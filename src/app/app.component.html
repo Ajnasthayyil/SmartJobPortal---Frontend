@@ -1,1 +1,7 @@
-<router-outlet></router-outlet>
+<app-header [appHideOnRoutes]="['/login', '/register', '/forgot-password']"></app-header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<app-footer [appHideOnRoutes]="['/login', '/register', '/forgot-password']"></app-footer>

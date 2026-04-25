@@ -6,7 +6,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./features/landing/landing.component')
+      import('./features/landing/landing/landing.component')
         .then(m => m.LandingComponent)
   },
   {
@@ -16,7 +16,7 @@ export const routes: Routes = [
         .then(m => m.LoginComponent)
   },
   {
-    path: 'register',                           // ← NEW
+    path: 'register',
     loadComponent: () =>
       import('./features/auth/register/register.component')
         .then(m => m.RegisterComponent)
@@ -34,7 +34,6 @@ export const routes: Routes = [
           import('./features/candidate/dashboard/candidate-dashboard.component')
             .then(m => m.CandidateDashboardComponent)
       },
-      // ... other candidate routes
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
@@ -51,7 +50,6 @@ export const routes: Routes = [
           import('./features/recruiter/dashboard/recruiter-dashboard.component')
             .then(m => m.RecruiterDashboardComponent)
       },
-      // ... other recruiter routes
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
@@ -68,7 +66,6 @@ export const routes: Routes = [
           import('./features/admin/dashboard/admin-dashboard.component')
             .then(m => m.AdminDashboardComponent)
       },
-      // ... other admin routes
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

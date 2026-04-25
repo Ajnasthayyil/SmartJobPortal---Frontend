@@ -12,14 +12,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 12px;
-  border: 1.5px solid #e5e7eb;
+  gap: 10px;
+  padding: 14px;
+  border: 1.5px solid #f1f5f9;
   border-radius: 12px;
   cursor: pointer;
-  background: #f9fafb;
+  background: #f8fafc;
   transition: all 0.2s;
-  color: #6b7280;
+  color: #64748b;
 
   input {
     display: none;
@@ -28,29 +28,29 @@
   .role-icon {
     display: flex;
     align-items: center;
-    color: #9ca3af;
+    color: #94a3b8;
     transition: color 0.2s;
   }
 
   .role-label {
     font-size: 14px;
     font-family: 'Outfit', sans-serif;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   &:hover {
-    background: #f3f4f6;
-    border-color: #d1d5db;
+    background: #f1f5f9;
+    border-color: #e2e8f0;
   }
 
   &.active {
-    background: #fff;
+    background: #ffffff;
     border-color: #0a0a0a;
     color: #0a0a0a;
-    box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
     .role-icon {
-      color: #f59e0b; // Amber color for active icon
+      color: #f59e0b; 
     }
   }
 }

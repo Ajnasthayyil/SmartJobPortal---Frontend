@@ -19,7 +19,7 @@ $red-bd: #fca5a5;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   min-height: 100vh;
-  background: $black;
+  background: #ffffff;
   font-family: 'Outfit', sans-serif;
 
   @media (max-width: 900px) {
@@ -29,14 +29,14 @@ $red-bd: #fca5a5;
 
 // ── Left panel ────────────────────────────────────────────────
 .left-panel {
-  background: $black;
+  background: #ffffff;
   padding: 52px 48px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
   overflow: hidden;
-  border-right: 1px solid #1e1e1e;
+  border-right: 1px solid #f1f5f9;
 
   @media (max-width: 900px) { display: none; }
 }
@@ -44,10 +44,10 @@ $red-bd: #fca5a5;
 .grid-bg {
   position: absolute; inset: 0;
   background-image:
-    linear-gradient(#1a1a1a 1px, transparent 1px),
-    linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
+    linear-gradient(#f1f5f9 1px, transparent 1px),
+    linear-gradient(90deg, #f1f5f9 1px, transparent 1px);
   background-size: 48px 48px;
-  opacity: .6;
+  opacity: .8;
   pointer-events: none;
 }
 
@@ -55,7 +55,7 @@ $red-bd: #fca5a5;
   position: absolute; bottom: -120px; left: -60px;
   width: 340px; height: 340px; border-radius: 50%;
   background: radial-gradient(
-    circle, rgba(245,158,11,.12) 0%, transparent 70%
+    circle, rgba(245,158,11,.08) 0%, transparent 70%
   );
   pointer-events: none;
 }
@@ -63,7 +63,7 @@ $red-bd: #fca5a5;
   position: absolute; top: -80px; right: -80px;
   width: 240px; height: 240px; border-radius: 50%;
   background: radial-gradient(
-    circle, rgba(245,158,11,.07) 0%, transparent 70%
+    circle, rgba(245,158,11,.05) 0%, transparent 70%
   );
   pointer-events: none;
 }
@@ -76,13 +76,14 @@ $red-bd: #fca5a5;
 .emblem { width: 44px; height: 44px; flex-shrink: 0; }
 .brand-name {
   font-family: 'Outfit', sans-serif;
-  font-weight: 700; font-size: 22px;
-  color: $white; letter-spacing: -.02em; line-height: 1;
+  font-weight: 800; font-size: 26px;
+  color: $black; letter-spacing: -.03em; line-height: 1;
+  span { color: $amber; }
 }
 .brand-quote {
-  font-size: 10px; color: $amber;
-  letter-spacing: .12em; text-transform: uppercase;
-  font-weight: 500; margin-top: 2px;
+  font-size: 11px; color: #64748b;
+  letter-spacing: .08em; text-transform: uppercase;
+  font-weight: 600; margin-top: 4px;
 }
 
 // Hero
@@ -98,30 +99,42 @@ $red-bd: #fca5a5;
 }
 .eyebrow-line {
   display: inline-block;
-  width: 28px; height: 2px; background: $amber;
+  width: 28px; height: 3px; background: $amber;
 }
 .eyebrow-text {
-  font-size: 11px; font-weight: 600; color: $amber;
-  letter-spacing: .14em; text-transform: uppercase;
+  font-size: 13px; font-weight: 800; color: $amber;
+  letter-spacing: .12em; text-transform: uppercase;
 }
 
 .hero-heading {
   font-family: 'Outfit', sans-serif;
-  font-weight: 700; font-size: 46px;
-  line-height: 1.1; color: $white;
-  letter-spacing: -.03em; margin-bottom: 18px;
+  font-weight: 800; font-size: 64px;
+  line-height: 1; color: $black;
+  letter-spacing: -.04em; margin-bottom: 28px;
 
   .amber { color: $amber; }
-  .stroke {
-    -webkit-text-stroke: 1.5px $white;
-    color: transparent;
+  .highlight {
+    position: relative;
+    display: inline-block;
+    color: $black;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      background: rgba(245, 158, 11, 0.2);
+      z-index: -1;
+    }
   }
 }
 
 .hero-sub {
-  font-size: 15px; color: #6b7280;
-  line-height: 1.75; margin-bottom: 36px;
-  max-width: 380px;
+  font-size: 18px; color: #334155;
+  line-height: 1.6; margin-bottom: 48px;
+  max-width: 440px;
+  font-weight: 400;
 }
 
 // Stats
@@ -129,35 +142,37 @@ $red-bd: #fca5a5;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1px;
-  background: #1e1e1e;
-  border: 1px solid #1e1e1e;
-  border-radius: 16px;
+  background: #f1f5f9;
+  border: 1px solid #f1f5f9;
+  border-radius: 20px;
   overflow: hidden;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
 }
 .stat {
-  background: #111; padding: 20px 18px;
+  background: #ffffff; padding: 24px 20px;
 }
 .stat-n {
   font-family: 'Outfit', sans-serif;
-  font-weight: 700; font-size: 26px;
-  color: $white; letter-spacing: -.02em;
+  font-weight: 800; font-size: 28px;
+  color: $black; letter-spacing: -.03em;
   span { color: $amber; }
 }
 .stat-l {
-  font-size: 11px; color: #4b5563;
-  margin-top: 4px; font-weight: 500;
-  text-transform: uppercase; letter-spacing: .06em;
+  font-size: 11px; color: #94a3b8;
+  margin-top: 6px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em;
 }
 
 // Features
 .features {
   list-style: none; display: flex;
-  flex-direction: column; gap: 10px;
+  flex-direction: column; gap: 12px;
 
   li {
     display: flex; align-items: center;
-    gap: 10px; font-size: 13px; color: #9ca3af;
+    gap: 12px; font-size: 14px; color: #64748b;
+    font-weight: 500;
 
     &::before {
       content: '';
@@ -170,19 +185,23 @@ $red-bd: #fca5a5;
 }
 
 .left-footer {
-  font-size: 11px; color: #374151;
-  z-index: 1; letter-spacing: .04em;
+  font-size: 12px; color: #94a3b8;
+  z-index: 1; letter-spacing: .02em;
+  font-weight: 500;
 }
 
 // ── Right panel ───────────────────────────────────────────────
 .right-panel {
-  background: $white;
-  padding: 52px 52px;
+  background: #fdfdfd;
+  padding: 52px 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow-y: auto;
+  position: relative;
+  border-left: 1px solid #f1f5f9;
 
+  @media (max-width: 1100px) { padding: 52px 48px; }
   @media (max-width: 480px) { padding: 36px 24px; }
 }
 
@@ -235,18 +254,19 @@ $red-bd: #fca5a5;
 
 .field-input {
   width: 100%;
-  padding: 13px 44px;
-  border: 1.5px solid $gray200;
+  padding: 14px 44px;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   font-size: 14px; font-family: 'Outfit', sans-serif;
-  color: $black; background: $gray50;
+  color: $black; background: #ffffff;
   transition: all .2s; outline: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 
-  &::placeholder { color: $gray200; }
+  &::placeholder { color: #94a3b8; }
 
   &:focus {
-    border-color: $black; background: $white;
-    box-shadow: 0 0 0 4px rgba(10,10,10,.05);
+    border-color: $amber; background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
   }
 
   &.is-error {

@@ -1,0 +1,172 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-orb orb1"></div>
+    <div class="hero-orb orb2"></div>
+    <div class="hero-orb orb3"></div>
+    <div class="hero-grid"></div>
+  </div>
+
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    AI-Powered Job Matching — Now Live
+  </div>
+
+  <h1>Find Your <em>Dream Job</em><br>Match Your <em>True Potential</em></h1>
+  <p>From freshers to senior engineers — discover opportunities that align with your skills, salary expectations, and career goals.</p>
+
+  <div class="search-box">
+    <div class="search-top">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input class="search-input" type="text" placeholder="Job title, skill, or keyword...">
+      </div>
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+        <input class="search-input" type="text" placeholder="City, state, or remote...">
+      </div>
+      <button class="search-btn" routerLink="/candidate/job-search">Search Jobs</button>
+    </div>
+    <div class="search-filters">
+      <span
+        *ngFor="let f of filters"
+        class="filter-chip"
+        [class.active]="activeFilter === f"
+        (click)="setFilter(f)">
+        {{ f }}
+      </span>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <ng-container *ngFor="let s of stats; let i = index">
+      <div *ngIf="i > 0" class="stat-div"></div>
+      <div class="stat">
+        <div class="stat-num">{{ s.num }}<span>{{ s.suffix }}</span></div>
+        <div class="stat-label">{{ s.label }}</div>
+      </div>
+    </ng-container>
+  </div>
+</section>
+
+<!-- FEATURED JOBS -->
+<section class="section-pad">
+  <div class="flex-between section-header">
+    <div>
+      <span class="section-tag">Hot Right Now</span>
+      <h2 class="section-title">Featured Opportunities</h2>
+      <p class="section-sub">Curated roles from top companies, ranked by AI match score.</p>
+    </div>
+    <a class="see-all" routerLink="/candidate/job-search">View all jobs →</a>
+  </div>
+
+  <div class="jobs-grid">
+    <div class="job-card" *ngFor="let job of jobs">
+      <div class="card-top">
+        <div class="card-top-left">
+          <div class="company-logo" [ngClass]="job.logoClass">{{ job.logoText }}</div>
+          <div>
+            <div class="job-title">{{ job.title }}</div>
+            <div class="company-name">{{ job.company }}</div>
+          </div>
+        </div>
+        <span class="badge-type" [ngClass]="job.badgeClass">{{ job.badgeLabel }}</span>
+      </div>
+      <div class="card-tags">
+        <span class="tag" *ngFor="let tag of job.tags">{{ tag }}</span>
+      </div>
+      <div class="card-footer">
+        <div>
+          <div class="salary">{{ job.salary }}</div>
+          <div class="time-ago">{{ job.timeAgo }}</div>
+        </div>
+        <div class="match-pill">
+          <span class="match-dot"></span>{{ job.match }}% Match
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section-pad section-alt">
+  <div class="flex-between section-header">
+    <div>
+      <span class="section-tag">Explore</span>
+      <h2 class="section-title">Browse by Category</h2>
+    </div>
+    <a class="see-all" routerLink="/candidate/job-search">All categories →</a>
+  </div>
+  <div class="cats-grid">
+    <div class="cat-card" *ngFor="let cat of categories">
+      <div class="cat-icon">{{ cat.icon }}</div>
+      <div class="cat-name">{{ cat.name }}</div>
+      <div class="cat-count">{{ cat.count }}</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section-pad">
+  <div class="section-header section-center">
+    <span class="section-tag">Simple Process</span>
+    <h2 class="section-title">Land Your Job in 3 Steps</h2>
+    <p class="section-sub" style="margin: 0 auto">Our AI matches you with the best roles so you never miss an opportunity.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Build Your Profile</h3>
+      <p>Upload your resume or fill in your skills. Our AI parses your experience and builds a rich candidate profile automatically.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Get AI Matches</h3>
+      <p>Our matching engine ranks thousands of jobs by relevance, salary fit, and culture match — all in real time.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Apply & Track</h3>
+      <p>One-click apply, track application status, and get interview prep tips — all from your personalized dashboard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TOP COMPANIES -->
+<section class="section-pad section-alt">
+  <div class="flex-between section-header">
+    <div>
+      <span class="section-tag">Hiring Now</span>
+      <h2 class="section-title">Top Companies</h2>
+    </div>
+    <a class="see-all" routerLink="/companies">View all companies →</a>
+  </div>
+  <div class="companies-row">
+    <div class="company-card" *ngFor="let co of companies">
+      <div class="company-avatar" [ngClass]="co.logoClass">{{ co.logoText }}</div>
+      <div class="company-info">
+        <h4>{{ co.name }}</h4>
+        <p>{{ co.industry }}</p>
+        <div class="open-jobs">{{ co.openRoles }} open roles</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="section-pad">
+  <div class="cta-banner">
+    <div class="cta-text">
+      <h2>Ready to Find Your<br><span class="orange">Next Big Role?</span></h2>
+      <p>Join 3.2 million candidates already using JobSpark to build their career.</p>
+    </div>
+    <div class="cta-btns">
+      <button class="btn-large btn-orange" routerLink="/register">Create Free Account</button>
+      <button class="btn-large btn-outline" routerLink="/recruiter/post-job">Post a Job</button>
+    </div>
+  </div>
+</section>

@@ -8,7 +8,7 @@ export interface RegisterCandidateRequest {
   email: string;
   password: string;
   phoneNumber: string;
-  roleId: number; // 3 = Candidate
+  role: string;
 }
 
 export interface RegisterRecruiterRequest {
@@ -16,7 +16,7 @@ export interface RegisterRecruiterRequest {
   email: string;
   password: string;
   phoneNumber: string;
-  roleId: number; // 2 = Recruiter
+  role: string;
 }
 
 export interface AuthResponse {

@@ -30,10 +30,10 @@ export class RegisterComponent {
     if (this.auth.isLoggedIn()) this.auth.redirectByRole();
 
     this.form = this.fb.group({
-      fullName:    ['', [Validators.required, Validators.minLength(2)]],
-      email:       ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9+\-\s()]+$/)]],
-      password:    ['', [Validators.required, Validators.minLength(6)]],
+      fullName:    ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[A-Za-z][A-Za-z\s]*$/)]],
+      email:       ['', [Validators.required, Validators.email, Validators.pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{9}$/)]],
+      password:    ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)]],
       roleId:      [3, [Validators.required]] // Default to Candidate (3)
     });
   }
@@ -58,10 +58,10 @@ export class RegisterComponent {
       email:       formVal.email.trim().toLowerCase(),
       phoneNumber: formVal.phoneNumber.trim(),
       password:    formVal.password,
-      roleId:      Number(formVal.roleId)
+      role:        Number(formVal.roleId) === 2 ? 'Recruiter' : 'Candidate'
     };
 
-    const registerObs = req.roleId === 2 
+    const registerObs = req.role === 'Recruiter' 
       ? this.auth.registerRecruiter(req) 
       : this.auth.registerCandidate(req);
 

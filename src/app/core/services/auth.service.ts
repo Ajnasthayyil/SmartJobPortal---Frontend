@@ -34,12 +34,12 @@ export class AuthService {
 
   registerCandidate(req: RegisterCandidateRequest): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>
-      (`${this.apiUrl}/register`, { ...req, roleId: 3 });
+      (`${this.apiUrl}/register`, { ...req, role: 'Candidate' });
   }
 
   registerRecruiter(req: RegisterRecruiterRequest): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>
-      (`${this.apiUrl}/register`, { ...req, roleId: 2 });
+      (`${this.apiUrl}/register`, { ...req, role: 'Recruiter' });
   }
 
   logout(): void {
