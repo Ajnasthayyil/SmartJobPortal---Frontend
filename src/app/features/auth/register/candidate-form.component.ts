@@ -1,0 +1,310 @@
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  ReactiveFormsModule, FormBuilder,
+  FormGroup, Validators
+} from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
+
+@Component({
+  selector: 'app-candidate-form',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="form">
+
+      <!-- Name fields -->
+      <div class="fieldset-half">
+        <div class="field-group">
+          <label for="fname">First name</label>
+          <div class="field-wrap">
+            <input id="fname" type="text" class="field-input"
+                   formControlName="firstName"
+                   [class.is-error]="firstName.invalid && firstName.touched"
+                   placeholder="First"/>
+          </div>
+          @if (firstName.invalid && firstName.touched) {
+            <p class="field-error">First name is required.</p>
+          }
+        </div>
+        <div class="field-group">
+          <label for="lname">Last name</label>
+          <div class="field-wrap">
+            <input id="lname" type="text" class="field-input"
+                   formControlName="lastName"
+                   [class.is-error]="lastName.invalid && lastName.touched"
+                   placeholder="Last"/>
+          </div>
+          @if (lastName.invalid && lastName.touched) {
+            <p class="field-error">Last name is required.</p>
+          }
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="field-group">
+        <label for="email">Email address</label>
+        <div class="field-wrap">
+          <svg class="field-icon" width="16" height="16" fill="none"
+               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
+          <input id="email" type="email" class="field-input"
+                 formControlName="email"
+                 [class.is-error]="email.invalid && email.touched"
+                 placeholder="you@talex.io"/>
+        </div>
+        @if (email.invalid && email.touched) {
+          <p class="field-error">
+            @if (email.errors?.['required']) { Email is required. }
+            @if (email.errors?.['email'])    { Enter a valid email. }
+          </p>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="field-group">
+        <label for="password">Password</label>
+        <div class="field-wrap">
+          <svg class="field-icon" width="16" height="16" fill="none"
+               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <input id="password" [type]="showPass() ? 'text' : 'password'"
+                 class="field-input"
+                 formControlName="password"
+                 [class.is-error]="password.invalid && password.touched"
+                 placeholder="Min 6 characters"/>
+          <button type="button" class="eye-btn"
+                  (click)="togglePassword()"
+                  [attr.aria-label]="showPass() ? 'Hide' : 'Show'">
+            @if (!showPass()) {
+              <svg width="16" height="16" fill="none" stroke="currentColor"
+                   stroke-width="2" viewBox="0 0 24 24">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            } @else {
+              <svg width="16" height="16" fill="none" stroke="currentColor"
+                   stroke-width="2" viewBox="0 0 24 24">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8
+                         a18.45 18.45 0 0 1 5.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8
+                         a18.5 18.5 0 0 1-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            }
+          </button>
+        </div>
+        @if (password.invalid && password.touched) {
+          <p class="field-error">Minimum 6 characters.</p>
+        }
+      </div>
+
+      <!-- Phone -->
+      <div class="field-group">
+        <label for="phone">Phone number</label>
+        <div class="field-wrap">
+          <svg class="field-icon" width="16" height="16" fill="none"
+               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07
+                     a19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2
+                     h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11
+                     L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45
+                     12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <input id="phone" type="tel" class="field-input"
+                 formControlName="phoneNumber"
+                 placeholder="+1 (555) 000-0000"/>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="field-group">
+        <label>Skills (press Enter to add)</label>
+        <div class="skill-input-wrap">
+          <input type="text" class="skill-input"
+                 #skillInput placeholder="e.g. React, Node.js, Python..."
+                 (keyup.enter)="addSkill(skillInput.value); skillInput.value = ''"/>
+          <button type="button" class="skill-btn"
+                  (click)="addSkill(skillInput.value); skillInput.value = ''">
+            Add
+          </button>
+        </div>
+        <div class="skills-tags">
+          @for (skill of form.get('skills')?.value || []; track skill) {
+            <div class="skill-tag">
+              {{ skill }}
+              <button type="button" (click)="removeSkill(skill)">✕</button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="field-group">
+        <label for="exp">Experience level</label>
+        <div class="field-wrap">
+          <select id="exp" class="field-input" formControlName="experienceYears"
+                  required>
+            <option value="">Select level...</option>
+            <option value="0">Fresher (0-1 years)</option>
+            <option value="1">Junior (1-3 years)</option>
+            <option value="3">Mid-level (3-6 years)</option>
+            <option value="6">Senior (6-10 years)</option>
+            <option value="10">Lead (10+ years)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Resume upload -->
+      <div class="field-group">
+        <label>Upload resume</label>
+        <div class="upload-area"
+             (drop)="onDropResume($event)"
+             (dragover)="onDragOverResume($event)"
+             (dragleave)="onDragLeaveResume()"
+             (click)="resumeInput.click()">
+          <div class="upload-icon">📄</div>
+          <div class="upload-text">Drop your resume here</div>
+          <div class="upload-sub">or click to browse (PDF, DOCX)</div>
+          @if (resumeFile()) {
+            <div class="file-info">✓ {{ resumeFile()?.name }}</div>
+          }
+          <input #resumeInput type="file" hidden
+                 (change)="onResumeSelect($event)"
+                 accept=".pdf,.docx,.doc"/>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <div class="form-opts">
+        <input class="checkbox" type="checkbox" id="terms"
+               formControlName="agreeToTerms" required/>
+        <label for="terms">
+          I agree to the <a href="#">Terms of Service</a> and
+          <a href="#">Privacy Policy</a>
+        </label>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn-submit" [disabled]="loading()">
+        @if (loading()) {
+          <span class="spinner"></span> Creating account...
+        } @else {
+          Create Candidate Account
+        }
+      </button>
+
+    </form>
+  `
+})
+export class CandidateFormComponent {
+  form: FormGroup;
+  loading   = signal(false);
+  showPass  = signal(false);
+  resumeFile = signal<File | null>(null);
+  dragOverResume = signal(false);
+
+  constructor(
+    private fb:      FormBuilder,
+    private auth:    AuthService,
+    private toast:   ToastService
+  ) {
+    this.form = this.fb.group({
+      firstName:      ['', Validators.required],
+      lastName:       ['', Validators.required],
+      email:          ['', [Validators.required, Validators.email]],
+      password:       ['', [Validators.required, Validators.minLength(6)]],
+      phoneNumber:    [''],
+      skills:         [[]],
+      experienceYears: ['', Validators.required],
+      agreeToTerms:   [false, Validators.required]
+    });
+  }
+
+  get firstName()      { return this.form.get('firstName')!; }
+  get lastName()       { return this.form.get('lastName')!; }
+  get email()          { return this.form.get('email')!; }
+  get password()       { return this.form.get('password')!; }
+
+  togglePassword(): void { this.showPass.update(v => !v); }
+
+  addSkill(value: string): void {
+    const trimmed = value.trim();
+    if (!trimmed) return;
+
+    const skills = this.form.get('skills')?.value || [];
+    if (!skills.includes(trimmed)) {
+      this.form.patchValue({ skills: [...skills, trimmed] });
+    }
+  }
+
+  removeSkill(skill: string): void {
+    const skills = (this.form.get('skills')?.value || [])
+      .filter((s: string) => s !== skill);
+    this.form.patchValue({ skills });
+  }
+
+  onResumeSelect(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file && ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(file.type)) {
+      this.resumeFile.set(file);
+    } else {
+      this.toast.error('Only PDF and DOCX files are allowed.');
+    }
+  }
+
+  onDropResume(event: DragEvent): void {
+    event.preventDefault();
+    this.dragOverResume.set(false);
+    const files = event.dataTransfer?.files;
+    if (files?.[0]) this.onResumeSelect({ target: { files } } as any);
+  }
+
+  onDragOverResume(event: DragEvent): void {
+    event.preventDefault();
+    this.dragOverResume.set(true);
+  }
+
+  onDragLeaveResume(): void {
+    this.dragOverResume.set(false);
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.loading.set(true);
+
+    const fullName = `${this.firstName.value} ${this.lastName.value}`.trim();
+
+    this.auth.registerCandidate({
+      fullName,
+      email: this.email.value.trim().toLowerCase(),
+      password: this.password.value,
+      phoneNumber: this.form.get('phoneNumber')?.value || '',
+      roleId: 3 // Candidate
+    }).subscribe({
+      next: res => {
+        this.loading.set(false);
+        if (res.success) {
+          this.toast.success('Account created! Please sign in.');
+          // Redirect handled by component
+        } else {
+          this.toast.error(res.message || 'Registration failed.');
+        }
+      },
+      error: err => {
+        this.loading.set(false);
+        this.toast.error(err?.error?.message || 'An error occurred.');
+      }
+    });
+  }
+}

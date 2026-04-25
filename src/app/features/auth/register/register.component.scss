@@ -1,0 +1,56 @@
+@import '../login/login.component.scss';
+
+// Role selector styles specifically for registration
+.role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.role-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #f9fafb;
+  transition: all 0.2s;
+  color: #6b7280;
+
+  input {
+    display: none;
+  }
+
+  .role-icon {
+    display: flex;
+    align-items: center;
+    color: #9ca3af;
+    transition: color 0.2s;
+  }
+
+  .role-label {
+    font-size: 14px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+  }
+
+  &:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+  }
+
+  &.active {
+    background: #fff;
+    border-color: #0a0a0a;
+    color: #0a0a0a;
+    box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.05);
+
+    .role-icon {
+      color: #f59e0b; // Amber color for active icon
+    }
+  }
+}
