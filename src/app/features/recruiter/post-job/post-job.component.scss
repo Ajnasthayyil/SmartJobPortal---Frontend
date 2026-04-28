@@ -1,0 +1,216 @@
+$amber:     #f59e0b;
+$black:     #0a0a0a;
+$white:     #ffffff;
+$gray-50:   #f8fafc;
+$gray-100:  #f1f5f9;
+$gray-200:  #e2e8f0;
+$gray-400:  #94a3b8;
+$gray-600:  #475569;
+$glass-bg:   rgba(255, 255, 255, 0.7);
+$glass-border: rgba(255, 255, 255, 0.4);
+
+.post-job-page {
+    background: $gray-50;
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+    padding: 40px;
+}
+
+.page-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: $black;
+}
+
+.btn-back {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $gray-600;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    &:hover { color: $black; }
+}
+
+.form-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+    @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.glass-card {
+    background: $glass-bg;
+    backdrop-filter: blur(20px);
+    border: 1px solid $glass-border;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: $black;
+    margin-bottom: 24px;
+}
+
+.field {
+    margin-bottom: 20px;
+    
+    label {
+        display: block;
+        font-size: 11px;
+        font-weight: 800;
+        color: $gray-400;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 8px;
+    }
+}
+
+.field-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid $gray-200;
+    border-radius: 14px;
+    font-size: 14px;
+    font-family: 'Outfit', sans-serif;
+    background: rgba($white, 0.5);
+    transition: all 0.2s;
+    outline: none;
+
+    &:focus {
+        border-color: $amber;
+        background: $white;
+        box-shadow: 0 0 0 4px rgba($amber, 0.1);
+    }
+    
+    &::placeholder { color: $gray-200; }
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    @media (max-width: 640px) { grid-template-columns: 1fr; }
+}
+
+.textarea { min-height: 160px; resize: vertical; }
+
+.skill-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.btn-add {
+    background: $black;
+    color: $white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    &:hover { background: #1a1a1a; }
+}
+
+.skills-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-tag {
+    background: rgba($amber, 0.1);
+    color: $amber;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    button {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+    }
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.btn-ghost {
+    padding: 12px 24px;
+    background: transparent;
+    border: 1.5px solid $gray-200;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    color: $gray-600;
+}
+
+.btn-primary {
+    background: $black;
+    color: $white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.tips-card {
+    h4 { font-size: 15px; font-weight: 800; color: $black; margin-bottom: 16px; }
+    ul {
+        list-style: none;
+        padding: 0;
+        li {
+            font-size: 13px;
+            color: $gray-600;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 8px;
+            &::before { content: '✨'; font-size: 12px; }
+        }
+    }
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba($white, 0.3);
+    border-top-color: $white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

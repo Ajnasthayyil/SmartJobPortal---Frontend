@@ -1,0 +1,232 @@
+<div class="detail-page">
+
+    <ng-container *ngIf="loading()">
+    <div class="skeleton-wrap">
+        <div class="skeleton" style="height:48px;width:260px;margin-bottom:24px"></div>
+        <div class="skeleton" style="height:500px;border-radius:16px"></div>
+    </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading() && job()">
+    <div class="detail-inner">
+
+        <!-- Back -->
+        <a routerLink="/candidate/jobs" class="btn-back">← Back to Jobs</a>
+
+        <div class="detail-grid">
+
+            <!-- ── Left: Job details ──────────────── -->
+            <div class="col-main">
+
+                <!-- Job header card -->
+                <div class="card job-header-card">
+                    <div class="jh-top">
+                        <div class="company-logo">
+                            {{ job().companyName?.charAt(0) }}
+                        </div>
+                        <ng-container *ngIf="applied()">
+                        <span class="applied-badge">✓ Applied</span>
+                        </ng-container>
+                    </div>
+                    <h1 class="jh-title">{{ job().title }}</h1>
+                    <div class="jh-company">{{ job().companyName }}</div>
+                    <div class="jh-meta">
+                        <span class="meta-pill">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            </svg>
+                            {{ job().location }}
+                        </span>
+                        <span class="meta-pill">{{ job().jobType }}</span>
+                        <ng-container *ngIf="job().minSalary">
+                        <span class="meta-pill amber-pill">
+                            ₹{{ job().minSalary | number }}
+                            <ng-container *ngIf="job().maxSalary"> – ₹{{ job().maxSalary | number }} </ng-container>
+                        </span>
+                        </ng-container>
+                        <span class="meta-pill">
+                            {{ job().minExperienceYears }}+ yrs exp
+                        </span>
+                    </div>
+
+                    <!-- Apply section -->
+                    <ng-container *ngIf="!applied(); else appliedBlock">
+                    <ng-container *ngIf="!showApply(); else showApplyBlock">
+                    <button class="btn-apply-main" (click)="showApply.set(true)">
+                        Apply Now
+                    </button>
+                    </ng-container>
+                    <ng-template #showApplyBlock>
+                    <div class="apply-form">
+                        <label class="apply-label">
+                            Cover Note (optional)
+                        </label>
+                        <textarea [(ngModel)]="coverNote" class="cover-textarea" rows="4"
+                            placeholder="Tell the recruiter why you're a great fit...">
+                  </textarea>
+                        <div class="apply-actions">
+                            <button class="btn-cancel" (click)="showApply.set(false)">
+                                Cancel
+                            </button>
+                            <button class="btn-submit-apply" (click)="applyJob()" [disabled]="applying()">
+                                <ng-container *ngIf="applying(); else notApplying">
+                                <span class="spinner"></span> Submitting...
+                                </ng-container>
+                                <ng-template #notApplying>
+                                Submit Application
+                                </ng-template>
+                            </button>
+                        </div>
+                    </div>
+                    </ng-template>
+                    </ng-container>
+                    <ng-template #appliedBlock>
+                    <div class="applied-success">
+                        ✅ You've already applied to this job
+                    </div>
+                    </ng-template>
+                </div>
+
+                <!-- Description -->
+                <div class="card">
+                    <h3 class="section-title">Job Description</h3>
+                    <div class="description-text">{{ job().description }}</div>
+                </div>
+
+                <!-- Required Skills -->
+                <div class="card">
+                    <h3 class="section-title">Required Skills</h3>
+                    <div class="skills-cloud">
+                        <ng-container *ngFor="let skill of job().requiredSkills">
+                        <span class="skill-tag">{{ skill }}</span>
+                        </ng-container>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ── Right: Match score ─────────────── -->
+            <div class="col-sidebar">
+
+                <!-- Match Score Card -->
+                <ng-container *ngIf="matchScore()">
+                <div class="card match-card">
+                    <h3 class="section-title">Your Match Score</h3>
+
+                    <div class="score-center">
+                        <svg width="140" height="140" viewBox="0 0 140 140">
+                            <circle cx="70" cy="70" r="54" fill="none" stroke="#f3f4f6" stroke-width="12" />
+                            <circle cx="70" cy="70" r="54" fill="none"
+                                [attr.stroke]="getScoreColor(matchScore()!.totalScore)" stroke-width="12"
+                                stroke-linecap="round" [attr.stroke-dasharray]="2*3.14159*54"
+                                [attr.stroke-dashoffset]="getDashOffset(matchScore()!.totalScore)"
+                                transform="rotate(-90 70 70)" />
+                            <text x="70" y="75" text-anchor="middle" font-size="26" font-weight="700" fill="#0a0a0a">
+                                {{ matchScore()!.totalScore }}%
+                            </text>
+                            <text x="70" y="92" text-anchor="middle" font-size="11" fill="#9ca3af">
+                                {{ matchScore()!.scoreLabel }}
+                            </text>
+                        </svg>
+                    </div>
+
+                    <!-- Score breakdown -->
+                    <div class="score-breakdown">
+                        <div class="score-row">
+                            <span class="score-label">Skills Match</span>
+                            <div class="score-bar">
+                                <div class="score-fill" [style.width.%]="matchScore()!.skillScore">
+                                </div>
+                            </div>
+                            <span class="score-pct">
+                                {{ matchScore()!.skillScore | number:'1.0-0' }}%
+                            </span>
+                        </div>
+                        <div class="score-row">
+                            <span class="score-label">Experience</span>
+                            <div class="score-bar">
+                                <div class="score-fill" [style.width.%]="matchScore()!.experienceScore">
+                                </div>
+                            </div>
+                            <span class="score-pct">
+                                {{ matchScore()!.experienceScore | number:'1.0-0' }}%
+                            </span>
+                        </div>
+                        <div class="score-row">
+                            <span class="score-label">Location</span>
+                            <div class="score-bar">
+                                <div class="score-fill" [style.width.%]="matchScore()!.locationScore">
+                                </div>
+                            </div>
+                            <span class="score-pct">
+                                {{ matchScore()!.locationScore | number:'1.0-0' }}%
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Matched skills -->
+                    <ng-container *ngIf="matchScore()!.matchedSkills.length > 0">
+                    <div class="match-section">
+                        <div class="match-sec-title">✓ Matched Skills</div>
+                        <div class="skill-row">
+                            <ng-container *ngFor="let s of matchScore()!.matchedSkills">
+                            <span class="skill-matched">{{ s }}</span>
+                            </ng-container>
+                        </div>
+                    </div>
+                    </ng-container>
+
+                    <!-- Missing skills -->
+                    <ng-container *ngIf="matchScore()!.missingSkills.length > 0">
+                    <div class="match-section">
+                        <div class="match-sec-title missing-title">
+                            ✕ Missing Skills
+                        </div>
+                        <div class="skill-row">
+                            <ng-container *ngFor="let s of matchScore()!.missingSkills">
+                            <span class="skill-missing">{{ s }}</span>
+                            </ng-container>
+                        </div>
+                    </div>
+                    </ng-container>
+                </div>
+                </ng-container>
+
+                <!-- Job details sidebar -->
+                <div class="card">
+                    <h3 class="section-title">Job Details</h3>
+                    <div class="detail-list">
+                        <div class="detail-row">
+                            <span class="detail-key">Posted</span>
+                            <span class="detail-val">
+                                {{ job().postedAt | date:'mediumDate' }}
+                            </span>
+                        </div>
+                        <ng-container *ngIf="job().expiresAt">
+                        <div class="detail-row">
+                            <span class="detail-key">Closes</span>
+                            <span class="detail-val">
+                                {{ job().expiresAt | date:'mediumDate' }}
+                            </span>
+                        </div>
+                        </ng-container>
+                        <div class="detail-row">
+                            <span class="detail-key">Type</span>
+                            <span class="detail-val">{{ job().jobType }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-key">Experience</span>
+                            <span class="detail-val">
+                                {{ job().minExperienceYears }}+ years
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </ng-container>
+
+</div>

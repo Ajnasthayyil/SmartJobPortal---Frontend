@@ -1,0 +1,184 @@
+<div class="post-job-page">
+  <div class="page-inner">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Post a New Job</h1>
+        <p class="page-sub">Fill in the details to attract the right candidates</p>
+      </div>
+      <a routerLink="/recruiter/jobs" class="btn-back">← My Jobs</a>
+    </div>
+
+    <div class="form-layout">
+
+      <!-- Main form -->
+      <div class="form-main">
+        <form [formGroup]="form()" (ngSubmit)="onSubmit()" novalidate>
+
+          <!-- Title -->
+          <div class="card">
+            <h3 class="card-title">Basic Information</h3>
+
+            <div class="field">
+              <label>Job Title *</label>
+              <input type="text" class="field-input"
+                     formControlName="title"
+                     [class.is-error]="form().get('title')!.invalid &&
+                                       form().get('title')!.touched"
+                     placeholder="e.g. Senior React Developer"/>
+              <ng-container *ngIf="form().get('title')!.invalid && form().get('title')!.touched">
+                <p class="field-error">Job title is required.</p>
+              </ng-container>
+            </div>
+
+            <div class="field">
+              <label>Job Description *</label>
+              <textarea class="field-input textarea"
+                        formControlName="description"
+                        [class.is-error]="form().get('description')!.invalid &&
+                                          form().get('description')!.touched"
+                        rows="8"
+                        placeholder="Describe the role, responsibilities, requirements...">
+              </textarea>
+              <ng-container *ngIf="form().get('description')!.invalid &&
+                   form().get('description')!.touched">
+                <p class="field-error">
+                  Description must be at least 50 characters.
+                </p>
+              </ng-container>
+            </div>
+          </div>
+
+          <!-- Job details -->
+          <div class="card">
+            <h3 class="card-title">Job Details</h3>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Location *</label>
+                <div class="field-wrap">
+                  <svg class="field-icon" width="15" height="15" fill="none"
+                       stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <input type="text" class="field-input has-icon"
+                         formControlName="location"
+                         placeholder="City or Remote"/>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Job Type *</label>
+                <select class="field-input" formControlName="jobType">
+                  <ng-container *ngFor="let type of jobTypes">
+                    <option [value]="type">{{ type }}</option>
+                  </ng-container>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Min Salary (₹)</label>
+                <input type="number" class="field-input"
+                       formControlName="minSalary"
+                       placeholder="e.g. 500000"/>
+              </div>
+              <div class="field">
+                <label>Max Salary (₹)</label>
+                <input type="number" class="field-input"
+                       formControlName="maxSalary"
+                       placeholder="e.g. 1200000"/>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Min Experience (years) *</label>
+                <input type="number" class="field-input"
+                       formControlName="minExperienceYears"
+                       min="0" max="30" placeholder="e.g. 3"/>
+              </div>
+              <div class="field">
+                <label>Expiry Date</label>
+                <input type="date" class="field-input"
+                       formControlName="expiresAt"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="card">
+            <h3 class="card-title">Required Skills *</h3>
+            <p class="card-desc">
+              Add skills to enable AI matching with candidates
+            </p>
+
+            <div class="skill-input-row">
+              <input type="text" class="field-input"
+                     [value]="skillInput()"
+                     (input)="skillInput.set($any($event.target).value)"
+                     (keydown)="onKeydown($event, skillInput())"
+                     placeholder="e.g. React, TypeScript — Enter to add"/>
+              <button type="button" class="btn-add"
+                      (click)="addSkill(skillInput())">
+                + Add
+              </button>
+            </div>
+
+            <div class="skills-cloud">
+              <ng-container *ngFor="let skill of skills()">
+                <span class="skill-tag">
+                  {{ skill }}
+                  <button type="button" (click)="removeSkill(skill)">✕</button>
+                </span>
+              </ng-container>
+              <ng-container *ngIf="skills().length === 0">
+                <span class="no-skills">No skills added yet</span>
+              </ng-container>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="form-actions">
+            <a routerLink="/recruiter/jobs" class="btn-cancel">Cancel</a>
+            <button type="submit" class="btn-post" [disabled]="saving()">
+              <ng-container *ngIf="saving()">
+                <span class="spinner"></span> Posting...
+              </ng-container>
+              <ng-container *ngIf="!saving()">
+                Post Job
+              </ng-container>
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Sidebar tips -->
+      <div class="form-sidebar">
+        <div class="tips-card">
+          <h4 class="tips-title">💡 Tips for better results</h4>
+          <ul class="tips-list">
+            <li>Write a clear, specific job title</li>
+            <li>Add detailed description (responsibilities, requirements)</li>
+            <li>Include accurate salary range to attract more candidates</li>
+            <li>Add all required skills — drives AI matching accuracy</li>
+            <li>Set a realistic expiry date</li>
+          </ul>
+        </div>
+
+        <div class="tips-card">
+          <h4 class="tips-title">🤖 AI Matching</h4>
+          <p class="tips-desc">
+            Once posted, Talex AI will automatically score and rank candidates
+            based on skills (60%), experience (30%), and location (10%) match.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

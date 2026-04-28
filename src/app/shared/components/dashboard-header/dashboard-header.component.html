@@ -1,0 +1,47 @@
+<div class="dash-header-container">
+  <header class="dash-header">
+    <div class="header-left">
+      <div class="logo" routerLink="/">Tal<span>Ex</span></div>
+    </div>
+
+    <div class="header-right">
+      <button class="icon-btn">
+        <lucide-icon [img]="Bell" [size]="20"></lucide-icon>
+        <span class="notification-dot"></span>
+      </button>
+
+      <div class="profile-dropdown">
+        <button class="profile-btn" 
+                (click)="toggleProfile()"
+                [attr.aria-expanded]="isProfileOpen()">
+          <div class="avatar">
+            <img *ngIf="authService.currentUser()?.profilePictureUrl" 
+                 [src]="authService.currentUser()?.profilePictureUrl" 
+                 alt="Profile" 
+                 class="avatar-img">
+            <span *ngIf="!authService.currentUser()?.profilePictureUrl">
+              {{ authService.currentUser()?.fullName?.charAt(0) }}
+            </span>
+          </div>
+          <div class="user-meta">
+            <span class="name">{{ authService.currentUser()?.fullName }}</span>
+            <span class="role">{{ authService.currentUser()?.role }}</span>
+          </div>
+          <lucide-icon [img]="ChevronDown" [size]="16" class="chevron"></lucide-icon>
+        </button>
+
+        <div class="dropdown-menu" *ngIf="isProfileOpen()">
+          <a [routerLink]="authService.getRole() === 'Candidate' ? '/candidate/profile' : null" 
+             (click)="isProfileOpen.set(false)" class="menu-item">
+            <lucide-icon [img]="User" [size]="18"></lucide-icon>
+            <span>Profile</span>
+          </a>
+          <button (click)="logout()" class="menu-item logout">
+            <lucide-icon [img]="LogOut" [size]="18"></lucide-icon>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>

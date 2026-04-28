@@ -1,0 +1,315 @@
+<div class="dashboard-page">
+
+  <!-- ── Loading Skeleton ─────────────────────────── -->
+  <ng-container *ngIf="loading()">
+    <div class="skeleton-wrap">
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton-grid">
+        <ng-container *ngFor="let i of [1,2,3,4]">
+          <div class="skeleton skeleton-card"></div>
+        </ng-container>
+      </div>
+      <div class="skeleton skeleton-block"></div>
+    </div>
+  </ng-container>
+
+  <!-- ── Main Dashboard ───────────────────────────── -->
+  <ng-container *ngIf="!loading()">
+    <div class="dashboard-inner">
+
+      <!-- Header -->
+      <div class="dash-header">
+        <div>
+          <h1 class="dash-title">
+            {{ getGreeting() }}, {{ getUserFirstName() }} 👋
+          </h1>
+          <p class="dash-sub">
+            Here's your talent exchange journey at a glance
+          </p>
+        </div>
+        <div class="header-actions">
+          <a routerLink="/candidate/jobs" class="btn-browse">
+            <svg width="15" height="15" fill="none" stroke="currentColor"
+                 stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            Browse Jobs
+          </a>
+          <a routerLink="/candidate/profile" class="btn-profile">
+            Update Profile
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fef3c7;color:#d97706">
+            <svg width="18" height="18" fill="none" stroke="currentColor"
+                 stroke-width="2" viewBox="0 0 24 24">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <div class="stat-value">{{ stats().profileViews }}</div>
+          <div class="stat-label">Profile Views</div>
+          <div class="stat-change positive">↑ 12% this month</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fef3c7;color:#d97706">
+            <svg width="18" height="18" fill="none" stroke="currentColor"
+                 stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div class="stat-value">{{ stats().jobMatches }}</div>
+          <div class="stat-label">Job Matches</div>
+          <div class="stat-change">AI-powered</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fef3c7;color:#d97706">
+            <svg width="18" height="18" fill="none" stroke="currentColor"
+                 stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div class="stat-value">{{ stats().applications }}</div>
+          <div class="stat-label">Applications</div>
+          <div class="stat-change">
+            {{ applications().length > 0 ? applications().length + ' active' : 'Start applying' }}
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fef3c7;color:#d97706">
+            <svg width="18" height="18" fill="none" stroke="currentColor"
+                 stroke-width="2" viewBox="0 0 24 24">
+              <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="stat-value">{{ stats().savedJobs }}</div>
+          <div class="stat-label">Saved Jobs</div>
+          <div class="stat-change">Ready to apply</div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="content-grid">
+
+        <!-- ── Left Column ─────────────────── -->
+        <div class="col-left">
+
+          <!-- Profile Completion Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Profile Completion</h3>
+              <a routerLink="/candidate/profile" class="link-amber">
+                Edit Profile
+              </a>
+            </div>
+
+            <div class="completion-ring-wrap">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42"
+                        fill="none" stroke="#f3f4f6" stroke-width="8"/>
+                <circle cx="50" cy="50" r="42"
+                        fill="none"
+                        stroke="#f59e0b"
+                        stroke-width="8"
+                        stroke-linecap="round"
+                        [attr.stroke-dasharray]="2 * 3.14159 * 42"
+                        [attr.stroke-dashoffset]="2 * 3.14159 * 42 * (1 - profileCompletion() / 100)"
+                        transform="rotate(-90 50 50)"/>
+                <text x="50" y="55" text-anchor="middle"
+                      font-size="18" font-weight="700" fill="#0a0a0a">
+                  {{ profileCompletion() }}%
+                </text>
+              </svg>
+              <div class="completion-items">
+                <div class="completion-item"
+                     [class.done]="profile()?.fullName">
+                  <span class="ci-dot"></span> Full Name
+                </div>
+                <div class="completion-item"
+                     [class.done]="profile()?.headline">
+                  <span class="ci-dot"></span> Headline
+                </div>
+                <div class="completion-item"
+                     [class.done]="profile()?.skills?.length">
+                  <span class="ci-dot"></span> Skills Added
+                </div>
+                <div class="completion-item"
+                     [class.done]="profile()?.hasResume">
+                  <span class="ci-dot"></span> Resume Uploaded
+                </div>
+                <div class="completion-item"
+                     [class.done]="profile()?.summary">
+                  <span class="ci-dot"></span> Summary
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skill Gap Analysis -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Skill Gap Analysis</h3>
+              <span class="badge-amber">AI Powered</span>
+            </div>
+            <p class="card-desc">
+              Based on your top job matches, learn these skills to
+              unlock more opportunities.
+            </p>
+
+            <ng-container *ngIf="skillGaps().length > 0; else noGaps">
+              <div class="skill-gap-tags">
+                <ng-container *ngFor="let skill of skillGaps()">
+                  <span class="gap-tag">
+                    <svg width="10" height="10" fill="none"
+                         stroke="currentColor" stroke-width="2.5"
+                         viewBox="0 0 24 24">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    {{ skill }}
+                  </span>
+                </ng-container>
+              </div>
+              <p class="gap-hint">
+                Learn these to unlock
+                <strong>{{ skillGaps().length * 5 }}+ new matches</strong>
+              </p>
+            </ng-container>
+            <ng-template #noGaps>
+              <div class="empty-state">
+                <div class="empty-icon">🎯</div>
+                <p>Great! No major skill gaps found.</p>
+              </div>
+            </ng-template>
+          </div>
+
+        </div>
+
+        <!-- ── Right Column ────────────────── -->
+        <div class="col-right">
+
+          <!-- AI Recommended Jobs -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">AI Recommended For You</h3>
+              <a routerLink="/candidate/jobs" class="link-amber">
+                View all
+              </a>
+            </div>
+
+            <ng-container *ngIf="recommendedJobs().length > 0; else noJobs">
+              <div class="job-list">
+                <ng-container *ngFor="let job of recommendedJobs().slice(0, 4)">
+                  <div class="job-item">
+                    <div class="job-info">
+                      <div class="job-title">{{ job.title }}</div>
+                      <div class="job-company">
+                        {{ job.companyName }} · {{ job.location }}
+                      </div>
+                      <div class="job-meta">
+                        <span class="meta-tag">{{ job.jobType }}</span>
+                        <ng-container *ngIf="job.minSalary">
+                          <span class="meta-tag">
+                            ₹{{ job.minSalary | number }}+
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="job.matchScore">
+                          <span class="meta-tag match-tag">
+                            {{ job.matchScore >= 70 ? '🔥' : '⚡' }}
+                            {{ job.matchScore }}% match
+                          </span>
+                        </ng-container>
+                      </div>
+                    </div>
+
+                    <!-- Match score ring -->
+                    <ng-container *ngIf="job.matchScore">
+                      <div class="score-ring">
+                        <svg width="52" height="52" viewBox="0 0 52 52">
+                          <circle cx="26" cy="26" r="22" fill="none"
+                                  stroke="#f3f4f6" stroke-width="5"/>
+                          <circle cx="26" cy="26" r="22" fill="none"
+                                  [attr.stroke]="getScoreColor(job.matchScore)"
+                                  stroke-width="5"
+                                  stroke-linecap="round"
+                                  [attr.stroke-dasharray]="2 * 3.14159 * 22"
+                                  [attr.stroke-dashoffset]="getScoreDashOffset(job.matchScore)"
+                                  transform="rotate(-90 26 26)"/>
+                          <text x="26" y="30" text-anchor="middle"
+                                font-size="11" font-weight="700" fill="#0a0a0a">
+                            {{ job.matchScore }}%
+                          </text>
+                        </svg>
+                      </div>
+                    </ng-container>
+
+                    <a [routerLink]="['/candidate/jobs', job.jobId]"
+                       class="btn-apply">
+                      Apply
+                    </a>
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+            <ng-template #noJobs>
+              <div class="empty-state">
+                <div class="empty-icon">💼</div>
+                <p>No job matches yet.</p>
+                <a routerLink="/candidate/profile" class="link-amber">
+                  Complete your profile to get matches
+                </a>
+              </div>
+            </ng-template>
+          </div>
+
+          <!-- Recent Applications -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Recent Applications</h3>
+              <a routerLink="/candidate/applications" class="link-amber">
+                View all
+              </a>
+            </div>
+
+            <ng-container *ngIf="applications().length > 0; else noApps">
+              <div class="app-list">
+                <ng-container *ngFor="let app of applications().slice(0, 4)">
+                  <div class="app-item">
+                    <div class="app-info">
+                      <div class="app-title">{{ app.jobTitle }}</div>
+                      <div class="app-company">{{ app.companyName }}</div>
+                    </div>
+                    <span [class]="'status-badge ' + getStatusClass(app.status)">
+                      {{ getStatusLabel(app.status) }}
+                    </span>
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+            <ng-template #noApps>
+              <div class="empty-state">
+                <div class="empty-icon">📋</div>
+                <p>No applications yet.</p>
+                <a routerLink="/candidate/jobs" class="link-amber">
+                  Browse jobs to apply
+                </a>
+              </div>
+            </ng-template>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

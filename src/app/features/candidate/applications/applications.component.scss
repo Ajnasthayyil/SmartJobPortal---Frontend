@@ -1,0 +1,365 @@
+$black: #0a0a0a;
+$amber: #f59e0b;
+$amber-d: #d97706;
+$white: #ffffff;
+$gray50: #f9fafb;
+$gray100: #f3f4f6;
+$gray200: #e5e7eb;
+$gray400: #9ca3af;
+$gray600: #6b7280;
+
+.apps-page {
+    background: $gray50;
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+    padding: 40px;
+
+    @media(max-width:768px) {
+        padding: 20px;
+    }
+}
+
+.apps-inner {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+
+    @media(max-width:640px) {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+.page-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: $black;
+    letter-spacing: -.02em;
+}
+
+.page-sub {
+    font-size: 13px;
+    color: $gray400;
+    margin-top: 2px;
+}
+
+.btn-browse {
+    padding: 10px 20px;
+    background: $amber;
+    color: $white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all .2s;
+
+    &:hover {
+        background: $amber-d;
+    }
+}
+
+// Filter tabs
+.filter-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+}
+
+.filter-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: $white;
+    border: 1.5px solid $gray200;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: $gray600;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: 'Outfit', sans-serif;
+
+    &:hover {
+        border-color: $amber;
+        color: $amber;
+    }
+
+    &.active {
+        background: $amber;
+        color: $white;
+        border-color: $amber;
+    }
+}
+
+.tab-count {
+    background: rgba($black, .08);
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+
+    .active & {
+        background: rgba($white, .25);
+    }
+}
+
+// Apps list
+.apps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.app-card {
+    background: $white;
+    border: 1px solid $gray200;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all .2s;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+    }
+}
+
+.app-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.company-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #fef3c7;
+    color: $amber-d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.app-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.app-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: $black;
+    margin-bottom: 2px;
+}
+
+.app-company {
+    font-size: 12px;
+    color: $gray400;
+    margin-bottom: 6px;
+}
+
+.app-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: $gray400;
+}
+
+.match-score {
+    color: $amber-d;
+    font-weight: 600;
+}
+
+// Status badges
+.status-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.status-applied {
+    background: $gray100;
+    color: $gray600;
+}
+
+.status-review {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-shortlisted {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-interview {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-offered {
+    background: #d1fae5;
+    color: #065f46;
+    font-weight: 700;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+// Timeline
+.timeline {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    padding-top: 16px;
+    border-top: 1px solid $gray100;
+    overflow-x: auto;
+}
+
+.timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 80px;
+    position: relative;
+}
+
+.step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid $gray200;
+    background: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: $white;
+    margin-bottom: 6px;
+    transition: all .3s;
+    flex-shrink: 0;
+
+    .completed & {
+        background: $amber;
+        border-color: $amber;
+    }
+
+    .current & {
+        border-color: $amber;
+        color: $amber;
+        box-shadow: 0 0 0 4px rgba($amber, .15);
+    }
+}
+
+.step-line {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    right: -50%;
+    height: 2px;
+    background: $gray200;
+    z-index: 0;
+
+    &.filled {
+        background: $amber;
+    }
+}
+
+.step-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: $gray400;
+    text-align: center;
+    white-space: nowrap;
+
+    .completed & {
+        color: $black;
+        font-weight: 600;
+    }
+
+    .current & {
+        color: $amber-d;
+        font-weight: 600;
+    }
+}
+
+.step-date {
+    font-size: 9px;
+    color: $gray400;
+    margin-top: 2px;
+    text-align: center;
+}
+
+// Empty state
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+
+    .empty-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: $gray600;
+        margin-bottom: 8px;
+    }
+
+    p {
+        font-size: 14px;
+        color: $gray400;
+        margin-bottom: 20px;
+    }
+}
+
+.btn-browse-empty {
+    display: inline-block;
+    padding: 10px 24px;
+    background: $amber;
+    color: $white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all .2s;
+
+    &:hover {
+        background: $amber-d;
+    }
+}
+
+// Skeleton
+.skeleton {
+    background: linear-gradient(90deg, $gray100 0%, $gray200 50%, $gray100 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}

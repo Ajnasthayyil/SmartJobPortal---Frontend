@@ -1,0 +1,224 @@
+<div class="dashboard-page">
+
+    <!-- ══ LOADING STATE ════════════════════════════════ -->
+    <ng-container *ngIf="loading()">
+        <div class="skeleton-wrap">
+            <div class="skeleton-header">
+                <div class="sk sk-title"></div>
+                <div class="sk sk-btn"></div>
+            </div>
+            <div class="skeleton-stats">
+                <div class="sk sk-card" *ngFor="let i of [1,2,3,4]"></div>
+            </div>
+            <div class="skeleton-grid">
+                <div class="sk sk-main"></div>
+                <div class="sk sk-side"></div>
+            </div>
+        </div>
+    </ng-container>
+
+    <!-- ══ MAIN CONTENT ════════════════════════════════ -->
+    <ng-container *ngIf="!loading()">
+        <div class="dashboard-inner">
+
+            <!-- Header Section -->
+            <header class="dash-header">
+                <div class="welcome-text">
+                    <span class="greeting-badge">
+                        <span class="dot"></span>
+                        {{ getGreeting() }}
+                    </span>
+                    <h1 class="dash-title">
+                        Welcome back, <span>{{ getUserFirstName() }}</span>
+                    </h1>
+                    <p class="dash-sub">
+                        Here's what's happening with your recruitment today.
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary" routerLink="/recruiter/manage-jobs">
+                        View Jobs
+                    </button>
+                    <button class="btn-primary" routerLink="/recruiter/post-job">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path d="M12 5v14M5 12h14"></path>
+                        </svg>
+                        Post New Job
+                    </button>
+                </div>
+            </header>
+
+            <!-- Stats Bar -->
+            <section class="stats-bar">
+                <div class="stat-card glass-card">
+                    <div class="stat-icon amber">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Active Jobs</span>
+                        <div class="stat-value-row">
+                            <span class="stat-num">{{ stats().activeJobs }}</span>
+                            <span class="stat-trend up">+2 this month</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-icon blue">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Applicants</span>
+                        <div class="stat-value-row">
+                            <span class="stat-num">{{ stats().totalApplicants }}</span>
+                            <span class="stat-trend neutral">Stable</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-icon emerald">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 20V10M18 20V4M6 20v-4"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Avg. Match Score</span>
+                        <div class="stat-value-row">
+                            <span class="stat-num">{{ stats().avgMatchScore }}%</span>
+                            <span class="stat-trend up">+5% improvement</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-icon rose">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">New Hires</span>
+                        <div class="stat-value-row">
+                            <span class="stat-num">{{ stats().hiresThisMonth }}</span>
+                            <span class="stat-trend up">Target met</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content Grid -->
+            <div class="main-grid">
+                
+                <!-- ── Left Column: Active Jobs ──────────────── -->
+                <div class="grid-col jobs-col">
+                    <div class="glass-card full-height">
+                        <div class="card-header">
+                            <h3 class="card-title">Active Job Listings</h3>
+                            <a routerLink="/recruiter/manage-jobs" class="view-all-link">View all</a>
+                        </div>
+
+                        <div class="job-list" *ngIf="jobs().length > 0; else noJobs">
+                            <div class="job-item" *ngFor="let job of jobs().slice(0, 5)">
+                                <div class="job-main">
+                                    <div class="job-title-row">
+                                        <h4>{{ job.title }}</h4>
+                                        <span class="status-pill active">Active</span>
+                                    </div>
+                                    <div class="job-meta">
+                                        <span>{{ job.location }}</span>
+                                        <span class="dot-sep"></span>
+                                        <span>{{ job.jobType }}</span>
+                                        <span class="dot-sep"></span>
+                                        <span class="applicant-count">{{ job.totalApplicants }} applicants</span>
+                                    </div>
+                                    <div class="skill-pills">
+                                        <span class="skill-pill" *ngFor="let skill of job.requiredSkills.slice(0,3)">{{ skill }}</span>
+                                        <span class="more-skills" *ngIf="job.requiredSkills.length > 3">+{{ job.requiredSkills.length - 3 }}</span>
+                                    </div>
+                                </div>
+                                <div class="job-actions">
+                                    <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="btn-manage">
+                                        Manage
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ng-template #noJobs>
+                            <div class="empty-state">
+                                <div class="empty-icon">📁</div>
+                                <h3>No active jobs</h3>
+                                <p>Start by posting your first job listing.</p>
+                                <button class="btn-primary" routerLink="/recruiter/post-job">Post Job</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <!-- ── Right Column: Top Candidates ────────────── -->
+                <div class="grid-col talent-col">
+                    <div class="glass-card full-height">
+                        <div class="card-header">
+                            <h3 class="card-title">Top Talents</h3>
+                        </div>
+
+                        <div class="applicant-list" *ngIf="topApplicants().length > 0; else noApplicants">
+                            <div class="applicant-item" *ngFor="let app of topApplicants(); let i = index">
+                                <div class="rank-num">#{{ i + 1 }}</div>
+                                <div class="applicant-profile">
+                                    <div class="app-avatar">
+                                        {{ app.fullName.charAt(0) }}
+                                    </div>
+                                    <div class="app-info">
+                                        <div class="app-name">{{ app.fullName }}</div>
+                                        <div class="app-sub">{{ app.experienceYears }} yrs exp • {{ app.location || 'Remote' }}</div>
+                                    </div>
+                                </div>
+                                <div class="match-badge">
+                                    <div class="score-ring">
+                                        <svg width="32" height="32" viewBox="0 0 32 32">
+                                            <circle cx="16" cy="16" r="14" fill="none" stroke="#f3f4f6" stroke-width="3" />
+                                            <circle cx="16" cy="16" r="14" fill="none" [attr.stroke]="getScoreColor(app.totalScore)" stroke-width="3"
+                                                stroke-linecap="round" stroke-dasharray="88"
+                                                [attr.stroke-dashoffset]="88 * (1 - (app.totalScore || 0) / 100)"
+                                                transform="rotate(-90 16 16)" />
+                                        </svg>
+                                        <span class="score-val">{{ app.totalScore }}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ng-template #noApplicants>
+                            <div class="empty-state">
+                                <div class="empty-icon">🔍</div>
+                                <h3>No applicants yet</h3>
+                                <p>Top candidates for your active jobs will appear here.</p>
+                            </div>
+                        </ng-template>
+                    </div>
+
+                    <!-- Quick Help/Guide -->
+                    <div class="glass-card amber-card">
+                        <div class="guide-content">
+                            <h4>Pro Tip! 💡</h4>
+                            <p>Boost your job visibility by adding more specific skills and a detailed company profile.</p>
+                            <a routerLink="/recruiter/profile" class="btn-text">Edit Profile →</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </ng-container>
+</div>

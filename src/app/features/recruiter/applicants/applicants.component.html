@@ -1,0 +1,113 @@
+<div class="applicants-page">
+    <div class="page-inner">
+
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-left">
+                <a routerLink="/recruiter/jobs" class="btn-back">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+                    Back to Jobs
+                </a>
+                <div class="title-group">
+                    <h1 class="page-title">Applicants</h1>
+                    <p class="page-sub" *ngIf="applicants().length > 0">
+                        Managing {{ applicants().length }} applications for this position
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Filters/Sort (Pills) -->
+            <div class="header-right">
+                <div class="glass-tabs">
+                    <button class="tab" [class.active]="activeTab() === 'all'" (click)="onTabChange('all')">
+                        All <span class="badge">{{ applicants().length }}</span>
+                    </button>
+                    <button class="tab" [class.active]="activeTab() === 'shortlisted'" (click)="onTabChange('shortlisted')">
+                        Shortlisted
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Loading -->
+        <div class="loading-wrap" *ngIf="loading()">
+            <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="content-wrap" *ngIf="!loading()">
+            
+            <div class="glass-card table-card">
+                <div class="table-container" *ngIf="filtered().length > 0; else noApplicants">
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Exp & Location</th>
+                                <th>Skills</th>
+                                <th>Match Score</th>
+                                <th>Status</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let app of filtered()">
+                                <td>
+                                    <div class="candidate-info">
+                                        <div class="avatar">{{ app.fullName.charAt(0) }}</div>
+                                        <div class="name-box">
+                                            <div class="name">{{ app.fullName }}</div>
+                                            <div class="email">{{ app.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="meta-box">
+                                        <div class="exp">{{ app.experienceYears }} years</div>
+                                        <div class="loc">{{ app.location || 'Remote' }}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="skill-tags">
+                                        <span class="skill-tag" *ngFor="let s of app.skills.slice(0, 3)">{{ s }}</span>
+                                        <span class="more" *ngIf="app.skills.length > 3">+{{ app.skills.length - 3 }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="score-badge" [style.color]="getScoreColor(app.totalScore)" [style.background]="getScoreColor(app.totalScore) + '15'">
+                                        {{ app.totalScore }}%
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-pill" [class]="app.status.toLowerCase()">
+                                        {{ app.status }}
+                                    </span>
+                                </td>
+                                <td class="text-right">
+                                    <div class="action-btns">
+                                        <a *ngIf="app.hasResume" [href]="app.resumeUrl" target="_blank" class="btn-icon-outline" title="View Resume">
+                                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        </a>
+                                        <button class="btn-icon-amber" (click)="updateStatus(app.applicationId, 'Shortlisted')" *ngIf="app.status !== 'Shortlisted'" title="Shortlist">
+                                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <ng-template #noApplicants>
+                    <div class="empty-state">
+                        <div class="empty-icon">👥</div>
+                        <h3>No applicants found</h3>
+                        <p>Applications for this job listing will appear here.</p>
+                    </div>
+                </ng-template>
+            </div>
+
+        </div>
+
+    </div>
+</div>

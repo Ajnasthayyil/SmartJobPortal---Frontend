@@ -1,7 +1,18 @@
-<app-header [appHideOnRoutes]="['/login', '/register', '/forgot-password']"></app-header>
+<div class="app-layout" [class.has-sidebar]="hasSidebar()">
+  <!-- Main Application Header (Landing/Auth) -->
+  <app-header *ngIf="!hasSidebar()" [appHideOnRoutes]="['/login', '/register', '/forgot-password']"></app-header>
 
-<main>
-  <router-outlet></router-outlet>
-</main>
+  <!-- Dashboard Header (Authenticated) -->
+  <app-dashboard-header *ngIf="hasSidebar()"></app-dashboard-header>
 
-<app-footer [appHideOnRoutes]="['/login', '/register', '/forgot-password']"></app-footer>
+  <!-- Sidebar -->
+  <app-sidebar *ngIf="hasSidebar()"></app-sidebar>
+
+  <!-- Main Content Area -->
+  <main class="main-content" [class.no-padding]="!hasSidebar()">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <app-footer *ngIf="!hasSidebar()" [appHideOnRoutes]="['/login', '/register', '/forgot-password']"></app-footer>
+</div>

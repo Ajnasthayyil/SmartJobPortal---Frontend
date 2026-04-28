@@ -1,0 +1,120 @@
+<div class="jobs-page">
+    <div class="page-inner">
+
+        <!-- Header -->
+        <header class="page-header">
+            <div class="welcome-text">
+                <h1 class="page-title">Manage Jobs</h1>
+                <p class="page-sub">Monitor and manage all your active and past job listings.</p>
+            </div>
+            <a routerLink="/recruiter/post-job" class="btn-primary">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path d="M12 5v14M5 12h14"></path>
+                </svg>
+                Post New Job
+            </a>
+        </header>
+
+        <!-- Tabs Section -->
+        <div class="tabs-row">
+            <div class="glass-tabs">
+                <button class="tab" [class.active]="activeTab() === 'all'" (click)="applyTab('all')">
+                    All Jobs <span class="badge">{{ count('all') }}</span>
+                </button>
+                <button class="tab" [class.active]="activeTab() === 'active'" (click)="applyTab('active')">
+                    Active <span class="badge green">{{ count('active') }}</span>
+                </button>
+                <button class="tab" [class.active]="activeTab() === 'inactive'" (click)="applyTab('inactive')">
+                    Inactive <span class="badge gray">{{ count('inactive') }}</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <ng-container *ngIf="loading()">
+            <div class="jobs-list">
+                <div class="skeleton-card" *ngFor="let i of [1,2,3]"></div>
+            </div>
+        </ng-container>
+
+        <!-- Empty State -->
+        <ng-container *ngIf="!loading() && filtered().length === 0">
+            <div class="glass-card empty-card">
+                <div class="empty-icon">📂</div>
+                <h3>No jobs found</h3>
+                <p>You haven't posted any jobs in this category yet.</p>
+                <button class="btn-primary" routerLink="/recruiter/post-job">Post Your First Job</button>
+            </div>
+        </ng-container>
+
+        <!-- Jobs List -->
+        <ng-container *ngIf="!loading() && filtered().length > 0">
+            <div class="jobs-list">
+                <div class="job-card glass-card" *ngFor="let job of filtered()">
+                    
+                    <div class="job-main-info">
+                        <div class="job-title-row">
+                            <h3>{{ job.title }}</h3>
+                            <span class="status-pill" [class.active]="job.isActive">
+                                {{ job.isActive ? 'Active' : 'Inactive' }}
+                            </span>
+                        </div>
+                        
+                        <div class="job-meta">
+                            <span class="meta-item">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                {{ job.location }}
+                            </span>
+                            <span class="sep"></span>
+                            <span class="meta-item">{{ job.jobType }}</span>
+                            <span class="sep"></span>
+                            <span class="meta-item">{{ job.minExperienceYears }}+ yrs Exp</span>
+                            <span class="sep" *ngIf="job.minSalary"></span>
+                            <span class="meta-item salary" *ngIf="job.minSalary">
+                                ₹{{ job.minSalary | number }} <ng-container *ngIf="job.maxSalary">- ₹{{ job.maxSalary | number }}</ng-container>
+                            </span>
+                        </div>
+
+                        <div class="skill-cloud">
+                            <span class="skill-tag" *ngFor="let s of job.requiredSkills.slice(0, 4)">{{ s }}</span>
+                            <span class="more-tag" *ngIf="job.requiredSkills.length > 4">+{{ job.requiredSkills.length - 4 }}</span>
+                        </div>
+                    </div>
+
+                    <div class="job-stats-actions">
+                        <div class="applicant-stat">
+                            <span class="stat-num">{{ job.totalApplicants }}</span>
+                            <span class="stat-lbl">Applicants</span>
+                        </div>
+                        
+                        <div class="actions-group">
+                            <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="btn-manage">
+                                View Applicants
+                            </a>
+                            <button *ngIf="job.isActive" class="btn-icon-danger" (click)="confirmId.set(job.jobId)" title="Deactivate">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                                    <line x1="12" y1="2" x2="12" y2="12"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Deactivate Confirmation Overlay -->
+                    <div class="confirm-overlay" *ngIf="confirmId() === job.jobId">
+                        <div class="confirm-content">
+                            <h4>Deactivate Job?</h4>
+                            <p>This will stop new applications. Existing ones will remain.</p>
+                            <div class="confirm-btns">
+                                <button class="btn-ghost" (click)="confirmId.set(null)">Cancel</button>
+                                <button class="btn-danger" (click)="deleteJob(job.jobId)">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+
+    </div>
+</div>

@@ -1,0 +1,118 @@
+<div class="apps-page">
+    <div class="apps-inner">
+
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">My Applications</h1>
+                <p class="page-sub">Track your application journey in real-time</p>
+            </div>
+            <a routerLink="/candidate/jobs" class="btn-browse">
+                + Browse More Jobs
+            </a>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="filter-tabs">
+            <ng-container *ngFor="let f of filters">
+                <button class="filter-tab" [class.active]="activeFilter() === f" (click)="setFilter(f)">
+                    {{ f === 'UnderReview' ? 'Under Review' : f }}
+                    <span class="tab-count">{{ countByStatus(f) }}</span>
+                </button>
+            </ng-container>
+        </div>
+
+        <!-- Loading -->
+        <ng-container *ngIf="loading()">
+            <div class="apps-list">
+                <ng-container *ngFor="let i of [1,2,3,4]">
+                    <div class="skeleton" style="height:140px;border-radius:16px"></div>
+                </ng-container>
+            </div>
+        </ng-container>
+
+        <!-- Empty -->
+        <ng-container *ngIf="!loading() && filtered().length === 0">
+            <div class="empty-state">
+                <div class="empty-icon">📋</div>
+                <h3>No applications found</h3>
+                <p>
+                    <ng-container *ngIf="activeFilter() === 'All'; else notAll">
+                        You haven't applied to any jobs yet.
+                    </ng-container>
+                    <ng-template #notAll>
+                        No applications with status "{{ activeFilter() }}"
+                    </ng-template>
+                </p>
+                <a routerLink="/candidate/jobs" class="btn-browse-empty">
+                    Browse Jobs
+                </a>
+            </div>
+        </ng-container>
+
+        <!-- Applications list -->
+        <ng-container *ngIf="!loading() && filtered().length > 0">
+            <div class="apps-list">
+                <ng-container *ngFor="let app of filtered()">
+                    <div class="app-card">
+
+                        <div class="app-card-top">
+
+                            <!-- Company logo -->
+                            <div class="company-logo">
+                                {{ app.companyName.charAt(0) }}
+                            </div>
+
+                            <!-- Job info -->
+                            <div class="app-info">
+                                <h3 class="app-title">{{ app.jobTitle }}</h3>
+                                <div class="app-company">{{ app.companyName }}</div>
+                                <div class="app-meta">
+                                    <span>Applied {{ app.appliedAt | date:'mediumDate' }}</span>
+                                    <ng-container *ngIf="app.matchScore">
+                                        <span class="match-score">
+                                            🎯 {{ app.matchScore }}% match
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <!-- Status badge -->
+                            <span [class]="'status-badge ' + getStatusClass(app.status)">
+                                {{ getStatusLabel(app.status) }}
+                            </span>
+
+                        </div>
+
+                        <!-- Status timeline -->
+                        <ng-container *ngIf="app.timeline && app.timeline.length > 0">
+                            <div class="timeline">
+                                <ng-container *ngFor="let step of app.timeline; let last = last">
+                                    <div class="timeline-step" [class.completed]="step.isCompleted" [class.current]="step.isCurrent">
+                                        <div class="step-dot">
+                                            <ng-container *ngIf="step.isCompleted"> ✓ </ng-container>
+                                        </div>
+                                        <ng-container *ngIf="!last">
+                                            <div class="step-line" [class.filled]="step.isCompleted">
+                                            </div>
+                                        </ng-container>
+                                        <div class="step-label">
+                                            {{ step.status === 'UnderReview' ? 'Under Review' : step.status }}
+                                        </div>
+                                        <ng-container *ngIf="step.occurredAt">
+                                            <div class="step-date">
+                                                {{ step.occurredAt | date:'MMM d' }}
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+
+    </div>
+</div>

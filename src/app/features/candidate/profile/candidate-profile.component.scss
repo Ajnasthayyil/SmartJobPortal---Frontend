@@ -1,0 +1,267 @@
+$black:   #0a0a0a;
+$amber:   #f59e0b;
+$amber-d: #d97706;
+$white:   #ffffff;
+$gray50:  #f9fafb;
+$gray100: #f3f4f6;
+$gray200: #e5e7eb;
+$gray400: #9ca3af;
+$gray600: #6b7280;
+$gray700: #374151;
+$red:     #ef4444;
+
+.profile-page {
+  background: $gray50; min-height: 100vh;
+  font-family: 'Outfit', sans-serif; padding: 40px;
+  @media(max-width:768px) { padding: 20px; }
+}
+.profile-inner { max-width: 1200px; margin: 0 auto; }
+
+.page-header {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 32px;
+  @media(max-width:640px) { flex-direction: column; gap: 12px; }
+}
+.page-title {
+  font-size: 26px; font-weight: 700;
+  color: $black; letter-spacing: -.02em;
+}
+.page-sub { font-size: 13px; color: $gray400; margin-top: 2px; }
+.btn-back {
+  font-size: 13px; font-weight: 600; color: $gray600;
+  text-decoration: none; transition: color .2s;
+  &:hover { color: $black; }
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  @media(max-width:900px) { grid-template-columns: 1fr; }
+}
+
+.sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+.photo-card {
+  padding: 32px 24px;
+}
+
+.avatar-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+
+  .avatar-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    background: linear-gradient(135deg, $amber 0%, #fbbf24 100%);
+    box-shadow: 0 10px 25px rgba($amber, 0.2);
+    overflow: hidden;
+    border: 4px solid $white;
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      font-weight: 800;
+      color: $white;
+    }
+
+    .avatar-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $white;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover .avatar-overlay {
+      opacity: 1;
+    }
+  }
+
+  .photo-info {
+    h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: $black;
+      margin-bottom: 4px;
+    }
+    p {
+      font-size: 14px;
+      color: $gray600;
+      margin-bottom: 16px;
+    }
+  }
+
+  .btn-change-photo {
+    background: rgba($amber, 0.1);
+    color: $amber-d;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: $amber;
+      color: $white;
+    }
+  }
+}
+
+.main-form { display: flex; flex-direction: column; gap: 20px; }
+
+.card {
+  background: $white; border: 1px solid $gray200;
+  border-radius: 16px; padding: 24px;
+}
+.card-title {
+  font-size: 15px; font-weight: 700;
+  color: $black; margin-bottom: 16px;
+}
+
+// Completion ring
+.ring-center {
+  display: flex; justify-content: center; margin-bottom: 16px;
+}
+.checklist { display: flex; flex-direction: column; gap: 8px; }
+.check-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: $gray400;
+  .check-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: $gray200; flex-shrink: 0;
+  }
+  &.done { color: $black; font-weight: 500;
+    .check-dot { background: $amber; }
+  }
+}
+
+// Resume
+.resume-current {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px; background: $gray50; border-radius: 10px;
+  margin-bottom: 12px;
+}
+.resume-icon { font-size: 24px; }
+.resume-name { font-size: 12px; font-weight: 600; color: $black; }
+.resume-date { font-size: 11px; color: $gray400; margin-top: 2px; }
+
+.upload-zone {
+  border: 2px dashed $gray200; border-radius: 12px;
+  padding: 24px; text-align: center; cursor: pointer;
+  transition: all .2s;
+  &:hover, &.drag-active {
+    border-color: $amber; background: #fffbf0;
+  }
+}
+.upload-loading {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: 13px; color: $amber; font-weight: 500;
+}
+.spin-amber {
+  width: 24px; height: 24px;
+  border: 3px solid rgba($amber,.2);
+  border-top-color: $amber; border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+.upload-icon { font-size: 28px; margin-bottom: 8px; }
+.upload-txt { font-size: 13px; font-weight: 600; color: $black; }
+.upload-sub { font-size: 11px; color: $gray400; margin-top: 4px; }
+
+// Form fields
+.field { margin-bottom: 20px; }
+.field label {
+  display: block; font-size: 11px; font-weight: 600;
+  color: $gray700; letter-spacing: .06em;
+  text-transform: uppercase; margin-bottom: 7px;
+}
+.field-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 20px;
+  @media(max-width:640px) { grid-template-columns: 1fr; }
+}
+.field-wrap { position: relative; }
+.field-icon {
+  position: absolute; left: 14px; top: 50%;
+  transform: translateY(-50%); color: $gray400; pointer-events: none;
+}
+.field-input {
+  width: 100%; padding: 12px 14px; border: 1.5px solid $gray200;
+  border-radius: 12px; font-size: 14px;
+  font-family: 'Outfit', sans-serif; color: $black;
+  background: $gray50; transition: all .2s; outline: none;
+  &.has-icon { padding-left: 42px; }
+  &::placeholder { color: $gray200; }
+  &:focus { border-color: $black; background: $white; box-shadow: 0 0 0 4px rgba($black,.05); }
+  &.is-error { border-color: #f87171; }
+}
+.textarea { resize: vertical; min-height: 120px; }
+.field-error { font-size: 11px; color: $red; margin-top: 4px; }
+
+// Skills
+.skill-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.btn-add-skill {
+  padding: 12px 18px; background: $black; color: $white;
+  border: none; border-radius: 12px; font-size: 12px;
+  font-weight: 600; cursor: pointer; white-space: nowrap;
+  transition: all .2s; font-family: 'Outfit', sans-serif;
+  &:hover { background: #222; }
+}
+.skills-cloud { display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px; }
+.skill-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #fef3c7; color: #92400e;
+  padding: 6px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 500;
+  button {
+    background: none; border: none; cursor: pointer;
+    color: inherit; padding: 0; font-size: 10px;
+    opacity: .6; &:hover { opacity: 1; }
+  }
+}
+.no-skills { font-size: 12px; color: $gray400; }
+
+.form-footer { display: flex; justify-content: flex-end; margin-top: 8px; }
+.btn-save {
+  padding: 13px 32px; background: $amber; color: $white;
+  border: none; border-radius: 12px; font-size: 14px;
+  font-weight: 600; cursor: pointer;
+  font-family: 'Outfit', sans-serif; transition: all .2s;
+  display: flex; align-items: center; gap: 8px;
+  &:hover:not(:disabled) { background: $amber-d; transform: translateY(-1px); }
+  &:disabled { opacity: .6; cursor: not-allowed; }
+}
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba($white,.3); border-top-color: $white;
+  border-radius: 50%; animation: spin .65s linear infinite;
+}
+.skeleton-wrap { max-width: 1200px; margin: 0 auto; }
+.skeleton {
+  background: linear-gradient(90deg, $gray100 0%, $gray200 50%, $gray100 100%);
+  background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }

@@ -48,7 +48,9 @@ export interface ApplicantResponse {
   status: string;
   coverNote: string;
   appliedAt: string;
+  candidateUserId: number;
   hasResume: boolean;
+  resumeUrl?: string;
   skills: string[];
   totalScore: number | null;
   skillScore: number | null;

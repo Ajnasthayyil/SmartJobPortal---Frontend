@@ -1,0 +1,28 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  transition: all 0.3s ease;
+  width: 100%;
+  padding-top: 24px; /* Default top padding */
+}
+
+/* When the sidebar is active, add margin on desktop and more top padding for header */
+.app-layout.has-sidebar {
+  .main-content {
+    padding-top: 128px; /* Increased space for floating pill navbar */
+    
+    @media (min-width: 1025px) {
+      margin-left: 120px; /* Reduced margin to account for mini-sidebar */
+      width: calc(100% - 120px);
+    }
+  }
+}
+
+.no-padding {
+  padding-top: 0 !important;
+}

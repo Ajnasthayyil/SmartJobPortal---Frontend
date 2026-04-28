@@ -19,7 +19,7 @@ export class RegisterComponent {
   form: FormGroup;
   loading = signal(false);
   showPass = signal(false);
-  apiError = signal('');
+
 
   constructor(
     private fb: FormBuilder,
@@ -50,7 +50,7 @@ export class RegisterComponent {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
 
     this.loading.set(true);
-    this.apiError.set('');
+
 
     const formVal = this.form.value;
     const req = {
@@ -72,12 +72,12 @@ export class RegisterComponent {
           this.toast.success('Registration successful! Please sign in.');
           this.router.navigate(['/login']);
         } else {
-          this.apiError.set(res.message || 'Registration failed.');
+          this.toast.error(res.message || 'Registration failed.');
         }
       },
       error: err => {
         this.loading.set(false);
-        this.apiError.set(
+        this.toast.error(
           err?.error?.message || 'Failed to register account.'
         );
       }

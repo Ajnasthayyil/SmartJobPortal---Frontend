@@ -11,6 +11,7 @@ export interface CandidateProfile {
   resumeOriginalName: string;
   resumeUploadedAt: string;
   skills: SkillItem[];
+  profilePictureUrl?: string;
 }
 
 export interface SkillItem {

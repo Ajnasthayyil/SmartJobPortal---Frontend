@@ -1,0 +1,13 @@
+<aside class="sidebar-wrapper" *ngIf="links.length > 0">
+  <nav class="sidebar-nav">
+    <ng-container *ngFor="let link of links">
+      <a [routerLink]="link.path"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}"
+         class="nav-link">
+        <lucide-icon [img]="link.icon" class="nav-icon" [size]="20"></lucide-icon>
+        <span class="nav-label">{{ link.label }}</span>
+      </a>
+    </ng-container>
+  </nav>
+</aside>

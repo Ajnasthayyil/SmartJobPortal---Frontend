@@ -19,7 +19,7 @@ export class LoginComponent {
   form: FormGroup;
   loading  = signal(false);
   showPass = signal(false);
-  apiError = signal('');
+
 
   constructor(
     private fb:     FormBuilder,
@@ -45,7 +45,7 @@ export class LoginComponent {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
 
     this.loading.set(true);
-    this.apiError.set('');
+
 
     this.auth.login({
       email:    this.email.value.trim().toLowerCase(),
@@ -54,15 +54,15 @@ export class LoginComponent {
       next: res => {
         this.loading.set(false);
         if (res.success) {
-          this.toast.success(`Welcome back, ${res.data.fullName}!`);
+          this.toast.success(`Login successful!`);
           this.auth.redirectByRole();
         } else {
-          this.apiError.set(res.message || 'Login failed.');
+          this.toast.error(res.message || 'Login failed.');
         }
       },
       error: err => {
         this.loading.set(false);
-        this.apiError.set(
+        this.toast.error(
           err?.error?.message || 'Invalid email or password.'
         );
       }

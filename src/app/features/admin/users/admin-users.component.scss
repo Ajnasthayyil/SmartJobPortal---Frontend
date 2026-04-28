@@ -1,0 +1,117 @@
+$black:   #0a0a0a;
+$amber:   #f59e0b;
+$amber-d: #d97706;
+$white:   #ffffff;
+$gray50:  #f9fafb;
+$gray100: #f3f4f6;
+$gray200: #e5e7eb;
+$gray400: #9ca3af;
+$gray600: #6b7280;
+
+.admin-users-page {
+  background: $gray50; min-height: 100vh;
+  font-family: 'Outfit', sans-serif; padding: 40px;
+  @media(max-width:768px) { padding: 20px; }
+}
+.page-inner { max-width: 1200px; margin: 0 auto; }
+
+.page-header { margin-bottom: 28px; }
+.page-title { font-size: 26px; font-weight: 700; color: $black; letter-spacing: -.02em; }
+.page-sub { font-size: 13px; color: $gray400; margin-top: 2px; }
+
+.filters-row {
+  display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.search-box {
+  display: flex; align-items: center; gap: 8px;
+  background: $white; border: 1.5px solid $gray200;
+  border-radius: 10px; padding: 10px 14px; flex: 1; min-width: 220px;
+  svg { color: $gray400; flex-shrink: 0; }
+  input {
+    border: none; outline: none; font-size: 13px;
+    font-family: 'Outfit', sans-serif; color: $black;
+    width: 100%; background: transparent;
+    &::placeholder { color: $gray400; }
+  }
+}
+.filter-select {
+  padding: 10px 14px; border: 1.5px solid $gray200;
+  border-radius: 10px; font-size: 13px;
+  font-family: 'Outfit', sans-serif; color: $black;
+  background: $white; outline: none; cursor: pointer;
+  &:focus { border-color: $amber; }
+}
+
+.table-card {
+  background: $white; border: 1px solid $gray200; border-radius: 16px; overflow: hidden;
+}
+.table-wrap { overflow-x: auto; }
+.data-table {
+  width: 100%; border-collapse: collapse;
+  th {
+    text-align: left; font-size: 11px; font-weight: 600;
+    color: $gray400; text-transform: uppercase; letter-spacing: .06em;
+    padding: 14px 20px; background: $gray50;
+    border-bottom: 1px solid $gray200;
+  }
+  td {
+    padding: 14px 20px; border-bottom: 1px solid $gray100;
+    font-size: 13px; vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fffbf0; }
+}
+
+.user-cell { display: flex; align-items: center; gap: 10px; }
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #fef3c7; color: $amber-d;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-shrink: 0;
+}
+.uname { font-size: 13px; font-weight: 600; color: $black; }
+.uemail { font-size: 11px; color: $gray400; }
+.phone { color: $gray600; }
+.date { font-size: 12px; color: $gray400; }
+
+.role-badge {
+  padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+.role-admin     { background: #f3e8ff; color: #7c3aed; }
+.role-recruiter { background: #dbeafe; color: #1d4ed8; }
+.role-candidate { background: #d1fae5; color: #065f46; }
+
+.active-badge {
+  background: #d1fae5; color: #065f46;
+  padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+.blocked-badge {
+  background: #fee2e2; color: #991b1b;
+  padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+
+.btn-block {
+  padding: 6px 14px; background: #fee2e2; color: #dc2626;
+  border: none; border-radius: 8px; font-size: 12px;
+  font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif;
+  transition: all .2s;
+  &:hover:not(:disabled) { background: #fca5a5; }
+  &:disabled { opacity: .5; cursor: not-allowed; }
+}
+.btn-unblock {
+  padding: 6px 14px; background: #d1fae5; color: #059669;
+  border: none; border-radius: 8px; font-size: 12px;
+  font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif;
+  transition: all .2s;
+  &:hover:not(:disabled) { background: #a7f3d0; }
+  &:disabled { opacity: .5; cursor: not-allowed; }
+}
+
+.empty-state { text-align: center; padding: 40px; color: $gray400; font-size: 14px; }
+
+.table-skeleton { display: flex; flex-direction: column; gap: 8px; }
+.skeleton {
+  background: linear-gradient(90deg, $gray100 0%, $gray200 50%, $gray100 100%);
+  background-size: 200% 100%; animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }

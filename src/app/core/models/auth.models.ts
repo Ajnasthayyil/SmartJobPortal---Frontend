@@ -20,11 +20,17 @@ export interface RegisterRecruiterRequest {
 }
 
 export interface AuthResponse {
+  token: string;
+  refreshToken: string;
+}
+
+export interface UserSession {
   accessToken: string;
   role: string;
-  fullName: string;
+  email: string;
   userId: number;
-  expiresAt: string;
+  fullName?: string;
+  profilePictureUrl?: string;
 }
 
 export interface ApiResponse<T> {

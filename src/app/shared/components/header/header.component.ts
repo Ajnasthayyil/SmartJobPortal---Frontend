@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +11,7 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  authService = inject(AuthService);
   isMenuOpen = false;
 
   toggleMenu() {
@@ -24,5 +26,10 @@ export class HeaderComponent {
   closeMenu() {
     this.isMenuOpen = false;
     document.body.style.overflow = 'auto';
+  }
+
+  onLogout() {
+    this.authService.logout();
+    this.closeMenu();
   }
 }

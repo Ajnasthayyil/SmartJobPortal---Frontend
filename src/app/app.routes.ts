@@ -21,8 +21,14 @@ export const routes: Routes = [
       import('./features/auth/register/register.component')
         .then(m => m.RegisterComponent)
   },
+  {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('./features/auth/forgot-password/forgot-password.component')
+        .then(m => m.ForgotPasswordComponent)
+  },
 
-  // ── Candidate routes ─────────────────────────────────
+  // ── Candidate ─────────────────────────────────────────
   {
     path: 'candidate',
     canActivate: [authGuard, roleGuard],
@@ -34,11 +40,35 @@ export const routes: Routes = [
           import('./features/candidate/dashboard/candidate-dashboard.component')
             .then(m => m.CandidateDashboardComponent)
       },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./features/candidate/profile/candidate-profile.component')
+            .then(m => m.ProfileComponent)
+      },
+      {
+        path: 'jobs',
+        loadComponent: () =>
+          import('./features/candidate/job-search/job-search.component')
+            .then(m => m.JobSearchComponent)
+      },
+      {
+        path: 'jobs/:id',
+        loadComponent: () =>
+          import('./features/candidate/job-detail/job-detail.component')
+            .then(m => m.JobDetailComponent)
+      },
+      {
+        path: 'applications',
+        loadComponent: () =>
+          import('./features/candidate/applications/applications.component')
+            .then(m => m.ApplicationsComponent)
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
 
-  // ── Recruiter routes ──────────────────────────────────
+  // ── Recruiter ──────────────────────────────────────────
   {
     path: 'recruiter',
     canActivate: [authGuard, roleGuard],
@@ -50,11 +80,29 @@ export const routes: Routes = [
           import('./features/recruiter/dashboard/recruiter-dashboard.component')
             .then(m => m.RecruiterDashboardComponent)
       },
+      {
+        path: 'post-job',
+        loadComponent: () =>
+          import('./features/recruiter/post-job/post-job.component')
+            .then(m => m.PostJobComponent)
+      },
+      {
+        path: 'jobs',
+        loadComponent: () =>
+          import('./features/recruiter/manage-jobs/manage-jobs.component')
+            .then(m => m.ManageJobsComponent)
+      },
+      {
+        path: 'jobs/:id/applicants',
+        loadComponent: () =>
+          import('./features/recruiter/applicants/applicants.component')
+            .then(m => m.ApplicantsComponent)
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
 
-  // ── Admin routes ──────────────────────────────────────
+  // ── Admin ──────────────────────────────────────────────
   {
     path: 'admin',
     canActivate: [authGuard, roleGuard],
@@ -65,6 +113,24 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/dashboard/admin-dashboard.component')
             .then(m => m.AdminDashboardComponent)
+      },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./features/admin/users/admin-users.component')
+            .then(m => m.AdminUsersComponent)
+      },
+      {
+        path: 'recruiters',
+        loadComponent: () =>
+          import('./features/admin/recruiters/admin-recruiters.component')
+            .then(m => m.AdminRecruitersComponent)
+      },
+      {
+        path: 'jobs',
+        loadComponent: () =>
+          import('./features/admin/jobs/admin-jobs.component')
+            .then(m => m.AdminJobsComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

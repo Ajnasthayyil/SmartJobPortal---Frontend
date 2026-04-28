@@ -1,0 +1,120 @@
+<div class="admin-users-page">
+  <div class="page-inner">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">User Management</h1>
+        <p class="page-sub">
+          {{ filtered().length }} users found
+        </p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-row">
+      <div class="search-box">
+        <svg width="15" height="15" fill="none" stroke="currentColor"
+             stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Search name or email..."
+               [(ngModel)]="search"
+               (ngModelChange)="applySearch()"/>
+      </div>
+
+      <select class="filter-select" [(ngModel)]="roleFilter"
+              (ngModelChange)="load()">
+        <option value="">All Roles</option>
+        <option value="Admin">Admin</option>
+        <option value="Recruiter">Recruiter</option>
+        <option value="Candidate">Candidate</option>
+      </select>
+
+      <select class="filter-select" [(ngModel)]="statusFilter"
+              (ngModelChange)="load()">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="blocked">Blocked</option>
+      </select>
+    </div>
+
+    <!-- Table -->
+    <ng-container *ngIf="loading()">
+      <div class="table-skeleton">
+        <ng-container *ngFor="let i of [1,2,3,4,5]">
+          <div class="skeleton" style="height:56px;border-radius:8px"></div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading()">
+      <div class="table-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let u of filtered()">
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="avatar">{{ u.fullName.charAt(0) }}</div>
+                      <div>
+                        <div class="uname">{{ u.fullName }}</div>
+                        <div class="uemail">{{ u.email }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span [class]="'role-badge ' + getRoleClass(u.roleName)">
+                      {{ u.roleName }}
+                    </span>
+                  </td>
+                  <td class="phone">{{ u.phoneNumber || '—' }}</td>
+                  <td>
+                    <span [class]="u.isActive ? 'active-badge' : 'blocked-badge'">
+                      {{ u.isActive ? 'Active' : 'Blocked' }}
+                    </span>
+                  </td>
+                  <td class="date">{{ u.createdAt | date:'MMM d, y' }}</td>
+                  <td>
+                    <ng-container *ngIf="u.roleName !== 'Admin'">
+                      <button
+                        [class]="u.isActive ? 'btn-block' : 'btn-unblock'"
+                        [disabled]="processing() === u.userId"
+                        (click)="toggleBlock(u)">
+                        <ng-container *ngIf="processing() === u.userId">
+                          ...
+                        </ng-container>
+                        <ng-container *ngIf="processing() !== u.userId">
+                          {{ u.isActive ? 'Block' : 'Unblock' }}
+                        </ng-container>
+                      </button>
+                    </ng-container>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-container *ngIf="filtered().length === 0">
+          <div class="empty-state">
+            <p>No users match your search.</p>
+          </div>
+        </ng-container>
+
+      </div>
+    </ng-container>
+
+  </div>
+</div>

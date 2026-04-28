@@ -1,0 +1,165 @@
+<div class="admin-page">
+  <div class="page-inner">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Admin Dashboard</h1>
+        <p class="page-sub">Platform overview and system health</p>
+      </div>
+    </div>
+
+    <ng-container *ngIf="loading()">
+      <div class="skeleton-grid">
+        <ng-container *ngFor="let i of [1,2,3,4,5,6]">
+          <div class="skeleton" style="height:110px;border-radius:14px"></div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading() && data()">
+
+      <!-- Stats grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon users">👥</div>
+          <div class="stat-val">{{ data()!.totalUsers }}</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon candidates">🎯</div>
+          <div class="stat-val">{{ data()!.totalCandidates }}</div>
+          <div class="stat-label">Candidates</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon recruiters">🏢</div>
+          <div class="stat-val">{{ data()!.totalRecruiters }}</div>
+          <div class="stat-label">Recruiters</div>
+        </div>
+        <div class="stat-card highlight">
+          <div class="stat-icon pending">⏳</div>
+          <div class="stat-val">{{ data()!.pendingRecruiterApprovals }}</div>
+          <div class="stat-label">Pending Approvals</div>
+          <ng-container *ngIf="data()!.pendingRecruiterApprovals > 0">
+            <a routerLink="/admin/recruiters" class="stat-action">
+              Review now →
+            </a>
+          </ng-container>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon jobs">💼</div>
+          <div class="stat-val">{{ data()!.activeJobs }}</div>
+          <div class="stat-label">Active Jobs</div>
+          <div class="stat-sub">of {{ data()!.totalJobs }} total</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon apps">📋</div>
+          <div class="stat-val">{{ data()!.totalApplications }}</div>
+          <div class="stat-label">Applications</div>
+          <div class="stat-sub">{{ data()!.applicationsToday }} today</div>
+        </div>
+      </div>
+
+      <!-- Quick nav -->
+      <div class="quick-nav">
+        <a routerLink="/admin/users" class="qn-btn">
+          <span class="qn-icon">👤</span>
+          <span class="qn-label">Manage Users</span>
+          <span class="qn-count">{{ data()!.totalUsers }}</span>
+        </a>
+        <a routerLink="/admin/recruiters" class="qn-btn">
+          <span class="qn-icon">✅</span>
+          <span class="qn-label">Recruiter Approvals</span>
+          <span class="qn-count pending-count">
+            {{ data()!.pendingRecruiterApprovals }} pending
+          </span>
+        </a>
+        <a routerLink="/admin/jobs" class="qn-btn">
+          <span class="qn-icon">💼</span>
+          <span class="qn-label">Monitor Jobs</span>
+          <span class="qn-count">{{ data()!.activeJobs }} active</span>
+        </a>
+      </div>
+
+      <div class="content-grid">
+
+        <!-- Recent users -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Registrations</h3>
+            <a routerLink="/admin/users" class="link-amber">View all</a>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let u of data()!.recentUsers">
+                  <tr>
+                    <td>
+                      <div class="user-cell">
+                        <div class="mini-avatar">
+                          {{ u.fullName.charAt(0) }}
+                        </div>
+                        <div>
+                          <div class="user-name">{{ u.fullName }}</div>
+                          <div class="user-email">{{ u.email }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span [class]="'role-badge role-' + u.roleName.toLowerCase()">
+                        {{ u.roleName }}
+                      </span>
+                    </td>
+                    <td class="date-cell">
+                      {{ u.createdAt | date:'MMM d, y' }}
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent jobs -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Job Posts</h3>
+            <a routerLink="/admin/jobs" class="link-amber">View all</a>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Job</th>
+                  <th>Company</th>
+                  <th>Applicants</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let j of data()!.recentJobs">
+                  <tr>
+                    <td class="job-name">{{ j.title }}</td>
+                    <td class="company-name">{{ j.companyName }}</td>
+                    <td>
+                      <span class="applicant-count">
+                        {{ j.totalApplicants }}
+                      </span>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </ng-container>
+
+  </div>
+</div>

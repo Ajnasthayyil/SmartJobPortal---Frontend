@@ -1,0 +1,89 @@
+<div class="admin-jobs-page">
+  <div class="page-inner">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Job Monitoring</h1>
+        <p class="page-sub">Monitor and manage all platform jobs</p>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="filters-row">
+      <div class="search-box">
+        <svg width="15" height="15" fill="none" stroke="currentColor"
+             stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Search job title or company..."
+               [(ngModel)]="search"
+               (ngModelChange)="applySearch()"/>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <ng-container *ngIf="loading()">
+      <div class="table-skeleton">
+        <ng-container *ngFor="let i of [1,2,3,4,5]">
+          <div class="skeleton" style="height:56px;border-radius:8px"></div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading()">
+      <div class="table-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Job Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Applicants</th>
+                <th>Posted</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let j of filtered()">
+                <tr>
+                  <td class="job-title-cell">{{ j.title }}</td>
+                  <td>
+                    <div class="company-cell">
+                      <div class="co-logo">{{ j.companyName?.charAt(0) }}</div>
+                      {{ j.companyName }}
+                    </div>
+                  </td>
+                  <td class="location-cell">{{ j.location }}</td>
+                  <td>
+                    <span class="count-badge">{{ j.totalApplicants }}</span>
+                  </td>
+                  <td class="date-cell">
+                    {{ j.postedAt | date:'MMM d, y' }}
+                  </td>
+                  <td>
+                    <button class="btn-deactivate"
+                            [disabled]="processing() === j.jobId"
+                            (click)="deactivate(j.jobId)">
+                      <ng-container *ngIf="processing() === j.jobId"> ... </ng-container>
+                      <ng-container *ngIf="processing() !== j.jobId"> Deactivate </ng-container>
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-container *ngIf="filtered().length === 0">
+          <div class="empty-state">
+            <p>No jobs match your search.</p>
+          </div>
+        </ng-container>
+
+      </div>
+    </ng-container>
+
+  </div>
+</div>
