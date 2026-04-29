@@ -7,7 +7,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // ✅ Shared Components (Standalone)
-import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { DashboardHeaderComponent } from './shared/components/dashboard-header/dashboard-header.component';
@@ -33,20 +32,24 @@ import { AdminDashboardComponent } from './features/admin/dashboard/admin-dashbo
 import { AdminUsersComponent } from './features/admin/users/admin-users.component';
 import { AdminRecruitersComponent } from './features/admin/recruiters/admin-recruiters.component';
 import { AdminJobsComponent } from './features/admin/jobs/admin-jobs.component';
+import { JobsListComponent } from './features/jobs/jobs-list/jobs-list.component';
+import { JobPublicDetailComponent } from './features/jobs/job-public-detail/job-public-detail.component';
+import { CompaniesComponent } from './features/companies/companies.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-    // ❌ No other components here (since you're using standalone)
-  ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     RouterModule,
 
+    // Standalone declarations moved to imports
+    AppComponent,
+    JobsListComponent,
+    JobPublicDetailComponent,
+    CompaniesComponent,
+
     // ✅ Shared
-    HeaderComponent,
     FooterComponent,
     SidebarComponent,
     DashboardHeaderComponent,

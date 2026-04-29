@@ -36,7 +36,7 @@ export class AdminRecruitersComponent implements OnInit {
         error: () => this.loading.set(false)
       });
     } else {
-      this.service.getUsers('Recruiter').subscribe({
+      this.service.getAllRecruiters().subscribe({
         next: (res: any) => {
           if (res.success) this.recruiters.set(res.data || []);
           this.loading.set(false);

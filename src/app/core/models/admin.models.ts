@@ -45,9 +45,12 @@ export interface RecruiterApproval {
   recruiterId: number;
   fullName: string;
   email: string;
+  phoneNumber: string;
   companyName: string;
   industry: string;
   location: string;
+  website: string;
   isApproved: boolean;
+  isActive: boolean;
   registeredAt: string;
 }

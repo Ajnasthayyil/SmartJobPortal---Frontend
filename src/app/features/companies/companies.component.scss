@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+
+$black:   #0a0a0a;
+$amber:   #f59e0b;
+$amber-d: #d97706;
+$white:   #ffffff;
+$gray50:  #f9fafb;
+$gray100: #f3f4f6;
+$gray200: #e5e7eb;
+$gray400: #9ca3af;
+$gray600: #6b7280;
+
+.companies-page {
+  font-family: 'Outfit', sans-serif;
+  background: $white;
+  min-height: 100vh;
+}
+
+// ── Hero ────────────────────────────────────────────────────────
+.hero-section {
+  background: linear-gradient(135deg, #fffbf0 0%, #fff9f0 50%, #f0f9ff 100%);
+  padding: 80px 40px 60px; position: relative; overflow: hidden;
+
+  &::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba($amber,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba($amber,.06) 1px, transparent 1px);
+    background-size: 48px 48px; pointer-events: none;
+  }
+  @media(max-width:768px) { padding: 48px 20px 40px; }
+}
+.hero-inner {
+  max-width: 720px; margin: 0 auto;
+  text-align: center; position: relative; z-index: 1;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: $white; border: 1px solid $gray200; border-radius: 30px;
+  padding: 6px 16px; font-size: 12px; font-weight: 500; color: $gray600;
+  margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+.badge-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: $amber;
+}
+.hero-title {
+  font-size: 48px; font-weight: 800; line-height: 1.1;
+  letter-spacing: -.03em; color: $black; margin-bottom: 14px;
+  .amber { color: $amber; }
+  @media(max-width:640px) { font-size: 32px; }
+}
+.hero-sub {
+  font-size: 15px; color: $gray600; line-height: 1.7; margin-bottom: 28px;
+}
+.search-bar {
+  display: flex; align-items: center; gap: 10px;
+  background: $white; border-radius: 14px;
+  padding: 14px 20px; max-width: 480px;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.1);
+  svg { color: $gray400; flex-shrink: 0; }
+  input {
+    border: none; outline: none; font-size: 14px;
+    font-family: 'Outfit', sans-serif; color: $black;
+    width: 100%; background: transparent;
+    &::placeholder { color: $gray400; }
+  }
+}
+.filter-chips {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+}
+.chip {
+  padding: 6px 16px; border: 1px solid $gray200; border-radius: 20px;
+  background: $white; font-size: 12px; font-weight: 600;
+  color: $gray600; cursor: pointer; transition: all .2s;
+  font-family: 'Outfit', sans-serif;
+  &:hover { border-color: $amber; color: $amber-d; }
+  &.active { background: $amber; color: $white; border-color: $amber; }
+}
+
+// ── Grid section ──────────────────────────────────────────────
+.grid-section {
+  background: $gray50; padding: 40px 40px 80px;
+  @media(max-width:768px) { padding: 24px 20px 60px; }
+}
+.grid-inner { max-width: 1400px; margin: 0 auto; }
+
+.count-row {
+  font-size: 14px; color: $gray600; margin-bottom: 24px;
+  strong { color: $black; font-weight: 700; }
+}
+
+.co-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  @media(max-width:640px) { grid-template-columns: 1fr; }
+}
+
+.co-card {
+  background: $white; border: 1px solid $gray200;
+  border-radius: 18px; padding: 24px; cursor: pointer;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: all .25s;
+  &:hover {
+    box-shadow: 0 8px 28px rgba(0,0,0,.1);
+    transform: translateY(-3px);
+    border-color: rgba($amber,.3);
+  }
+}
+.co-card-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.co-logo {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: #fef3c7; color: $amber-d;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 700;
+}
+.co-jobs-badge {
+  background: #fef3c7; color: $amber-d;
+  padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+.co-name { font-size: 16px; font-weight: 700; color: $black; }
+.co-industry { font-size: 12px; color: $amber-d; font-weight: 500; }
+.co-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+.meta-item {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; color: $gray400;
+}
+.co-recent-jobs {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.co-job-preview {
+  font-size: 12px; color: $gray600; padding: 5px 10px;
+  background: $gray50; border-radius: 6px; font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.co-card-footer {
+  margin-top: auto; padding-top: 12px; border-top: 1px solid $gray100;
+}
+.btn-view-co {
+  font-size: 12px; font-weight: 600; color: $amber;
+  background: none; border: none; cursor: pointer;
+  padding: 0; font-family: 'Outfit', sans-serif; transition: opacity .15s;
+  &:hover { opacity: .75; }
+}
+
+// ── Company detail drawer ─────────────────────────────────────
+.company-detail {
+  background: $gray50; min-height: 100vh; padding: 40px;
+  @media(max-width:768px) { padding: 20px; }
+}
+.cd-inner { max-width: 900px; margin: 0 auto; }
+.btn-back-cd {
+  font-size: 13px; font-weight: 600; color: $gray600;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Outfit', sans-serif; margin-bottom: 24px;
+  display: block; transition: color .2s; padding: 0;
+  &:hover { color: $black; }
+}
+.cd-header {
+  background: $white; border: 1px solid $gray200; border-radius: 18px;
+  padding: 28px; display: flex; gap: 20px; align-items: flex-start;
+  margin-bottom: 24px;
+}
+.cd-logo {
+  width: 64px; height: 64px; border-radius: 16px;
+  background: #fef3c7; color: $amber-d;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 700; flex-shrink: 0;
+}
+.cd-name {
+  font-size: 24px; font-weight: 700; color: $black;
+  letter-spacing: -.02em; margin-bottom: 6px;
+}
+.cd-meta {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  font-size: 13px; color: $gray400;
+}
+.cd-jobs-count { color: $amber-d; font-weight: 600; }
+.cd-section-title {
+  font-size: 18px; font-weight: 700; color: $black;
+  margin-bottom: 16px;
+}
+.cd-jobs-list { display: flex; flex-direction: column; gap: 12px; }
+.cd-job-row {
+  background: $white; border: 1px solid $gray200; border-radius: 14px;
+  padding: 18px 22px; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px;
+  text-decoration: none; color: inherit; transition: all .2s;
+  &:hover {
+    border-color: rgba($amber,.4);
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  }
+}
+.cd-job-info { flex: 1; }
+.cd-job-title { font-size: 14px; font-weight: 700; color: $black; margin-bottom: 4px; }
+.cd-job-meta {
+  display: flex; gap: 6px; font-size: 11px; color: $gray400; margin-bottom: 8px;
+}
+.cd-job-skills { display: flex; flex-wrap: wrap; gap: 4px; }
+.skill-pill {
+  font-size: 10px; background: $gray100; color: $gray600;
+  padding: 2px 8px; border-radius: 20px;
+}
+.cd-apply-link {
+  font-size: 13px; font-weight: 700; color: $amber;
+  flex-shrink: 0; transition: opacity .15s;
+}
+
+// Skeleton
+.co-card-skeleton {
+  background: $white; border: 1px solid $gray200;
+  border-radius: 18px; padding: 24px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.sk {
+  background: linear-gradient(90deg, $gray100 0%, $gray200 50%, $gray100 100%);
+  background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px;
+}
+.sk-logo { width: 52px; height: 52px; border-radius: 14px; }
+.sk-name { height: 18px; width: 60%; }
+.sk-sub  { height: 12px; width: 40%; }
+.sk-btn  { height: 32px; width: 100%; border-radius: 10px; }
+
+// Empty state
+.empty-state {
+  text-align: center; padding: 80px 20px;
+  .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  h3 { font-size: 18px; font-weight: 600; color: $gray600; margin-bottom: 8px; }
+  p  { font-size: 14px; color: $gray400; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

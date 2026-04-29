@@ -1,0 +1,192 @@
+<div class="jobs-public-page">
+
+  <!-- Hero search section -->
+  <div class="search-section">
+    <div class="search-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        AI-Powered Job Matching — Now Live
+      </div>
+
+      <h1 class="hero-title">
+        Find Your <span class="amber">Dream Job</span><br>
+        Match Your <span class="amber">True Potential</span>
+      </h1>
+
+      <p class="hero-sub">
+        From freshers to senior engineers — discover opportunities that
+        align with your skills, salary expectations, and career goals.
+      </p>
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <div class="search-input-wrap">
+          <svg width="16" height="16" fill="none" stroke="currentColor"
+               stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" [(ngModel)]="keyword"
+                 placeholder="Job title, skill, or keyword..."
+                 (keyup.enter)="search()"/>
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-input-wrap">
+          <svg width="16" height="16" fill="none" stroke="currentColor"
+               stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <input type="text" [(ngModel)]="location"
+                 placeholder="City, state, or remote..."
+                 (keyup.enter)="search()"/>
+        </div>
+        <button class="btn-search" (click)="search()">Search Jobs</button>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="filter-chips">
+        <ng-container *ngFor="let type of jobTypes">
+          <button class="chip"
+                  [class.active]="activeFilter === type"
+                  (click)="setFilter(type)">
+            {{ type }}
+          </button>
+        </ng-container>
+        <div class="chip-sep"></div>
+        <ng-container *ngFor="let r of salaryRanges">
+          <button class="chip"
+                  [class.active]="selectedSalary?.label === r.label"
+                  (click)="setSalary(r)">
+            {{ r.label }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section">
+    <div class="results-inner">
+
+      <!-- Results count -->
+      <div class="results-bar">
+        <span class="results-count">
+          <ng-container *ngIf="!loading()">
+            Showing <strong>{{ jobs().length }}</strong>
+            of <strong>{{ totalCount() }}</strong> jobs
+          </ng-container> 
+<ng-container *ngIf="loading()">
+            Searching...
+          </ng-container>
+        </span>
+      </div>
+
+      <!-- Skeleton loading -->
+      <ng-container *ngIf="loading()">
+        <div class="jobs-grid">
+          <ng-container *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]">
+            <div class="job-card-skeleton">
+              <div class="sk sk-logo"></div>
+              <div class="sk sk-title"></div>
+              <div class="sk sk-sub"></div>
+              <div class="sk sk-tags"></div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <!-- Jobs grid -->
+      <ng-container *ngIf="!loading() && jobs().length > 0">
+        <div class="jobs-grid">
+          <ng-container *ngFor="let job of jobs()">
+            <a [routerLink]="['/jobs', job.jobId]" class="job-card">
+
+              <!-- Card top -->
+              <div class="card-top">
+                <div class="co-logo">
+                  {{ job.companyName?.charAt(0) }}
+                </div>
+                <ng-container *ngIf="job.matchScore">
+                  <span class="match-badge"
+                        [class.strong]="job.matchScore >= 70"
+                        [class.good]="job.matchScore >= 40 && job.matchScore < 70">
+                    {{ job.matchScore >= 70 ? '🔥' : '⚡' }}
+                    {{ job.matchScore }}%
+                  </span>
+                </ng-container>
+              </div>
+
+              <!-- Info -->
+              <h3 class="jc-title">{{ job.title }}</h3>
+              <p class="jc-company">{{ job.companyName }}</p>
+
+              <!-- Meta pills -->
+              <div class="jc-meta">
+                <span class="meta-pill">
+                  <svg width="10" height="10" fill="none"
+                       stroke="currentColor" stroke-width="2"
+                       viewBox="0 0 24 24">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  </svg>
+                  {{ job.location }}
+                </span>
+                <span class="meta-pill">{{ job.jobType }}</span>
+                <ng-container *ngIf="job.minSalary">
+                  <span class="meta-pill amber-pill">
+                    ₹{{ job.minSalary | number }}+
+                  </span>
+                </ng-container>
+              </div>
+
+              <!-- Skills -->
+              <div class="jc-skills">
+                <ng-container *ngFor="let s of job.requiredSkills?.slice(0,3)">
+                  <span class="skill-chip">{{ s }}</span>
+                </ng-container>
+                <ng-container *ngIf="job.requiredSkills?.length > 3">
+                  <span class="skill-chip">
+                    +{{ job.requiredSkills.length - 3 }}
+                  </span>
+                </ng-container>
+              </div>
+
+              <!-- Footer -->
+              <div class="jc-footer">
+                <span class="posted-date">
+                  {{ job.postedAt | date:'MMM d' }}
+                </span>
+                <span class="view-link">View Details →</span>
+              </div>
+
+            </a>
+          </ng-container>
+        </div>
+
+        <!-- Load more -->
+        <ng-container *ngIf="hasMore">
+          <div class="load-more">
+            <button class="btn-more" (click)="loadMore()">
+              Load More Jobs
+            </button>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <!-- Empty state -->
+      <ng-container *ngIf="!loading() && jobs().length === 0">
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <h3>No jobs found</h3>
+          <p>Try different keywords or remove your filters</p>
+          <button class="btn-reset"
+                  (click)="keyword=''; location=''; setFilter('All')">
+            Clear Filters
+          </button>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+</div>

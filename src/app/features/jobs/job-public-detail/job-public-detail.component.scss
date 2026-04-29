@@ -1,0 +1,157 @@
+$black:   #0a0a0a;
+$amber:   #f59e0b;
+$amber-d: #d97706;
+$white:   #ffffff;
+$gray50:  #f9fafb;
+$gray100: #f3f4f6;
+$gray200: #e5e7eb;
+$gray400: #9ca3af;
+$gray600: #6b7280;
+
+.job-detail-page {
+  background: $gray50; min-height: 100vh;
+  font-family: 'Outfit', sans-serif; padding: 40px;
+  @media(max-width:768px) { padding: 20px; }
+}
+
+.skeleton-wrap { max-width: 1100px; margin: 0 auto; }
+.sk {
+  background: linear-gradient(90deg, $gray100 0%, $gray200 50%, $gray100 100%);
+  background-size: 200% 100%; animation: shimmer 1.5s infinite;
+  border-radius: 8px; margin-bottom: 12px;
+}
+
+.detail-inner { max-width: 1100px; margin: 0 auto; }
+
+.breadcrumb {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 24px; font-size: 13px; color: $gray400;
+  a {
+    color: $amber; text-decoration: none; font-weight: 500;
+    &:hover { opacity: .75; }
+  }
+}
+
+.detail-grid {
+  display: grid; grid-template-columns: 1fr 320px; gap: 24px;
+  @media(max-width:900px) { grid-template-columns: 1fr; }
+}
+.col-main { display: flex; flex-direction: column; gap: 20px; }
+.col-side  { display: flex; flex-direction: column; gap: 20px; }
+
+.card {
+  background: $white; border: 1px solid $gray200;
+  border-radius: 18px; padding: 28px;
+}
+
+// Job header
+.jh-top {
+  display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start;
+}
+.co-logo {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: #fef3c7; color: $amber-d;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 700; flex-shrink: 0;
+}
+.jh-title {
+  font-size: 22px; font-weight: 700; color: $black;
+  letter-spacing: -.02em; margin-bottom: 4px;
+}
+.jh-company { font-size: 14px; color: $gray400; }
+
+.jh-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: $gray600;
+  background: $gray100; padding: 5px 12px; border-radius: 20px;
+}
+.amber-pill { background: #fef3c7; color: $amber-d; }
+
+// CTA
+.btn-apply-full {
+  display: inline-block; padding: 14px 36px;
+  background: $amber; color: $white; text-decoration: none;
+  border-radius: 12px; font-size: 14px; font-weight: 700;
+  transition: all .2s;
+  &:hover { background: $amber-d; transform: translateY(-1px); }
+}
+
+.login-cta {
+  background: $gray50; border: 1px solid $gray200;
+  border-radius: 12px; padding: 20px;
+  p { font-size: 13px; color: $gray600; margin-bottom: 12px; }
+}
+.login-cta-btns { display: flex; gap: 10px; }
+.btn-register-cta {
+  padding: 10px 22px; background: $amber; color: $white;
+  border-radius: 10px; text-decoration: none; font-size: 13px;
+  font-weight: 600; transition: all .2s;
+  &:hover { background: $amber-d; }
+}
+.btn-login-cta {
+  padding: 10px 22px; background: $white; color: $black;
+  border: 1.5px solid $gray200; border-radius: 10px;
+  text-decoration: none; font-size: 13px; font-weight: 600;
+  transition: all .2s; &:hover { border-color: $black; }
+}
+
+.section-title {
+  font-size: 16px; font-weight: 700;
+  color: $black; margin-bottom: 16px;
+}
+.description {
+  font-size: 14px; color: $gray600; line-height: 1.8; white-space: pre-line;
+}
+.skills-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-tag {
+  background: #fef3c7; color: #92400e;
+  padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
+}
+
+// Sidebar
+.side-card { }
+.detail-rows { display: flex; flex-direction: column; gap: 12px; }
+.dr {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 12px; border-bottom: 1px solid $gray100;
+  &:last-child { border-bottom: none; padding-bottom: 0; }
+}
+.dk { font-size: 12px; color: $gray400; }
+.dv { font-size: 13px; font-weight: 600; color: $black; }
+.amber-val { color: $amber-d; }
+
+// AI teaser
+.ai-teaser {
+  text-align: center;
+  .ai-icon { font-size: 36px; margin-bottom: 12px; }
+  h4 { font-size: 15px; font-weight: 700; color: $black; margin-bottom: 8px; }
+  p { font-size: 12px; color: $gray400; line-height: 1.6; margin-bottom: 16px; }
+}
+.btn-teaser {
+  display: inline-block; padding: 10px 24px;
+  background: $black; color: $white; border-radius: 10px;
+  text-decoration: none; font-size: 13px; font-weight: 600; transition: all .2s;
+  &:hover { background: #222; }
+}
+
+// Company
+.co-card {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+}
+.co-logo-big {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: #fef3c7; color: $amber-d;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700;
+}
+.co-name { font-size: 15px; font-weight: 600; color: $black; }
+.company-link {
+  font-size: 12px; font-weight: 600; color: $amber; text-decoration: none;
+  &:hover { opacity: .75; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

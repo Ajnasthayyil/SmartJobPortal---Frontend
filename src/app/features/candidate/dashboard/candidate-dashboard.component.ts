@@ -58,8 +58,11 @@ export class CandidateDashboardComponent implements OnInit {
         if (res.success) {
           this.profile.set(res.data);
           this.calculateProfileCompletion(res.data);
+        } else {
+          this.toast.error(res.message);
         }
-      }
+      },
+      error: () => this.toast.error('Failed to load profile.')
     });
 
     // Load recommended jobs
@@ -78,7 +81,8 @@ export class CandidateDashboardComponent implements OnInit {
           // Extract skill gaps from jobs
           this.extractSkillGaps(jobs);
         }
-      }
+      },
+      error: () => this.toast.error('Failed to load job recommendations.')
     });
 
     // Load applications
@@ -89,10 +93,15 @@ export class CandidateDashboardComponent implements OnInit {
           this.stats.update(s => ({
             ...s, applications: res.data?.length || 0
           }));
+        } else {
+          this.toast.error(res.message);
         }
         this.loading.set(false);
       },
-      error: () => this.loading.set(false)
+      error: () => {
+        this.loading.set(false);
+        this.toast.error('Failed to load applications.');
+      }
     });
   }
 

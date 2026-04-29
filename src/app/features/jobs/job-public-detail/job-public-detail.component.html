@@ -1,0 +1,163 @@
+<div class="job-detail-page">
+
+  <ng-container *ngIf="loading()">
+    <div class="skeleton-wrap">
+      <div class="sk" style="height:48px;width:280px;margin-bottom:24px"></div>
+      <div class="sk" style="height:500px;border-radius:20px"></div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading() && job()">
+    <div class="detail-inner">
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a routerLink="/jobs">Jobs</a>
+        <span>›</span>
+        <span>{{ job().title }}</span>
+      </div>
+
+      <div class="detail-grid">
+
+        <!-- Left: Main content -->
+        <div class="col-main">
+          <div class="card job-header">
+
+            <div class="jh-top">
+              <div class="co-logo">{{ job().companyName?.charAt(0) }}</div>
+              <div class="jh-info">
+                <h1 class="jh-title">{{ job().title }}</h1>
+                <p class="jh-company">{{ job().companyName }}</p>
+              </div>
+            </div>
+
+            <div class="jh-pills">
+              <span class="pill">
+                <svg width="12" height="12" fill="none" stroke="currentColor"
+                     stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                </svg>
+                {{ job().location }}
+              </span>
+              <span class="pill">{{ job().jobType }}</span>
+              <ng-container *ngIf="job().minSalary">
+                <span class="pill amber-pill">
+                  ₹{{ job().minSalary | number }}
+                  <ng-container *ngIf="job().maxSalary">
+                    – ₹{{ job().maxSalary | number }}
+                  </ng-container>
+                </span>
+              </ng-container>
+              <span class="pill">{{ job().minExperienceYears }}+ yrs exp</span>
+            </div>
+
+            <!-- CTA -->
+            <ng-container *ngIf="auth.isLoggedIn() && auth.getRole() === 'Candidate'">
+              <a [routerLink]="['/candidate/jobs', job().jobId]"
+                 class="btn-apply-full">
+                Apply Now — Full View
+              </a>
+            </ng-container> 
+<ng-container *ngIf="!auth.isLoggedIn()">
+              <div class="login-cta">
+                <p>Create a free account to apply and see your match score</p>
+                <div class="login-cta-btns">
+                  <a routerLink="/register" class="btn-register-cta">
+                    Create Account
+                  </a>
+                  <a routerLink="/login" class="btn-login-cta">
+                    Sign In
+                  </a>
+                </div>
+              </div>
+            </ng-container>
+
+          </div>
+
+          <!-- Description -->
+          <div class="card">
+            <h3 class="section-title">Job Description</h3>
+            <div class="description">{{ job().description }}</div>
+          </div>
+
+          <!-- Required skills -->
+          <div class="card">
+            <h3 class="section-title">Required Skills</h3>
+            <div class="skills-grid">
+              <ng-container *ngFor="let s of job().requiredSkills">
+                <span class="skill-tag">{{ s }}</span>
+              </ng-container>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Sidebar -->
+        <div class="col-side">
+
+          <div class="card side-card">
+            <h3 class="section-title">Job Details</h3>
+            <div class="detail-rows">
+              <div class="dr">
+                <span class="dk">Posted</span>
+                <span class="dv">{{ job().postedAt | date:'mediumDate' }}</span>
+              </div>
+              <ng-container *ngIf="job().expiresAt">
+                <div class="dr">
+                  <span class="dk">Closes</span>
+                  <span class="dv">{{ job().expiresAt | date:'mediumDate' }}</span>
+                </div>
+              </ng-container>
+              <div class="dr">
+                <span class="dk">Job Type</span>
+                <span class="dv">{{ job().jobType }}</span>
+              </div>
+              <div class="dr">
+                <span class="dk">Experience</span>
+                <span class="dv">{{ job().minExperienceYears }}+ years</span>
+              </div>
+              <ng-container *ngIf="job().minSalary">
+                <div class="dr">
+                  <span class="dk">Salary</span>
+                  <span class="dv amber-val">
+                    ₹{{ job().minSalary | number }}+
+                  </span>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <!-- AI match teaser (not logged in) -->
+          <ng-container *ngIf="!auth.isLoggedIn()">
+            <div class="card ai-teaser">
+              <div class="ai-icon">🤖</div>
+              <h4>Get Your AI Match Score</h4>
+              <p>
+                Sign up free to see how well your skills match
+                this job and get personalised recommendations.
+              </p>
+              <a routerLink="/register" class="btn-teaser">
+                Get Match Score
+              </a>
+            </div>
+          </ng-container>
+
+          <div class="card side-card">
+            <h3 class="section-title">About Company</h3>
+            <div class="co-card">
+              <div class="co-logo-big">
+                {{ job().companyName?.charAt(0) }}
+              </div>
+              <div class="co-name">{{ job().companyName }}</div>
+            </div>
+            <a routerLink="/companies" class="company-link">
+              View Company Profile →
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

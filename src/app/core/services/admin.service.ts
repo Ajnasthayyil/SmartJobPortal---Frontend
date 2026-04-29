@@ -39,6 +39,11 @@ export class AdminService {
       (`${this.api}/recruiters/pending`);
   }
 
+  getAllRecruiters(): Observable<ApiResponse<RecruiterApproval[]>> {
+    return this.http.get<ApiResponse<RecruiterApproval[]>>
+      (`${this.api}/recruiters`);
+  }
+
   approveRecruiter(userId: number): Observable<ApiResponse<string>> {
     return this.http.put<ApiResponse<string>>
       (`${this.api}/recruiters/${userId}/approve`, {});
