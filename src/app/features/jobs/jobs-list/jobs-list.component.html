@@ -76,8 +76,8 @@
             Showing <strong>{{ jobs().length }}</strong>
             of <strong>{{ totalCount() }}</strong> jobs
           </ng-container> 
-<ng-container *ngIf="loading()">
-            Searching...
+          <ng-container *ngIf="loading()">
+            <span class="searching-text">Searching for opportunities...</span>
           </ng-container>
         </span>
       </div>

@@ -1,172 +1,136 @@
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg">
-    <div class="hero-orb orb1"></div>
-    <div class="hero-orb orb2"></div>
-    <div class="hero-orb orb3"></div>
+<div class="landing-wrapper">
+  
+  <!-- HERO SECTION -->
+  <section class="hero">
     <div class="hero-grid"></div>
-  </div>
 
-  <div class="hero-badge">
-    <span class="badge-dot"></span>
-    AI-Powered Job Matching — Now Live
-  </div>
-
-  <h1>Find Your <em>Dream Job</em><br>Match Your <em>True Potential</em></h1>
-  <p>From freshers to senior engineers — discover opportunities that align with your skills, salary expectations, and career goals.</p>
-
-  <div class="search-box">
-    <div class="search-top">
-      <div class="search-input-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
-        <input class="search-input" type="text" placeholder="Job title, skill, or keyword...">
-      </div>
-      <div class="search-input-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-        </svg>
-        <input class="search-input" type="text" placeholder="City, state, or remote...">
-      </div>
-      <button class="search-btn" routerLink="/candidate/job-search">Search Jobs</button>
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Next-Gen AI Job Matching — Now in Beta
     </div>
-    <div class="search-filters">
-      <span
-        *ngFor="let f of filters"
-        class="filter-chip"
-        [class.active]="activeFilter === f"
-        (click)="setFilter(f)">
-        {{ f }}
-      </span>
-    </div>
-  </div>
 
-  <div class="stats-row">
-    <ng-container *ngFor="let s of stats; let i = index">
-      <div *ngIf="i > 0" class="stat-div"></div>
-      <div class="stat">
-        <div class="stat-num">{{ s.num }}<span>{{ s.suffix }}</span></div>
-        <div class="stat-label">{{ s.label }}</div>
+    <h1>The Future of <span>Talent Discovery</span> is Here.</h1>
+    <p>Empowering millions of professionals and forward-thinking companies with AI-driven precision matching.</p>
+
+    <div class="search-container">
+      <div class="search-box">
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Job title, skills, or company...">
+        </div>
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-location-dot"></i>
+          <input type="text" placeholder="Location or Remote">
+        </div>
+        <button class="search-btn" routerLink="/candidate/job-search">Find Jobs</button>
       </div>
-    </ng-container>
-  </div>
-</section>
-
-<!-- FEATURED JOBS -->
-<section class="section-pad">
-  <div class="flex-between section-header">
-    <div>
-      <span class="section-tag">Hot Right Now</span>
-      <h2 class="section-title">Featured Opportunities</h2>
-      <p class="section-sub">Curated roles from top companies, ranked by AI match score.</p>
     </div>
-    <a class="see-all" routerLink="/candidate/job-search">View all jobs →</a>
-  </div>
+  </section>
 
-  <div class="jobs-grid">
-    <div class="job-card" *ngFor="let job of jobs">
-      <div class="card-top">
-        <div class="card-top-left">
+  <!-- TRUSTED BY (Sleek Logo Section) -->
+  <section class="section-pad center" style="padding-top: 0; padding-bottom: 60px;">
+    <p style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; font-weight: 700; color: var(--slate-500); margin-bottom: 40px;">Trusted by Industry Leaders</p>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 60px; opacity: 0.5; flex-wrap: wrap;">
+      <i class="fa-brands fa-google fa-2x"></i>
+      <i class="fa-brands fa-microsoft fa-2x"></i>
+      <i class="fa-brands fa-amazon fa-2x"></i>
+      <i class="fa-brands fa-apple fa-2x"></i>
+      <i class="fa-brands fa-spotify fa-2x"></i>
+    </div>
+  </section>
+
+  <!-- FEATURED OPPORTUNITIES -->
+  <section class="section-pad">
+    <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+      <div>
+        <span class="section-tag"><i class="fa-solid fa-fire"></i> Hot Openings</span>
+        <h2 class="section-title">Featured Opportunities</h2>
+        <p class="section-sub">Curated roles from world-class teams, ranked by your personal AI compatibility score.</p>
+      </div>
+      <a class="see-all" routerLink="/jobs" style="color: var(--primary); font-weight: 700; text-decoration: none; margin-bottom: 16px; display: block;">
+        Explore all 24k+ jobs <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="jobs-grid">
+      <div class="job-card" *ngFor="let job of jobs">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
           <div class="company-logo" [ngClass]="job.logoClass">{{ job.logoText }}</div>
-          <div>
-            <div class="job-title">{{ job.title }}</div>
-            <div class="company-name">{{ job.company }}</div>
-          </div>
+          <span class="match-pill">{{ job.match }}% AI Match</span>
         </div>
-        <span class="badge-type" [ngClass]="job.badgeClass">{{ job.badgeLabel }}</span>
-      </div>
-      <div class="card-tags">
-        <span class="tag" *ngFor="let tag of job.tags">{{ tag }}</span>
-      </div>
-      <div class="card-footer">
-        <div>
+        <h3 class="job-title">{{ job.title }}</h3>
+        <div class="job-meta">{{ job.company }} • {{ job.badgeLabel }}</div>
+        
+        <div class="card-tags">
+          <span class="tag" *ngFor="let tag of job.tags">{{ tag }}</span>
+        </div>
+
+        <div class="card-footer">
           <div class="salary">{{ job.salary }}</div>
-          <div class="time-ago">{{ job.timeAgo }}</div>
-        </div>
-        <div class="match-pill">
-          <span class="match-dot"></span>{{ job.match }}% Match
+          <button class="search-btn" style="padding: 10px 20px; font-size: 14px; border-radius: 12px;">View Details</button>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CATEGORIES -->
-<section class="section-pad section-alt">
-  <div class="flex-between section-header">
-    <div>
-      <span class="section-tag">Explore</span>
-      <h2 class="section-title">Browse by Category</h2>
+  <!-- CATEGORIES -->
+  <section class="section-pad section-alt">
+    <div class="section-header center">
+      <span class="section-tag">Categories</span>
+      <h2 class="section-title">Explore by Industry</h2>
+      <p class="section-sub" style="margin: 0 auto">Find your perfect niche in the global talent marketplace.</p>
     </div>
-    <a class="see-all" routerLink="/candidate/job-search">All categories →</a>
-  </div>
-  <div class="cats-grid">
-    <div class="cat-card" *ngFor="let cat of categories">
-      <div class="cat-icon">{{ cat.icon }}</div>
-      <div class="cat-name">{{ cat.name }}</div>
-      <div class="cat-count">{{ cat.count }}</div>
-    </div>
-  </div>
-</section>
 
-<!-- HOW IT WORKS -->
-<section class="section-pad">
-  <div class="section-header section-center">
-    <span class="section-tag">Simple Process</span>
-    <h2 class="section-title">Land Your Job in 3 Steps</h2>
-    <p class="section-sub" style="margin: 0 auto">Our AI matches you with the best roles so you never miss an opportunity.</p>
-  </div>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <h3>Build Your Profile</h3>
-      <p>Upload your resume or fill in your skills. Our AI parses your experience and builds a rich candidate profile automatically.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <h3>Get AI Matches</h3>
-      <p>Our matching engine ranks thousands of jobs by relevance, salary fit, and culture match — all in real time.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <h3>Apply & Track</h3>
-      <p>One-click apply, track application status, and get interview prep tips — all from your personalized dashboard.</p>
-    </div>
-  </div>
-</section>
-
-<!-- TOP COMPANIES -->
-<section class="section-pad section-alt">
-  <div class="flex-between section-header">
-    <div>
-      <span class="section-tag">Hiring Now</span>
-      <h2 class="section-title">Top Companies</h2>
-    </div>
-    <a class="see-all" routerLink="/companies">View all companies →</a>
-  </div>
-  <div class="companies-row">
-    <div class="company-card" *ngFor="let co of companies">
-      <div class="company-avatar" [ngClass]="co.logoClass">{{ co.logoText }}</div>
-      <div class="company-info">
-        <h4>{{ co.name }}</h4>
-        <p>{{ co.industry }}</p>
-        <div class="open-jobs">{{ co.openRoles }} open roles</div>
+    <div class="cats-grid">
+      <div class="cat-card" *ngFor="let cat of categories">
+        <div class="cat-icon">
+          <i [class]="cat.icon"></i>
+        </div>
+        <h4>{{ cat.name }}</h4>
+        <span>Browse {{ cat.name }} Jobs</span>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CTA BANNER -->
-<section class="section-pad">
-  <div class="cta-banner">
-    <div class="cta-text">
-      <h2>Ready to Find Your<br><span class="orange">Next Big Role?</span></h2>
-      <p>Join 3.2 million candidates already using JobSpark to build their career.</p>
+  <!-- HOW IT WORKS -->
+  <section class="section-pad">
+    <div class="section-header center">
+      <span class="section-tag">The Process</span>
+      <h2 class="section-title">How TalEx Works</h2>
+      <p class="section-sub" style="margin: 0 auto">Empowering your professional journey with data-driven simplicity.</p>
     </div>
-    <div class="cta-btns">
-      <button class="btn-large btn-orange" routerLink="/register">Create Free Account</button>
-      <button class="btn-large btn-outline" routerLink="/recruiter/post-job">Post a Job</button>
+
+    <div class="steps-container">
+      <div class="step-item">
+        <div class="step-circle"><i class="fa-solid fa-id-card-clip"></i></div>
+        <h3>Create Profile</h3>
+        <p>Build a rich, AI-optimized profile that truly reflects your skills and potential.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-circle"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <h3>AI Matching</h3>
+        <p>Our intelligent engine scans thousands of jobs to find your perfect professional match.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-circle"><i class="fa-solid fa-rocket"></i></div>
+        <h3>Get Hired</h3>
+        <p>Connect with top recruiters and secure your dream role with effortless precision.</p>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-pad" style="padding-top: 60px;">
+    <div class="cta-banner">
+      <div class="cta-content">
+        <h2 class="cta-title">Ready to define your <span>future?</span></h2>
+        <p class="cta-sub">Join thousands of professionals already using TalEx to accelerate their career growth.</p>
+      </div>
+      <div class="cta-btns">
+        <button class="btn-large btn-primary" routerLink="/register">Get Started Free</button>
+        <button class="btn-large btn-outline" routerLink="/login">Sign In</button>
+      </div>
+    </div>
+  </section>
+
+</div>

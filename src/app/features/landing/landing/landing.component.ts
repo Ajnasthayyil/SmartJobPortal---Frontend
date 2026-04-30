@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
@@ -30,15 +31,41 @@ export class LandingComponent {
   ];
 
   categories = [
-    { icon: '💻', name: 'Technology', count: '12,430 jobs' },
-    { icon: '📊', name: 'Data & Analytics', count: '4,820 jobs' },
-    { icon: '🎨', name: 'Design & UX', count: '2,910 jobs' },
-    { icon: '📱', name: 'Mobile Dev', count: '3,200 jobs' },
-    { icon: '☁️', name: 'Cloud & DevOps', count: '5,600 jobs' },
-    { icon: '📢', name: 'Marketing', count: '6,720 jobs' },
-    { icon: '💰', name: 'Finance', count: '3,480 jobs' },
-    { icon: '🤖', name: 'AI & Machine Learning', count: '2,150 jobs' },
+    { icon: 'fa-solid fa-laptop-code', name: 'Technology', count: 12430 },
+    { icon: 'fa-solid fa-chart-line', name: 'Data & Analytics', count: 4820 },
+    { icon: 'fa-solid fa-palette', name: 'Design & UX', count: 2910 },
+    { icon: 'fa-solid fa-mobile-screen-button', name: 'Mobile Dev', count: 3200 },
+    { icon: 'fa-solid fa-cloud-arrow-up', name: 'Cloud & DevOps', count: 5600 },
+    { icon: 'fa-solid fa-bullhorn', name: 'Marketing', count: 6720 },
+    { icon: 'fa-solid fa-sack-dollar', name: 'Finance', count: 3480 },
+    { icon: 'fa-solid fa-robot', name: 'AI & Machine Learning', count: 2150 },
   ];
+
+  // For animated counters
+  displayCounts: number[] = [];
+
+  ngOnInit() {
+    this.categories.forEach((cat, i) => {
+      this.displayCounts[i] = 0;
+      this.animateCount(i, cat.count);
+    });
+  }
+
+  animateCount(index: number, target: number) {
+    const duration = 2000;
+    const start = 0;
+    const step = (timestamp: number) => {
+      if (!this.startTime) this.startTime = timestamp;
+      const progress = Math.min((timestamp - this.startTime) / duration, 1);
+      this.displayCounts[index] = Math.floor(progress * target);
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }
+
+  private startTime: number | null = null;
 
   companies = [
     { logoClass: 'logo-a', logoText: 'GG', name: 'Google', industry: 'Technology', openRoles: 142 },

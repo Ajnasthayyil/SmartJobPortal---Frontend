@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { DashboardHeaderComponent } from './shared/components/dashboard-header/dashboard-header.component';
+import { PublicNavbarComponent } from './shared/components/public-navbar/public-navbar.component';
 
 // ✅ Directive (Standalone)
 import { ShellVisibilityDirective } from './core/directives/shell-visibility.directive';
@@ -37,6 +38,9 @@ import { JobPublicDetailComponent } from './features/jobs/job-public-detail/job-
 import { CompaniesComponent } from './features/companies/companies.component';
 
 @NgModule({
+  declarations: [
+    AppComponent
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -44,10 +48,10 @@ import { CompaniesComponent } from './features/companies/companies.component';
     RouterModule,
 
     // Standalone declarations moved to imports
-    AppComponent,
     JobsListComponent,
     JobPublicDetailComponent,
     CompaniesComponent,
+    PublicNavbarComponent,
 
     // ✅ Shared
     FooterComponent,

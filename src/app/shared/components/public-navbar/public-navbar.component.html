@@ -19,12 +19,11 @@
     <div class="nav-right">
       <ng-container *ngIf="auth.isLoggedIn()">
         <button class="btn-dashboard" (click)="goToDashboard()">
-          Dashboard →
+          Dashboard
         </button>
       </ng-container> 
-<ng-container *ngIf="!auth.isLoggedIn()">
+      <ng-container *ngIf="!auth.isLoggedIn()">
         <a routerLink="/login" class="btn-login">LOGIN</a>
-        <a routerLink="/register" class="btn-register">REGISTER</a>
       </ng-container>
 
       <!-- Mobile toggle -->

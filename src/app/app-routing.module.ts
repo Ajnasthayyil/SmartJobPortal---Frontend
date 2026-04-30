@@ -12,6 +12,9 @@ import { CandidateProfileComponent } from './features/candidate/profile/candidat
 import { AdminUsersComponent } from './features/admin/users/admin-users.component';
 import { AdminRecruitersComponent } from './features/admin/recruiters/admin-recruiters.component';
 import { AdminJobsComponent } from './features/admin/jobs/admin-jobs.component';
+import { JobsListComponent } from './features/jobs/jobs-list/jobs-list.component';
+import { JobPublicDetailComponent } from './features/jobs/job-public-detail/job-public-detail.component';
+import { CompaniesComponent } from './features/companies/companies.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -25,6 +28,12 @@ const routes: Routes = [
   { path: 'admin/users', component: AdminUsersComponent },
   { path: 'admin/recruiters', component: AdminRecruitersComponent },
   { path: 'admin/jobs', component: AdminJobsComponent },
+  
+  // Public Pages
+  { path: 'jobs', component: JobsListComponent },
+  { path: 'jobs/:id', component: JobPublicDetailComponent },
+  { path: 'companies', component: CompaniesComponent },
+
   { path: '**', redirectTo: '' }
 ];
 

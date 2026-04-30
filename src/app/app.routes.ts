@@ -133,28 +133,27 @@ export const routes: Routes = [
             .then(m => m.AdminJobsComponent)
       },
 
-      // ── Public pages ───────────────────────────────────────────────
-      {
-        path: 'jobs',
-        loadComponent: () =>
-          import('./features/jobs/jobs-list/jobs-list.component')
-            .then(m => m.JobsListComponent)
-      },
-      {
-        path: 'jobs/:id',
-        loadComponent: () =>
-          import('./features/jobs/job-public-detail/job-public-detail.component')
-            .then(m => m.JobPublicDetailComponent)
-      },
-      {
-        path: 'companies',
-        loadComponent: () =>
-          import('./features/companies/companies.component')
-            .then(m => m.CompaniesComponent)
-      },
-
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
+  },
+
+  {
+    path: 'jobs',
+    loadComponent: () =>
+      import('./features/jobs/jobs-list/jobs-list.component')
+        .then(m => m.JobsListComponent)
+  },
+  {
+    path: 'jobs/:id',
+    loadComponent: () =>
+      import('./features/jobs/job-public-detail/job-public-detail.component')
+        .then(m => m.JobPublicDetailComponent)
+  },
+  {
+    path: 'companies',
+    loadComponent: () =>
+      import('./features/companies/companies.component')
+        .then(m => m.CompaniesComponent)
   },
 
   { path: '**', redirectTo: '' }

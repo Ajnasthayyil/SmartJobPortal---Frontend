@@ -1,235 +1,133 @@
 <div class="login-page">
-
-  <!-- ══ Left panel ════════════════════════════════════ -->
+  <!-- Immersive Left Panel -->
   <div class="left-panel">
-    <div class="grid-bg"></div>
-    <div class="amber-orb"></div>
-    <div class="amber-orb2"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
 
-    <!-- Logo -->
     <div class="logo-row" routerLink="/">
-      <div class="emblem">
-        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-          <rect width="44" height="44" rx="12" fill="#0a0a0a"/>
-          <path d="M12 14h20M22 14v16" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-          <path d="M16 26l6 4 6-4" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="logo-text">
-        <div class="brand-name">Tal<span>Ex</span></div>
-        <div class="brand-quote">Talent Exchange</div>
-      </div>
+      <div class="brand-name">Tal<span>Ex</span></div>
     </div>
 
-    <!-- Hero copy -->
-    <div class="left-body">
-      <div class="eyebrow-row">
-        <span class="eyebrow-line"></span>
-        <span class="eyebrow-text">Join the future of work</span>
-      </div>
+    <div class="left-content">
+      <h1>Start Your <span>Professional</span> Evolution Today.</h1>
+      <p>Whether you're looking for your dream job or the perfect candidate, TalEx provides the tools to succeed.</p>
 
-      <h1 class="hero-heading">
-        Your next<br>
-        <span class="amber">opportunity</span><br>
-        starts <span class="highlight">here.</span>
-      </h1>
-
-      <p class="hero-sub">
-        Create an account to start applying for jobs, connecting with recruiters, and advancing your career with our AI-powered platform.
-      </p>
-
-      <!-- Stats grid -->
-      <div class="stats-grid">
-        <div class="stat">
-          <div class="stat-n">12<span>k+</span></div>
-          <div class="stat-l">Active Jobs</div>
+      <div class="feature-cards">
+        <div class="f-card">
+          <i class="fa-solid fa-bolt"></i>
+          <h4>Quick Start</h4>
+          <span>Get up and running in minutes with our streamlined onboarding.</span>
         </div>
-        <div class="stat">
-          <div class="stat-n">500<span>+</span></div>
-          <div class="stat-l">Companies</div>
-        </div>
-        <div class="stat">
-          <div class="stat-n">24<span>/7</span></div>
-          <div class="stat-l">Support</div>
+        <div class="f-card">
+          <i class="fa-solid fa-users-viewfinder"></i>
+          <h4>Targeted Reach</h4>
+          <span>Connect with the right opportunities using smart filtering.</span>
         </div>
       </div>
     </div>
 
-    <footer class="left-footer">© 2026 TALEX — TALENT EXCHANGE PLATFORM</footer>
+    <div class="left-footer">
+      © 2026 TalEx AI Technologies. All rights reserved.
+    </div>
   </div>
 
-  <!-- ══ Right panel (form) ════════════════════════════ -->
+  <!-- Form Panel -->
   <div class="right-panel">
+    <div class="form-box">
+      <div class="form-header">
+        <h2>Create Account</h2>
+        <p>Choose your role and join our community</p>
+      </div>
 
-    <div class="form-header">
-      <p class="form-eyebrow">Create Account</p>
-      <h2 class="form-title">Join Talex</h2>
-      <p class="form-sub">
-        Sign up as a Candidate or Recruiter to get started.
-      </p>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <!-- Role Selection -->
+        <div class="role-selector">
+          <label class="role-option" [class.active]="roleId.value == 3">
+            <input type="radio" formControlName="roleId" [value]="3" />
+            <span class="role-icon"><i class="fa-solid fa-user-tie"></i></span>
+            <span class="role-label">Candidate</span>
+          </label>
+          
+          <label class="role-option" [class.active]="roleId.value == 2">
+            <input type="radio" formControlName="roleId" [value]="2" />
+            <span class="role-icon"><i class="fa-solid fa-building-user"></i></span>
+            <span class="role-label">Recruiter</span>
+          </label>
+        </div>
+
+        <div class="field-group">
+          <label>Full Name</label>
+          <div class="input-wrapper">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" 
+                   class="form-control" 
+                   formControlName="fullName"
+                   [class.error]="fullName.invalid && fullName.touched"
+                   placeholder="John Doe">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Email Address</label>
+          <div class="input-wrapper">
+            <i class="fa-regular fa-envelope"></i>
+            <input type="email" 
+                   class="form-control" 
+                   formControlName="email"
+                   [class.error]="email.invalid && email.touched"
+                   placeholder="name@company.com">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Phone Number</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-phone"></i>
+            <input type="tel" 
+                   class="form-control" 
+                   formControlName="phoneNumber"
+                   [class.error]="phoneNumber.invalid && phoneNumber.touched"
+                   placeholder="1234567890">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Password</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock"></i>
+            <input [type]="showPass() ? 'text' : 'password'" 
+                   class="form-control" 
+                   formControlName="password"
+                   [class.error]="password.invalid && password.touched"
+                   placeholder="••••••••">
+            <button type="button" class="eye-toggle" (click)="togglePassword()">
+              <i class="fa-solid" [class.fa-eye]="!showPass()" [class.fa-eye-slash]="showPass()"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary-auth" [disabled]="loading()">
+          <span *ngIf="!loading()">Create Account</span>
+          <i *ngIf="loading()" class="fa-solid fa-circle-notch fa-spin"></i>
+        </button>
+
+        <div class="divider">
+          <span></span>
+          <em>or join with</em>
+          <span></span>
+        </div>
+
+        <button type="button" class="btn-social">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+          Sign up with Google
+        </button>
+      </form>
+
+      <!-- Bottom Auth Switch -->
+      <div class="auth-switch">
+        <span>Already have an account?</span>
+        <a routerLink="/login">Sign In instead</a>
+      </div>
     </div>
-
-
-
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-
-      <!-- Role Selection -->
-      <div class="role-selector">
-        <label class="role-option" [class.active]="roleId.value == 3">
-          <input type="radio" formControlName="roleId" [value]="3" />
-          <span class="role-icon">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </span>
-          <span class="role-label">Candidate</span>
-        </label>
-        
-        <label class="role-option" [class.active]="roleId.value == 2">
-          <input type="radio" formControlName="roleId" [value]="2" />
-          <span class="role-icon">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </span>
-          <span class="role-label">Recruiter</span>
-        </label>
-      </div>
-
-      <!-- Full Name -->
-      <div class="field-group">
-        <label for="fullName">Full Name</label>
-        <div class="field-wrap">
-          <svg class="fi" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <input id="fullName" type="text" formControlName="fullName"
-                 class="field-input"
-                 [class.is-error]="fullName.invalid && fullName.touched"
-                 placeholder="John Doe"
-                 autocomplete="name"/>
-        </div>
-        <ng-container *ngIf="fullName.invalid && fullName.touched">
-          <p class="field-error">
-            <ng-container *ngIf="fullName.errors?.['required']"> Full Name is required. </ng-container>
-            <ng-container *ngIf="fullName.errors?.['minlength']"> Minimum 3 characters. </ng-container>
-            <ng-container *ngIf="fullName.errors?.['pattern']"> Start with a letter, no numbers/special chars. </ng-container>
-          </p>
-        </ng-container>
-      </div>
-
-      <!-- Email -->
-      <div class="field-group">
-        <label for="email">Email Address</label>
-        <div class="field-wrap">
-          <svg class="fi" width="16" height="16" fill="none"
-               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <rect x="2" y="4" width="20" height="16" rx="2"/>
-            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-          </svg>
-          <input id="email" type="email" formControlName="email"
-                 class="field-input"
-                 [class.is-error]="email.invalid && email.touched"
-                 placeholder="you@talex.io"
-                 autocomplete="email"/>
-        </div>
-        <ng-container *ngIf="email.invalid && email.touched">
-          <p class="field-error">
-            <ng-container *ngIf="email.errors?.['required']"> Email is required. </ng-container>
-            <ng-container *ngIf="email.errors?.['email'] || email.errors?.['pattern']"> Enter a valid email address. </ng-container>
-          </p>
-        </ng-container>
-      </div>
-
-      <!-- Phone Number -->
-      <div class="field-group">
-        <label for="phoneNumber">Phone Number</label>
-        <div class="field-wrap">
-          <svg class="fi" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-          </svg>
-          <input id="phoneNumber" type="tel" formControlName="phoneNumber"
-                 class="field-input"
-                 [class.is-error]="phoneNumber.invalid && phoneNumber.touched"
-                 placeholder="1234567890"
-                 autocomplete="tel"/>
-        </div>
-        <ng-container *ngIf="phoneNumber.invalid && phoneNumber.touched">
-          <p class="field-error">
-            <ng-container *ngIf="phoneNumber.errors?.['required']"> Phone number is required. </ng-container>
-            <ng-container *ngIf="phoneNumber.errors?.['pattern']"> Exactly 10 digits. Cannot start with 0. </ng-container>
-          </p>
-        </ng-container>
-      </div>
-
-      <!-- Password -->
-      <div class="field-group">
-        <label for="password">Password</label>
-        <div class="field-wrap">
-          <svg class="fi" width="16" height="16" fill="none"
-               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <rect x="3" y="11" width="18" height="11" rx="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          </svg>
-          <input id="password" formControlName="password"
-                 [type]="showPass() ? 'text' : 'password'"
-                 class="field-input"
-                 [class.is-error]="password.invalid && password.touched"
-                 placeholder="Create a secure password"
-                 autocomplete="new-password"/>
-          <button type="button" class="eye-btn"
-                  (click)="togglePassword()"
-                  [attr.aria-label]="showPass() ? 'Hide' : 'Show'">
-            <ng-container *ngIf="!showPass(); else hidePassIcon">
-              <svg width="16" height="16" fill="none" stroke="currentColor"
-                   stroke-width="2" viewBox="0 0 24 24">
-                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            </ng-container>
-            <ng-template #hidePassIcon>
-              <svg width="16" height="16" fill="none" stroke="currentColor"
-                   stroke-width="2" viewBox="0 0 24 24">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8
-                         a18.45 18.45 0 0 1 5.06-5.94"/>
-                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8
-                         a18.5 18.5 0 0 1-2.16 3.19"/>
-                <line x1="1" y1="1" x2="23" y2="23"/>
-              </svg>
-            </ng-template>
-          </button>
-        </div>
-        <ng-container *ngIf="password.invalid && password.touched">
-          <p class="field-error">
-            <ng-container *ngIf="password.errors?.['required']"> Password is required. </ng-container>
-            <ng-container *ngIf="password.errors?.['minlength']"> Minimum 6 characters. </ng-container>
-            <ng-container *ngIf="password.errors?.['pattern']"> Must contain at least one uppercase, lowercase, digit, and special char. </ng-container>
-          </p>
-        </ng-container>
-      </div>
-
-      <!-- Submit -->
-      <button type="submit" class="btn-login" [disabled]="loading()">
-        <ng-container *ngIf="loading(); else notLoading">
-          <span class="spinner"></span>Creating account...
-        </ng-container>
-        <ng-template #notLoading>
-          Sign Up
-          <svg width="16" height="16" fill="none" stroke="currentColor"
-               stroke-width="2.5" viewBox="0 0 24 24">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </ng-template>
-      </button>
-
-    </form>
-
-    <p class="register-row">
-      Already have an account?
-      <a routerLink="/login" class="register-link">Sign in instead</a>
-    </p>
-
   </div>
 </div>

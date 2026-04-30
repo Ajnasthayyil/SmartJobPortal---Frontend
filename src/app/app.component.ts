@@ -8,14 +8,6 @@ import { PublicNavbarComponent } from './shared/components/public-navbar/public-
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    DashboardHeaderComponent,
-    FooterComponent,
-    PublicNavbarComponent
-  ],
   template: `
     <!-- Dashboard Header -->
     <ng-container *ngIf="isAuthPage()">
