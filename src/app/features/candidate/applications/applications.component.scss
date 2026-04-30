@@ -136,9 +136,8 @@ $slate-900: #0f172a;
 
 .filter-tabs {
   display: flex;
-  justify-content: center; // Center items inside
-  gap: 12px;
-  margin: 0 auto 40px; // Center the container itself
+  gap: 6px;
+  margin-bottom: 40px;
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(20px);
   padding: 8px;

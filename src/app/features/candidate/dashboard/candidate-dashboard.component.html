@@ -16,29 +16,22 @@
   <!-- ── Main Dashboard ───────────────────────────── -->
   <ng-container *ngIf="!loading()">
     
-    <!-- Premium Hero Section -->
-    <header class="page-hero">
-      <div class="hero-bg">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
+    <!-- Welcome Box -->
+    <div class="welcome-box">
+      <div class="content">
+        <span class="hi-text">Hi {{ getUserFirstName() }},</span>
+        <h1>Welcome To SmartJobPortal!</h1>
       </div>
-      <div class="hero-content dashboard-hero">
-        <div class="title-group">
-          <span class="hero-badge">Welcome Back</span>
-          <h1 class="page-title">Hi {{ getUserFirstName() }}, <span class="highlight">Ready to grow?</span></h1>
-          <p class="page-sub">Track your progress and discover new opportunities tailored for you.</p>
-        </div>
-        <div class="hero-actions">
-          <a routerLink="/candidate/jobs" class="btn-browse-hero">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            Find Jobs
-          </a>
-          <a routerLink="/candidate/profile" class="btn-outline-hero">
-            Edit Profile
-          </a>
-        </div>
+      <div class="actions">
+        <a routerLink="/candidate/jobs" class="btn-primary">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          Find Jobs
+        </a>
+        <a routerLink="/candidate/profile" class="btn-outline">
+          Update Profile
+        </a>
       </div>
-    </header>
+    </div>
 
     <!-- Stats Row -->
     <div class="stats-grid">

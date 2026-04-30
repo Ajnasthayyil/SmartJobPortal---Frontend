@@ -1,36 +1,38 @@
 <div class="companies-page">
 
-  <!-- Premium Hero Section -->
-  <header class="page-hero">
-    <div class="hero-bg">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-    </div>
-    <div class="hero-content">
-      <div class="title-group">
-        <span class="hero-badge">Global Partners</span>
-        <h1 class="page-title">Elite <span class="highlight">Teams</span></h1>
-        <p class="page-sub">Connect with the world's most innovative companies and discover your next growth opportunity.</p>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Top Hiring Partners
+      </div>
+
+      <h1 class="hero-title">
+        Meet the World's <span class="amber">Leading Teams</span><br>
+        Find Your Next Home.
+      </h1>
+
+      <p class="hero-sub">
+        Explore company profiles, cultures, and open opportunities from the fastest-growing startups and global enterprises.
+      </p>
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()"
+               placeholder="Search by company name or industry..."/>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="filter-chips">
+        <button class="chip" [class.active]="activeIndustry === 'All'" (click)="setIndustry('All')">All Industries</button>
+        <button class="chip" [class.active]="activeIndustry === 'Technology'" (click)="setIndustry('Technology')">Technology</button>
+        <button class="chip" [class.active]="activeIndustry === 'Fintech'" (click)="setIndustry('Fintech')">Fintech</button>
+        <button class="chip" [class.active]="activeIndustry === 'Healthcare'" (click)="setIndustry('Healthcare')">Healthcare</button>
       </div>
     </div>
-  </header>
-
-  <div class="companies-controls">
-    <!-- Search bar -->
-    <div class="search-bar">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()"
-              placeholder="Search by company name or industry..."/>
-    </div>
-
-    <!-- Filter chips -->
-    <div class="filter-chips">
-      <button class="chip" [class.active]="activeIndustry === 'All'" (click)="setIndustry('All')">All Industries</button>
-      <button class="chip" [class.active]="activeIndustry === 'Technology'" (click)="setIndustry('Technology')">Technology</button>
-      <button class="chip" [class.active]="activeIndustry === 'Fintech'" (click)="setIndustry('Fintech')">Fintech</button>
-      <button class="chip" [class.active]="activeIndustry === 'Healthcare'" (click)="setIndustry('Healthcare')">Healthcare</button>
-    </div>
-  </div>
+  </section>
 
   <!-- Grid Section -->
   <section class="grid-section">

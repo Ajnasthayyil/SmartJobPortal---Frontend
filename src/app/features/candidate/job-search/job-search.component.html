@@ -1,23 +1,14 @@
 <div class="jobs-page">
 
-  <!-- ── Premium Hero ─────────────────────────────────── -->
-  <header class="page-hero">
-      <div class="hero-bg">
-          <div class="shape shape-1"></div>
-          <div class="shape shape-2"></div>
-      </div>
-      <div class="hero-content">
-          <div class="title-group">
-              <span class="hero-badge">Market Intelligence</span>
-              <h1 class="page-title">Find Your Next <span class="highlight">Career</span></h1>
-              <p class="page-sub">Explore thousands of job opportunities matched to your unique skill set.</p>
-          </div>
-      </div>
-  </header>
-
-  <!-- ── Search Bar Section ──────────────────────────── -->
-  <div class="search-section">
-    <div class="search-container">
+  <!-- ── Search Hero ─────────────────────────────────── -->
+  <div class="search-hero">
+    <h1 class="search-title">Discover Your Next Move</h1>
+    <p class="search-sub">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> 
+      Explore thousands of AI-matched opportunities tailored to your expertise
+    </p>
+    
+    <div class="search-bar">
       <div class="search-field">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" [(ngModel)]="keyword" placeholder="Job title, skills, or company..." (keyup.enter)="search()" />
