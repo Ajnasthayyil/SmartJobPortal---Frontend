@@ -15,6 +15,10 @@ import { AdminJobsComponent } from './features/admin/jobs/admin-jobs.component';
 import { JobsListComponent } from './features/jobs/jobs-list/jobs-list.component';
 import { JobPublicDetailComponent } from './features/jobs/job-public-detail/job-public-detail.component';
 import { CompaniesComponent } from './features/companies/companies.component';
+import { JobSearchComponent } from './features/candidate/job-search/job-search.component';
+import { ApplicationsComponent } from './features/candidate/applications/applications.component';
+import { PostJobComponent } from './features/recruiter/post-job/post-job.component';
+import { ManageJobsComponent } from './features/recruiter/manage-jobs/manage-jobs.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -23,7 +27,15 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'candidate/dashboard', component: CandidateDashboardComponent },
   { path: 'candidate/profile', component: CandidateProfileComponent },
+  { path: 'candidate/jobs', component: JobSearchComponent },
+  { path: 'candidate/applications', component: ApplicationsComponent },
+  { path: 'candidate/companies', component: CompaniesComponent },
+  
   { path: 'recruiter/dashboard', component: RecruiterDashboardComponent },
+  { path: 'recruiter/post-job', component: PostJobComponent },
+  { path: 'recruiter/jobs', component: ManageJobsComponent },
+  { path: 'recruiter/profile', component: CandidateProfileComponent }, // Reusing profile for now
+
   { path: 'admin/dashboard', component: AdminDashboardComponent },
   { path: 'admin/users', component: AdminUsersComponent },
   { path: 'admin/recruiters', component: AdminRecruitersComponent },

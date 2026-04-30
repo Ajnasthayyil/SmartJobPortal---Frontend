@@ -1,28 +1,18 @@
-.app-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.main-content {
+main {
   flex: 1;
   transition: all 0.3s ease;
   width: 100%;
-  padding-top: 24px; /* Default top padding */
+  min-height: 100vh;
 }
 
-/* When the sidebar is active, add margin on desktop and more top padding for header */
-.app-layout.has-sidebar {
-  .main-content {
-    padding-top: 128px; /* Increased space for floating pill navbar */
-    
-    @media (min-width: 1025px) {
-      margin-left: 120px; /* Reduced margin to account for mini-sidebar */
-      width: calc(100% - 120px);
-    }
+/* Sidebar margin for authenticated pages */
+main.has-sidebar {
+  @media (min-width: 769px) {
+    // The sidebar is 72px fixed. 
+    // We don't necessarily need margin-left on 'main' if the dashboard content 
+    // already has padding-left: 96px, which it DOES.
+    // However, for consistency across ALL dashboard pages:
+    // margin-left: 72px;
+    // width: calc(100% - 72px);
   }
-}
-
-.no-padding {
-  padding-top: 0 !important;
 }

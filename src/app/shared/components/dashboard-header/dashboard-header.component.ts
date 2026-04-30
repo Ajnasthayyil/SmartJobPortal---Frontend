@@ -1,30 +1,26 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
-import { LucideAngularModule, Bell, User, LogOut, ChevronDown } from 'lucide-angular';
 
 @Component({
   selector: 'app-dashboard-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, LucideAngularModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard-header.component.html',
   styleUrls: ['./dashboard-header.component.scss']
 })
 export class DashboardHeaderComponent {
   authService = inject(AuthService);
-  isProfileOpen = signal(false);
+  
+  isDropdownOpen = false;
 
-  readonly Bell = Bell;
-  readonly User = User;
-  readonly LogOut = LogOut;
-  readonly ChevronDown = ChevronDown;
-
-  toggleProfile() {
-    this.isProfileOpen.update(v => !v);
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
   logout() {
     this.authService.logout();
+    this.isDropdownOpen = false;
   }
 }

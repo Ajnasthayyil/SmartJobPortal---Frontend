@@ -1,13 +1,25 @@
-<aside class="sidebar-wrapper" *ngIf="links.length > 0">
-  <nav class="sidebar-nav">
-    <ng-container *ngFor="let link of links">
-      <a [routerLink]="link.path"
-         routerLinkActive="active"
-         [routerLinkActiveOptions]="{exact: true}"
-         class="nav-link">
-        <lucide-icon [img]="link.icon" class="nav-icon" [size]="20"></lucide-icon>
-        <span class="nav-label">{{ link.label }}</span>
-      </a>
-    </ng-container>
-  </nav>
+<aside class="sidebar-wrapper">
+  <div class="sidebar-logo" routerLink="/">
+    <div class="logo-box">
+      <i class="fa-solid fa-bolt"></i>
+    </div>
+    <span class="logo-text">TalEx</span>
+  </div>
+  
+  <div class="sidebar-content">
+    <div class="nav-group" *ngFor="let group of links">
+      <h3 class="group-title">{{ group.group }}</h3>
+      
+      <div class="nav-items">
+        <a *ngFor="let item of group.items"
+           [routerLink]="item.path"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}"
+           class="nav-link">
+          <i [class]="'nav-icon ' + item.iconClass"></i>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
 </aside>

@@ -1,44 +1,49 @@
 <div class="dash-header-container">
   <header class="dash-header">
-    <div class="header-left">
-      <div class="logo" routerLink="/">Tal<span>Ex</span></div>
+    <div class="logo" routerLink="/">
+      Tal<span>Ex</span>
     </div>
 
     <div class="header-right">
-      <button class="icon-btn">
-        <lucide-icon [img]="Bell" [size]="20"></lucide-icon>
+      <!-- Search Button -->
+      <button class="icon-btn" title="Search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+
+      <!-- Notifications -->
+      <button class="icon-btn" title="Notifications">
+        <i class="fa-solid fa-bell"></i>
         <span class="notification-dot"></span>
       </button>
 
+      <!-- Profile Dropdown Trigger -->
       <div class="profile-dropdown">
-        <button class="profile-btn" 
-                (click)="toggleProfile()"
-                [attr.aria-expanded]="isProfileOpen()">
+        <div class="profile-btn" (click)="toggleDropdown()">
           <div class="avatar">
-            <img *ngIf="authService.currentUser()?.profilePictureUrl" 
-                 [src]="authService.currentUser()?.profilePictureUrl" 
-                 alt="Profile" 
-                 class="avatar-img">
+            <img [src]="authService.currentUser()?.profilePictureUrl || 'assets/images/default-avatar.png'" 
+                 alt="Avatar" class="avatar-img" 
+                 *ngIf="authService.currentUser()?.profilePictureUrl">
             <span *ngIf="!authService.currentUser()?.profilePictureUrl">
-              {{ authService.currentUser()?.fullName?.charAt(0) }}
+              {{ authService.currentUser()?.fullName?.charAt(0) || 'U' }}
             </span>
           </div>
           <div class="user-meta">
-            <span class="name">{{ authService.currentUser()?.fullName }}</span>
-            <span class="role">{{ authService.currentUser()?.role }}</span>
+            <span class="name">{{ authService.currentUser()?.fullName || 'User' }}</span>
+            <span class="role">{{ authService.currentUser()?.role || 'Candidate' }}</span>
           </div>
-          <lucide-icon [img]="ChevronDown" [size]="16" class="chevron"></lucide-icon>
-        </button>
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </div>
 
-        <div class="dropdown-menu" *ngIf="isProfileOpen()">
-          <a [routerLink]="authService.getRole() === 'Candidate' ? '/candidate/profile' : null" 
-             (click)="isProfileOpen.set(false)" class="menu-item">
-            <lucide-icon [img]="User" [size]="18"></lucide-icon>
-            <span>Profile</span>
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" *ngIf="isDropdownOpen">
+          <a routerLink="/candidate/profile" class="menu-item">
+            <i class="fa-solid fa-user"></i> My Profile
+          </a>
+          <a routerLink="/candidate/settings" class="menu-item">
+            <i class="fa-solid fa-gear"></i> Settings
           </a>
           <button (click)="logout()" class="menu-item logout">
-            <lucide-icon [img]="LogOut" [size]="18"></lucide-icon>
-            <span>Logout</span>
+            <i class="fa-solid fa-right-from-bracket"></i> Sign Out
           </button>
         </div>
       </div>
