@@ -1,167 +1,166 @@
 <div class="jobs-page">
-    <div class="jobs-inner">
 
-        <!-- Search bar -->
-        <div class="search-hero">
-            <h1 class="search-title">Find Your Dream Job</h1>
-            <p class="search-sub">
-                AI-powered matching across thousands of opportunities
-            </p>
-            <div class="search-bar">
-                <div class="search-field">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.35-4.35" />
-                    </svg>
-                    <input type="text" [(ngModel)]="keyword" placeholder="Job title, skill, or keyword..."
-                        (keyup.enter)="search()" />
-                </div>
-                <div class="search-divider"></div>
-                <div class="search-field">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                        <circle cx="12" cy="10" r="3" />
-                    </svg>
-                    <input type="text" [(ngModel)]="location" placeholder="City, state, or remote..."
-                        (keyup.enter)="search()" />
-                </div>
-                <button class="btn-search" (click)="search()">Search Jobs</button>
-            </div>
+  <!-- ── Premium Hero ─────────────────────────────────── -->
+  <header class="page-hero">
+      <div class="hero-bg">
+          <div class="shape shape-1"></div>
+          <div class="shape shape-2"></div>
+      </div>
+      <div class="hero-content">
+          <div class="title-group">
+              <span class="hero-badge">Market Intelligence</span>
+              <h1 class="page-title">Find Your Next <span class="highlight">Career</span></h1>
+              <p class="page-sub">Explore thousands of job opportunities matched to your unique skill set.</p>
+          </div>
+      </div>
+  </header>
 
-            <!-- Filter chips -->
-            <div class="filter-chips">
-                <ng-container *ngFor="let type of jobTypes">
-                <button class="chip" [class.active]="activeFilter === type" (click)="setFilter(type)">
-                    {{ type }}
-                </button>
-                </ng-container>
-                <div class="chip-divider"></div>
-                <ng-container *ngFor="let range of salaryRanges">
-                <button class="chip" [class.active]="selectedSalary?.label === range.label" (click)="setSalary(range)">
-                    {{ range.label }}
-                </button>
-                </ng-container>
-                <ng-container *ngIf="selectedSalary">
-                <button class="chip chip-clear" (click)="selectedSalary = null; search()">
-                    ✕ Clear
-                </button>
-                </ng-container>
-            </div>
-        </div>
-
-        <!-- Results header -->
-        <div class="results-header">
-            <span class="results-count">
-                <ng-container *ngIf="!loading(); else searchingBlock">
-                <strong>{{ totalCount() }}</strong> jobs found
-                </ng-container>
-                <ng-template #searchingBlock>
-                Searching...
-                </ng-template>
-            </span>
-        </div>
-
-        <!-- Job cards -->
-        <ng-container *ngIf="loading()">
-        <div class="jobs-grid">
-            <ng-container *ngFor="let i of [1,2,3,4,5,6,7,8]">
-            <div class="skeleton" style="height:200px;border-radius:16px"></div>
-            </ng-container>
-        </div>
-        </ng-container>
-
-        <ng-container *ngIf="!loading()">
-        <ng-container *ngIf="jobs().length === 0; else jobsListBlock">
-        <div class="empty-state">
-            <div class="empty-icon">🔍</div>
-            <h3>No jobs found</h3>
-            <p>Try different keywords or remove filters</p>
-            <button class="btn-reset" (click)="keyword='';location='';setFilter('All')">
-                Reset Filters
-            </button>
-        </div>
-        </ng-container>
-        <ng-template #jobsListBlock>
-        <div class="jobs-grid">
-            <ng-container *ngFor="let job of jobs()">
-            <div class="job-card">
-
-                <!-- Top row -->
-                <div class="job-card-top">
-                    <div class="company-logo">
-                        {{ job.companyName.charAt(0) }}
-                    </div>
-                    <ng-container *ngIf="job.matchScore">
-                    <div class="score-badge">
-                        <svg width="42" height="42" viewBox="0 0 42 42">
-                            <circle cx="21" cy="21" r="18" fill="none" stroke="#f3f4f6" stroke-width="4" />
-                            <circle cx="21" cy="21" r="18" fill="none" [attr.stroke]="getScoreColor(job.matchScore)"
-                                stroke-width="4" stroke-linecap="round" [attr.stroke-dasharray]="2*3.14159*18"
-                                [attr.stroke-dashoffset]="getDashOffset(job.matchScore)"
-                                transform="rotate(-90 21 21)" />
-                            <text x="21" y="25" text-anchor="middle" font-size="10" font-weight="700" fill="#0a0a0a">
-                                {{ job.matchScore }}%
-                            </text>
-                        </svg>
-                    </div>
-                    </ng-container>
-                </div>
-
-                <!-- Job info -->
-                <h3 class="jc-title">{{ job.title }}</h3>
-                <p class="jc-company">{{ job.companyName }}</p>
-
-                <div class="jc-meta">
-                    <span class="meta-pill">
-                        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                        </svg>
-                        {{ job.location }}
-                    </span>
-                    <span class="meta-pill">{{ job.jobType }}</span>
-                    <ng-container *ngIf="job.minSalary">
-                    <span class="meta-pill amber-pill">
-                        ₹{{ job.minSalary | number }}+
-                    </span>
-                    </ng-container>
-                </div>
-
-                <!-- Skills -->
-                <div class="jc-skills">
-                    <ng-container *ngFor="let skill of job.requiredSkills.slice(0,3)">
-                    <span class="skill-pill">{{ skill }}</span>
-                    </ng-container>
-                    <ng-container *ngIf="job.requiredSkills.length > 3">
-                    <span class="skill-pill">
-                        +{{ job.requiredSkills.length - 3 }}
-                    </span>
-                    </ng-container>
-                </div>
-
-                <!-- Footer -->
-                <div class="jc-footer">
-                    <span class="jc-date">
-                        {{ job.postedAt | date:'MMM d' }}
-                    </span>
-                    <a [routerLink]="['/candidate/jobs', job.jobId]" class="btn-view">
-                        View Job →
-                    </a>
-                </div>
-
-            </div>
-            </ng-container>
-        </div>
-
-        <!-- Load more -->
-        <ng-container *ngIf="page() < totalPages"> <div class="load-more-wrap">
-            <button class="btn-load-more" (click)="loadMore()">
-                Load More Jobs
-            </button>
-        </div>
-        </ng-container>
-        </ng-template>
-        </ng-container>
-
+  <!-- ── Search Bar Section ──────────────────────────── -->
+  <div class="search-section">
+    <div class="search-container">
+      <div class="search-field">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" [(ngModel)]="keyword" placeholder="Job title, skills, or company..." (keyup.enter)="search()" />
+      </div>
+      <div class="search-divider"></div>
+      <div class="search-field">
+        <i class="fa-solid fa-location-dot"></i>
+        <input type="text" [(ngModel)]="location" placeholder="City, State, or Remote" (keyup.enter)="search()" />
+      </div>
+      <button class="btn-search" (click)="search()">Search</button>
     </div>
+  </div>
+
+  <div class="jobs-layout">
+    
+    <!-- ── Filter Sidebar ────────────────────────────── -->
+    <aside class="filter-sidebar">
+      <div class="filter-card">
+        <h3 class="filter-title">Filters</h3>
+        
+        <!-- Job Type Group -->
+        <div class="filter-group">
+          <label>Job Type</label>
+          <div class="chip-grid">
+            <button *ngFor="let type of jobTypes" 
+                    class="filter-chip" 
+                    [class.active]="activeFilter === type"
+                    (click)="setFilter(type)">
+              {{ type }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Salary Range Group -->
+        <div class="filter-group">
+          <label>Salary Range (Min)</label>
+          <div class="chip-grid">
+            <button *ngFor="let range of salaryRanges" 
+                    class="filter-chip" 
+                    [class.active]="selectedSalary?.label === range.label"
+                    (click)="setSalary(range)">
+              {{ range.label }}
+            </button>
+          </div>
+          <button *ngIf="selectedSalary" class="clear-link" (click)="selectedSalary = null; search()">
+            Reset Salary
+          </button>
+        </div>
+
+        <!-- Experience Group -->
+        <div class="filter-group">
+          <label>Experience Level</label>
+          <select class="filter-select">
+            <option>All Levels</option>
+            <option>Entry Level (0-2 yrs)</option>
+            <option>Mid Level (2-5 yrs)</option>
+            <option>Senior Level (5+ yrs)</option>
+          </select>
+        </div>
+
+        <button class="btn-reset-all" (click)="keyword='';location='';setFilter('All')">
+          Clear All Filters
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Results Area ──────────────────────────────── -->
+    <main class="results-area">
+      
+      <!-- Premium Loading State -->
+      <div class="loading-overlay" *ngIf="loading()">
+        <div class="spinner-container">
+          <div class="premium-spinner"></div>
+          <div class="loading-text">Analyzing opportunities...</div>
+        </div>
+      </div>
+
+      <div class="results-info">
+        <span *ngIf="!loading()">Showing <strong>{{ totalCount() }}</strong> opportunities</span>
+        <div class="sort-dropdown">
+          Sort by: <strong>Most Relevant</strong> <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="jobs-grid" *ngIf="loading()">
+        <div *ngFor="let i of [1,2,3,4,5,6]" class="skeleton-card"></div>
+      </div>
+
+      <!-- Jobs Grid -->
+      <div class="jobs-grid" *ngIf="!loading()">
+        
+        <ng-container *ngIf="jobs().length > 0; else noJobs">
+          <div *ngFor="let job of jobs()" class="job-card">
+            <div class="card-top">
+              <div class="company-logo">{{ job.companyName.charAt(0) }}</div>
+              <div class="match-badge" *ngIf="job.matchScore">
+                <i class="fa-solid fa-bolt"></i> {{ job.matchScore }}% Match
+              </div>
+            </div>
+
+            <div class="card-body">
+              <h3 class="job-title">{{ job.title }}</h3>
+              <div class="company-name">{{ job.companyName }}</div>
+              
+              <div class="meta-row">
+                <span class="meta-item"><i class="fa-solid fa-location-dot"></i> {{ job.location }}</span>
+                <span class="meta-item"><i class="fa-solid fa-clock"></i> {{ job.jobType }}</span>
+                <span class="meta-item accent" *ngIf="job.minSalary"><i class="fa-solid fa-indian-rupee-sign"></i> {{ job.minSalary | number }}k+</span>
+              </div>
+
+              <div class="skills-row">
+                <span *ngFor="let skill of job.requiredSkills.slice(0,3)" class="skill-tag">{{ skill }}</span>
+                <span *ngIf="job.requiredSkills.length > 3" class="skill-more">+{{ job.requiredSkills.length - 3 }}</span>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <span class="posted-date">Posted {{ job.postedAt | date:'MMM d' }}</span>
+              <a [routerLink]="['/candidate/jobs', job.jobId]" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #noJobs>
+          <div class="empty-results">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <h3>No matches found</h3>
+            <p>Try adjusting your filters or searching for different keywords.</p>
+          </div>
+        </ng-template>
+
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-wrap" *ngIf="page() < totalPages">
+        <button class="btn-load-more" (click)="loadMore()" [disabled]="loading()">
+          <span *ngIf="!loading()">Load More Jobs</span>
+          <span *ngIf="loading()">Loading...</span>
+        </button>
+      </div>
+
+    </main>
+
+  </div>
 </div>

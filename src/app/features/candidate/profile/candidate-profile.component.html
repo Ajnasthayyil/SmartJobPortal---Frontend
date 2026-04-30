@@ -1,246 +1,268 @@
 <div class="profile-page">
 
-    <ng-container *ngIf="loading()">
+  <!-- ── Loading Skeleton ─────────────────────────── -->
+  <ng-container *ngIf="loading()">
     <div class="skeleton-wrap">
-        <div class="skeleton" style="height:60px;width:300px;margin-bottom:24px"></div>
-        <div class="skeleton" style="height:400px;border-radius:16px"></div>
+      <div class="skeleton-banner"></div>
+      <div class="skeleton-content">
+        <div class="skeleton-side"></div>
+        <div class="skeleton-main"></div>
+      </div>
     </div>
-    </ng-container>
+  </ng-container>
 
-    <ng-container *ngIf="!loading()">
-    <div class="profile-inner">
-
-        <!-- Page header -->
-        <div class="page-header">
-            <div>
-                <h1 class="page-title">My Profile</h1>
-                <p class="page-sub">
-                    Keep your profile updated to get better AI matches
-                </p>
-            </div>
-            <a routerLink="/candidate/dashboard" class="btn-back">
-                ← Dashboard
-            </a>
+  <ng-container *ngIf="!loading()">
+    
+    <!-- ── Profile Banner Section ──────────────────── -->
+    <div class="profile-hero">
+      <div class="banner"></div>
+      <div class="hero-content">
+        <div class="avatar-wrapper" (click)="photoInput.click()">
+          <img *ngIf="profile()?.profilePictureUrl" [src]="profile()?.profilePictureUrl" class="avatar-img">
+          <div *ngIf="!profile()?.profilePictureUrl" class="avatar-placeholder">
+            {{ profile()?.fullName?.charAt(0) }}
+          </div>
+          <div class="avatar-edit"><i class="fa-solid fa-camera"></i></div>
+          <input #photoInput type="file" hidden accept="image/*" (change)="onPhotoSelect($event)" />
+        </div>
+        
+        <div class="user-info">
+          <h1 class="user-name">{{ profile()?.fullName }}</h1>
+          <p class="user-headline">{{ profile()?.headline || 'Add a professional headline' }}</p>
+          <div class="user-meta">
+            <span><i class="fa-solid fa-location-dot"></i> {{ profile()?.location || 'Location not set' }}</span>
+            <span><i class="fa-solid fa-envelope"></i> {{ profile()?.email }}</span>
+          </div>
         </div>
 
-        <div class="profile-grid">
-
-            <!-- ── Left sidebar ─────────────────────────── -->
-            <div class="sidebar">
-
-                <!-- Photo Upload Card -->
-                <div class="card photo-card">
-                    <div class="avatar-upload-container">
-                        <div class="avatar-preview" (click)="photoInput.click()">
-                            <img *ngIf="profile()?.profilePictureUrl" 
-                                 [src]="profile()?.profilePictureUrl" 
-                                 alt="Profile" 
-                                 class="avatar-img">
-                            <div *ngIf="!profile()?.profilePictureUrl" class="avatar-placeholder">
-                                {{ profile()?.fullName?.charAt(0) }}
-                            </div>
-                            <div class="avatar-overlay">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                                    <circle cx="12" cy="13" r="4"></circle>
-                                </svg>
-                            </div>
-                        </div>
-                        <input #photoInput type="file" hidden accept="image/*" (change)="onPhotoSelect($event)" />
-                        <div class="photo-info">
-                            <h3>{{ profile()?.fullName }}</h3>
-                            <p>{{ profile()?.email }}</p>
-                            <button class="btn-change-photo" (click)="photoInput.click()">
-                                {{ profile()?.profilePictureUrl ? 'Change Photo' : 'Upload Photo' }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Completion card -->
-                <div class="card">
-                    <h3 class="card-title">Profile Strength</h3>
-                    <div class="ring-center">
-                        <svg width="120" height="120" viewBox="0 0 120 120">
-                            <circle cx="60" cy="60" r="50" fill="none" stroke="#f3f4f6" stroke-width="10" />
-                            <circle cx="60" cy="60" r="50" fill="none" stroke="#f59e0b" stroke-width="10"
-                                stroke-linecap="round" [attr.stroke-dasharray]="2 * 3.14159 * 50"
-                                [attr.stroke-dashoffset]="2 * 3.14159 * 50 * (1 - completion()/100)"
-                                transform="rotate(-90 60 60)" />
-                            <text x="60" y="65" text-anchor="middle" font-size="22" font-weight="700" fill="#0a0a0a">
-                                {{ completion() }}%
-                            </text>
-                        </svg>
-                    </div>
-                    <div class="checklist">
-                        <div class="check-item" [class.done]="profile()?.fullName">
-                            <span class="check-dot"></span> Full name
-                        </div>
-                        <div class="check-item" [class.done]="profile()?.headline">
-                            <span class="check-dot"></span> Headline
-                        </div>
-                        <div class="check-item" [class.done]="profile()?.summary">
-                            <span class="check-dot"></span> Summary
-                        </div>
-                        <div class="check-item" [class.done]="profile()?.location">
-                            <span class="check-dot"></span> Location
-                        </div>
-                        <div class="check-item" [class.done]="skills().length > 0">
-                            <span class="check-dot"></span> Skills added
-                        </div>
-                        <div class="check-item" [class.done]="profile()?.hasResume">
-                            <span class="check-dot"></span> Resume uploaded
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Resume upload -->
-                <div class="card">
-                    <h3 class="card-title">Resume</h3>
-
-                    <ng-container *ngIf="profile()?.hasResume">
-                    <div class="resume-current">
-                        <div class="resume-icon">📄</div>
-                        <div class="resume-info">
-                            <div class="resume-name">
-                                {{ profile()?.resumeOriginalName }}
-                            </div>
-                            <div class="resume-date">
-                                Uploaded {{ profile()?.resumeUploadedAt | date:'mediumDate' }}
-                            </div>
-                        </div>
-                    </div>
-                    </ng-container>
-
-                    <div class="upload-zone" [class.drag-active]="dragOver()"
-                        (dragover)="$event.preventDefault(); dragOver.set(true)" (dragleave)="dragOver.set(false)"
-                        (drop)="onDrop($event)" (click)="resumeInput.click()">
-                        <ng-container *ngIf="uploading(); else uploadReady">
-                        <div class="upload-loading">
-                            <div class="spin-amber"></div>
-                            <span>Analyzing resume...</span>
-                        </div>
-                        </ng-container>
-                        <ng-template #uploadReady>
-                        <div class="upload-icon">📂</div>
-                        <div class="upload-txt">
-                            {{ profile()?.hasResume ? 'Update Resume' : 'Upload Resume' }}
-                        </div>
-                        <div class="upload-sub">PDF or DOCX · Max 5MB</div>
-                        </ng-template>
-                        <input #resumeInput type="file" hidden accept=".pdf,.docx,.doc"
-                            (change)="onResumeSelect($event)" />
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- ── Main form ─────────────────────────────── -->
-            <div class="main-form">
-                <div class="card">
-                    <h3 class="card-title" style="margin-bottom:24px">
-                        Personal Information
-                    </h3>
-
-                    <form [formGroup]="form" (ngSubmit)="onSave()" novalidate>
-
-                        <!-- Headline -->
-                        <div class="field">
-                            <label>Professional Headline</label>
-                            <div class="field-wrap">
-                                <input type="text" class="field-input" formControlName="headline" [class.is-error]="form.get('headline')!.invalid &&
-                                           form.get('headline')!.touched"
-                                    placeholder="e.g. Senior Full Stack Developer · 6 yrs" />
-                            </div>
-                            <ng-container *ngIf="form.get('headline')!.invalid && form.get('headline')!.touched">
-                            <p class="field-error">Headline is required.</p>
-                            </ng-container>
-                        </div>
-
-                        <!-- Summary -->
-                        <div class="field">
-                            <label>Professional Summary</label>
-                            <textarea class="field-input textarea" formControlName="summary" [class.is-error]="form.get('summary')!.invalid &&
-                                            form.get('summary')!.touched"
-                                placeholder="Tell recruiters about yourself, your experience, and goals..."
-                                rows="5"></textarea>
-                            <ng-container *ngIf="form.get('summary')!.invalid && form.get('summary')!.touched">
-                            <p class="field-error">
-                                Summary must be at least 50 characters.
-                            </p>
-                            </ng-container>
-                        </div>
-
-                        <!-- Location + Experience -->
-                        <div class="field-row">
-                            <div class="field">
-                                <label>Location</label>
-                                <div class="field-wrap">
-                                    <svg class="field-icon" width="15" height="15" fill="none" stroke="currentColor"
-                                        stroke-width="2" viewBox="0 0 24 24">
-                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                        <circle cx="12" cy="10" r="3" />
-                                    </svg>
-                                    <input type="text" class="field-input" formControlName="location" [class.is-error]="form.get('location')!.invalid &&
-                                             form.get('location')!.touched" placeholder="City, State / Remote" />
-                                </div>
-                                <ng-container *ngIf="form.get('location')!.invalid && form.get('location')!.touched">
-                                <p class="field-error">Location is required.</p>
-                                </ng-container>
-                            </div>
-
-                            <div class="field">
-                                <label>Years of Experience</label>
-                                <div class="field-wrap">
-                                    <input type="number" class="field-input" formControlName="experienceYears" min="0"
-                                        max="50" placeholder="e.g. 3" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Skills -->
-                        <div class="field">
-                            <label>Skills</label>
-                            <div class="skill-input-row">
-                                <input type="text" class="field-input" [value]="skillInput()"
-                                    (input)="skillInput.set($any($event.target).value)"
-                                    (keydown)="onKeydown($event, skillInput())"
-                                    placeholder="e.g. React, Node.js — press Enter to add" />
-                                <button type="button" class="btn-add-skill" (click)="addSkill(skillInput())">
-                                    Add
-                                </button>
-                            </div>
-                            <div class="skills-cloud">
-                                <ng-container *ngFor="let skill of skills()">
-                                <span class="skill-tag">
-                                    {{ skill }}
-                                    <button type="button" (click)="removeSkill(skill)">✕</button>
-                                </span>
-                                </ng-container>
-                                <ng-container *ngIf="skills().length === 0">
-                                <span class="no-skills">No skills added yet</span>
-                                </ng-container>
-                            </div>
-                        </div>
-
-                        <!-- Save button -->
-                        <div class="form-footer">
-                            <button type="submit" class="btn-save" [disabled]="saving()">
-                                <ng-container *ngIf="saving(); else notSaving">
-                                <span class="spinner"></span> Saving...
-                                </ng-container>
-                                <ng-template #notSaving>
-                                Save Profile
-                                </ng-template>
-                            </button>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-
+        <div class="hero-actions">
+          <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
+            <i class="fa-solid fa-check" *ngIf="!saving()"></i>
+            <span class="spinner" *ngIf="saving()"></span>
+            {{ saving() ? 'Saving...' : 'Save Changes' }}
+          </button>
         </div>
+      </div>
     </div>
-    </ng-container>
+
+    <div class="profile-layout" [formGroup]="form">
+      
+      <!-- ── Left Column: Form ─────────────────────── -->
+      <main class="profile-main">
+        
+        <!-- About Section -->
+        <section class="profile-section">
+          <h2 class="section-title">Professional Summary</h2>
+          <div class="card">
+            <div class="premium-field">
+              <label>Headline</label>
+              <div class="input-wrap" style="margin-bottom: 20px;">
+                <input type="text" formControlName="headline" placeholder="e.g. Senior Software Engineer" />
+              </div>
+            </div>
+
+            <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 12px; text-transform: uppercase;">About Me</label>
+            <textarea formControlName="summary" 
+                      class="premium-textarea" 
+                      placeholder="Tell your professional story..."
+                      rows="6"></textarea>
+            <div class="char-count" [class.error]="form.get('summary')?.invalid && form.get('summary')?.touched">
+              {{ form.get('summary')?.value?.length || 0 }} / 50 characters min
+            </div>
+          </div>
+        </section>
+
+        <!-- Experience & Location -->
+        <section class="profile-section">
+          <h2 class="section-title">Core Details</h2>
+          <div class="card-grid">
+            <div class="premium-field">
+              <label>Location</label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-location-dot"></i>
+                <input type="text" formControlName="location" placeholder="City, Country" />
+              </div>
+            </div>
+            <div class="premium-field">
+              <label>Years of Experience</label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-briefcase"></i>
+                <input type="number" formControlName="experienceYears" placeholder="e.g. 5" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Work Experience Section -->
+        <section class="profile-section">
+          <div class="section-header">
+            <h2 class="section-title">Work Experience</h2>
+            <button type="button" class="btn-add-mini" (click)="addExperience()">
+              <i class="fa-solid fa-plus"></i> Add
+            </button>
+          </div>
+          <div formArrayName="workExperience">
+            <div *ngFor="let exp of experienceGroups.controls; let i = index" [formGroupName]="i" class="card dynamic-card">
+              <button type="button" class="btn-remove-mini" (click)="removeExperience(i)">✕</button>
+              <div class="card-grid">
+                <div class="premium-field">
+                  <label>Company</label>
+                  <div class="input-wrap">
+                    <input type="text" formControlName="company" placeholder="e.g. Google" />
+                  </div>
+                </div>
+                <div class="premium-field">
+                  <label>Role</label>
+                  <div class="input-wrap">
+                    <input type="text" formControlName="role" placeholder="e.g. Senior Developer" />
+                  </div>
+                </div>
+              </div>
+              <div class="premium-field" style="margin-top: 16px;">
+                <label>Duration</label>
+                <div class="input-wrap">
+                  <input type="text" formControlName="duration" placeholder="e.g. Jan 2020 - Present" />
+                </div>
+              </div>
+              <div class="premium-field" style="margin-top: 16px;">
+                <label>Description</label>
+                <textarea formControlName="description" class="premium-textarea mini" placeholder="Describe your responsibilities..."></textarea>
+              </div>
+            </div>
+            <div *ngIf="experienceGroups.length === 0" class="empty-card">
+              <i class="fa-solid fa-briefcase"></i>
+              <p>No work experience added. Share your journey!</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="profile-section">
+          <div class="section-header">
+            <h2 class="section-title">Education</h2>
+            <button type="button" class="btn-add-mini" (click)="addEducation()">
+              <i class="fa-solid fa-plus"></i> Add
+            </button>
+          </div>
+          <div formArrayName="education">
+            <div *ngFor="let edu of educationGroups.controls; let i = index" [formGroupName]="i" class="card dynamic-card">
+              <button type="button" class="btn-remove-mini" (click)="removeEducation(i)">✕</button>
+              <div class="card-grid">
+                <div class="premium-field">
+                  <label>Degree</label>
+                  <div class="input-wrap">
+                    <input type="text" formControlName="degree" placeholder="e.g. Bachelor of Science" />
+                  </div>
+                </div>
+                <div class="premium-field">
+                  <label>Institution</label>
+                  <div class="input-wrap">
+                    <input type="text" formControlName="institution" placeholder="e.g. Stanford University" />
+                  </div>
+                </div>
+              </div>
+              <div class="card-grid" style="margin-top: 16px;">
+                <div class="premium-field">
+                  <label>Field of Study</label>
+                  <div class="input-wrap">
+                    <input type="text" formControlName="fieldOfStudy" placeholder="e.g. Computer Science" />
+                  </div>
+                </div>
+                <div class="premium-field">
+                  <label>Duration</label>
+                  <div class="input-wrap">
+                    <input type="text" formControlName="duration" placeholder="e.g. 2016 - 2020" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="educationGroups.length === 0" class="empty-card">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <p>No education details added.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="profile-section">
+          <h2 class="section-title">Skills & Expertise</h2>
+          <div class="card">
+            <div class="skill-input-bar">
+              <input type="text" [ngModel]="skillInput()" 
+                     (ngModelChange)="skillInput.set($event)"
+                     [ngModelOptions]="{standalone: true}"
+                     (keydown.enter)="addSkill(skillInput())"
+                     placeholder="Add a skill (e.g. Angular, UI Design)..." />
+              <button type="button" (click)="addSkill(skillInput())">Add</button>
+            </div>
+            
+            <div class="skills-list-managed" formArrayName="skills">
+              <div *ngFor="let skill of skillGroups.controls; let i = index" [formGroupName]="i" class="managed-skill-item">
+                <span class="skill-name-label">{{ skill.get('skillName')?.value }}</span>
+                <select formControlName="level" class="skill-level-select">
+                  <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
+                </select>
+                <button type="button" class="btn-remove-skill" (click)="removeSkill(i)">✕</button>
+              </div>
+              <div *ngIf="skillGroups.length === 0" class="empty-skills">
+                No skills added yet. Let employers know what you're good at!
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ── Right Column: Sidebar ─────────────────── -->
+      <aside class="profile-side">
+        
+        <!-- Completion Card -->
+        <div class="side-card completion-card">
+          <h3 class="side-title">Profile Strength</h3>
+          <div class="ring-container">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="54" fill="none" stroke="#f1f5f9" stroke-width="12" />
+              <circle cx="60" cy="60" r="54" fill="none" stroke="#6366f1" stroke-width="12"
+                      stroke-linecap="round" 
+                      [attr.stroke-dasharray]="2 * 3.14159 * 54"
+                      [attr.stroke-dashoffset]="2 * 3.14159 * 54 * (1 - completion() / 100)"
+                      transform="rotate(-90 60 60)" />
+              <text x="60" y="68" text-anchor="middle" font-size="24" font-weight="900" fill="#0f172a">
+                {{ completion() }}%
+              </text>
+            </svg>
+          </div>
+          <p class="completion-text">Complete your profile to unlock <strong>AI matches</strong>.</p>
+        </div>
+
+        <!-- Resume Card -->
+        <div class="side-card resume-card">
+          <h3 class="side-title">Resume</h3>
+          
+          <div *ngIf="profile()?.hasResume" class="current-resume">
+            <div class="resume-icon"><i class="fa-solid fa-file-pdf"></i></div>
+            <div class="resume-details">
+              <div class="name">{{ profile()?.resumeOriginalName }}</div>
+              <div class="date">Updated {{ profile()?.resumeUploadedAt | date:'MMM d' }}</div>
+            </div>
+          </div>
+
+          <div class="upload-area" 
+               [class.active]="dragOver()"
+               (dragover)="$event.preventDefault(); dragOver.set(true)"
+               (dragleave)="dragOver.set(false)"
+               (drop)="onDrop($event)"
+               (click)="resumeInput.click()">
+            <input #resumeInput type="file" hidden accept=".pdf,.docx" (change)="onResumeSelect($event)" />
+            <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="upload-label">{{ profile()?.hasResume ? 'Update Resume' : 'Upload Resume' }}</div>
+            <div class="upload-hint">PDF or DOCX (Max 5MB)</div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </ng-container>
 
 </div>

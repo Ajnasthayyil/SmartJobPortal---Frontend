@@ -30,6 +30,9 @@ const routes: Routes = [
   { path: 'candidate/jobs', component: JobSearchComponent },
   { path: 'candidate/applications', component: ApplicationsComponent },
   { path: 'candidate/companies', component: CompaniesComponent },
+  { path: 'candidate/notifications', component: CandidateDashboardComponent }, // Fallback
+  { path: 'candidate/settings', component: CandidateDashboardComponent },      // Fallback
+  { path: 'candidate/skill-gap', component: CandidateDashboardComponent },     // Fallback
   
   { path: 'recruiter/dashboard', component: RecruiterDashboardComponent },
   { path: 'recruiter/post-job', component: PostJobComponent },

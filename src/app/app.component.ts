@@ -1,34 +1,32 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router } from '@angular/router';
-
-import { DashboardHeaderComponent } from './shared/components/dashboard-header/dashboard-header.component';
-import { FooterComponent } from './shared/components/footer/footer.component';
-import { PublicNavbarComponent } from './shared/components/public-navbar/public-navbar.component';
-import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { SidebarService } from './core/services/sidebar.service';
 
 @Component({
   selector: 'app-root',
   template: `
-    <!-- Dashboard Header -->
-    <ng-container *ngIf="isAuthPage()">
-      <app-dashboard-header></app-dashboard-header>
-    </ng-container>
+    <div class="layout-container" [class.has-sidebar]="showSidebar()" [class.sidebar-expanded]="sidebarService.isExpanded()">
+      <!-- Dashboard Header -->
+      <ng-container *ngIf="isAuthPage()">
+        <app-dashboard-header></app-dashboard-header>
+      </ng-container>
 
-    <!-- Public Navbar -->
-    <ng-container *ngIf="isPublicPage()">
-      <app-public-navbar></app-public-navbar>
-    </ng-container>
+      <!-- Public Navbar -->
+      <ng-container *ngIf="isPublicPage()">
+        <app-public-navbar></app-public-navbar>
+      </ng-container>
 
-    <!-- Sidebar -->
-    <ng-container *ngIf="showSidebar()">
-      <app-sidebar></app-sidebar>
-    </ng-container>
+      <!-- Sidebar -->
+      <app-candidate-sidebar *ngIf="isCandidate()"></app-candidate-sidebar>
+      <app-recruiter-sidebar *ngIf="isRecruiter()"></app-recruiter-sidebar>
+      <app-admin-sidebar *ngIf="isAdmin()"></app-admin-sidebar>
 
-    <!-- Main Content -->
-    <main [class.has-sidebar]="showSidebar()">
-      <router-outlet></router-outlet>
-    </main>
+      <!-- Main Content -->
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </div>
 
     <!-- Footer -->
     <ng-container *ngIf="isPublicPage()">
@@ -38,15 +36,22 @@ import { SidebarComponent } from './shared/components/sidebar/sidebar.component'
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, public sidebarService: SidebarService) {}
 
   showSidebar(): boolean {
-    const url = this.router.url;
-    return (
-      url.startsWith('/candidate') ||
-      url.startsWith('/recruiter') ||
-      url.startsWith('/admin')
-    );
+    return this.isCandidate() || this.isRecruiter() || this.isAdmin();
+  }
+
+  isCandidate(): boolean {
+    return this.router.url.startsWith('/candidate');
+  }
+
+  isRecruiter(): boolean {
+    return this.router.url.startsWith('/recruiter');
+  }
+
+  isAdmin(): boolean {
+    return this.router.url.startsWith('/admin');
   }
 
   isAuthPage(): boolean {

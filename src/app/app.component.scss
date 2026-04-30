@@ -1,18 +1,30 @@
-main {
-  flex: 1;
-  transition: all 0.3s ease;
-  width: 100%;
+.layout-container {
+  --sidebar-width: 0px;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  
+  &.has-sidebar {
+    --sidebar-width: 80px;
+  }
+  
+  &.sidebar-expanded {
+    --sidebar-width: 260px;
+  }
 }
 
-/* Sidebar margin for authenticated pages */
-main.has-sidebar {
-  @media (min-width: 769px) {
-    // The sidebar is 72px fixed. 
-    // We don't necessarily need margin-left on 'main' if the dashboard content 
-    // already has padding-left: 96px, which it DOES.
-    // However, for consistency across ALL dashboard pages:
-    // margin-left: 72px;
-    // width: calc(100% - 72px);
+main {
+  flex: 1;
+  transition: padding-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  padding-left: var(--sidebar-width);
+}
+
+@media (max-width: 1024px) {
+  .layout-container.has-sidebar {
+    --sidebar-width: 0px;
+  }
+  main {
+    padding-left: 0;
   }
 }

@@ -58,6 +58,15 @@
 
   <!-- Results -->
   <div class="results-section">
+
+    <!-- Premium Loading State -->
+    <div class="loading-overlay" *ngIf="loading()">
+      <div class="spinner-container">
+        <div class="premium-spinner"></div>
+        <div class="loading-text">Scanning global opportunities...</div>
+      </div>
+    </div>
+
     <div class="results-inner">
 
       <!-- Results count -->

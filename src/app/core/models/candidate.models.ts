@@ -11,14 +11,28 @@ export interface CandidateProfile {
   resumeOriginalName: string;
   resumeUploadedAt: string;
   skills: SkillItem[];
+  education: EducationItem[];
+  workExperience: WorkExperienceItem[];
   profilePictureUrl?: string;
 }
 
 export interface SkillItem {
-  skillId: number;
   skillName: string;
   level: string;
-  category: string;
+}
+
+export interface EducationItem {
+  degree: string;
+  institution: string;
+  fieldOfStudy: string;
+  duration: string;
+}
+
+export interface WorkExperienceItem {
+  company: string;
+  role: string;
+  duration: string;
+  description: string;
 }
 
 export interface JobListItem {

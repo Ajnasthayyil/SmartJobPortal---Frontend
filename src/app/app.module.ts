@@ -8,9 +8,13 @@ import { AppComponent } from './app.component';
 
 // ✅ Shared Components (Standalone)
 import { FooterComponent } from './shared/components/footer/footer.component';
-import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { DashboardHeaderComponent } from './shared/components/dashboard-header/dashboard-header.component';
 import { PublicNavbarComponent } from './shared/components/public-navbar/public-navbar.component';
+
+// ✅ Role-Specific Sidebars
+import { CandidateSidebarComponent } from './features/candidate/candidate-sidebar/candidate-sidebar.component';
+import { RecruiterSidebarComponent } from './features/recruiter/recruiter-sidebar/recruiter-sidebar.component';
+import { AdminSidebarComponent } from './features/admin/admin-sidebar/admin-sidebar.component';
 
 // ✅ Directive (Standalone)
 import { ShellVisibilityDirective } from './core/directives/shell-visibility.directive';
@@ -55,9 +59,13 @@ import { CompaniesComponent } from './features/companies/companies.component';
 
     // ✅ Shared
     FooterComponent,
-    SidebarComponent,
     DashboardHeaderComponent,
     ShellVisibilityDirective,
+
+    // ✅ Sidebars
+    CandidateSidebarComponent,
+    RecruiterSidebarComponent,
+    AdminSidebarComponent,
 
     // ✅ Candidate
     CandidateDashboardComponent,

@@ -1,16 +1,24 @@
 <div class="apps-page">
     <div class="apps-inner">
 
-        <!-- Header -->
-        <div class="page-header">
-            <div>
-                <h1 class="page-title">My Applications</h1>
-                <p class="page-sub">Track your application journey in real-time</p>
+        <!-- Premium Hero -->
+        <header class="apps-hero">
+            <div class="hero-bg">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
             </div>
-            <a routerLink="/candidate/jobs" class="btn-browse">
-                + Browse More Jobs
-            </a>
-        </div>
+            <div class="hero-content">
+                <div class="title-group">
+                    <span class="hero-badge">Application Tracker</span>
+                    <h1 class="page-title">My <span class="highlight">Applications</span></h1>
+                    <p class="page-sub">Monitor your career progress and interview stages in real-time.</p>
+                </div>
+                <a routerLink="/candidate/jobs" class="btn-browse-hero">
+                    <i class="fa-solid fa-plus"></i>
+                    Browse More Jobs
+                </a>
+            </div>
+        </header>
 
         <!-- Filter tabs -->
         <div class="filter-tabs">
@@ -22,30 +30,41 @@
             </ng-container>
         </div>
 
-        <!-- Loading -->
+        <!-- Loading Skeleton -->
         <ng-container *ngIf="loading()">
             <div class="apps-list">
-                <ng-container *ngFor="let i of [1,2,3,4]">
-                    <div class="skeleton" style="height:140px;border-radius:16px"></div>
-                </ng-container>
+                <div *ngFor="let i of [1,2,3]" class="card-skeleton">
+                    <div class="sk-header">
+                        <div class="sk-logo"></div>
+                        <div class="sk-text">
+                            <div class="sk-line w-40"></div>
+                            <div class="sk-line w-20"></div>
+                        </div>
+                    </div>
+                    <div class="sk-footer"></div>
+                </div>
             </div>
         </ng-container>
 
-        <!-- Empty -->
+        <!-- Empty State -->
         <ng-container *ngIf="!loading() && filtered().length === 0">
-            <div class="empty-state">
-                <div class="empty-icon">📋</div>
+            <div class="empty-state-card">
+                <div class="empty-illustration">
+                    <div class="icon-circle">
+                        <i class="fa-solid fa-file-circle-exclamation"></i>
+                    </div>
+                </div>
                 <h3>No applications found</h3>
-                <p>
+                <p class="empty-desc">
                     <ng-container *ngIf="activeFilter() === 'All'; else notAll">
-                        You haven't applied to any jobs yet.
+                        You haven't started any application journeys yet.
                     </ng-container>
                     <ng-template #notAll>
-                        No applications with status "{{ activeFilter() }}"
+                        We couldn't find any applications marked as "<strong>{{ activeFilter() }}</strong>"
                     </ng-template>
                 </p>
-                <a routerLink="/candidate/jobs" class="btn-browse-empty">
-                    Browse Jobs
+                <a routerLink="/candidate/jobs" class="btn-primary-glow">
+                    Discover Opportunities
                 </a>
             </div>
         </ng-container>

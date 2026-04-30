@@ -1,13 +1,12 @@
 :host {
   display: block;
-  width: 100%;
   position: fixed;
   top: 24px;
-  left: 80px; // Offset for the narrow sidebar
-  right: 0;
-  width: calc(100% - 80px);
+  left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
   z-index: 2000;
   padding: 0 40px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dash-header-container {

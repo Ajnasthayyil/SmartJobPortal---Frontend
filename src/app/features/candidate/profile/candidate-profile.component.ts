@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule, FormBuilder,
-  FormGroup, Validators
+  FormGroup, Validators, FormsModule, FormArray
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CandidateService } from '../../../core/services/candidate.service';
@@ -13,7 +13,7 @@ import { CandidateProfile } from '../../../core/models/candidate.models';
 @Component({
   selector: 'app-candidate-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './candidate-profile.component.html',
   styleUrls: ['./candidate-profile.component.scss']
 })
@@ -26,8 +26,7 @@ export class CandidateProfileComponent implements OnInit {
   uploading = signal(false);
   resumeFile = signal<File | null>(null);
   dragOver = signal(false);
-  skillInput = signal('');
-  skills = signal<string[]>([]);
+  // skills signal is removed, we'll use form.get('skills')
   completion = signal(0);
 
   readonly levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
@@ -42,8 +41,49 @@ export class CandidateProfileComponent implements OnInit {
       headline: ['', Validators.required],
       summary: ['', [Validators.required, Validators.minLength(50)]],
       location: ['', Validators.required],
-      experienceYears: [0, [Validators.required, Validators.min(0)]]
+      experienceYears: [0, [Validators.required, Validators.min(0)]],
+      skills: this.fb.array([]),
+      education: this.fb.array([]),
+      workExperience: this.fb.array([])
     });
+  }
+
+  get skillGroups() {
+    return (this.form.get('skills') as FormArray);
+  }
+
+  get educationGroups() {
+    return (this.form.get('education') as FormArray);
+  }
+
+  get experienceGroups() {
+    return (this.form.get('workExperience') as FormArray);
+  }
+
+  addEducation() {
+    this.educationGroups.push(this.fb.group({
+      degree: ['', Validators.required],
+      institution: ['', Validators.required],
+      fieldOfStudy: ['', Validators.required],
+      duration: ['', Validators.required]
+    }));
+  }
+
+  removeEducation(index: number) {
+    this.educationGroups.removeAt(index);
+  }
+
+  addExperience() {
+    this.experienceGroups.push(this.fb.group({
+      company: ['', Validators.required],
+      role: ['', Validators.required],
+      duration: ['', Validators.required],
+      description: ['', Validators.required]
+    }));
+  }
+
+  removeExperience(index: number) {
+    this.experienceGroups.removeAt(index);
   }
 
   ngOnInit(): void { this.loadProfile(); }
@@ -60,9 +100,32 @@ export class CandidateProfileComponent implements OnInit {
             location: res.data.location,
             experienceYears: res.data.experienceYears
           });
-          this.skills.set(
-            res.data.skills?.map(s => s.skillName) || []
-          );
+
+          // Handle education array
+          this.educationGroups.clear();
+          if (res.data.education) {
+            res.data.education.forEach(edu => {
+              this.educationGroups.push(this.fb.group(edu));
+            });
+          }
+
+          // Handle experience array
+          this.experienceGroups.clear();
+          if (res.data.workExperience) {
+            res.data.workExperience.forEach(exp => {
+              this.experienceGroups.push(this.fb.group(exp));
+            });
+          }
+          // Handle skills array
+          this.skillGroups.clear();
+          if (res.data.skills) {
+            res.data.skills.forEach(s => {
+              this.skillGroups.push(this.fb.group({
+                skillName: [s.skillName, Validators.required],
+                level: [s.level || 'Intermediate', Validators.required]
+              }));
+            });
+          }
           this.calcCompletion(res.data);
         }
         this.loading.set(false);
@@ -82,26 +145,21 @@ export class CandidateProfileComponent implements OnInit {
     this.completion.set(s);
   }
 
-  addSkill(value: string): void {
-    const t = value.trim();
+  addSkill(name: string) {
+    const t = name.trim();
     if (!t) return;
-    const current = this.skills();
-    if (!current.map(s => s.toLowerCase()).includes(t.toLowerCase())) {
-      this.skills.set([...current, t]);
-    }
+    this.skillGroups.push(this.fb.group({
+      skillName: [t, Validators.required],
+      level: ['Intermediate', Validators.required]
+    }));
     this.skillInput.set('');
   }
 
-  removeSkill(skill: string): void {
-    this.skills.set(this.skills().filter(s => s !== skill));
+  removeSkill(index: number) {
+    this.skillGroups.removeAt(index);
   }
 
-  onKeydown(event: KeyboardEvent, value: string): void {
-    if (event.key === 'Enter' || event.key === ',') {
-      event.preventDefault();
-      this.addSkill(value);
-    }
-  }
+  skillInput = signal('');
 
   onSave(): void {
     if (this.form.invalid) {
@@ -109,10 +167,7 @@ export class CandidateProfileComponent implements OnInit {
       return;
     }
     this.saving.set(true);
-    this.service.updateProfile({
-      ...this.form.value,
-      skills: this.skills().map(s => ({ skillName: s, level: 'Intermediate' }))
-    }).subscribe({
+    this.service.updateProfile(this.form.value).subscribe({
       next: res => {
         this.saving.set(false);
         if (res.success) {

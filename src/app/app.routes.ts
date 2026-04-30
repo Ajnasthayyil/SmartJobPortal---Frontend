@@ -64,6 +64,12 @@ export const routes: Routes = [
           import('./features/candidate/applications/applications.component')
             .then(m => m.ApplicationsComponent)
       },
+      {
+        path: 'companies',
+        loadComponent: () =>
+          import('./features/companies/companies.component')
+            .then(m => m.CompaniesComponent)
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
