@@ -9,39 +9,30 @@
       </div>
 
       <h1 class="hero-title">
-        Find Your <span class="amber">Dream Job</span><br>
+        Discover Your <span class="amber">Ideal Career</span><br>
         Match Your <span class="amber">True Potential</span>
       </h1>
 
       <p class="hero-sub">
-        From freshers to senior engineers — discover opportunities that
-        align with your skills, salary expectations, and career goals.
+        Join the future of talent discovery. Our AI matching engine connects you with roles that truly align with your professional goals.
       </p>
 
       <!-- Search bar -->
       <div class="search-bar">
         <div class="search-input-wrap">
-          <svg width="16" height="16" fill="none" stroke="currentColor"
-               stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="m21 21-4.35-4.35"/>
-          </svg>
+          <i class="fa-solid fa-magnifying-glass"></i>
           <input type="text" [(ngModel)]="keyword"
                  placeholder="Job title, skill, or keyword..."
                  (keyup.enter)="search()"/>
         </div>
         <div class="search-divider"></div>
         <div class="search-input-wrap">
-          <svg width="16" height="16" fill="none" stroke="currentColor"
-               stroke-width="2" viewBox="0 0 24 24">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
+          <i class="fa-solid fa-location-dot"></i>
           <input type="text" [(ngModel)]="location"
                  placeholder="City, state, or remote..."
                  (keyup.enter)="search()"/>
         </div>
-        <button class="btn-search" (click)="search()">Search Jobs</button>
+        <button class="btn-search" (click)="search()">Find Jobs</button>
       </div>
 
       <!-- Filter chips -->
@@ -53,7 +44,7 @@
             {{ type }}
           </button>
         </ng-container>
-        <div class="chip-sep"></div>
+        <div style="width: 2px; height: 24px; background: rgba(15, 23, 42, 0.08); margin: 0 10px; display: inline-block; vertical-align: middle;"></div>
         <ng-container *ngFor="let r of salaryRanges">
           <button class="chip"
                   [class.active]="selectedSalary?.label === r.label"
@@ -74,10 +65,10 @@
         <span class="results-count">
           <ng-container *ngIf="!loading()">
             Showing <strong>{{ jobs().length }}</strong>
-            of <strong>{{ totalCount() }}</strong> jobs
+            of <strong>{{ totalCount() }}</strong> opportunities
           </ng-container> 
           <ng-container *ngIf="loading()">
-            <span class="searching-text">Searching for opportunities...</span>
+            <span class="searching-text">Scanning opportunities...</span>
           </ng-container>
         </span>
       </div>
@@ -85,7 +76,7 @@
       <!-- Skeleton loading -->
       <ng-container *ngIf="loading()">
         <div class="jobs-grid">
-          <ng-container *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]">
+          <ng-container *ngFor="let i of [1,2,3,4,5,6]">
             <div class="job-card-skeleton">
               <div class="sk sk-logo"></div>
               <div class="sk sk-title"></div>
@@ -111,8 +102,8 @@
                   <span class="match-badge"
                         [class.strong]="job.matchScore >= 70"
                         [class.good]="job.matchScore >= 40 && job.matchScore < 70">
-                    {{ job.matchScore >= 70 ? '🔥' : '⚡' }}
-                    {{ job.matchScore }}%
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    {{ job.matchScore }}% Match
                   </span>
                 </ng-container>
               </div>
@@ -124,17 +115,13 @@
               <!-- Meta pills -->
               <div class="jc-meta">
                 <span class="meta-pill">
-                  <svg width="10" height="10" fill="none"
-                       stroke="currentColor" stroke-width="2"
-                       viewBox="0 0 24 24">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                  </svg>
+                  <i class="fa-solid fa-location-dot"></i>
                   {{ job.location }}
                 </span>
-                <span class="meta-pill">{{ job.jobType }}</span>
+                <span class="meta-pill"><i class="fa-solid fa-briefcase"></i> {{ job.jobType }}</span>
                 <ng-container *ngIf="job.minSalary">
                   <span class="meta-pill amber-pill">
-                    ₹{{ job.minSalary | number }}+
+                    <i class="fa-solid fa-indian-rupee-sign"></i> {{ job.minSalary | number }}+
                   </span>
                 </ng-container>
               </div>
@@ -154,9 +141,9 @@
               <!-- Footer -->
               <div class="jc-footer">
                 <span class="posted-date">
-                  {{ job.postedAt | date:'MMM d' }}
+                  <i class="fa-regular fa-calendar"></i> {{ job.postedAt | date:'MMM d' }}
                 </span>
-                <span class="view-link">View Details →</span>
+                <span class="view-link">View Details <i class="fa-solid fa-arrow-right"></i></span>
               </div>
 
             </a>
@@ -167,7 +154,7 @@
         <ng-container *ngIf="hasMore">
           <div class="load-more">
             <button class="btn-more" (click)="loadMore()">
-              Load More Jobs
+              Load More Opportunities
             </button>
           </div>
         </ng-container>
@@ -176,12 +163,12 @@
       <!-- Empty state -->
       <ng-container *ngIf="!loading() && jobs().length === 0">
         <div class="empty-state">
-          <div class="empty-icon">🔍</div>
-          <h3>No jobs found</h3>
-          <p>Try different keywords or remove your filters</p>
+          <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <h3>No matching jobs found</h3>
+          <p>Try adjusting your search terms or filters to see more results.</p>
           <button class="btn-reset"
                   (click)="keyword=''; location=''; setFilter('All')">
-            Clear Filters
+            Reset Filters
           </button>
         </div>
       </ng-container>

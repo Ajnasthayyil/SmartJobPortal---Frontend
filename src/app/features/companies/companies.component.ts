@@ -14,117 +14,85 @@ import { environment } from '../../../environments/environment';
 })
 export class CompaniesComponent implements OnInit {
 
-  companies  = signal<any[]>([]);
-  filtered   = signal<any[]>([]);
-  loading    = signal(true);
-  search     = '';
-  selected   = signal<any | null>(null);
+  companies = signal<any[]>([]);
+  loading = signal(true);
+  searchTerm = '';
+  activeIndustry = 'All';
 
   readonly industries = [
-    'All', 'Technology', 'Finance', 'Healthcare',
+    'All', 'Technology', 'Fintech', 'Healthcare',
     'Retail', 'Manufacturing', 'Education'
   ];
-  activeIndustry = 'All';
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.load();
+  }
 
   load(): void {
     this.loading.set(true);
-    // Fetch all recruiters (companies) from admin endpoint
-    // This is public-safe since it only shows company name/industry/location
-    this.http.get<any>(`${environment.apiUrl}/recruiter/profile`)
+    // Fetch jobs and extract company info since recruiters profiles might be protected/empty
+    this.http.get<any>(`${environment.apiUrl}/candidate/jobs?pageSize=100`)
       .subscribe({
         next: res => {
-          // Fallback: build mock list from jobs endpoint
-          this.http.get<any>(
-            `${environment.apiUrl}/candidate/jobs?pageSize=100`
-          ).subscribe({
-            next: jobRes => {
-              if (jobRes.success) {
-                const jobs: any[] = jobRes.data?.jobs || [];
-                const map = new Map<string, any>();
-                jobs.forEach(j => {
-                  if (!map.has(j.companyName)) {
-                    map.set(j.companyName, {
-                      companyName: j.companyName,
-                      industry:    'Technology',
-                      location:    j.location,
-                      jobCount:    1,
-                      jobs:        [j]
-                    });
-                  } else {
-                    const c = map.get(j.companyName)!;
-                    c.jobCount++;
-                    c.jobs.push(j);
-                  }
+          if (res.success) {
+            const jobs: any[] = res.data?.jobs || [];
+            const map = new Map<string, any>();
+            
+            jobs.forEach(j => {
+              if (!map.has(j.companyName)) {
+                map.set(j.companyName, {
+                  id: j.jobId, // Fallback ID
+                  name: j.companyName,
+                  industry: 'Technology', // Default
+                  location: j.location,
+                  openJobsCount: 1,
+                  size: '50-200',
+                  recentJobs: [{ title: j.title }]
                 });
-                const list = Array.from(map.values());
-                this.companies.set(list);
-                this.filtered.set(list);
+              } else {
+                const c = map.get(j.companyName)!;
+                c.openJobsCount++;
+                if (c.recentJobs.length < 2) {
+                  c.recentJobs.push({ title: j.title });
+                }
               }
-              this.loading.set(false);
-            },
-            error: () => this.loading.set(false)
-          });
+            });
+            
+            this.companies.set(Array.from(map.values()));
+          }
+          this.loading.set(false);
         },
-        error: () => {
-          // Build from jobs directly
-          this.http.get<any>(
-            `${environment.apiUrl}/candidate/jobs?pageSize=100`
-          ).subscribe({
-            next: jobRes => {
-              if (jobRes.success) {
-                const jobs: any[] = jobRes.data?.jobs || [];
-                const map = new Map<string, any>();
-                jobs.forEach(j => {
-                  if (!map.has(j.companyName)) {
-                    map.set(j.companyName, {
-                      companyName: j.companyName,
-                      industry:    'Technology',
-                      location:    j.location,
-                      jobCount:    1,
-                      jobs:        [j]
-                    });
-                  } else {
-                    const c = map.get(j.companyName)!;
-                    c.jobCount++;
-                    c.jobs.push(j);
-                  }
-                });
-                const list = Array.from(map.values());
-                this.companies.set(list);
-                this.filtered.set(list);
-              }
-              this.loading.set(false);
-            },
-            error: () => this.loading.set(false)
-          });
-        }
+        error: () => this.loading.set(false)
       });
   }
 
-  applyFilter(): void {
-    let list = this.companies();
-    if (this.activeIndustry !== 'All')
-      list = list.filter(c => c.industry === this.activeIndustry);
-    if (this.search)
-      list = list.filter(c =>
-        c.companyName.toLowerCase().includes(this.search.toLowerCase())
-      );
-    this.filtered.set(list);
+  onSearch(): void {
+    // Search is handled by filtering the displayed signal or a separate derived signal
+    // For simplicity, we just trigger the signal logic if needed
   }
 
   setIndustry(i: string): void {
     this.activeIndustry = i;
-    this.applyFilter();
   }
 
-  openCompany(c: any): void {
-    this.selected.set(c);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Helper to get filtered companies for the template
+  getFilteredCompanies(): any[] {
+    let list = this.companies();
+    
+    if (this.activeIndustry !== 'All') {
+      list = list.filter(c => c.industry === this.activeIndustry);
+    }
+    
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
+      list = list.filter(c => 
+        c.name.toLowerCase().includes(term) || 
+        c.industry.toLowerCase().includes(term)
+      );
+    }
+    
+    return list;
   }
-
-  closeCompany(): void { this.selected.set(null); }
 }

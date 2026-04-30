@@ -1,178 +1,113 @@
 <div class="companies-page">
 
-  <!-- Company detail drawer -->
-  <ng-container *ngIf="selected()">
-    <div class="company-detail">
-      <div class="cd-inner">
-        <button class="btn-back-cd" (click)="closeCompany()">
-          ← Back to Companies
-        </button>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Top Hiring Partners
+      </div>
 
-        <div class="cd-header">
-          <div class="cd-logo">{{ selected().companyName?.charAt(0) }}</div>
-          <div>
-            <h1 class="cd-name">{{ selected().companyName }}</h1>
-            <div class="cd-meta">
-              <span>{{ selected().industry }}</span>
-              <span>·</span>
-              <span>{{ selected().location }}</span>
-              <span>·</span>
-              <span class="cd-jobs-count">
-                {{ selected().jobCount }} open position{{
-                  selected().jobCount !== 1 ? 's' : '' }}
-              </span>
+      <h1 class="hero-title">
+        Meet the World's <span class="amber">Leading Teams</span><br>
+        Find Your Next Home.
+      </h1>
+
+      <p class="hero-sub">
+        Explore company profiles, cultures, and open opportunities from the fastest-growing startups and global enterprises.
+      </p>
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()"
+               placeholder="Search by company name or industry..."/>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="filter-chips">
+        <button class="chip" [class.active]="activeIndustry === 'All'" (click)="setIndustry('All')">All Industries</button>
+        <button class="chip" [class.active]="activeIndustry === 'Technology'" (click)="setIndustry('Technology')">Technology</button>
+        <button class="chip" [class.active]="activeIndustry === 'Fintech'" (click)="setIndustry('Fintech')">Fintech</button>
+        <button class="chip" [class.active]="activeIndustry === 'Healthcare'" (click)="setIndustry('Healthcare')">Healthcare</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grid Section -->
+  <section class="grid-section">
+    <div class="grid-inner">
+
+      <div class="count-row">
+        <span>Showing <strong>{{ getFilteredCompanies().length }}</strong> elite hiring partners</span>
+      </div>
+
+      <!-- Skeleton loading -->
+      <ng-container *ngIf="loading()">
+        <div class="co-grid">
+          <ng-container *ngFor="let i of [1,2,3,4,5,6]">
+            <div class="co-card-skeleton">
+              <div class="sk sk-logo"></div>
+              <div class="sk sk-name"></div>
+              <div class="sk sk-industry"></div>
+              <div class="sk sk-btn"></div>
             </div>
-          </div>
-        </div>
-
-        <h3 class="cd-section-title">Open Positions</h3>
-
-        <div class="cd-jobs-list">
-          <ng-container *ngFor="let job of selected().jobs">
-            <a [routerLink]="['/jobs', job.jobId]" class="cd-job-row">
-              <div class="cd-job-info">
-                <div class="cd-job-title">{{ job.title }}</div>
-                <div class="cd-job-meta">
-                  <span>{{ job.location }}</span>
-                  <span>·</span>
-                  <span>{{ job.jobType }}</span>
-                  <ng-container *ngIf="job.minSalary">
-                    <span>· ₹{{ job.minSalary | number }}+</span>
-                  </ng-container>
-                </div>
-                <div class="cd-job-skills">
-                  <ng-container *ngFor="let s of job.requiredSkills?.slice(0,4)">
-                    <span class="skill-pill">{{ s }}</span>
-                  </ng-container>
-                </div>
-              </div>
-              <span class="cd-apply-link">Apply →</span>
-            </a>
           </ng-container>
         </div>
+      </ng-container>
 
-      </div>
-    </div>
-  </ng-container>
+      <!-- Grid -->
+      <ng-container *ngIf="!loading() && getFilteredCompanies().length > 0">
+        <div class="co-grid">
+          <ng-container *ngFor="let co of getFilteredCompanies()">
+            <div class="co-card" [routerLink]="['/companies', co.id]">
+              
+              <div class="co-card-top">
+                <div class="co-logo">
+                  {{ co.name.charAt(0) }}
+                </div>
+                <div class="co-jobs-badge">
+                  <i class="fa-solid fa-briefcase"></i> {{ co.openJobsCount || 0 }} Roles
+                </div>
+              </div>
 
-  <ng-container *ngIf="!selected()">
+              <h3 class="co-name">{{ co.name }}</h3>
+              <p class="co-industry">{{ co.industry }}</p>
 
-    <!-- Hero -->
-    <div class="hero-section">
-      <div class="hero-inner">
-        <div class="hero-badge">
-          <span class="badge-dot"></span>
-          {{ companies().length }} Companies Hiring
-        </div>
-        <h1 class="hero-title">
-          Explore <span class="amber">Top Companies</span><br>
-          Hiring Right Now
-        </h1>
-        <p class="hero-sub">
-          Discover companies that match your career goals and culture preferences.
-        </p>
+              <div class="co-meta">
+                <span class="meta-item"><i class="fa-solid fa-location-dot"></i> {{ co.location || 'Multiple Locations' }}</span>
+                <span class="meta-item"><i class="fa-solid fa-users"></i> {{ co.size || '50-200' }} Employees</span>
+              </div>
 
-        <!-- Search -->
-        <div class="search-bar">
-          <svg width="16" height="16" fill="none" stroke="currentColor"
-               stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="m21 21-4.35-4.35"/>
-          </svg>
-          <input type="text" [(ngModel)]="search"
-                 (ngModelChange)="applyFilter()"
-                 placeholder="Search companies..."/>
-        </div>
+              <!-- Optional Job Previews -->
+              <div class="co-recent-jobs" *ngIf="co.recentJobs?.length">
+                <div class="co-job-preview" *ngFor="let job of co.recentJobs.slice(0, 2)">
+                   {{ job.title }}
+                </div>
+              </div>
 
-        <!-- Industry filters -->
-        <div class="filter-chips">
-          <ng-container *ngFor="let ind of industries">
-            <button class="chip"
-                    [class.active]="activeIndustry === ind"
-                    (click)="setIndustry(ind)">
-              {{ ind }}
-            </button>
+              <div class="co-card-footer">
+                <button class="btn-view-co">
+                  View Company Profile <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+
+            </div>
           </ng-container>
         </div>
-      </div>
-    </div>
+      </ng-container>
 
-    <!-- Companies grid -->
-    <div class="grid-section">
-      <div class="grid-inner">
-
-        <div class="count-row">
-          <strong>{{ filtered().length }}</strong> companies found
+      <!-- Empty state -->
+      <ng-container *ngIf="!loading() && getFilteredCompanies().length === 0">
+        <div class="empty-state" style="text-align: center; padding: 100px 40px;">
+          <div class="empty-icon" style="font-size: 64px; margin-bottom: 24px;"><i class="fa-solid fa-building-circle-exclamation"></i></div>
+          <h3 style="font-size: 28px; font-weight: 800; color: #020617; margin-bottom: 12px;">No companies found</h3>
+          <p style="font-size: 18px; color: #64748b; margin-bottom: 32px;">Try adjusting your search terms or selecting a different industry.</p>
+          <button class="btn-search" (click)="searchTerm=''; activeIndustry='All'; onSearch()">Reset View</button>
         </div>
+      </ng-container>
 
-        <ng-container *ngIf="loading()">
-          <div class="co-grid">
-            <ng-container *ngFor="let i of [1,2,3,4,5,6,7,8]">
-              <div class="co-card-skeleton">
-                <div class="sk sk-logo"></div>
-                <div class="sk sk-name"></div>
-                <div class="sk sk-sub"></div>
-                <div class="sk sk-btn"></div>
-              </div>
-            </ng-container>
-          </div>
-        </ng-container>
-
-        <ng-container *ngIf="!loading() && filtered().length === 0">
-          <div class="empty-state">
-            <div class="empty-icon">🏢</div>
-            <h3>No companies found</h3>
-            <p>Try a different search term or industry filter</p>
-          </div>
-        </ng-container>
-
-        <ng-container *ngIf="!loading() && filtered().length > 0">
-          <div class="co-grid">
-            <ng-container *ngFor="let co of filtered()">
-              <div class="co-card" (click)="openCompany(co)">
-
-                <div class="co-card-top">
-                  <div class="co-logo">{{ co.companyName?.charAt(0) }}</div>
-                  <span class="co-jobs-badge">
-                    {{ co.jobCount }} open
-                  </span>
-                </div>
-
-                <h3 class="co-name">{{ co.companyName }}</h3>
-                <p class="co-industry">{{ co.industry }}</p>
-
-                <div class="co-meta">
-                  <span class="meta-item">
-                    <svg width="11" height="11" fill="none"
-                         stroke="currentColor" stroke-width="2"
-                         viewBox="0 0 24 24">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    </svg>
-                    {{ co.location }}
-                  </span>
-                </div>
-
-                <!-- Recent jobs preview -->
-                <div class="co-recent-jobs">
-                  <ng-container *ngFor="let j of co.jobs.slice(0,2)">
-                    <div class="co-job-preview">{{ j.title }}</div>
-                  </ng-container>
-                </div>
-
-                <div class="co-card-footer">
-                  <button class="btn-view-co">
-                    View Company →
-                  </button>
-                </div>
-
-              </div>
-            </ng-container>
-          </div>
-        </ng-container>
-
-      </div>
     </div>
-
-  </ng-container>
+  </section>
 
 </div>
