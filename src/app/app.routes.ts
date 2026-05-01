@@ -105,10 +105,34 @@ export const routes: Routes = [
             .then(m => m.ApplicantsComponent)
       },
       {
+        path: 'jobs/:id/edit',
+        loadComponent: () =>
+          import('./features/recruiter/edit-job/edit-job.component')
+            .then(m => m.EditJobComponent)
+      },
+      {
         path: 'profile',
         loadComponent: () =>
           import('./features/recruiter/profile/recruiter-profile.component')
             .then(m => m.RecruiterProfileComponent)
+      },
+      {
+        path: 'applicants',
+        loadComponent: () =>
+          import('./features/recruiter/all-applicants/all-applicants.component')
+            .then(m => m.AllApplicantsComponent)
+      },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import('./features/recruiter/notifications/recruiter-notifications.component')
+            .then(m => m.RecruiterNotificationsComponent)
+      },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./features/recruiter/settings/recruiter-settings.component')
+            .then(m => m.RecruiterSettingsComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

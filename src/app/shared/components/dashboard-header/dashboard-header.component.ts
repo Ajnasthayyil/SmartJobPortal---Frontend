@@ -23,4 +23,14 @@ export class DashboardHeaderComponent {
     this.authService.logout();
     this.isDropdownOpen = false;
   }
+
+  getProfileUrl(): string {
+    const role = this.authService.currentUser()?.role?.toLowerCase() || 'candidate';
+    return `/${role}/profile`;
+  }
+
+  getSettingsUrl(): string {
+    const role = this.authService.currentUser()?.role?.toLowerCase() || 'candidate';
+    return `/${role}/settings`;
+  }
 }

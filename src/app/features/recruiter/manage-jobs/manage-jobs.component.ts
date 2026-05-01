@@ -68,4 +68,29 @@ export class ManageJobsComponent implements OnInit {
       }
     });
   }
+
+  toggleStatus(jobId: number): void {
+    // Optimistic Update: Instantly flip UI state
+    this.jobs.update(jobs => 
+      jobs.map(j => j.jobId === jobId ? { ...j, isActive: !j.isActive } : j)
+    );
+    this.applyTab(this.activeTab()); // Re-apply current filter
+
+    this.service.toggleJobStatus(jobId).subscribe({
+      next: res => {
+        if (!res.success) {
+          // Revert on API reported failure
+          this.toast.error(res.message);
+          this.load(); 
+        } else {
+          this.toast.success('Job status updated instantly.');
+        }
+      },
+      error: () => {
+        // Revert on HTTP error
+        this.toast.error('Failed to communicate with server. Reverting status.');
+        this.load();
+      }
+    });
+  }
 }

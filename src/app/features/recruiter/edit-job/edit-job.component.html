@@ -1,46 +1,48 @@
-<div class="profile-container">
+<div class="profile-container" *ngIf="!loading()">
 
   <!-- Header Section -->
   <header class="profile-header">
     <div class="header-content">
-      <div class="profile-badge">Job Management</div>
-      <h1 class="header-title">Post a New Job</h1>
-      <p class="header-subtitle">Fill in the details to attract the right candidates for your company.</p>
+      <div class="profile-badge" style="background: rgba(16, 185, 129, 0.1); color: #059669;">Edit Mode</div>
+      <h1 class="header-title">Update Job Listing</h1>
+      <p class="header-subtitle">Modify the details of your job post to attract better candidates.</p>
     </div>
     
     <div class="header-actions">
       <a routerLink="/recruiter/jobs" class="btn-cancel">
-        <i class="fa-solid fa-arrow-left"></i> Back to Jobs
+        <i class="fa-solid fa-arrow-left"></i> Cancel
       </a>
       <button class="btn-save" (click)="onSubmit()" [disabled]="saving()">
-        <span *ngIf="!saving()">Publish Job</span>
+        <span *ngIf="!saving()">Save Changes</span>
         <span *ngIf="saving()" class="spinner"></span>
       </button>
     </div>
   </header>
 
   <div class="profile-grid">
-    <!-- Left Column: Tips & Matching Info -->
+    <!-- Left Column: Status & Tips -->
     <div class="grid-left">
-      <div class="card info-card">
-        <h3 class="card-title"><i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> Pro Tips</h3>
-        <ul class="tips-list">
-          <li><i class="fa-solid fa-check"></i> Write a clear, specific job title</li>
-          <li><i class="fa-solid fa-check"></i> Add detailed description (responsibilities, requirements)</li>
-          <li><i class="fa-solid fa-check"></i> Include accurate salary range to attract more candidates</li>
-          <li><i class="fa-solid fa-check"></i> Add all required skills — drives AI matching accuracy</li>
-          <li><i class="fa-solid fa-check"></i> Set a realistic expiry date</li>
-        </ul>
+      <div class="card branding-card" style="text-align: left;">
+        <h3 class="card-title"><i class="fa-solid fa-toggle-on" style="color: #6366f1;"></i> Job Status</h3>
+        <p style="margin-bottom: 16px; font-size: 14px; color: #64748b; line-height: 1.5;">
+          You can temporarily hide this job from candidates by setting it to inactive.
+        </p>
+        <form [formGroup]="form()">
+          <label class="toggle-container">
+            <input type="checkbox" formControlName="isActive">
+            <span class="slider round"></span>
+            <span class="toggle-label">{{ form().get('isActive')?.value ? 'Active (Visible)' : 'Inactive (Hidden)' }}</span>
+          </label>
+        </form>
       </div>
 
-      <div class="card branding-card" style="text-align: left;">
-        <div class="logo-info" style="margin-top: 0;">
-          <h3><i class="fa-solid fa-robot" style="color: #6366f1;"></i> AI Matching Enabled</h3>
-          <p style="margin-top: 12px; line-height: 1.6;">
-            Once posted, Talex AI will automatically score and rank candidates
-            based on skills (60%), experience (30%), and location (10%) match.
-          </p>
-        </div>
+      <div class="card info-card">
+        <h3 class="card-title"><i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> Edit Tips</h3>
+        <ul class="tips-list">
+          <li><i class="fa-solid fa-check"></i> Adjusting skills re-triggers AI matching for new candidates</li>
+          <li><i class="fa-solid fa-check"></i> Expanding the salary range can increase applicant pool</li>
+          <li><i class="fa-solid fa-check"></i> Ensure the expiry date is in the future</li>
+        </ul>
       </div>
     </div>
 
@@ -140,7 +142,7 @@
         <div class="card section-card">
           <h3 class="card-title"><i class="fa-solid fa-code"></i> Required Skills <span class="req">*</span></h3>
           <p class="card-desc" style="color: #64748b; font-size: 14px; margin-bottom: 20px;">
-            Add required skills to enable AI matching with candidates.
+            Modify required skills to update AI matching with candidates.
           </p>
 
           <div class="form-grid">

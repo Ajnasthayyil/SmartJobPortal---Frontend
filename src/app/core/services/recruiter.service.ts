@@ -37,6 +37,10 @@ export class RecruiterService {
     return this.http.delete<ApiResponse<string>>(`${this.api}/jobs/${jobId}`);
   }
 
+  toggleJobStatus(jobId: number): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(`${this.api}/jobs/${jobId}/toggle-status`, {});
+  }
+
   getApplicants(jobId: number): Observable<ApiResponse<ApplicantResponse[]>> {
     return this.http.get<ApiResponse<ApplicantResponse[]>>
       (`${this.api}/jobs/${jobId}/applicants`);

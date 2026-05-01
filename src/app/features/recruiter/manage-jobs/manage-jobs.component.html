@@ -1,5 +1,4 @@
-<div class="jobs-page">
-    <div class="page-inner">
+<div class="page-inner">
 
         <!-- Header -->
         <header class="page-header">
@@ -91,11 +90,20 @@
                             <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="btn-manage">
                                 View Applicants
                             </a>
-                            <button *ngIf="job.isActive" class="btn-icon-danger" (click)="confirmId.set(job.jobId)" title="Deactivate">
+                            <a [routerLink]="['/jobs', job.jobId]" class="btn-manage" style="background: white; color: #4f46e5; border: 1px solid #c7d2fe;" target="_blank">
+                                View Job
+                            </a>
+                            <a [routerLink]="['/recruiter/jobs', job.jobId, 'edit']" class="btn-manage" style="background: white; color: #475569; border: 1px solid #e2e8f0;">
+                                Edit Job
+                            </a>
+                            <button *ngIf="job.isActive" class="btn-icon-danger" (click)="toggleStatus(job.jobId)" title="Deactivate">
                                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
                                     <line x1="12" y1="2" x2="12" y2="12"></line>
                                 </svg>
+                            </button>
+                            <button *ngIf="!job.isActive" class="btn-icon-success" style="background: #ecfdf5; color: #10b981; border: 1px solid #a7f3d0;" (click)="toggleStatus(job.jobId)" title="Reactivate">
+                                <i class="fa-solid fa-bolt"></i>
                             </button>
                         </div>
                     </div>
@@ -117,4 +125,3 @@
         </ng-container>
 
     </div>
-</div>

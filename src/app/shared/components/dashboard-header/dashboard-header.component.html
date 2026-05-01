@@ -36,10 +36,10 @@
 
         <!-- Dropdown Menu -->
         <div class="dropdown-menu" *ngIf="isDropdownOpen">
-          <a routerLink="/candidate/profile" class="menu-item">
+          <a [routerLink]="getProfileUrl()" class="menu-item">
             <i class="fa-solid fa-user"></i> My Profile
           </a>
-          <a routerLink="/candidate/settings" class="menu-item">
+          <a [routerLink]="getSettingsUrl()" class="menu-item">
             <i class="fa-solid fa-gear"></i> Settings
           </a>
           <button (click)="logout()" class="menu-item logout">
