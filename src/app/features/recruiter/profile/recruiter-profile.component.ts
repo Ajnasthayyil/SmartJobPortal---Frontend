@@ -1,6 +1,9 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule, FormBuilder,
+  FormGroup, Validators, FormsModule
+} from '@angular/forms';
 import { RecruiterService } from '../../../core/services/recruiter.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -9,12 +12,12 @@ import { RecruiterProfile } from '../../../core/models/recruiter.models';
 @Component({
   selector: 'app-recruiter-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './recruiter-profile.component.html',
-  styleUrls: ['./recruiter-profile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./recruiter-profile.component.scss']
 })
 export class RecruiterProfileComponent implements OnInit {
+
   form: FormGroup;
   profile = signal<RecruiterProfile | null>(null);
   loading = signal(true);
@@ -24,13 +27,13 @@ export class RecruiterProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private service: RecruiterService,
-    public auth: AuthService,
+    private auth: AuthService,
     private toast: ToastService
   ) {
     this.form = this.fb.group({
       companyName: ['', Validators.required],
-      website: ['', [Validators.pattern('https?://.+')]],
       industry: ['', Validators.required],
+      website: ['', [Validators.required, Validators.pattern('https?://.+')]],
       location: ['', Validators.required],
       description: ['', [Validators.required, Validators.minLength(50)]]
     });
@@ -46,13 +49,7 @@ export class RecruiterProfileComponent implements OnInit {
       next: res => {
         if (res.success && res.data) {
           this.profile.set(res.data);
-          this.form.patchValue({
-            companyName: res.data.companyName,
-            website: res.data.website,
-            industry: res.data.industry,
-            location: res.data.location,
-            description: res.data.description
-          });
+          this.form.patchValue(res.data);
         }
         this.loading.set(false);
       },
@@ -65,7 +62,6 @@ export class RecruiterProfileComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-
     this.saving.set(true);
     this.service.updateProfile(this.form.value).subscribe({
       next: res => {
@@ -99,19 +95,18 @@ export class RecruiterProfileComponent implements OnInit {
       next: res => {
         this.uploading.set(false);
         if (res.success) {
-          this.toast.success('Profile photo updated!');
+          this.toast.success('Logo updated!');
           const current = this.profile();
-          if (current) {
-            // Since photo URL is in User table usually, header updates automatically 
-            // via AuthService signal. We can just refresh or assume it worked.
-          }
+          // Note: profilePictureUrl might not be in RecruiterProfile model, 
+          // but we can update it in the signal or AuthService session
+          this.auth.redirectByRole(); // Refresh or just let it be
         } else {
           this.toast.error(res.message);
         }
       },
       error: () => {
         this.uploading.set(false);
-        this.toast.error('Failed to upload photo.');
+        this.toast.error('Failed to upload logo.');
       }
     });
   }

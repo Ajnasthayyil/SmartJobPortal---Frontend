@@ -145,8 +145,8 @@
               <svg width="80" height="80" viewBox="0 0 80 80">
                 <circle cx="40" cy="40" r="36" fill="none" stroke="#f1f5f9" stroke-width="8"/>
                 <circle cx="40" cy="40" r="36" fill="none" stroke="#6366f1" stroke-width="8" stroke-linecap="round"
-                        [attr.stroke-dasharray]="ringCircumferenceLarge"
-                        [attr.stroke-dashoffset]="ringCircumferenceLarge * (1 - profileCompletion() / 100)"
+                        [attr.stroke-dasharray]="2 * 3.14159 * 36"
+                        [attr.stroke-dashoffset]="2 * 3.14159 * 36 * (1 - profileCompletion() / 100)"
                         transform="rotate(-90 40 40)"/>
               </svg>
               <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;">

@@ -32,7 +32,6 @@ import { ApplicationsComponent } from './features/candidate/applications/applica
 import { RecruiterDashboardComponent } from './features/recruiter/dashboard/recruiter-dashboard.component';
 import { PostJobComponent } from './features/recruiter/post-job/post-job.component';
 import { ManageJobsComponent } from './features/recruiter/manage-jobs/manage-jobs.component';
-import { RecruiterProfileComponent } from './features/recruiter/profile/recruiter-profile.component';
 import { ApplicantsComponent } from './features/recruiter/applicants/applicants.component';
 
 // ✅ Admin (Standalone)
@@ -82,7 +81,6 @@ import { CompaniesComponent } from './features/companies/companies.component';
     RecruiterDashboardComponent,
     PostJobComponent,
     ManageJobsComponent,
-    RecruiterProfileComponent,
     ApplicantsComponent,
 
     // ✅ Admin

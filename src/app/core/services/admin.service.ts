@@ -62,4 +62,12 @@ export class AdminService {
     return this.http.put<ApiResponse<string>>
       (`${this.api}/jobs/${jobId}/deactivate`, {});
   }
+
+  getProfile(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.api}/profile`);
+  }
+
+  updateProfile(data: any): Observable<ApiResponse<any>> {
+    return this.http.put<ApiResponse<any>>(`${this.api}/profile`, data);
+  }
 }

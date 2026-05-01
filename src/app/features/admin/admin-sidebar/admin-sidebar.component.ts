@@ -16,26 +16,27 @@ export class AdminSidebarComponent {
   onHover(val: boolean) {
     this.sidebarService.setExpanded(val);
   }
+
   links = [
     {
-      group: 'SYSTEM',
+      group: 'CONTROL PANEL',
       items: [
-        { path: "/admin/dashboard", iconClass: "fa-solid fa-gauge", label: "Admin Panel" },
+        { path: "/admin/dashboard", iconClass: "fa-solid fa-gauge-high", label: "Dashboard" },
+        { path: "/admin/users", iconClass: "fa-solid fa-users-gear", label: "User Management" },
+        { path: "/admin/recruiters", iconClass: "fa-solid fa-user-check", label: "Recruiter Approvals" },
       ]
     },
     {
-      group: 'MANAGEMENT',
+      group: 'CONTENT',
       items: [
-        { path: "/admin/users", iconClass: "fa-solid fa-users", label: "Manage Users" },
-        { path: "/admin/recruiters", iconClass: "fa-solid fa-user-tie", label: "Manage Recruiters" },
-        { path: "/admin/jobs", iconClass: "fa-solid fa-briefcase", label: "Job Moderation" },
+        { path: "/admin/jobs", iconClass: "fa-solid fa-clipboard-list", label: "Active Jobs" },
+        { path: "/admin/profile", iconClass: "fa-solid fa-user-shield", label: "Admin Account" },
       ]
     },
     {
-      group: 'SETTINGS',
+      group: 'OTHERS',
       items: [
-        { path: "/admin/notifications", iconClass: "fa-solid fa-bell", label: "Notifications" },
-        { path: "/admin/settings", iconClass: "fa-solid fa-sliders", label: "Global Settings" },
+        { path: "/admin/settings", iconClass: "fa-solid fa-gears", label: "System Settings" },
       ]
     }
   ];

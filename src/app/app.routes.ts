@@ -104,6 +104,12 @@ export const routes: Routes = [
           import('./features/recruiter/applicants/applicants.component')
             .then(m => m.ApplicantsComponent)
       },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./features/recruiter/profile/recruiter-profile.component')
+            .then(m => m.RecruiterProfileComponent)
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
@@ -138,7 +144,12 @@ export const routes: Routes = [
           import('./features/admin/jobs/admin-jobs.component')
             .then(m => m.AdminJobsComponent)
       },
-
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./features/admin/profile/admin-profile.component')
+            .then(m => m.AdminProfileComponent)
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

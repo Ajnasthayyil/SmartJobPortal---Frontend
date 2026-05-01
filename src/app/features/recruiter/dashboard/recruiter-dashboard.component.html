@@ -1,168 +1,167 @@
 <div class="dashboard-page">
 
-  <!-- ── Loading Skeleton ─────────────────────────── -->
-  <ng-container *ngIf="loading()">
-    <div class="skeleton-wrap">
-      <div class="skeleton-block" style="height: 180px; border-radius: 24px; margin-bottom: 40px;"></div>
-      <div class="skeleton-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 48px;">
-        <div class="skeleton-block" style="height: 140px; border-radius: 20px;"></div>
-        <div class="skeleton-block" style="height: 140px; border-radius: 20px;"></div>
-        <div class="skeleton-block" style="height: 140px; border-radius: 20px;"></div>
-        <div class="skeleton-block" style="height: 140px; border-radius: 20px;"></div>
-      </div>
-    </div>
-  </ng-container>
-
-  <!-- ── Main Dashboard ───────────────────────────── -->
-  <ng-container *ngIf="!loading()">
-    
-    <!-- Welcome Box -->
-    <div class="welcome-box">
-      <div class="content">
-        <span class="hi-text">{{ getGreeting() }}, {{ getUserFirstName() }}</span>
-        <h1>Scale Your Team With TalEx</h1>
-      </div>
-      <div class="actions">
-        <button routerLink="/recruiter/post-job" class="btn-primary">
-          <i class="fa-solid fa-plus"></i>
-          Post New Job
-        </button>
-        <button routerLink="/recruiter/manage-jobs" class="btn-outline">
-          Manage Listings
-        </button>
-      </div>
-    </div>
-
-    <!-- Stats Row -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="icon-box amber"><i class="fa-solid fa-briefcase"></i></div>
-        <span class="value">{{ stats().activeJobs }}</span>
-        <span class="label">Active Jobs</span>
-        <div class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> +2 new listings</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="icon-box blue"><i class="fa-solid fa-users"></i></div>
-        <span class="value">{{ stats().totalApplicants }}</span>
-        <span class="label">Total Applicants</span>
-        <div class="trend">Across all positions</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="icon-box emerald"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-        <span class="value">{{ stats().avgMatchScore }}%</span>
-        <span class="label">Avg. Match Score</span>
-        <div class="trend up">High precision talent</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="icon-box rose"><i class="fa-solid fa-user-check"></i></div>
-        <span class="value">{{ stats().hiresThisMonth }}</span>
-        <span class="label">New Hires</span>
-        <div class="trend">Hiring target on track</div>
-      </div>
-    </div>
-
-    <!-- Main Content Grid -->
-    <div class="dashboard-content">
-
-      <!-- Left Column: Active Job Listings -->
-      <div class="col-main">
-        
-        <div class="section-header">
-          <h2 class="section-title">
-            Live Job Listings
-            <a routerLink="/recruiter/manage-jobs" class="view-all">View All</a>
-          </h2>
+    <!-- ══ LOADING STATE ════════════════════════════════ -->
+    <ng-container *ngIf="loading()">
+        <div class="skeleton-wrap">
+            <div class="skeleton-header">
+                <div class="sk sk-title"></div>
+                <div class="sk sk-btn"></div>
+            </div>
+            <div class="skeleton-stats">
+                <div class="sk sk-card" *ngFor="let i of [1,2,3,4]"></div>
+            </div>
+            <div class="skeleton-grid">
+                <div class="sk sk-main"></div>
+                <div class="sk sk-side"></div>
+            </div>
         </div>
-        
-        <div class="list-container" *ngIf="jobs().length > 0; else noJobs">
-          <div *ngFor="let job of jobs().slice(0, 5)" class="job-item-premium">
-            <div class="job-info">
-              <div class="title-row">
-                <span class="title">{{ job.title }}</span>
-                <span class="badge-status">Active</span>
+    </ng-container>
+
+    <!-- ══ MAIN CONTENT ════════════════════════════════ -->
+    <ng-container *ngIf="!loading()">
+        <div class="dashboard-inner">
+
+            <!-- Welcome Box -->
+            <div class="welcome-box">
+              <div class="content">
+                <span class="hi-text">{{ getGreeting() }}</span>
+                <h1>Welcome back, {{ getUserFirstName() }}</h1>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-top: 8px;">Here's what's happening with your recruitment today.</p>
               </div>
-              <span class="subtitle">{{ job.location }} · {{ job.jobType }}</span>
-              <div class="skill-tags">
-                <span class="tag" *ngFor="let skill of job.requiredSkills.slice(0, 3)">{{ skill }}</span>
-                <span class="more" *ngIf="job.requiredSkills.length > 3">+{{ job.requiredSkills.length - 3 }}</span>
+              
+              <div class="actions">
+                <button class="btn-outline" style="color: white; border-color: rgba(255,255,255,0.4); background: transparent;" routerLink="/recruiter/manage-jobs">
+                  View Jobs
+                </button>
+                <button class="btn-primary" style="background: white; color: #0f172a;" routerLink="/recruiter/post-job">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                      <path d="M12 5v14M5 12h14"></path>
+                  </svg>
+                  Post New Job
+                </button>
               </div>
             </div>
-            <div class="job-stats">
-              <div class="stat-mini">
-                <span class="count">{{ job.totalApplicants }}</span>
-                <span class="label">Applicants</span>
-              </div>
+
+            <!-- Stats Bar -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="icon-box indigo">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <span class="value">{{ stats().activeJobs }}</span>
+                    <span class="label">Active Jobs</span>
+                    <div class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> +2 this month</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="icon-box blue">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <span class="value">{{ stats().totalApplicants }}</span>
+                    <span class="label">Total Applicants</span>
+                    <div class="trend"><i class="fa-solid fa-minus"></i> Stable</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="icon-box purple">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <span class="value">{{ stats().avgMatchScore }}%</span>
+                    <span class="label">Avg. Match Score</span>
+                    <div class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> +5% improvement</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="icon-box rose">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <span class="value">{{ stats().hiresThisMonth }}</span>
+                    <span class="label">New Hires</span>
+                    <div class="trend up"><i class="fa-solid fa-check"></i> Target met</div>
+                </div>
+            </section>
+
+            <!-- Content Grid -->
+            <div class="dashboard-content">
+                
+                <!-- ── Left Column: Active Jobs ──────────────── -->
+                <div class="col-main">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            Active Job Listings
+                            <a routerLink="/recruiter/manage-jobs" class="view-all">View all</a>
+                        </h2>
+                    </div>
+
+                    <div class="list-container" *ngIf="jobs().length > 0; else noJobs">
+                        <div class="job-item" *ngFor="let job of jobs().slice(0, 5)">
+                            <div class="logo-circle">
+                                <i class="fa-solid fa-briefcase"></i>
+                            </div>
+                            <div class="info">
+                                <span class="title">{{ job.title }}</span>
+                                <span class="subtitle">{{ job.location }} • {{ job.jobType }} • {{ job.totalApplicants }} applicants</span>
+                            </div>
+                            <div class="actions-right">
+                                <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="btn-manage">
+                                    Manage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #noJobs>
+                        <div class="list-container empty-state" style="padding: 40px; text-align: center;">
+                            <div style="font-size: 40px; color: #94a3b8; margin-bottom: 16px;">
+                                <i class="fa-solid fa-folder-open"></i>
+                            </div>
+                            <h3 style="margin-bottom: 8px;">No active jobs</h3>
+                            <p style="color: #64748b; margin-bottom: 24px;">Start by posting your first job listing.</p>
+                            <button class="btn-primary" style="margin: 0 auto;" routerLink="/recruiter/post-job">Post Job</button>
+                        </div>
+                    </ng-template>
+                </div>
+
+                <!-- ── Right Column: Top Candidates ────────────── -->
+                <div class="col-side">
+                    <div class="section-header">
+                        <h2 class="section-title">Top Talents</h2>
+                    </div>
+
+                    <div class="list-container" *ngIf="topApplicants().length > 0; else noApplicants">
+                        <div class="app-item" *ngFor="let app of topApplicants(); let i = index">
+                            <div class="logo-circle" style="background: #eef2ff; color: #6366f1;">
+                                {{ app.fullName.charAt(0) }}
+                            </div>
+                            <div class="info">
+                                <span class="title">{{ app.fullName }}</span>
+                                <span class="subtitle">{{ app.experienceYears }} yrs exp • {{ app.location || 'Remote' }}</span>
+                            </div>
+                            <div class="score-badge" style="font-weight: 800; color: #10b981;">
+                                {{ app.totalScore }}%
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #noApplicants>
+                        <div class="list-container empty-state" style="padding: 40px; text-align: center;">
+                            <div style="font-size: 40px; color: #94a3b8; margin-bottom: 16px;">
+                                <i class="fa-solid fa-search"></i>
+                            </div>
+                            <h3 style="margin-bottom: 8px;">No applicants yet</h3>
+                            <p style="color: #64748b;">Top candidates for your active jobs will appear here.</p>
+                        </div>
+                    </ng-template>
+
+                    <!-- Quick Help/Guide -->
+                    <div class="list-container" style="margin-top: 24px; padding: 24px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-color: #bbf7d0;">
+                        <h4 style="color: #166534; font-weight: 800; margin-bottom: 8px;">Pro Tip! 💡</h4>
+                        <p style="color: #15803d; font-size: 13px; line-height: 1.5; margin-bottom: 16px;">Boost your job visibility by adding more specific skills and a detailed company profile.</p>
+                        <a routerLink="/recruiter/profile" style="color: #166534; font-weight: 700; font-size: 13px; text-decoration: none;">Edit Profile →</a>
+                    </div>
+                </div>
+
             </div>
-            <div class="job-actions">
-              <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="btn-manage">
-                Manage
-              </a>
-            </div>
-          </div>
         </div>
-
-        <ng-template #noJobs>
-          <div class="list-container" style="padding: 60px; text-align: center; color: #64748b;">
-            <i class="fa-solid fa-folder-open" style="font-size: 40px; margin-bottom: 16px; opacity: 0.2;"></i>
-            <p>No active jobs. Start by posting a new position!</p>
-            <button class="btn-primary" style="margin-top: 16px;" routerLink="/recruiter/post-job">Post Job</button>
-          </div>
-        </ng-template>
-      </div>
-
-      <!-- Right Column: Top Talents -->
-      <div class="col-side">
-        
-        <div class="section-header">
-          <h2 class="section-title">AI Top Talents</h2>
-        </div>
-        
-        <div class="list-container" *ngIf="topApplicants().length > 0; else noTalent">
-          <div *ngFor="let app of topApplicants(); let i = index" class="talent-item">
-            <div class="avatar">
-              {{ app.fullName.charAt(0) }}
-            </div>
-            <div class="info">
-              <span class="name">{{ app.fullName }}</span>
-              <span class="sub">{{ app.experienceYears }} yrs exp · {{ app.location || 'Remote' }}</span>
-            </div>
-            <div class="match">
-              <div class="score-ring">
-                <svg width="32" height="32" viewBox="0 0 32 32">
-                  <circle cx="16" cy="16" r="14" fill="none" stroke="#f1f5f9" stroke-width="3"/>
-                  <circle cx="16" cy="16" r="14" fill="none" stroke="#6366f1" stroke-width="3" stroke-linecap="round"
-                          stroke-dasharray="88"
-                          [attr.stroke-dashoffset]="88 * (1 - (app.totalScore || 0) / 100)"
-                          transform="rotate(-90 16 16)"/>
-                </svg>
-                <span class="score">{{ app.totalScore }}%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <ng-template #noTalent>
-          <div class="list-container" style="padding: 40px; text-align: center; color: #64748b;">
-            <i class="fa-solid fa-user-astronaut" style="font-size: 32px; margin-bottom: 12px; opacity: 0.2;"></i>
-            <p style="font-size: 13px;">No applicants yet. Candidates will be ranked here by AI.</p>
-          </div>
-        </ng-template>
-
-        <!-- Recruitment Tip -->
-        <div class="tip-card-premium">
-          <div class="tip-header">
-            <i class="fa-solid fa-lightbulb"></i>
-            <span>Pro Tip</span>
-          </div>
-          <p>Boost visibility by detailing specific skill requirements. AI matching is 40% more accurate with clear tags.</p>
-          <a routerLink="/recruiter/profile" class="btn-text">Optimize Profile →</a>
-        </div>
-
-      </div>
-    </div>
-  </ng-container>
-
+    </ng-container>
 </div>

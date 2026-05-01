@@ -21,17 +21,16 @@ export class RecruiterSidebarComponent {
     {
       group: 'MAIN MENU',
       items: [
-        { path: "/recruiter/dashboard", iconClass: "fa-solid fa-chart-line", label: "Dashboard" },
-        { path: "/recruiter/manage-jobs", iconClass: "fa-solid fa-list-check", label: "My Job Listings" },
-        { path: "/recruiter/candidates", iconClass: "fa-solid fa-users", label: "Talent Pool" },
+        { path: "/recruiter/dashboard", iconClass: "fa-solid fa-layer-group", label: "Dashboard" },
+        { path: "/recruiter/post-job", iconClass: "fa-solid fa-circle-plus", label: "Post New Job" },
+        { path: "/recruiter/jobs", iconClass: "fa-solid fa-briefcase", label: "Manage Jobs" },
       ]
     },
     {
-      group: 'HIRING TOOLS',
+      group: 'RECRUITER AREA',
       items: [
-        { path: "/recruiter/post-job", iconClass: "fa-solid fa-plus-circle", label: "Post New Job" },
-        { path: "/recruiter/applicants", iconClass: "fa-solid fa-user-tie", label: "Active Applicants" },
-        { path: "/recruiter/interviews", iconClass: "fa-solid fa-calendar-check", label: "Interviews" },
+        { path: "/recruiter/profile", iconClass: "fa-solid fa-user-tie", label: "Company Profile" },
+        { path: "/recruiter/applicants", iconClass: "fa-solid fa-users", label: "All Applicants" },
       ]
     },
     {

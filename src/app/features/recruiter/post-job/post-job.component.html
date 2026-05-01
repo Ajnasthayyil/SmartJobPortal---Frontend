@@ -1,186 +1,181 @@
 <div class="post-job-page">
   <div class="page-inner">
 
-    <!-- Premium Header -->
+    <!-- Header -->
     <div class="page-header">
-      <div class="title-wrap">
-        <span class="badge">REC-001</span>
-        <h1 class="page-title">Post New Job</h1>
-        <p class="page-sub">Fill in the details to attract the world's best talent.</p>
+      <div>
+        <h1 class="page-title">Post a New Job</h1>
+        <p class="page-sub">Fill in the details to attract the right candidates</p>
       </div>
-      <div class="header-actions">
-        <a routerLink="/recruiter/jobs" class="btn-outline">
-          <i class="fa-solid fa-chevron-left"></i>
-          Back to Listings
-        </a>
-      </div>
+      <a routerLink="/recruiter/jobs" class="btn-back">← My Jobs</a>
     </div>
 
     <div class="form-layout">
 
-      <!-- Main Form Area -->
+      <!-- Main form -->
       <div class="form-main">
         <form [formGroup]="form()" (ngSubmit)="onSubmit()" novalidate>
 
-          <!-- Section 1: Identity -->
-          <div class="premium-card">
-            <div class="card-header">
-              <div class="icon-box blue"><i class="fa-solid fa-file-signature"></i></div>
-              <div class="text">
-                <h3>Basic Information</h3>
-                <p>Define the core identity of the position.</p>
-              </div>
+          <!-- Title -->
+          <div class="card">
+            <h3 class="card-title">Basic Information</h3>
+
+            <div class="field">
+              <label>Job Title *</label>
+              <input type="text" class="field-input"
+                     formControlName="title"
+                     [class.is-error]="form().get('title')!.invalid &&
+                                       form().get('title')!.touched"
+                     placeholder="e.g. Senior React Developer"/>
+              <ng-container *ngIf="form().get('title')!.invalid && form().get('title')!.touched">
+                <p class="field-error">Job title is required.</p>
+              </ng-container>
             </div>
 
-            <div class="form-body">
-              <div class="field-group">
-                <label>Job Title <span class="required">*</span></label>
-                <div class="input-wrap">
-                  <i class="fa-solid fa-briefcase input-icon"></i>
-                  <input type="text" class="premium-input"
-                         formControlName="title"
-                         [class.error]="form().get('title')!.invalid && form().get('title')!.touched"
-                         placeholder="e.g. Senior Full-Stack Engineer"/>
-                </div>
-                <p class="error-text" *ngIf="form().get('title')!.invalid && form().get('title')!.touched">
-                  A compelling title is required.
+            <div class="field">
+              <label>Job Description *</label>
+              <textarea class="field-input textarea"
+                        formControlName="description"
+                        [class.is-error]="form().get('description')!.invalid &&
+                                          form().get('description')!.touched"
+                        rows="8"
+                        placeholder="Describe the role, responsibilities, requirements...">
+              </textarea>
+              <ng-container *ngIf="form().get('description')!.invalid &&
+                   form().get('description')!.touched">
+                <p class="field-error">
+                  Description must be at least 50 characters.
                 </p>
-              </div>
-
-              <div class="field-group">
-                <label>Detailed Description <span class="required">*</span></label>
-                <textarea class="premium-input textarea"
-                          formControlName="description"
-                          [class.error]="form().get('description')!.invalid && form().get('description')!.touched"
-                          rows="8"
-                          placeholder="What makes this role special? Outline responsibilities, culture, and perks...">
-                </textarea>
-                <p class="error-text" *ngIf="form().get('description')!.invalid && form().get('description')!.touched">
-                  Please provide at least 50 characters.
-                </p>
-              </div>
+              </ng-container>
             </div>
           </div>
 
-          <!-- Section 2: Logistics -->
-          <div class="premium-card">
-            <div class="card-header">
-              <div class="icon-box amber"><i class="fa-solid fa-location-dot"></i></div>
-              <div class="text">
-                <h3>Job Details & Logistics</h3>
-                <p>Where, how, and for how much?</p>
-              </div>
-            </div>
+          <!-- Job details -->
+          <div class="card">
+            <h3 class="card-title">Job Details</h3>
 
-            <div class="form-body grid-2">
-              <div class="field-group">
-                <label>Work Location <span class="required">*</span></label>
-                <div class="input-wrap">
-                  <i class="fa-solid fa-map-marker-alt input-icon"></i>
-                  <input type="text" class="premium-input" formControlName="location" placeholder="City, Country or Remote"/>
+            <div class="field-row">
+              <div class="field">
+                <label>Location *</label>
+                <div class="field-wrap">
+                  <svg class="field-icon" width="15" height="15" fill="none"
+                       stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <input type="text" class="field-input has-icon"
+                         formControlName="location"
+                         placeholder="City or Remote"/>
                 </div>
               </div>
 
-              <div class="field-group">
-                <label>Employment Type <span class="required">*</span></label>
-                <select class="premium-input select" formControlName="jobType">
-                  <option *ngFor="let type of jobTypes" [value]="type">{{ type }}</option>
+              <div class="field">
+                <label>Job Type *</label>
+                <select class="field-input" formControlName="jobType">
+                  <ng-container *ngFor="let type of jobTypes">
+                    <option [value]="type">{{ type }}</option>
+                  </ng-container>
                 </select>
               </div>
+            </div>
 
-              <div class="field-group">
+            <div class="field-row">
+              <div class="field">
                 <label>Min Salary (₹)</label>
-                <div class="input-wrap">
-                  <span class="currency-label">₹</span>
-                  <input type="number" class="premium-input has-prefix" formControlName="minSalary" placeholder="500,000"/>
-                </div>
+                <input type="number" class="field-input"
+                       formControlName="minSalary"
+                       placeholder="e.g. 500000"/>
               </div>
-
-              <div class="field-group">
+              <div class="field">
                 <label>Max Salary (₹)</label>
-                <div class="input-wrap">
-                  <span class="currency-label">₹</span>
-                  <input type="number" class="premium-input has-prefix" formControlName="maxSalary" placeholder="1,200,000"/>
-                </div>
+                <input type="number" class="field-input"
+                       formControlName="maxSalary"
+                       placeholder="e.g. 1200000"/>
               </div>
+            </div>
 
-              <div class="field-group">
-                <label>Experience Required (Yrs) <span class="required">*</span></label>
-                <input type="number" class="premium-input" formControlName="minExperienceYears" placeholder="e.g. 3"/>
+            <div class="field-row">
+              <div class="field">
+                <label>Min Experience (years) *</label>
+                <input type="number" class="field-input"
+                       formControlName="minExperienceYears"
+                       min="0" max="30" placeholder="e.g. 3"/>
               </div>
-
-              <div class="field-group">
-                <label>Listing Expiry Date</label>
-                <input type="date" class="premium-input" formControlName="expiresAt"/>
+              <div class="field">
+                <label>Expiry Date</label>
+                <input type="date" class="field-input"
+                       formControlName="expiresAt"/>
               </div>
             </div>
           </div>
 
-          <!-- Section 3: AI Matching Skills -->
-          <div class="premium-card">
-            <div class="card-header">
-              <div class="icon-box emerald"><i class="fa-solid fa-bolt-lightning"></i></div>
-              <div class="text">
-                <h3>Skill Requirements</h3>
-                <p>Crucial for TalEx AI matching precision.</p>
-              </div>
+          <!-- Skills -->
+          <div class="card">
+            <h3 class="card-title">Required Skills *</h3>
+            <p class="card-desc">
+              Add skills to enable AI matching with candidates
+            </p>
+
+            <div class="skill-input-row">
+              <input type="text" class="field-input"
+                     [value]="skillInput()"
+                     (input)="skillInput.set($any($event.target).value)"
+                     (keydown)="onKeydown($event, skillInput())"
+                     placeholder="e.g. React, TypeScript — Enter to add"/>
+              <button type="button" class="btn-add"
+                      (click)="addSkill(skillInput())">
+                + Add
+              </button>
             </div>
 
-            <div class="form-body">
-              <div class="skill-entry-row">
-                <input type="text" class="premium-input"
-                       [value]="skillInput()"
-                       (input)="skillInput.set($any($event.target).value)"
-                       (keydown)="onKeydown($event, skillInput())"
-                       placeholder="Add a skill (e.g. React, Docker) — Enter to add"/>
-                <button type="button" class="btn-add-skill" (click)="addSkill(skillInput())">
-                  <i class="fa-solid fa-plus"></i>
-                </button>
-              </div>
-
-              <div class="skills-showcase">
-                <div *ngFor="let skill of skills()" class="premium-skill-tag">
+            <div class="skills-cloud">
+              <ng-container *ngFor="let skill of skills()">
+                <span class="skill-tag">
                   {{ skill }}
-                  <button type="button" (click)="removeSkill(skill)" class="remove-btn">✕</button>
-                </div>
-                <div class="empty-skills" *ngIf="skills().length === 0">
-                  <i class="fa-solid fa-tags"></i>
-                  <span>No skills defined yet.</span>
-                </div>
-              </div>
+                  <button type="button" (click)="removeSkill(skill)">✕</button>
+                </span>
+              </ng-container>
+              <ng-container *ngIf="skills().length === 0">
+                <span class="no-skills">No skills added yet</span>
+              </ng-container>
             </div>
           </div>
 
-          <!-- Actions -->
-          <div class="form-footer-actions">
-            <button type="button" routerLink="/recruiter/jobs" class="btn-cancel-link">Discard Draft</button>
-            <button type="submit" class="btn-submit-premium" [disabled]="saving()">
-              <span *ngIf="!saving()">Publish Job Listing</span>
-              <span *ngIf="saving()" class="loader-wrap">
-                <span class="loader-dot"></span> Publishing...
-              </span>
+          <!-- Submit -->
+          <div class="form-actions">
+            <a routerLink="/recruiter/jobs" class="btn-cancel">Cancel</a>
+            <button type="submit" class="btn-post" [disabled]="saving()">
+              <ng-container *ngIf="saving()">
+                <span class="spinner"></span> Posting...
+              </ng-container>
+              <ng-container *ngIf="!saving()">
+                Post Job
+              </ng-container>
             </button>
           </div>
 
         </form>
       </div>
 
-      <!-- Right Column: Sidebar Insights -->
-      <div class="form-insights">
-        <div class="insight-card amber">
-          <div class="card-top">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            <h4>AI Matching Tips</h4>
-          </div>
-          <p>Our AI analyzes over 50 data points. Using specific skill tags like <strong>"Redis"</strong> instead of just <strong>"Databases"</strong> increases match quality by up to <strong>35%</strong>.</p>
+      <!-- Sidebar tips -->
+      <div class="form-sidebar">
+        <div class="tips-card">
+          <h4 class="tips-title">💡 Tips for better results</h4>
+          <ul class="tips-list">
+            <li>Write a clear, specific job title</li>
+            <li>Add detailed description (responsibilities, requirements)</li>
+            <li>Include accurate salary range to attract more candidates</li>
+            <li>Add all required skills — drives AI matching accuracy</li>
+            <li>Set a realistic expiry date</li>
+          </ul>
         </div>
 
-        <div class="insight-card dark">
-          <div class="card-top">
-            <i class="fa-solid fa-shield-halved"></i>
-            <h4>Security & Privacy</h4>
-          </div>
-          <p>Your listing will be reviewed by our moderation team. Ensure your contact details are handled through our secure platform.</p>
+        <div class="tips-card">
+          <h4 class="tips-title">🤖 AI Matching</h4>
+          <p class="tips-desc">
+            Once posted, Talex AI will automatically score and rank candidates
+            based on skills (60%), experience (30%), and location (10%) match.
+          </p>
         </div>
       </div>
 
