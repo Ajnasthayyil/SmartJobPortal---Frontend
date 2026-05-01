@@ -224,8 +224,8 @@
               <circle cx="60" cy="60" r="54" fill="none" stroke="#f1f5f9" stroke-width="12" />
               <circle cx="60" cy="60" r="54" fill="none" stroke="#6366f1" stroke-width="12"
                       stroke-linecap="round" 
-                      [attr.stroke-dasharray]="2 * 3.14159 * 54"
-                      [attr.stroke-dashoffset]="2 * 3.14159 * 54 * (1 - completion() / 100)"
+                      [attr.stroke-dasharray]="ringCircumference"
+                      [attr.stroke-dashoffset]="ringCircumference * (1 - completion() / 100)"
                       transform="rotate(-90 60 60)" />
               <text x="60" y="68" text-anchor="middle" font-size="24" font-weight="900" fill="#0f172a">
                 {{ completion() }}%

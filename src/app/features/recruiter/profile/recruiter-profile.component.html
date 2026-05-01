@@ -1,0 +1,133 @@
+<div class="profile-page">
+
+  <!-- Loading Skeleton -->
+  <ng-container *ngIf="loading()">
+    <div class="skeleton-wrap">
+      <div class="skeleton-banner"></div>
+      <div class="skeleton-content">
+        <div class="skeleton-side"></div>
+        <div class="skeleton-main"></div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading()">
+    
+    <!-- Profile Hero -->
+    <div class="profile-hero">
+      <div class="banner"></div>
+      <div class="hero-content">
+        <div class="avatar-wrapper" (click)="photoInput.click()">
+          <img *ngIf="auth.currentUser()?.profilePictureUrl" [src]="auth.currentUser()?.profilePictureUrl" class="avatar-img">
+          <div *ngIf="!auth.currentUser()?.profilePictureUrl" class="avatar-placeholder">
+            {{ profile()?.companyName?.charAt(0) || profile()?.fullName?.charAt(0) }}
+          </div>
+          <div class="avatar-edit"><i class="fa-solid fa-camera"></i></div>
+          <input #photoInput type="file" hidden accept="image/*" (change)="onPhotoSelect($event)" />
+        </div>
+        
+        <div class="user-info">
+          <h1 class="user-name">{{ profile()?.companyName }}</h1>
+          <p class="user-headline">{{ profile()?.industry }} · {{ profile()?.location }}</p>
+          <div class="user-meta">
+            <span><i class="fa-solid fa-user-tie"></i> {{ profile()?.fullName }} (Recruiter)</span>
+            <span><i class="fa-solid fa-envelope"></i> {{ profile()?.email }}</span>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
+            <i class="fa-solid fa-check" *ngIf="!saving()"></i>
+            <span class="spinner" *ngIf="saving()"></span>
+            {{ saving() ? 'Saving...' : 'Update Profile' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-layout" [formGroup]="form">
+      
+      <main class="profile-main">
+        
+        <!-- Company Section -->
+        <section class="profile-section">
+          <h2 class="section-title">Company Information</h2>
+          <div class="card">
+            <div class="card-grid">
+              <div class="premium-field">
+                <label>Company Name <span class="required">*</span></label>
+                <div class="input-wrap">
+                  <i class="fa-solid fa-building"></i>
+                  <input type="text" formControlName="companyName" placeholder="e.g. Acme Corp" />
+                </div>
+              </div>
+              <div class="premium-field">
+                <label>Industry <span class="required">*</span></label>
+                <div class="input-wrap">
+                  <i class="fa-solid fa-industry"></i>
+                  <input type="text" formControlName="industry" placeholder="e.g. Technology" />
+                </div>
+              </div>
+            </div>
+
+            <div class="card-grid" style="margin-top: 24px;">
+              <div class="premium-field">
+                <label>Website</label>
+                <div class="input-wrap">
+                  <i class="fa-solid fa-globe"></i>
+                  <input type="text" formControlName="website" placeholder="https://example.com" />
+                </div>
+              </div>
+              <div class="premium-field">
+                <label>Headquarters <span class="required">*</span></label>
+                <div class="input-wrap">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <input type="text" formControlName="location" placeholder="City, Country" />
+                </div>
+              </div>
+            </div>
+
+            <div class="premium-field" style="margin-top: 24px;">
+              <label>Company Description <span class="required">*</span></label>
+              <textarea formControlName="description" 
+                        class="premium-textarea" 
+                        placeholder="Tell candidates about your company culture and mission..."
+                        rows="8"></textarea>
+              <div class="char-count" [class.error]="form.get('description')?.invalid && form.get('description')?.touched">
+                {{ form.get('description')?.value?.length || 0 }} / 50 characters min
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <aside class="profile-side">
+        <!-- Stats Card -->
+        <div class="side-card stats-summary">
+          <h3 class="side-title">Hiring Activity</h3>
+          <div class="stat-row">
+            <div class="stat-box">
+              <span class="num">{{ profile()?.totalJobsPosted || 0 }}</span>
+              <span class="lbl">Jobs Posted</span>
+            </div>
+            <div class="stat-box">
+              <span class="num">--</span>
+              <span class="lbl">Hired</span>
+            </div>
+          </div>
+          <p class="stat-hint">Active recruiter since {{ (profile()?.totalJobsPosted || 0) > 0 ? 'Recently' : 'Today' }}</p>
+        </div>
+
+        <!-- Tip Card -->
+        <div class="side-card tip-card">
+          <div class="tip-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <h4>Why complete this?</h4>
+          <p>Companies with full profiles and descriptions receive <strong>2.5x more</strong> applications from qualified candidates.</p>
+        </div>
+      </aside>
+
+    </div>
+  </ng-container>
+
+</div>

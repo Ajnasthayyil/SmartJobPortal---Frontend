@@ -1,6 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { CandidateService } from '../../../core/services/candidate.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -16,7 +17,8 @@ import {
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './candidate-dashboard.component.html',
-  styleUrls: ['./candidate-dashboard.component.scss']
+  styleUrls: ['./candidate-dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CandidateDashboardComponent implements OnInit {
 
@@ -33,11 +35,33 @@ export class CandidateDashboardComponent implements OnInit {
     savedJobs:      12
   });
 
+  // Constants
+  readonly ringCircumference      = 2 * Math.PI * 22;
+  readonly ringCircumferenceLarge = 2 * Math.PI * 36;
+
   // Profile completion
   profileCompletion = signal(0);
 
-  // Skill gaps — from top matched jobs
-  skillGaps = signal<string[]>([]);
+  // Skill gaps — computed reactively from profile and jobs
+  skillGaps = computed(() => {
+    const profile = this.profile();
+    const jobs    = this.recommendedJobs();
+    
+    if (!profile || !jobs.length) return [];
+
+    const mySkills = profile.skills?.map(s => s.skillName.toLowerCase()) || [];
+    const missingSkills = new Set<string>();
+
+    jobs.slice(0, 3).forEach(job => {
+      job.requiredSkills?.forEach(skill => {
+        if (!mySkills.includes(skill.toLowerCase())) {
+          missingSkills.add(skill);
+        }
+      });
+    });
+
+    return Array.from(missingSkills).slice(0, 6);
+  });
 
   constructor(
     private candidateService: CandidateService,
@@ -52,55 +76,37 @@ export class CandidateDashboardComponent implements OnInit {
   loadDashboard(): void {
     this.loading.set(true);
 
-    // Load profile
-    this.candidateService.getProfile().subscribe({
-      next: res => {
-        if (res.success) {
-          this.profile.set(res.data);
-          this.calculateProfileCompletion(res.data);
-        } else {
-          this.toast.error(res.message);
-        }
-      },
-      error: () => this.toast.error('Failed to load profile.')
-    });
-
-    // Load recommended jobs
-    this.candidateService.searchJobs({
-      page: 1,
-      pageSize: 5
+    forkJoin({
+      profile: this.candidateService.getProfile(),
+      jobs: this.candidateService.searchJobs({ page: 1, pageSize: 5 }),
+      applications: this.candidateService.getApplications()
     }).subscribe({
-      next: res => {
-        if (res.success) {
-          const jobs = res.data?.jobs || [];
-          this.recommendedJobs.set(jobs);
-          this.stats.update(s => ({
-            ...s, jobMatches: res.data?.totalCount || 0
-          }));
-
-          // Extract skill gaps from jobs
-          this.extractSkillGaps(jobs);
+      next: ({ profile, jobs, applications }) => {
+        // 1. Handle Profile
+        if (profile.success) {
+          this.profile.set(profile.data);
+          this.calculateProfileCompletion(profile.data);
         }
-      },
-      error: () => this.toast.error('Failed to load job recommendations.')
-    });
 
-    // Load applications
-    this.candidateService.getApplications().subscribe({
-      next: res => {
-        if (res.success) {
-          this.applications.set(res.data || []);
-          this.stats.update(s => ({
-            ...s, applications: res.data?.length || 0
-          }));
-        } else {
-          this.toast.error(res.message);
+        // 2. Handle Jobs
+        if (jobs.success) {
+          const jobData = jobs.data?.jobs || [];
+          this.recommendedJobs.set(jobData);
+          this.stats.update(s => ({ ...s, jobMatches: jobs.data?.totalCount || 0 }));
         }
+
+        // 3. Handle Applications
+        if (applications.success) {
+          this.applications.set(applications.data || []);
+          this.stats.update(s => ({ ...s, applications: applications.data?.length || 0 }));
+        }
+
         this.loading.set(false);
       },
-      error: () => {
+      error: (err) => {
         this.loading.set(false);
-        this.toast.error('Failed to load applications.');
+        this.toast.error('Failed to load dashboard data.');
+        console.error('Dashboard Load Error:', err);
       }
     });
   }
@@ -116,23 +122,7 @@ export class CandidateDashboardComponent implements OnInit {
     this.profileCompletion.set(score);
   }
 
-  extractSkillGaps(jobs: JobListItem[]): void {
-    const mySkills = this.profile()?.skills?.map(
-      s => s.skillName.toLowerCase()
-    ) || [];
 
-    const missingSkills = new Set<string>();
-
-    jobs.slice(0, 3).forEach(job => {
-      job.requiredSkills?.forEach(skill => {
-        if (!mySkills.includes(skill.toLowerCase())) {
-          missingSkills.add(skill);
-        }
-      });
-    });
-
-    this.skillGaps.set(Array.from(missingSkills).slice(0, 6));
-  }
 
   getScoreColor(score: number): string {
     if (score >= 70) return '#f59e0b';
@@ -141,8 +131,7 @@ export class CandidateDashboardComponent implements OnInit {
   }
 
   getScoreDashOffset(score: number): number {
-    const circumference = 2 * Math.PI * 22;
-    return circumference * (1 - score / 100);
+    return this.ringCircumference * (1 - score / 100);
   }
 
   getStatusClass(status: string): string {

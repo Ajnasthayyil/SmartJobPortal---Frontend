@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule, FormBuilder,
@@ -15,7 +15,8 @@ import { CandidateProfile } from '../../../core/models/candidate.models';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './candidate-profile.component.html',
-  styleUrls: ['./candidate-profile.component.scss']
+  styleUrls: ['./candidate-profile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CandidateProfileComponent implements OnInit {
 
@@ -30,6 +31,7 @@ export class CandidateProfileComponent implements OnInit {
   completion = signal(0);
 
   readonly levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+  readonly ringCircumference = 2 * Math.PI * 54;
 
   constructor(
     private fb: FormBuilder,
