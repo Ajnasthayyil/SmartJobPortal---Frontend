@@ -16,18 +16,22 @@ export class RecruiterSidebarComponent {
   onHover(val: boolean) {
     this.sidebarService.setExpanded(val);
   }
+
   links = [
     {
-      group: 'OVERVIEW',
+      group: 'MAIN MENU',
       items: [
         { path: "/recruiter/dashboard", iconClass: "fa-solid fa-chart-line", label: "Dashboard" },
+        { path: "/recruiter/manage-jobs", iconClass: "fa-solid fa-list-check", label: "My Job Listings" },
+        { path: "/recruiter/candidates", iconClass: "fa-solid fa-users", label: "Talent Pool" },
       ]
     },
     {
-      group: 'RECRUITMENT',
+      group: 'HIRING TOOLS',
       items: [
         { path: "/recruiter/post-job", iconClass: "fa-solid fa-plus-circle", label: "Post New Job" },
-        { path: "/recruiter/jobs", iconClass: "fa-solid fa-briefcase", label: "Manage Jobs" },
+        { path: "/recruiter/applicants", iconClass: "fa-solid fa-user-tie", label: "Active Applicants" },
+        { path: "/recruiter/interviews", iconClass: "fa-solid fa-calendar-check", label: "Interviews" },
       ]
     },
     {

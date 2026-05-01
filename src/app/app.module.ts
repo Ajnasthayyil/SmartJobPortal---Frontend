@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { JwtInterceptorService } from './core/interceptors/jwt-interceptor.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,6 +11,7 @@ import { AppComponent } from './app.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { DashboardHeaderComponent } from './shared/components/dashboard-header/dashboard-header.component';
 import { PublicNavbarComponent } from './shared/components/public-navbar/public-navbar.component';
+import { ToastContainerComponent } from './shared/components/toast/toast-container.component';
 
 // ✅ Role-Specific Sidebars
 import { CandidateSidebarComponent } from './features/candidate/candidate-sidebar/candidate-sidebar.component';
@@ -60,6 +62,7 @@ import { CompaniesComponent } from './features/companies/companies.component';
     // ✅ Shared
     FooterComponent,
     DashboardHeaderComponent,
+    ToastContainerComponent,
     ShellVisibilityDirective,
 
     // ✅ Sidebars
@@ -86,7 +89,9 @@ import { CompaniesComponent } from './features/companies/companies.component';
     AdminRecruitersComponent,
     AdminJobsComponent
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

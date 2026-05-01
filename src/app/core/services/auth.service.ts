@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { ToastService } from './toast.service';
 import {
   LoginRequest, AuthResponse, ApiResponse, UserSession,
   RegisterCandidateRequest, RegisterRecruiterRequest
@@ -16,7 +17,11 @@ export class AuthService {
   currentUser = signal<UserSession | null>(this.loadFromStorage());
   isLoggedIn  = signal<boolean>(!!this.loadFromStorage());
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private toast: ToastService
+  ) {}
 
   login(request: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>
@@ -60,6 +65,7 @@ export class AuthService {
     localStorage.removeItem('authUser');
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
+    this.toast.info('Logged out successfully.');
     this.router.navigate(['/login']);
   }
 

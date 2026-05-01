@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router } from '@angular/router';
 import { SidebarService } from './core/services/sidebar.service';
+import { ToastContainerComponent } from './shared/components/toast/toast-container.component';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,9 @@ import { SidebarService } from './core/services/sidebar.service';
     <ng-container *ngIf="isPublicPage()">
       <app-footer></app-footer>
     </ng-container>
+
+    <!-- Global Toast Notifications -->
+    <app-toast-container></app-toast-container>
   `,
   styleUrls: ['./app.component.scss']
 })
