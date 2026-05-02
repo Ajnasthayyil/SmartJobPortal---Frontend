@@ -26,8 +26,8 @@ export class CandidateProfileComponent implements OnInit {
   uploading = signal(false);
   resumeFile = signal<File | null>(null);
   dragOver = signal(false);
-  // skills signal is removed, we'll use form.get('skills')
   completion = signal(0);
+  isEditModalOpen = signal(false);
 
   readonly levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
@@ -94,44 +94,55 @@ export class CandidateProfileComponent implements OnInit {
       next: res => {
         if (res.success && res.data) {
           this.profile.set(res.data);
-          this.form.patchValue({
-            headline: res.data.headline,
-            summary: res.data.summary,
-            location: res.data.location,
-            experienceYears: res.data.experienceYears
-          });
-
-          // Handle education array
-          this.educationGroups.clear();
-          if (res.data.education) {
-            res.data.education.forEach(edu => {
-              this.educationGroups.push(this.fb.group(edu));
-            });
-          }
-
-          // Handle experience array
-          this.experienceGroups.clear();
-          if (res.data.workExperience) {
-            res.data.workExperience.forEach(exp => {
-              this.experienceGroups.push(this.fb.group(exp));
-            });
-          }
-          // Handle skills array
-          this.skillGroups.clear();
-          if (res.data.skills) {
-            res.data.skills.forEach(s => {
-              this.skillGroups.push(this.fb.group({
-                skillName: [s.skillName, Validators.required],
-                level: [s.level || 'Intermediate', Validators.required]
-              }));
-            });
-          }
           this.calcCompletion(res.data);
         }
         this.loading.set(false);
       },
       error: () => this.loading.set(false)
     });
+  }
+
+  openEditModal(): void {
+    const data = this.profile();
+    if (!data) return;
+
+    this.form.patchValue({
+      headline: data.headline,
+      summary: data.summary,
+      location: data.location,
+      experienceYears: data.experienceYears
+    });
+
+    // Handle education array
+    this.educationGroups.clear();
+    if (data.education) {
+      data.education.forEach(edu => {
+        this.educationGroups.push(this.fb.group(edu));
+      });
+    }
+
+    // Handle experience array
+    this.experienceGroups.clear();
+    if (data.workExperience) {
+      data.workExperience.forEach(exp => {
+        this.experienceGroups.push(this.fb.group(exp));
+      });
+    }
+    // Handle skills array
+    this.skillGroups.clear();
+    if (data.skills) {
+      data.skills.forEach(s => {
+        this.skillGroups.push(this.fb.group({
+          skillName: [s.skillName, Validators.required],
+          level: [s.level || 'Intermediate', Validators.required]
+        }));
+      });
+    }
+    this.isEditModalOpen.set(true);
+  }
+
+  closeEditModal(): void {
+    this.isEditModalOpen.set(false);
   }
 
   calcCompletion(p: CandidateProfile): void {
@@ -174,6 +185,7 @@ export class CandidateProfileComponent implements OnInit {
           this.toast.success('Profile updated successfully!');
           this.profile.set(res.data);
           this.calcCompletion(res.data);
+          this.closeEditModal();
         } else {
           this.toast.error(res.message);
         }
@@ -241,8 +253,6 @@ export class CandidateProfileComponent implements OnInit {
         this.uploading.set(false);
         if (res.success) {
           this.toast.success('Profile photo updated!');
-          // Signal in AuthService already updates the header, 
-          // we can also update local profile signal if needed.
           const current = this.profile();
           if (current) {
             this.profile.set({ ...current, profilePictureUrl: res.data.url });

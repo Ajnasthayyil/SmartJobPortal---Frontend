@@ -261,9 +261,9 @@ export class RecruiterDashboardComponent implements OnInit {
   }
 
   getScoreColor(score: number | null): string {
-    if (!score) return '#e5e7eb';
-    if (score >= 70) return '#f59e0b';
-    if (score >= 40) return '#f97316';
+    if (!score) return '#e2e8f0';
+    if (score >= 70) return '#10b981';
+    if (score >= 40) return '#f59e0b';
     return '#ef4444';
   }
 

@@ -2,8 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { CandidateService } from '../../core/services/candidate.service';
+import { ApiResponse } from '../../core/models/auth.models';
 
 @Component({
   selector: 'app-companies',
@@ -24,7 +24,9 @@ export class CompaniesComponent implements OnInit {
     'Retail', 'Manufacturing', 'Education'
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private service: CandidateService
+  ) {}
 
   ngOnInit(): void {
     this.load();
@@ -32,52 +34,65 @@ export class CompaniesComponent implements OnInit {
 
   load(): void {
     this.loading.set(true);
-    // Fetch jobs and extract company info since recruiters profiles might be protected/empty
-    this.http.get<any>(`${environment.apiUrl}/candidate/jobs?pageSize=100`)
-      .subscribe({
-        next: res => {
-          if (res.success) {
-            const jobs: any[] = res.data?.jobs || [];
-            const map = new Map<string, any>();
-            
-            jobs.forEach(j => {
-              if (!map.has(j.companyName)) {
-                map.set(j.companyName, {
-                  id: j.jobId, // Fallback ID
-                  name: j.companyName,
-                  industry: 'Technology', // Default
-                  location: j.location,
-                  openJobsCount: 1,
-                  size: '50-200',
-                  recentJobs: [{ title: j.title }]
-                });
-              } else {
-                const c = map.get(j.companyName)!;
-                c.openJobsCount++;
-                if (c.recentJobs.length < 2) {
-                  c.recentJobs.push({ title: j.title });
-                }
-              }
-            });
-            
-            this.companies.set(Array.from(map.values()));
-          }
+    this.service.getCompanies().subscribe({
+      next: (res: ApiResponse<any[]>) => {
+        if (res.success && res.data && res.data.length > 0) {
+          this.companies.set(res.data.map((c: any) => ({
+            ...c,
+            name: c.companyName, // Mapping for template
+            id: c.recruiterId
+          })));
           this.loading.set(false);
-        },
-        error: () => this.loading.set(false)
-      });
+        } else {
+          this.loadFromJobs();
+        }
+      },
+      error: () => this.loadFromJobs()
+    });
+  }
+
+  private loadFromJobs(): void {
+    this.service.searchJobs({ pageSize: 100 }).subscribe({
+      next: (res: ApiResponse<any>) => {
+        if (res.success) {
+          const jobs: any[] = res.data?.jobs || [];
+          const map = new Map<string, any>();
+          
+          jobs.forEach(j => {
+            if (!map.has(j.companyName)) {
+              map.set(j.companyName, {
+                id: j.jobId,
+                name: j.companyName,
+                industry: j.industry || 'Business',
+                location: j.location,
+                openJobsCount: 1,
+                size: j.companySize || '', // Empty if not provided
+                description: j.companyDescription || '',
+                recentJobs: [{ title: j.title }]
+              });
+            } else {
+              const c = map.get(j.companyName)!;
+              c.openJobsCount++;
+              if (c.recentJobs.length < 2) {
+                c.recentJobs.push({ title: j.title });
+              }
+            }
+          });
+          this.companies.set(Array.from(map.values()));
+        }
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false)
+    });
   }
 
   onSearch(): void {
-    // Search is handled by filtering the displayed signal or a separate derived signal
-    // For simplicity, we just trigger the signal logic if needed
   }
 
   setIndustry(i: string): void {
     this.activeIndustry = i;
   }
 
-  // Helper to get filtered companies for the template
   getFilteredCompanies(): any[] {
     let list = this.companies();
     
@@ -89,7 +104,7 @@ export class CompaniesComponent implements OnInit {
       const term = this.searchTerm.toLowerCase();
       list = list.filter(c => 
         c.name.toLowerCase().includes(term) || 
-        c.industry.toLowerCase().includes(term)
+        (c.industry && c.industry.toLowerCase().includes(term))
       );
     }
     

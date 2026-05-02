@@ -1,312 +1,181 @@
-.applicants-container {
-  padding: 140px 32px 60px;
-  font-family: 'Outfit', sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
+// ── Design Tokens ────────────────────────────────────────────────
+$primary: #10b981;
+$primary-light: #ecfdf5;
+$success: #10b981;
+$slate-50: #f8fafc;
+$slate-100: #f1f5f9;
+$slate-200: #e2e8f0;
+$slate-300: #cbd5e1;
+$slate-400: #94a3b8;
+$slate-500: #64748b;
+$slate-600: #475569;
+$slate-700: #334155;
+$slate-900: #0f172a;
+$white: #ffffff;
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$glass-bg: rgba(255, 255, 255, 0.7);
+$glass-border: rgba(255, 255, 255, 0.4);
+
+:host {
+    display: block;
+    background: $slate-100;
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+    padding: 140px 32px 60px;
 }
 
-// ── Header Section ───────────────────────────────────────────────
-.header-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 48px;
-  gap: 24px;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.page-inner {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.premium-title {
-  font-size: 32px;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.02em;
-  margin-bottom: 8px;
+/* ── Header ── */
+.page-header {
+    margin-bottom: 32px;
+    .page-title { font-size: 32px; font-weight: 800; color: $slate-900; margin: 0; letter-spacing: -0.02em; }
+    .page-sub { color: $slate-500; font-size: 15px; margin-top: 4px; }
 }
 
-.premium-sub {
-  font-size: 16px;
-  color: #64748b;
-  font-weight: 500;
+/* ── Glass Components ── */
+.glass-card {
+    background: $glass-bg;
+    backdrop-filter: blur(20px);
+    border: 1px solid $glass-border;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
-.tabs-container {
-  display: flex;
-  background: #f1f5f9;
-  padding: 4px;
-  border-radius: 14px;
+.glass-tabs {
+    display: inline-flex;
+    background: $white;
+    border: 1px solid $slate-200;
+    padding: 6px;
+    border-radius: 16px;
+    gap: 4px;
+    box-shadow: $shadow-sm;
+    margin-top: 24px;
 }
 
-.tab-pill {
-  border: none;
-  background: transparent;
-  padding: 8px 18px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #64748b;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  &.active {
-    background: white;
-    color: #10b981;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  }
-
-  .tab-count {
-    background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-  }
+.tab {
+    padding: 8px 24px; border-radius: 12px; border: none; background: transparent;
+    font-size: 14px; font-weight: 700; color: $slate-600; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; transition: all 0.2s;
+    &:hover { background: $slate-50; color: $slate-900; }
+    &.active { background: $primary; color: $white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: rgba($slate-900, 0.05); color: $slate-600; }
+    &.active .badge { background: rgba($white, 0.2); color: $white; }
 }
 
-// ── Applicant Grid & Cards ───────────────────────────────────────
-.applicants-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.applicant-card {
-  background: white;
-  border-radius: 28px;
-  padding: 32px;
-  border: 1px solid #f1f5f9;
-  display: flex;
-  justify-content: space-between;
-  gap: 32px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
-    border-color: rgba(16, 185, 129, 0.2);
-  }
-
-  @media (max-width: 992px) {
-    flex-direction: column;
-  }
-}
-
-.card-main {
-  display: flex;
-  gap: 24px;
-  flex: 1;
-}
-
-.avatar-circle {
-  width: 64px;
-  height: 64px;
-  background: #8b5cf6;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 800;
-}
-
-.name-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 4px;
-}
-
-.candidate-name {
-  font-size: 22px;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.match-badge {
-  background: #ecfdf5;
-  color: #10b981;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 100px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.current-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #64748b;
-  margin-bottom: 16px;
-}
-
-.meta-row {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 24px;
-
-  .meta-item {
-    font-size: 14px;
-    font-weight: 600;
-    color: #64748b;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    i { color: #cbd5e1; }
-  }
-}
-
-.skills-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.skill-tag {
-  background: #f1f5f9;
-  color: #64748b;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 10px;
-  
-  &.more {
-    background: transparent;
-    border: 1px solid #f1f5f9;
-  }
-}
-
-// ── Card Aside ───────────────────────────────────────────────────
-.card-aside {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  border-left: 1px solid #f1f5f9;
-  padding-left: 40px;
-
-  @media (max-width: 992px) {
-    border-left: none;
-    border-top: 1px solid #f1f5f9;
-    padding-left: 0;
-    padding-top: 24px;
-    justify-content: space-between;
-  }
-}
-
-.context-info {
-  display: flex;
-  flex-direction: column;
-  text-align: right;
-  
-  @media (max-width: 992px) { text-align: left; }
-
-  .context-label { font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-  .job-applied-name { font-size: 15px; font-weight: 800; color: #0f172a; margin: 4px 0; }
-  .applied-date { font-size: 13px; color: #94a3b8; font-weight: 500; }
-}
-
-.match-score-visual {
-  position: relative;
-  width: 64px;
-  height: 64px;
-
-  svg { transform: rotate(-90deg); width: 64px; height: 64px; }
-  circle {
-    fill: none;
-    stroke-width: 4;
-    &.bg { stroke: #f1f5f9; }
-    &.meter {
-      stroke-linecap: round;
-      stroke-dasharray: 138.2; // 2 * PI * 22
-      transition: stroke-dashoffset 1s ease-out;
+/* ── Filters ── */
+.filters-card {
+    margin-bottom: 32px;
+    .filter-top-row {
+        display: flex; gap: 16px;
+        .search-box {
+            flex: 1; position: relative;
+            i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: $slate-400; }
+            input { width: 100%; padding: 14px 20px 14px 52px; border-radius: 16px; border: 1.5px solid $slate-100; background: $white; font-weight: 600; transition: all 0.2s; &:focus { outline: none; border-color: $primary; box-shadow: 0 0 0 4px rgba($primary, 0.05); } }
+        }
+        .action-buttons {
+            display: flex; gap: 12px;
+            .btn-toggle-view {
+                padding: 0 20px; border-radius: 16px; border: 1.5px solid $slate-100; background: $white; color: $slate-500; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s;
+                &.active { border-color: $primary; background: rgba($primary, 0.05); color: $primary; }
+                &:hover:not(.active) { background: $slate-50; }
+            }
+            .btn-filter-action { padding: 0 24px; border-radius: 16px; border: 1.5px solid $primary; background: $white; color: $primary; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s; &:hover { background: $primary; color: white; } }
+        }
     }
-  }
-
-  .score-text {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 800;
-    color: #0f172a;
-  }
 }
 
-.card-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+/* ── Applicant Card ── */
+.applicants-list { display: flex; flex-direction: column; gap: 16px; }
+.applicant-card {
+    background: $white; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s;
+    &:hover { transform: translateY(-4px) scale(1.01); border-color: rgba($primary, 0.3); box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08); }
 
-  @media (max-width: 992px) { flex-direction: row; }
+    .profile-section {
+        display: flex; gap: 24px; align-items: center;
+        .avatar-circle { width: 70px; height: 70px; border-radius: 18px; background: $primary; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; }
+        .info-body {
+            .name-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; .candidate-name { font-size: 18px; font-weight: 800; color: $slate-900; margin: 0; } .match-chip { background: #ecfdf5; color: $primary; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 6px; } }
+            .candidate-headline { font-size: 14px; font-weight: 700; color: $slate-500; margin-bottom: 8px; }
+            .meta-info { display: flex; gap: 16px; margin-bottom: 12px; span { font-size: 13px; color: $slate-400; font-weight: 600; display: flex; align-items: center; gap: 6px; i { font-size: 14px; } } }
+            .skills-wrap { display: flex; gap: 8px; .skill-pill { background: $slate-50; border: 1px solid $slate-100; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: $slate-600; } }
+        }
+    }
+
+    .status-section {
+        display: flex; align-items: center; gap: 40px;
+        .score-visual { position: relative; width: 60px; height: 60px; svg { transform: rotate(-90deg); width: 100%; height: 100%; } circle { fill: none; stroke-width: 4; } .bg { stroke: $slate-100; } .meter { stroke-linecap: round; transition: stroke-dashoffset 1s ease; } .score-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; color: $slate-900; } }
+        .application-context { text-align: right; .context-label { font-size: 11px; font-weight: 800; color: $slate-400; text-transform: uppercase; display: block; margin-bottom: 4px; } .job-name { font-size: 14px; font-weight: 800; color: $slate-900; } .applied-at { font-size: 12px; color: $slate-400; font-weight: 600; } }
+        .card-actions {
+            display: flex; gap: 12px; align-items: center;
+            .icon-btn { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid $slate-200; background: $white; color: $slate-600; cursor: pointer; transition: all 0.2s; &.preview:hover { background: #f0fdf4; color: $primary; border-color: $primary; } }
+            .status-dropdown-wrap {
+                position: relative;
+                
+                .status-select {
+                    appearance: none;
+                    background: $white;
+                    border: 2px solid $slate-100;
+                    border-radius: 14px;
+                    padding: 10px 40px 10px 16px;
+                    font-size: 13px;
+                    font-weight: 800;
+                    color: $slate-700;
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    min-width: 140px;
+                    box-shadow: $shadow-sm;
+
+                    &:hover {
+                        border-color: $primary;
+                        background: $slate-50;
+                        transform: translateY(-1px);
+                    }
+
+                    &:focus {
+                        outline: none;
+                        border-color: $primary;
+                        box-shadow: 0 0 0 4px rgba($primary, 0.15);
+                    }
+                }
+
+                &::after {
+                    content: '\f078';
+                    font-family: 'Font Awesome 6 Free';
+                    font-weight: 900;
+                    position: absolute;
+                    right: 16px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-size: 10px;
+                    color: $slate-400;
+                    pointer-events: none;
+                    transition: all 0.3s;
+                }
+
+                &:hover::after {
+                    color: $primary;
+                }
+                &.loading {
+                    opacity: 0.7;
+                    pointer-events: none;
+                    &::after {
+                        content: '\f110';
+                        animation: spin 1s linear infinite;
+                    }
+                }
+            }
+        }
+    }
 }
 
-.action-btn {
-  width: 40px;
-  height: 40px;
-  border: 1px solid #f1f5f9;
-  border-radius: 12px;
-  background: white;
-  color: #64748b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-decoration: none;
+@keyframes spin { from { transform: translateY(-50%) rotate(0deg); } to { transform: translateY(-50%) rotate(360deg); } }
 
-  &:hover {
-    background: #f8fafc;
-    color: #10b981;
-    border-color: #10b981;
-  }
-  
-  &.delete:hover {
-    color: #ef4444;
-    border-color: #ef4444;
-    background: #fef2f2;
-  }
-}
+.empty-card { text-align: center; padding: 60px 40px; .empty-icon { font-size: 48px; margin-bottom: 16px; color: $slate-300; } h3 { font-size: 20px; font-weight: 800; color: $slate-900; margin-bottom: 8px; } p { color: $slate-500; font-size: 14px; } }
 
-// ── Empty State ──────────────────────────────────────────────────
-.ultra-empty {
-  text-align: center;
-  padding: 80px 40px;
-  background: white;
-  border-radius: 32px;
-  border: 1px solid #f1f5f9;
-
-  .icon-wrap {
-    font-size: 64px;
-    color: #cbd5e1;
-    margin-bottom: 24px;
-  }
-
-  h3 { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 12px; }
-  p { font-size: 16px; color: #64748b; }
-}
-
-// ── Skeleton ─────────────────────────────────────────────────────
-.skeleton-card {
-  height: 180px;
-  background: linear-gradient(90deg, #f8fafc 25%, #f1f5f9 50%, #f8fafc 75%);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-  border-radius: 28px;
-  margin-bottom: 20px;
-}
-
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+.skeleton-card { height: 160px; background: linear-gradient(90deg, $slate-100 25%, $slate-200 50%, $slate-100 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 24px; margin-bottom: 16px; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }

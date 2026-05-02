@@ -84,12 +84,16 @@
               <p class="co-industry">{{ co.industry }}</p>
 
               <div class="co-meta">
-                <span class="meta-item"><i class="fa-solid fa-location-dot"></i> {{ co.location || 'Multiple Locations' }}</span>
-                <span class="meta-item"><i class="fa-solid fa-users"></i> {{ co.size || '50-200' }} Employees</span>
+                <span class="meta-item" *ngIf="co.location">
+                  <i class="fa-solid fa-location-dot"></i> {{ co.location }}
+                </span>
+                <span class="meta-item" *ngIf="co.size">
+                  <i class="fa-solid fa-users"></i> {{ co.size }} Employees
+                </span>
               </div>
 
               <!-- Optional Job Previews -->
-              <div class="co-recent-jobs" *ngIf="co.recentJobs?.length">
+              <div class="co-recent-jobs" *ngIf="co.recentJobs?.length && co.recentJobs[0]?.title">
                 <div class="co-job-preview" *ngFor="let job of co.recentJobs.slice(0, 2)">
                    {{ job.title }}
                 </div>

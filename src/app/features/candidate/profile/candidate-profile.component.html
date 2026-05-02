@@ -36,58 +36,47 @@
         </div>
 
         <div class="hero-actions">
-          <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
-            <i class="fa-solid fa-check" *ngIf="!saving()"></i>
-            <span class="spinner" *ngIf="saving()"></span>
-            {{ saving() ? 'Saving...' : 'Save Changes' }}
+          <button class="btn-primary" (click)="openEditModal()">
+            <i class="fa-solid fa-pen-nib"></i> Update Details
           </button>
         </div>
       </div>
     </div>
 
-    <div class="profile-layout" [formGroup]="form">
+    <div class="profile-layout">
       
-      <!-- ── Left Column: Form ─────────────────────── -->
+      <!-- ── Left Column: Display ─────────────────────── -->
       <main class="profile-main">
         
         <!-- About Section -->
         <section class="profile-section">
           <h2 class="section-title">Professional Summary</h2>
-          <div class="card">
-            <div class="premium-field">
-              <label>Headline</label>
-              <div class="input-wrap" style="margin-bottom: 20px;">
-                <input type="text" formControlName="headline" placeholder="e.g. Senior Software Engineer" />
-              </div>
+          <div class="card read-only-card">
+            <div class="display-item">
+              <label>Professional Headline</label>
+              <div class="display-val">{{ profile()?.headline || 'Not specified' }}</div>
             </div>
-
-            <label style="display: block; font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 12px; text-transform: uppercase;">About Me</label>
-            <textarea formControlName="summary" 
-                      class="premium-textarea" 
-                      placeholder="Tell your professional story..."
-                      rows="6"></textarea>
-            <div class="char-count" [class.error]="form.get('summary')?.invalid && form.get('summary')?.touched">
-              {{ form.get('summary')?.value?.length || 0 }} / 50 characters min
+            <div class="display-item">
+              <label>Detailed Bio</label>
+              <div class="display-val summary-text">{{ profile()?.summary || 'No detailed bio provided yet. Add one to stand out to recruiters.' }}</div>
             </div>
           </div>
         </section>
 
         <!-- Experience & Location -->
         <section class="profile-section">
-          <h2 class="section-title">Core Details</h2>
+          <h2 class="section-title">Core Information</h2>
           <div class="card-grid">
-            <div class="premium-field">
-              <label>Location</label>
-              <div class="input-wrap">
-                <i class="fa-solid fa-location-dot"></i>
-                <input type="text" formControlName="location" placeholder="City, Country" />
+            <div class="card display-card">
+              <label>Current Location</label>
+              <div class="display-val">
+                <i class="fa-solid fa-map-location-dot"></i> {{ profile()?.location || 'Remote / Not specified' }}
               </div>
             </div>
-            <div class="premium-field">
-              <label>Years of Experience</label>
-              <div class="input-wrap">
-                <i class="fa-solid fa-briefcase"></i>
-                <input type="number" formControlName="experienceYears" placeholder="e.g. 5" />
+            <div class="card display-card">
+              <label>Industry Experience</label>
+              <div class="display-val">
+                <i class="fa-solid fa-award"></i> {{ profile()?.experienceYears || 0 }} Years
               </div>
             </div>
           </div>
@@ -95,88 +84,35 @@
 
         <!-- Work Experience Section -->
         <section class="profile-section">
-          <div class="section-header">
-            <h2 class="section-title">Work Experience</h2>
-            <button type="button" class="btn-add-mini" (click)="addExperience()">
-              <i class="fa-solid fa-plus"></i> Add
-            </button>
-          </div>
-          <div formArrayName="workExperience">
-            <div *ngFor="let exp of experienceGroups.controls; let i = index" [formGroupName]="i" class="card dynamic-card">
-              <button type="button" class="btn-remove-mini" (click)="removeExperience(i)">✕</button>
-              <div class="card-grid">
-                <div class="premium-field">
-                  <label>Company</label>
-                  <div class="input-wrap">
-                    <input type="text" formControlName="company" placeholder="e.g. Google" />
-                  </div>
-                </div>
-                <div class="premium-field">
-                  <label>Role</label>
-                  <div class="input-wrap">
-                    <input type="text" formControlName="role" placeholder="e.g. Senior Developer" />
-                  </div>
-                </div>
+          <h2 class="section-title">Work Experience</h2>
+          <div class="experience-list">
+            <div *ngFor="let exp of profile()?.workExperience" class="card display-card experience-item">
+              <div class="exp-header">
+                <div class="exp-role">{{ exp.role }}</div>
+                <div class="exp-duration">{{ exp.duration }}</div>
               </div>
-              <div class="premium-field" style="margin-top: 16px;">
-                <label>Duration</label>
-                <div class="input-wrap">
-                  <input type="text" formControlName="duration" placeholder="e.g. Jan 2020 - Present" />
-                </div>
-              </div>
-              <div class="premium-field" style="margin-top: 16px;">
-                <label>Description</label>
-                <textarea formControlName="description" class="premium-textarea mini" placeholder="Describe your responsibilities..."></textarea>
-              </div>
+              <div class="exp-company">{{ exp.company }}</div>
+              <p class="exp-desc">{{ exp.description }}</p>
             </div>
-            <div *ngIf="experienceGroups.length === 0" class="empty-card">
+            <div *ngIf="!profile()?.workExperience?.length" class="empty-card">
               <i class="fa-solid fa-briefcase"></i>
-              <p>No work experience added. Share your journey!</p>
+              <p>No work experience added.</p>
             </div>
           </div>
         </section>
 
         <!-- Education Section -->
         <section class="profile-section">
-          <div class="section-header">
-            <h2 class="section-title">Education</h2>
-            <button type="button" class="btn-add-mini" (click)="addEducation()">
-              <i class="fa-solid fa-plus"></i> Add
-            </button>
-          </div>
-          <div formArrayName="education">
-            <div *ngFor="let edu of educationGroups.controls; let i = index" [formGroupName]="i" class="card dynamic-card">
-              <button type="button" class="btn-remove-mini" (click)="removeEducation(i)">✕</button>
-              <div class="card-grid">
-                <div class="premium-field">
-                  <label>Degree</label>
-                  <div class="input-wrap">
-                    <input type="text" formControlName="degree" placeholder="e.g. Bachelor of Science" />
-                  </div>
-                </div>
-                <div class="premium-field">
-                  <label>Institution</label>
-                  <div class="input-wrap">
-                    <input type="text" formControlName="institution" placeholder="e.g. Stanford University" />
-                  </div>
-                </div>
+          <h2 class="section-title">Education</h2>
+          <div class="education-list">
+            <div *ngFor="let edu of profile()?.education" class="card display-card education-item">
+              <div class="edu-header">
+                <div class="edu-degree">{{ edu.degree }}</div>
+                <div class="edu-duration">{{ edu.duration }}</div>
               </div>
-              <div class="card-grid" style="margin-top: 16px;">
-                <div class="premium-field">
-                  <label>Field of Study</label>
-                  <div class="input-wrap">
-                    <input type="text" formControlName="fieldOfStudy" placeholder="e.g. Computer Science" />
-                  </div>
-                </div>
-                <div class="premium-field">
-                  <label>Duration</label>
-                  <div class="input-wrap">
-                    <input type="text" formControlName="duration" placeholder="e.g. 2016 - 2020" />
-                  </div>
-                </div>
-              </div>
+              <div class="edu-details">{{ edu.fieldOfStudy }} • {{ edu.institution }}</div>
             </div>
-            <div *ngIf="educationGroups.length === 0" class="empty-card">
+            <div *ngIf="!profile()?.education?.length" class="empty-card">
               <i class="fa-solid fa-graduation-cap"></i>
               <p>No education details added.</p>
             </div>
@@ -186,26 +122,13 @@
         <!-- Skills Section -->
         <section class="profile-section">
           <h2 class="section-title">Skills & Expertise</h2>
-          <div class="card">
-            <div class="skill-input-bar">
-              <input type="text" [ngModel]="skillInput()" 
-                     (ngModelChange)="skillInput.set($event)"
-                     [ngModelOptions]="{standalone: true}"
-                     (keydown.enter)="addSkill(skillInput())"
-                     placeholder="Add a skill (e.g. Angular, UI Design)..." />
-              <button type="button" (click)="addSkill(skillInput())">Add</button>
-            </div>
-            
-            <div class="skills-list-managed" formArrayName="skills">
-              <div *ngFor="let skill of skillGroups.controls; let i = index" [formGroupName]="i" class="managed-skill-item">
-                <span class="skill-name-label">{{ skill.get('skillName')?.value }}</span>
-                <select formControlName="level" class="skill-level-select">
-                  <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
-                </select>
-                <button type="button" class="btn-remove-skill" (click)="removeSkill(i)">✕</button>
+          <div class="card skills-display">
+            <div class="skills-wrap">
+              <div *ngFor="let skill of profile()?.skills" class="skill-pill">
+                {{ skill.skillName }} <span class="skill-lvl">{{ skill.level }}</span>
               </div>
-              <div *ngIf="skillGroups.length === 0" class="empty-skills">
-                No skills added yet. Let employers know what you're good at!
+              <div *ngIf="!profile()?.skills?.length" class="empty-skills">
+                No skills added yet.
               </div>
             </div>
           </div>
@@ -263,6 +186,112 @@
       </aside>
 
     </div>
+
+    <!-- ── Edit Modal ──────────────────────────────── -->
+    <div class="modal-overlay" *ngIf="isEditModalOpen()" (click)="closeEditModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()" [formGroup]="form">
+        <div class="modal-header">
+          <div class="header-info">
+            <h3>Update Profile</h3>
+            <p>Keep your professional information current.</p>
+          </div>
+          <button class="btn-close" (click)="closeEditModal()">✕</button>
+        </div>
+
+        <div class="modal-body">
+          
+          <!-- Summary Section -->
+          <div class="form-section">
+            <h4 class="form-sec-title">Summary</h4>
+            <div class="premium-field">
+              <label>Headline</label>
+              <input type="text" formControlName="headline" placeholder="e.g. Senior Software Engineer" />
+            </div>
+            <div class="premium-field">
+              <label>About Me</label>
+              <textarea formControlName="summary" placeholder="Tell your story..." rows="4"></textarea>
+            </div>
+          </div>
+
+          <!-- Location & Exp -->
+          <div class="form-section">
+            <h4 class="form-sec-title">Core Details</h4>
+            <div class="form-row">
+              <div class="premium-field">
+                <label>Location</label>
+                <input type="text" formControlName="location" placeholder="City, Country" />
+              </div>
+              <div class="premium-field">
+                <label>Experience (Years)</label>
+                <input type="number" formControlName="experienceYears" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Work Experience -->
+          <div class="form-section">
+            <div class="form-sec-header">
+              <h4 class="form-sec-title">Work Experience</h4>
+              <button class="btn-add-mini" (click)="addExperience()">+ Add</button>
+            </div>
+            <div formArrayName="workExperience" class="dynamic-list">
+              <div *ngFor="let exp of experienceGroups.controls; let i = index" [formGroupName]="i" class="dynamic-item">
+                <button type="button" class="btn-remove-mini" (click)="removeExperience(i)">✕</button>
+                <div class="form-row">
+                  <div class="premium-field">
+                    <label>Company</label>
+                    <input type="text" formControlName="company" />
+                  </div>
+                  <div class="premium-field">
+                    <label>Role</label>
+                    <input type="text" formControlName="role" />
+                  </div>
+                </div>
+                <div class="premium-field">
+                  <label>Duration</label>
+                  <input type="text" formControlName="duration" />
+                </div>
+                <div class="premium-field">
+                  <label>Description</label>
+                  <textarea formControlName="description" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="form-section">
+            <h4 class="form-sec-title">Skills</h4>
+            <div class="skill-input-bar">
+              <input type="text" [ngModel]="skillInput()" 
+                     (ngModelChange)="skillInput.set($event)"
+                     [ngModelOptions]="{standalone: true}"
+                     (keydown.enter)="addSkill(skillInput())"
+                     placeholder="Add skill..." />
+              <button type="button" (click)="addSkill(skillInput())">Add</button>
+            </div>
+            <div class="skills-list-managed" formArrayName="skills">
+              <div *ngFor="let skill of skillGroups.controls; let i = index" [formGroupName]="i" class="managed-skill-item">
+                <span class="skill-name-label">{{ skill.get('skillName')?.value }}</span>
+                <select formControlName="level">
+                  <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
+                </select>
+                <button type="button" (click)="removeSkill(i)">✕</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeEditModal()">Cancel</button>
+          <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
+            {{ saving() ? 'Saving...' : 'Save Changes' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
   </ng-container>
 
 </div>

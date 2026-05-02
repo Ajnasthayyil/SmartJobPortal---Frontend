@@ -10,6 +10,10 @@ import { ApiResponse } from '../models/auth.models';
 @Injectable({ providedIn: 'root' })
 export class RecruiterService {
   private readonly api = `${environment.apiUrl}/recruiter`;
+  
+  getApiBaseUrl(): string {
+    return environment.apiUrl.replace('/api', '');
+  }
 
   constructor(private http: HttpClient) {}
 

@@ -1,103 +1,131 @@
-<div class="applicants-container">
-  <!-- Header Section -->
-  <div class="header-section">
-    <div class="title-area">
-      <h1 class="premium-title">Applicants</h1>
-      <p class="premium-sub" *ngIf="applicants().length > 0">
-        {{ jobId > 0 ? 'Managing applicants for this position' : 'Global overview of all candidates' }}
-      </p>
-    </div>
+<div class="applicants-page">
+  <div class="page-inner">
+    
+    <!-- ── Header Section ── -->
+    <header class="page-header">
+      <div class="header-content">
+        <h1 class="page-title">Applicants</h1>
+        <p class="page-sub">Review and manage candidate applications for your active listings.</p>
+      </div>
+    </header>
 
-    <!-- Filter Tabs -->
-    <div class="tabs-container">
-      <button class="tab-pill" [class.active]="activeTab() === 'all'" (click)="onTabChange('all')">
-        All Candidates <span class="tab-count">{{ applicants().length }}</span>
-      </button>
-      <button class="tab-pill" [class.active]="activeTab() === 'shortlisted'" (click)="onTabChange('shortlisted')">
-        Shortlisted
-      </button>
-    </div>
-  </div>
-
-  <!-- Loading State -->
-  <div class="loading-grid" *ngIf="loading()">
-    <div class="skeleton-card" *ngFor="let i of [1,2,3]"></div>
-  </div>
-
-  <!-- Content Section -->
-  <div class="applicants-grid" *ngIf="!loading()">
-    <ng-container *ngIf="filtered().length > 0; else emptyState">
-      <div class="applicant-card" *ngFor="let app of filtered()">
-        <!-- Left: Basic Info -->
-        <div class="card-main">
-          <div class="avatar-wrapper">
-            <div class="avatar-circle">{{ app.fullName.charAt(0) }}</div>
-          </div>
-
-          <div class="info-content">
-            <div class="name-row">
-              <h3 class="candidate-name">{{ app.fullName }}</h3>
-              <span class="match-badge" *ngIf="app.totalScore && app.totalScore >= 70">
-                <i class="fa-solid fa-star"></i> {{ app.totalScore }}% Match
-              </span>
-            </div>
-
-            <p class="current-title">{{ app.jobTitle || 'Candidate' }}</p>
-
-            <div class="meta-row">
-              <span class="meta-item"><i class="fa-solid fa-location-dot"></i> {{ app.location || 'Remote' }}</span>
-              <span class="meta-item"><i class="fa-solid fa-briefcase"></i> {{ app.experienceYears }} years experience</span>
-            </div>
-
-            <div class="skills-row">
-              <span class="skill-tag" *ngFor="let skill of app.skills?.slice(0, 4)">{{ skill }}</span>
-              <span class="skill-tag more" *ngIf="app.skills && app.skills.length > 4">+{{ app.skills.length - 4 }}</span>
-            </div>
-          </div>
+    <!-- ── Search & Filter Bar ── -->
+    <section class="filters-card glass-card">
+      <div class="filter-top-row">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" 
+                 [ngModel]="searchQuery()" 
+                 (ngModelChange)="searchQuery.set($event)"
+                 placeholder="Search by name, skills, or job title..." />
         </div>
-
-        <!-- Right: Application Context & Match Score -->
-        <div class="card-aside">
-          <div class="context-info">
-            <span class="context-label">Applied for</span>
-            <span class="job-applied-name">{{ app.jobTitle || 'General Application' }}</span>
-            <span class="applied-date">Applied recently</span>
-          </div>
-
-          <div class="match-score-visual">
-            <svg viewBox="0 0 50 50">
-              <circle class="bg" cx="25" cy="25" r="22"></circle>
-              <circle class="meter" cx="25" cy="25" r="22" 
-                      [style.stroke-dashoffset]="getDashOffset(app.totalScore)"
-                      [style.stroke]="getScoreColor(app.totalScore)"></circle>
-            </svg>
-            <div class="score-text">{{ app.totalScore }}%</div>
-          </div>
-
-          <!-- Actions -->
-          <div class="card-actions">
-            <a *ngIf="app.hasResume" [href]="app.resumeUrl" target="_blank" class="action-btn" title="View Resume">
-              <i class="fa-solid fa-file-pdf"></i>
-            </a>
-            <button class="action-btn" (click)="updateStatus(app.applicationId, 'Shortlisted')" 
-                    *ngIf="app.status !== 'Shortlisted'" title="Shortlist">
-              <i class="fa-solid fa-check"></i>
-            </button>
-            <button class="action-btn delete" (click)="updateStatus(app.applicationId, 'Rejected')" 
-                    *ngIf="app.status !== 'Rejected'" title="Reject">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
+        <div class="action-buttons">
+          <button class="btn-toggle-view" (click)="toggleViewMode()" [class.active]="viewMode() === 'ranked'" title="Toggle AI Ranking">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> {{ viewMode() === 'ranked' ? 'AI Ranked' : 'Standard List' }}
+          </button>
+          <button class="btn-filter-action">
+            <i class="fa-solid fa-filter"></i> Filters
+          </button>
         </div>
       </div>
-    </ng-container>
 
-    <ng-template #emptyState>
-      <div class="ultra-empty">
-        <div class="icon-wrap"><i class="fa-solid fa-users-slash"></i></div>
-        <h3>No candidates found</h3>
-        <p>Try switching tabs or check back later for new applications.</p>
+      <div class="glass-tabs">
+        <button *ngFor="let cat of categories"
+                class="tab"
+                [class.active]="activeCategory() === cat"
+                (click)="activeCategory.set(cat)">
+          {{ cat === 'All' ? 'All Applicants' : cat }}
+          <span class="badge" *ngIf="cat === 'All'">{{ filtered().length }}</span>
+        </button>
       </div>
-    </ng-template>
+    </section>
+
+    <!-- ── Results Section ── -->
+    <main class="results-container">
+      
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="loading()">
+        <div class="skeleton-card" *ngFor="let i of [1,2,3]"></div>
+      </div>
+
+      <!-- Applicants List -->
+      <div class="applicants-list" *ngIf="!loading()">
+        <ng-container *ngIf="filtered().length > 0; else emptyState">
+          
+          <div class="applicant-card glass-card" *ngFor="let app of filtered()">
+            
+            <!-- Left: Profile Info -->
+            <div class="profile-section">
+              <div class="avatar-circle">
+                {{ getInitials(app.fullName) }}
+              </div>
+              <div class="info-body">
+                <div class="name-row">
+                  <h3 class="candidate-name">{{ app.fullName }}</h3>
+                  <span class="match-chip">
+                    <i class="fa-solid fa-star"></i> {{ app.totalScore || 0 }}% Match
+                  </span>
+                </div>
+                <p class="candidate-headline">{{ app.jobTitle || 'Applied Role' }}</p>
+                
+                <div class="meta-info">
+                  <span><i class="fa-solid fa-location-dot"></i> {{ app.location || 'Remote' }}</span>
+                  <span><i class="fa-solid fa-briefcase"></i> {{ app.experienceYears }} years exp.</span>
+                </div>
+
+                <div class="skills-wrap">
+                  <span class="skill-pill" *ngFor="let skill of app.skills?.slice(0, 3)">{{ skill }}</span>
+                  <span class="skill-pill more" *ngIf="app.skills && app.skills.length > 3">+{{ app.skills.length - 3 }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Status & Visual Score -->
+            <div class="status-section">
+              <div class="score-visual">
+                <svg viewBox="0 0 50 50">
+                  <circle class="bg" cx="25" cy="25" r="22"></circle>
+                  <circle class="meter" cx="25" cy="25" r="22" 
+                          [style.stroke-dashoffset]="getDashOffset(app.totalScore)"
+                          [style.stroke]="getScoreColor(app.totalScore)"></circle>
+                </svg>
+                <div class="score-label">{{ app.totalScore || 0 }}%</div>
+              </div>
+
+              <div class="application-context">
+                <span class="context-label">Applied for</span>
+                <div class="job-name">{{ app.jobTitle || 'General' }}</div>
+                <div class="applied-at">{{ app.appliedAt | date:'mediumDate' }}</div>
+              </div>
+
+              <div class="card-actions">
+                <a *ngIf="app.hasResume" [href]="app.resumeUrl" target="_blank" class="icon-btn preview" title="View Resume">
+                  <i class="fa-solid fa-file-pdf"></i>
+                </a>
+                
+              <div class="status-dropdown-wrap" [class.loading]="updatingId() === app.applicationId">
+                  <select [ngModel]="app.status" (ngModelChange)="updateStatus(app.applicationId, $event)" class="status-select">
+                    <option value="Applied">Applied</option>
+                    <option value="UnderReview">UnderReview</option>
+                    <option value="Shortlisted">Shortlisted</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Offered">Offered</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #emptyState>
+          <div class="empty-card glass-card">
+            <div class="empty-icon"><i class="fa-solid fa-user-slash"></i></div>
+            <h3>No applicants found</h3>
+            <p>No candidates match your current filters or search query.</p>
+          </div>
+        </ng-template>
+      </div>
+    </main>
   </div>
 </div>

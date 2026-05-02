@@ -119,8 +119,8 @@ export const routes: Routes = [
       {
         path: 'applicants',
         loadComponent: () =>
-          import('./features/recruiter/all-applicants/all-applicants.component')
-            .then(m => m.AllApplicantsComponent)
+          import('./features/recruiter/applicants/applicants.component')
+            .then(m => m.ApplicantsComponent)
       },
       {
         path: 'notifications',

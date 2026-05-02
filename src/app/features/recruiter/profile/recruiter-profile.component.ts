@@ -23,18 +23,7 @@ export class RecruiterProfileComponent implements OnInit {
   profile  = signal<RecruiterProfile | null>(null);
   loading  = signal(true);
   saving   = signal(false);
-
-  // Character counts
-  get descLength(): number {
-    return this.form.get('description')?.value?.length || 0;
-  }
-
-  // Form control getters
-  get companyName() { return this.form.get('companyName')!; }
-  get industry()    { return this.form.get('industry')!; }
-  get website()     { return this.form.get('website')!; }
-  get location()    { return this.form.get('location')!; }
-  get description() { return this.form.get('description')!; }
+  isEditModalOpen = signal(false);
 
   constructor(
     private fb:      FormBuilder,
@@ -43,15 +32,11 @@ export class RecruiterProfileComponent implements OnInit {
     private toast:   ToastService
   ) {
     this.form = this.fb.group({
-      companyName: ['', [Validators.required,
-                         Validators.minLength(2),
-                         Validators.maxLength(150)]],
+      companyName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(150)]],
       industry:    ['', Validators.required],
       website:     ['', [Validators.pattern('https?://.+')]],
       location:    ['', Validators.required],
-      description: ['', [Validators.required,
-                         Validators.minLength(50),
-                         Validators.maxLength(1000)]]
+      description: ['', [Validators.required, Validators.minLength(50), Validators.maxLength(1000)]]
     });
   }
 
@@ -63,19 +48,29 @@ export class RecruiterProfileComponent implements OnInit {
       next: res => {
         if (res.success && res.data) {
           this.profile.set(res.data);
-          // Patch only the fields the API accepts
-          this.form.patchValue({
-            companyName: res.data.companyName || '',
-            industry:    res.data.industry    || '',
-            website:     res.data.website     || '',
-            location:    res.data.location    || '',
-            description: res.data.description || ''
-          });
         }
         this.loading.set(false);
       },
       error: () => this.loading.set(false)
     });
+  }
+
+  openEditModal(): void {
+    const data = this.profile();
+    if (data) {
+      this.form.patchValue({
+        companyName: data.companyName || '',
+        industry:    data.industry    || '',
+        website:     data.website     || '',
+        location:    data.location    || '',
+        description: data.description || ''
+      });
+    }
+    this.isEditModalOpen.set(true);
+  }
+
+  closeEditModal(): void {
+    this.isEditModalOpen.set(false);
   }
 
   onSave(): void {
@@ -86,39 +81,26 @@ export class RecruiterProfileComponent implements OnInit {
     }
 
     this.saving.set(true);
-
-    // Only send what the API expects
-    const payload = {
-      companyName: this.form.value.companyName,
-      website:     this.form.value.website     || '',
-      industry:    this.form.value.industry,
-      description: this.form.value.description,
-      location:    this.form.value.location
-    };
-
-    this.service.updateProfile(payload).subscribe({
+    this.service.updateProfile(this.form.value).subscribe({
       next: res => {
         this.saving.set(false);
         if (res.success) {
           this.toast.success('Company profile updated successfully!');
           if (res.data) this.profile.set(res.data);
+          this.closeEditModal();
         } else {
           this.toast.error(res.message || 'Update failed.');
         }
       },
       error: err => {
         this.saving.set(false);
-        this.toast.error(
-          err?.error?.message || 'Failed to update profile. Try again.'
-        );
+        this.toast.error(err?.error?.message || 'Failed to update profile.');
       }
     });
   }
 
   getInitials(): string {
-    const name = this.profile()?.companyName ||
-                 this.companyName.value || '?';
-    return name.charAt(0).toUpperCase();
+    return (this.profile()?.companyName || 'C').charAt(0).toUpperCase();
   }
 
   getFullName(): string {

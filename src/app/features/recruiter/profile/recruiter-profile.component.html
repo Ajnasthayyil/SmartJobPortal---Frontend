@@ -1,206 +1,139 @@
 <div class="profile-page">
 
-  <!-- ── Loading skeleton ────────────────────────────── -->
-  <ng-container *ngIf="loading()">
-    <div class="skeleton-wrap">
-      <div class="sk" style="height:80px;border-radius:16px;margin-bottom:16px"></div>
-      <div class="sk" style="height:500px;border-radius:16px"></div>
+  <!-- ── Loading Overlay ─────────────────────────── -->
+  <div class="loading-overlay" *ngIf="loading()">
+    <div class="spinner-container">
+      <div class="premium-spinner"></div>
+      <p>Fetching your profile...</p>
     </div>
-  </ng-container>
+  </div>
 
-  <!-- ── Main content ────────────────────────────────── -->
   <ng-container *ngIf="!loading()">
-    <div class="profile-container">
-
-      <!-- ── Header ───────────────────────────────────── -->
-      <header class="profile-header">
-        <div class="header-left">
-          <div class="profile-badge">
-            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            Recruiter Portal
+    
+    <!-- ── Profile Hero Section ──────────────────── -->
+    <div class="profile-hero">
+      <div class="banner"></div>
+      <div class="hero-content">
+        <div class="avatar-wrapper">
+          <div class="avatar-placeholder">
+            {{ getInitials() }}
           </div>
-          <h1 class="header-title">Company Profile</h1>
-          <p class="header-subtitle">Manage your company information and employer branding</p>
+        </div>
+        
+        <div class="user-info">
+          <h1 class="user-name">{{ profile()?.companyName }}</h1>
+          <p class="user-headline">{{ profile()?.industry }} • Organization</p>
+          <div class="user-meta">
+            <span><i class="fa-solid fa-map-location-dot"></i> {{ profile()?.location || 'Not specified' }}</span>
+            <span><i class="fa-solid fa-globe"></i> <a [href]="profile()?.website" target="_blank">{{ profile()?.website || 'No website link' }}</a></span>
+          </div>
         </div>
 
-        <div class="header-actions">
-          <a routerLink="/recruiter/dashboard" class="btn-back">← Dashboard</a>
-          <button class="btn-save" (click)="onSave()" [disabled]="saving()">
-            <ng-container *ngIf="saving(); else notSaving">
-              <span class="spinner"></span>
-              Saving...
-            </ng-container>
-            <ng-template #notSaving>
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                <polyline points="17 21 17 13 7 13 7 21"/>
-                <polyline points="7 3 7 8 15 8"/>
-              </svg>
-              Save Changes
-            </ng-template>
+        <div class="hero-actions">
+          <button class="btn-primary" (click)="openEditModal()">
+            <i class="fa-solid fa-pen-nib"></i> Update Profile
           </button>
         </div>
-      </header>
-
-      <!-- ── Profile grid ──────────────────────────────── -->
-      <div class="profile-grid">
-
-        <!-- ── Left sidebar ──────────────────────────── -->
-        <div class="sidebar">
-
-          <!-- Company card -->
-          <div class="card company-card">
-            <div class="company-avatar">{{ getInitials() }}</div>
-            <div class="company-name-display">{{ profile()?.companyName || companyName.value || 'Your Company' }}</div>
-            <div class="company-industry-display">{{ profile()?.industry || industry.value || 'Industry not set' }}</div>
-            
-            <div class="company-location-display" *ngIf="profile()?.location || location.value">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                <circle cx="12" cy="10" r="3"/>
-              </svg>
-              {{ profile()?.location || location.value }}
-            </div>
-            
-            <a [href]="profile()?.website || website.value" target="_blank" class="company-website-link" *ngIf="profile()?.website || website.value">
-              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-              </svg>
-              Visit Website
-            </a>
-          </div>
-
-          <!-- Recruiter info card -->
-          <div class="card recruiter-card">
-            <h4 class="rc-title">Recruiter Info</h4>
-            <div class="rc-row">
-              <div class="rc-avatar">{{ getFullName().charAt(0) }}</div>
-              <div>
-                <div class="rc-name">{{ getFullName() }}</div>
-                <div class="rc-email">{{ getUserEmail() }}</div>
-              </div>
-            </div>
-            <div class="rc-stat" *ngIf="profile()?.totalJobsPosted != null">
-              <span class="rc-stat-n">{{ profile()!.totalJobsPosted }}</span>
-              <span class="rc-stat-l">Jobs Posted</span>
-            </div>
-          </div>
-
-          <!-- Tips card -->
-          <div class="card tips-card">
-            <h4 class="tips-title">💡 Profile Tips</h4>
-            <ul class="tips-list">
-              <li>Add a clear description to attract top talent</li>
-              <li>Include your website for credibility</li>
-              <li>Specify your location for better candidate matching</li>
-              <li>Mention your industry to get relevant applicants</li>
-            </ul>
-          </div>
-
-        </div>
-
-        <!-- ── Main form ─────────────────────────────── -->
-        <div class="form-main">
-          <form [formGroup]="form" class="profile-form" novalidate>
-
-            <div class="card section-card">
-              <h3 class="card-title">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                  <polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
-                Company Information
-              </h3>
-
-              <div class="form-grid">
-
-                <div class="form-group">
-                  <label class="form-label">Company Name <span class="required">*</span></label>
-                  <div class="input-wrapper" [class.focused]="companyName.dirty" [class.error-border]="companyName.invalid && companyName.touched">
-                    <svg class="input-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <rect x="2" y="7" width="20" height="14" rx="2"/>
-                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                    </svg>
-                    <input type="text" formControlName="companyName" placeholder="e.g. Tech Solutions Inc" autocomplete="organization"/>
-                  </div>
-                  <p class="field-error" *ngIf="companyName.invalid && companyName.touched">
-                    <span *ngIf="companyName.errors?.['required']">Company name is required.</span>
-                    <span *ngIf="companyName.errors?.['minlength']">Minimum 2 characters.</span>
-                  </p>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">Industry <span class="required">*</span></label>
-                  <div class="input-wrapper" [class.focused]="industry.dirty" [class.error-border]="industry.invalid && industry.touched">
-                    <svg class="input-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                      <line x1="7" y1="7" x2="7.01" y2="7"/>
-                    </svg>
-                    <input type="text" formControlName="industry" placeholder="e.g. Software Development"/>
-                  </div>
-                  <p class="field-error" *ngIf="industry.invalid && industry.touched">Industry is required.</p>
-                </div>
-
-                <div class="form-group full-width">
-                  <label class="form-label">Website URL</label>
-                  <div class="input-wrapper" [class.error-border]="website.invalid && website.touched">
-                    <svg class="input-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="10"/>
-                      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                    </svg>
-                    <input type="url" formControlName="website" placeholder="https://yourcompany.com" autocomplete="url"/>
-                  </div>
-                  <p class="field-error" *ngIf="website.invalid && website.touched">Enter a valid URL starting with http:// or https://</p>
-                </div>
-
-                <div class="form-group full-width">
-                  <label class="form-label">Location <span class="required">*</span></label>
-                  <div class="input-wrapper" [class.error-border]="location.invalid && location.touched">
-                    <svg class="input-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                      <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                    <input type="text" formControlName="location" placeholder="e.g. Bangalore, India" autocomplete="address-level2"/>
-                  </div>
-                  <p class="field-error" *ngIf="location.invalid && location.touched">Location is required.</p>
-                </div>
-
-                <div class="form-group full-width">
-                  <label class="form-label">Company Description <span class="required">*</span></label>
-                  <textarea formControlName="description" class="form-textarea" [class.error-border]="description.invalid && description.touched" rows="6" placeholder="Describe your company culture, mission, products, and what makes you a great place to work..."></textarea>
-                  <div class="textarea-footer">
-                    <span class="ta-hint">Minimum 50 characters</span>
-                    <span class="ta-count" [class.ta-count-error]="description.invalid && description.touched && descLength < 50" [class.ta-count-ok]="descLength >= 50">{{ descLength }} / 1000</span>
-                  </div>
-                  <p class="field-error" *ngIf="description.invalid && description.touched">
-                    <span *ngIf="description.errors?.['required']">Description is required.</span>
-                    <span *ngIf="description.errors?.['minlength']">Minimum 50 characters required. ({{ descLength }} / 50)</span>
-                  </p>
-                </div>
-
-              </div>
-            </div>
-
-            <!-- ── Form footer actions ─────────────────── -->
-            <div class="form-footer">
-              <a routerLink="/recruiter/dashboard" class="btn-cancel">Cancel</a>
-              <button type="button" class="btn-save-bottom" (click)="onSave()" [disabled]="saving()">
-                <ng-container *ngIf="saving(); else notSavingBottom">
-                  <span class="spinner"></span> Saving...
-                </ng-container>
-                <ng-template #notSavingBottom>Save Profile</ng-template>
-              </button>
-            </div>
-
-          </form>
-        </div>
-
       </div>
     </div>
+
+    <div class="profile-layout">
+      
+      <!-- ── Left Column: Main Info ────────────────── -->
+      <main class="profile-main">
+        
+        <!-- About Section -->
+        <section class="profile-section">
+          <h2 class="section-title">About the Company</h2>
+          <div class="card read-only-card">
+            <p class="company-description">{{ profile()?.description || 'No description provided.' }}</p>
+          </div>
+        </section>
+
+        <!-- Company Stats -->
+        <section class="profile-section">
+          <h2 class="section-title">Company Insights</h2>
+          <div class="card-grid">
+            <div class="card stat-card">
+              <label>Total Jobs Posted</label>
+              <div class="stat-val">{{ profile()?.totalJobsPosted || 0 }}</div>
+            </div>
+            <div class="card stat-card">
+              <label>Verification Status</label>
+              <div class="stat-val status-verified"><i class="fa-solid fa-circle-check"></i> Verified</div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ── Right Column: Recruiter Info ──────────── -->
+      <aside class="profile-side">
+        <div class="side-card recruiter-card">
+          <h3 class="side-title">Recruiter Details</h3>
+          <div class="rec-info">
+            <div class="rec-avatar">{{ getFullName().charAt(0) }}</div>
+            <div class="rec-text">
+              <div class="rec-name">{{ getFullName() }}</div>
+              <div class="rec-email">{{ getUserEmail() }}</div>
+            </div>
+          </div>
+          <div class="rec-note">
+            This information is linked to your account and managed by the platform administrator.
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- ── Edit Modal ──────────────────────────────── -->
+    <div class="modal-overlay" *ngIf="isEditModalOpen()" (click)="closeEditModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()" [formGroup]="form">
+        <div class="modal-header">
+          <div class="header-info">
+            <h3>Update Company Profile</h3>
+            <p>Showcase your company to potential candidates.</p>
+          </div>
+          <button class="btn-close" (click)="closeEditModal()">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="premium-field">
+            <label>Company Name</label>
+            <input type="text" formControlName="companyName" placeholder="Enter company name" />
+          </div>
+
+          <div class="form-row">
+            <div class="premium-field">
+              <label>Industry</label>
+              <input type="text" formControlName="industry" placeholder="e.g. Technology" />
+            </div>
+            <div class="premium-field">
+              <label>Website</label>
+              <input type="text" formControlName="website" placeholder="https://company.com" />
+            </div>
+          </div>
+
+          <div class="premium-field">
+            <label>Location</label>
+            <input type="text" formControlName="location" placeholder="City, Country" />
+          </div>
+
+          <div class="premium-field">
+            <label>About Company</label>
+            <textarea formControlName="description" placeholder="Describe your company culture, mission..." rows="6"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeEditModal()">Cancel</button>
+          <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
+            {{ saving() ? 'Saving...' : 'Save Changes' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
   </ng-container>
 
 </div>

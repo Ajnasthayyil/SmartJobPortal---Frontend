@@ -56,4 +56,8 @@ export class CandidateService {
     return this.http.get<ApiResponse<MatchScoreResponse>>
       (`${this.api}/jobs/${jobId}/match-score`);
   }
+
+  getCompanies(): Observable<ApiResponse<any[]>> {
+    return this.http.get<ApiResponse<any[]>>(`${this.api}/companies`);
+  }
 }
