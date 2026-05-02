@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { CandidateService } from '../../../core/services/candidate.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { JobListItem } from '../../../core/models/candidate.models';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-job-search',
@@ -35,14 +36,28 @@ export class JobSearchComponent implements OnInit {
   ];
   selectedSalary: any = null;
 
+  private searchSubject = new Subject<void>();
+
   constructor(
     private service: CandidateService,
-    private toast: ToastService
+    private toast:   ToastService
   ) { }
 
-  ngOnInit(): void { this.search(); }
+  ngOnInit(): void { 
+    // Listen for debounced search triggers
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => this.executeSearch());
 
-  search(): void {
+    this.executeSearch(); 
+  }
+
+  onSearchChange(): void {
+    this.searchSubject.next();
+  }
+
+  executeSearch(): void {
     this.loading.set(true);
     this.page.set(1);
     this.service.searchJobs(this.buildParams()).subscribe({
@@ -64,12 +79,12 @@ export class JobSearchComponent implements OnInit {
     } else if (['FullTime', 'PartTime', 'Remote', 'Internship', 'Contract'].includes(filter)) {
       this.jobType = filter;
     }
-    this.search();
+    this.executeSearch();
   }
 
   setSalary(range: any): void {
     this.selectedSalary = range;
-    this.search();
+    this.executeSearch();
   }
 
   loadMore(): void {

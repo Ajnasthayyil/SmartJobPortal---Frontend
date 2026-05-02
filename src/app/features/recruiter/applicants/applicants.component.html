@@ -103,13 +103,15 @@
                   <i class="fa-solid fa-file-pdf"></i>
                 </a>
                 
-              <div class="status-dropdown-wrap" [class.loading]="updatingId() === app.applicationId">
-                  <select [ngModel]="app.status" (ngModelChange)="updateStatus(app.applicationId, $event)" class="status-select">
-                    <option value="Applied">Applied</option>
-                    <option value="UnderReview">UnderReview</option>
-                    <option value="Shortlisted">Shortlisted</option>
-                    <option value="Interview">Interview</option>
-                    <option value="Offered">Offered</option>
+                <div class="status-dropdown-wrap" [class.loading]="updatingId() === app.applicationId">
+                  <select [value]="app.status" 
+                          (change)="onStatusChange(app.applicationId, $event)" 
+                          class="status-select">
+                    <option value="Applied" [disabled]="!isStatusAllowed(app.status, 'Applied')">Applied</option>
+                    <option value="UnderReview" [disabled]="!isStatusAllowed(app.status, 'UnderReview')">UnderReview</option>
+                    <option value="Shortlisted" [disabled]="!isStatusAllowed(app.status, 'Shortlisted')">Shortlisted</option>
+                    <option value="Interview" [disabled]="!isStatusAllowed(app.status, 'Interview')">Interview</option>
+                    <option value="Offered" [disabled]="!isStatusAllowed(app.status, 'Offered')">Offered</option>
                     <option value="Rejected">Rejected</option>
                   </select>
                 </div>

@@ -15,6 +15,12 @@ export class ToastService {
   private nextId = 0;
 
   show(message: string, type: ToastType = 'info', duration = 4000): void {
+    // Prevent duplicate toasts within a short timeframe
+    const active = this.toasts();
+    if (active.some(t => t.message === message && t.type === type && !t.removing)) {
+      return;
+    }
+
     const toast: Toast = { id: this.nextId++, message, type, removing: false };
     this.toasts.update(t => [...t, toast]);
 

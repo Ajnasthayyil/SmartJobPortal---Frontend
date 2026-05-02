@@ -1,126 +1,98 @@
-<div class="companies-page">
-
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-inner">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        Top Hiring Partners
+<div class="companies-directory-wrapper">
+  
+  <div class="page-inner">
+    
+    <!-- ── Header ────────────────────────────────────────── -->
+    <header class="directory-header reveal">
+      <div class="header-left">
+        <h1 class="page-title">Company Directory</h1>
+        <p class="page-sub">Explore our curated ecosystem of high-growth companies and global industry leaders.</p>
       </div>
+      <div class="header-stats" *ngIf="!loading()">
+        <div class="stat-pill glass">
+          <strong>{{ getFilteredCompanies().length }}</strong> Companies Active
+        </div>
+      </div>
+    </header>
 
-      <h1 class="hero-title">
-        Meet the World's <span class="amber">Leading Teams</span><br>
-        Find Your Next Home.
-      </h1>
-
-      <p class="hero-sub">
-        Explore company profiles, cultures, and open opportunities from the fastest-growing startups and global enterprises.
-      </p>
-
-      <!-- Search bar -->
-      <div class="search-bar">
+    <!-- ── Control Bar ──────────────────────────────────── -->
+    <section class="control-bar glass reveal delay-1">
+      <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()"
-               placeholder="Search by company name or industry..."/>
+               placeholder="Search by name, industry or location..." />
       </div>
 
-      <!-- Filter chips -->
-      <div class="filter-chips">
-        <button class="chip" [class.active]="activeIndustry === 'All'" (click)="setIndustry('All')">All Industries</button>
-        <button class="chip" [class.active]="activeIndustry === 'Technology'" (click)="setIndustry('Technology')">Technology</button>
-        <button class="chip" [class.active]="activeIndustry === 'Fintech'" (click)="setIndustry('Fintech')">Fintech</button>
-        <button class="chip" [class.active]="activeIndustry === 'Healthcare'" (click)="setIndustry('Healthcare')">Healthcare</button>
+      <div class="industry-filters">
+        <button class="filter-chip" 
+                *ngFor="let ind of industries" 
+                [class.active]="activeIndustry === ind"
+                (click)="setIndustry(ind)">
+          {{ ind }}
+        </button>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Grid Section -->
-  <section class="grid-section">
-    
-    <!-- Premium Loading State -->
-    <div class="loading-overlay" *ngIf="loading()">
-      <div class="spinner-container">
-        <div class="premium-spinner"></div>
-        <div class="loading-text">Discovering elite teams...</div>
-      </div>
-    </div>
-
-    <div class="grid-inner">
-
-      <div class="count-row">
-        <span>Showing <strong>{{ getFilteredCompanies().length }}</strong> elite hiring partners</span>
+    <!-- ── Content Area ─────────────────────────────────── -->
+    <main class="content-area">
+      
+      <!-- Loading State -->
+      <div class="skeleton-grid" *ngIf="loading()">
+        <div class="sk-card" *ngFor="let i of [1,2,3,4,5,6]"></div>
       </div>
 
-      <!-- Skeleton loading -->
-      <ng-container *ngIf="loading()">
-        <div class="co-grid">
-          <ng-container *ngFor="let i of [1,2,3,4,5,6]">
-            <div class="co-card-skeleton">
-              <div class="sk sk-logo"></div>
-              <div class="sk sk-name"></div>
-              <div class="sk sk-industry"></div>
-              <div class="sk sk-btn"></div>
+      <!-- Companies Grid -->
+      <div class="companies-grid" *ngIf="!loading() && getFilteredCompanies().length > 0">
+        <div class="company-card glass reveal" 
+             *ngFor="let co of getFilteredCompanies(); let i = index"
+             [style.animation-delay]="(i * 0.05) + 's'"
+             [routerLink]="['/companies', co.id]">
+          
+          <div class="card-body">
+            <div class="brand-row">
+              <div class="company-logo">{{ co.name.charAt(0) }}</div>
+              <div class="brand-meta">
+                <h3 class="company-name">{{ co.name }}</h3>
+                <span class="industry-tag">{{ co.industry }}</span>
+              </div>
+              <div class="roles-badge">
+                <i class="fa-solid fa-briefcase"></i> {{ co.openJobsCount || 0 }} Roles
+              </div>
             </div>
-          </ng-container>
-        </div>
-      </ng-container>
 
-      <!-- Grid -->
-      <ng-container *ngIf="!loading() && getFilteredCompanies().length > 0">
-        <div class="co-grid">
-          <ng-container *ngFor="let co of getFilteredCompanies()">
-            <div class="co-card" [routerLink]="['/companies', co.id]">
-              
-              <div class="co-card-top">
-                <div class="co-logo">
-                  {{ co.name.charAt(0) }}
-                </div>
-                <div class="co-jobs-badge">
-                  <i class="fa-solid fa-briefcase"></i> {{ co.openJobsCount || 0 }} Roles
-                </div>
-              </div>
+            <p class="company-desc" *ngIf="co.description">
+              {{ co.description | slice:0:100 }}{{ co.description.length > 100 ? '...' : '' }}
+            </p>
 
-              <h3 class="co-name">{{ co.name }}</h3>
-              <p class="co-industry">{{ co.industry }}</p>
-
-              <div class="co-meta">
-                <span class="meta-item" *ngIf="co.location">
-                  <i class="fa-solid fa-location-dot"></i> {{ co.location }}
-                </span>
-                <span class="meta-item" *ngIf="co.size">
-                  <i class="fa-solid fa-users"></i> {{ co.size }} Employees
-                </span>
-              </div>
-
-              <!-- Optional Job Previews -->
-              <div class="co-recent-jobs" *ngIf="co.recentJobs?.length && co.recentJobs[0]?.title">
-                <div class="co-job-preview" *ngFor="let job of co.recentJobs.slice(0, 2)">
-                   {{ job.title }}
-                </div>
-              </div>
-
-              <div class="co-card-footer">
-                <button class="btn-view-co">
-                  View Company Profile <i class="fa-solid fa-arrow-right"></i>
-                </button>
-              </div>
-
+            <div class="location-row" *ngIf="co.location">
+              <i class="fa-solid fa-location-dot"></i>
+              <span>{{ co.location }}</span>
             </div>
-          </ng-container>
+
+            <!-- Job Previews -->
+            <div class="job-previews" *ngIf="co.recentJobs?.length">
+              <div class="preview-tag" *ngFor="let job of co.recentJobs.slice(0, 2)">
+                {{ job.title }}
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="view-link">View Ecosystem <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+
         </div>
-      </ng-container>
+      </div>
 
-      <!-- Empty state -->
-      <ng-container *ngIf="!loading() && getFilteredCompanies().length === 0">
-        <div class="empty-state" style="text-align: center; padding: 100px 40px;">
-          <div class="empty-icon" style="font-size: 64px; margin-bottom: 24px;"><i class="fa-solid fa-building-circle-exclamation"></i></div>
-          <h3 style="font-size: 28px; font-weight: 800; color: #020617; margin-bottom: 12px;">No companies found</h3>
-          <p style="font-size: 18px; color: #64748b; margin-bottom: 32px;">Try adjusting your search terms or selecting a different industry.</p>
-          <button class="btn-search" (click)="searchTerm=''; activeIndustry='All'; onSearch()">Reset View</button>
-        </div>
-      </ng-container>
+      <!-- Empty State -->
+      <div class="empty-state reveal" *ngIf="!loading() && getFilteredCompanies().length === 0">
+        <div class="empty-icon"><i class="fa-solid fa-building-circle-exclamation"></i></div>
+        <h3>No matches found</h3>
+        <p>We couldn't find any companies matching your current filters. Try resetting or expanding your search.</p>
+        <button class="btn-reset" (click)="searchTerm=''; activeIndustry='All'">Reset Filters</button>
+      </div>
 
-    </div>
-  </section>
+    </main>
 
+  </div>
 </div>

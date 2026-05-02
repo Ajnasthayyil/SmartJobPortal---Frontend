@@ -1,91 +1,111 @@
-<div class="admin-jobs-page">
+<div class="admin-jobs-wrapper">
+  
+  <!-- Organic Background Blobs -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
   <div class="page-inner">
-
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">Job Monitoring</h1>
-        <p class="page-sub">Monitor and manage all platform jobs</p>
+    
+    <!-- ── Header Section ─────────────────────────────────── -->
+    <header class="page-header reveal">
+      <div class="header-left">
+        <h1 class="page-title">Marketplace Monitoring</h1>
+        <p class="page-sub">Audit active job listings and manage platform inventory.</p>
       </div>
-    </div>
+      <div class="header-stats" *ngIf="!loading()">
+        <div class="quick-stat glass">
+          <span class="label">Inventory</span>
+          <span class="value">{{ filtered().length }} Active Jobs</span>
+        </div>
+      </div>
+    </header>
 
-    <!-- Search -->
-    <div class="filters-row">
+    <!-- ── Search & Filter ──────────────────────────────── -->
+    <section class="search-section glass reveal delay-1">
       <div class="search-box">
-        <svg width="15" height="15" fill="none" stroke="currentColor"
-             stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.35-4.35"/>
-        </svg>
-        <input type="text" placeholder="Search job title or company..."
-               [(ngModel)]="search"
-               (ngModelChange)="applySearch()"/>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" 
+               [(ngModel)]="search" 
+               (input)="applySearch()"
+               placeholder="Search by job title, company, or tech stack..." />
       </div>
-    </div>
+      <button class="btn-refresh" (click)="load()" [disabled]="loading()">
+        <i class="fa-solid fa-rotate" [class.fa-spin]="loading()"></i>
+      </button>
+    </section>
 
-    <!-- Loading -->
-    <ng-container *ngIf="loading()">
-      <div class="table-skeleton">
-        <ng-container *ngFor="let i of [1,2,3,4,5]">
-          <div class="skeleton" style="height:56px;border-radius:8px"></div>
-        </ng-container>
+    <!-- ── Results Area ──────────────────────────────────── -->
+    <main class="results-area reveal delay-2">
+      
+      <!-- Loading State -->
+      <div class="table-skeleton" *ngIf="loading()">
+        <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
       </div>
-    </ng-container>
 
-    <ng-container *ngIf="!loading()">
-      <div class="table-card">
-        <div class="table-wrap">
-          <table class="data-table">
+      <!-- Jobs Table -->
+      <div class="data-card glass" *ngIf="!loading()">
+        <div class="table-container">
+          <table class="premium-table">
             <thead>
               <tr>
-                <th>Job Title</th>
-                <th>Company</th>
+                <th>Listing Details</th>
+                <th>Corporate Entity</th>
                 <th>Location</th>
-                <th>Applicants</th>
-                <th>Posted</th>
-                <th>Actions</th>
+                <th>Engagement</th>
+                <th>Posted Date</th>
+                <th class="text-right">Administration</th>
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let j of filtered()">
-                <tr>
-                  <td class="job-title-cell">{{ j.title }}</td>
-                  <td>
-                    <div class="company-cell">
-                      <div class="co-logo">{{ j.companyName?.charAt(0) }}</div>
-                      {{ j.companyName }}
-                    </div>
-                  </td>
-                  <td class="location-cell">{{ j.location }}</td>
-                  <td>
-                    <span class="count-badge">{{ j.totalApplicants }}</span>
-                  </td>
-                  <td class="date-cell">
-                    {{ j.postedAt | date:'MMM d, y' }}
-                  </td>
-                  <td>
-                    <button class="btn-deactivate"
-                            [disabled]="processing() === j.jobId"
-                            (click)="deactivate(j.jobId)">
-                      <ng-container *ngIf="processing() === j.jobId"> ... </ng-container>
-                      <ng-container *ngIf="processing() !== j.jobId"> Deactivate </ng-container>
-                    </button>
-                  </td>
-                </tr>
-              </ng-container>
+              <tr *ngFor="let j of filtered()" class="job-row-item">
+                <td>
+                  <div class="job-identity">
+                    <span class="job-name">{{ j.title }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="company-cell">
+                    <div class="co-logo">{{ j.companyName?.charAt(0) }}</div>
+                    <span class="co-name">{{ j.companyName }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="loc-badge">
+                    <i class="fa-solid fa-location-dot"></i>
+                    {{ j.location }}
+                  </div>
+                </td>
+                <td>
+                  <div class="engagement-pill">
+                    <span class="count">{{ j.totalApplicants }}</span>
+                    <span class="label">Applicants</span>
+                  </div>
+                </td>
+                <td class="date-cell">{{ j.postedAt | date:'MMM d, y' }}</td>
+                <td class="text-right">
+                  <button class="btn-deactivate"
+                          [disabled]="processing() === j.jobId"
+                          (click)="deactivate(j.jobId)">
+                    <i class="fa-solid fa-power-off"></i>
+                    {{ processing() === j.jobId ? '...' : 'Deactivate' }}
+                  </button>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <ng-container *ngIf="filtered().length === 0">
-          <div class="empty-state">
-            <p>No jobs match your search.</p>
-          </div>
-        </ng-container>
-
+        <!-- Empty State -->
+        <div class="empty-results" *ngIf="filtered().length === 0">
+          <div class="empty-icon"><i class="fa-solid fa-briefcase-slash"></i></div>
+          <h3>No listings match</h3>
+          <p>We couldn't find any job posts matching your current search criteria.</p>
+        </div>
       </div>
-    </ng-container>
+
+    </main>
 
   </div>
 </div>
-
-

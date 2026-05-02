@@ -14,11 +14,11 @@
             </a>
         </header>
 
-        <!-- Tabs Section -->
-        <div class="tabs-row">
+        <!-- Tabs & Search Row -->
+        <div class="filters-row">
             <div class="glass-tabs">
                 <button class="tab" [class.active]="activeTab() === 'all'" (click)="applyTab('all')">
-                    All Jobs <span class="badge">{{ count('all') }}</span>
+                    All <span class="badge">{{ count('all') }}</span>
                 </button>
                 <button class="tab" [class.active]="activeTab() === 'active'" (click)="applyTab('active')">
                     Active <span class="badge green">{{ count('active') }}</span>
@@ -26,6 +26,14 @@
                 <button class="tab" [class.active]="activeTab() === 'inactive'" (click)="applyTab('inactive')">
                     Inactive <span class="badge gray">{{ count('inactive') }}</span>
                 </button>
+            </div>
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" 
+                       [ngModel]="searchQuery()" 
+                       (ngModelChange)="searchQuery.set($event)"
+                       placeholder="Search by job title or location...">
             </div>
         </div>
 

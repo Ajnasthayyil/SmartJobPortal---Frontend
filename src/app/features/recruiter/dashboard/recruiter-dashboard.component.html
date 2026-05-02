@@ -133,9 +133,7 @@
                                 <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="icon-btn view" title="View Applicants">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
-                                <a [routerLink]="['/recruiter/edit-job', job.jobId]" class="icon-btn edit" title="Edit Job">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
+                               
                                 <button (click)="toggleStatus(job.jobId)" class="icon-btn toggle" [class.active]="job.isActive" [title]="job.isActive ? 'Deactivate' : 'Activate'">
                                     <i class="fa-solid fa-power-off"></i>
                                 </button>

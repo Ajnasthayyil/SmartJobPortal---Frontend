@@ -1,331 +1,250 @@
-// ── Design Tokens ────────────────────────────────────────────────
-$primary: #10b981;
-$primary-light: #d1fae5;
-$primary-dark: #059669;
-$slate-50: #f8fafc;
-$slate-100: #f1f5f9;
-$slate-200: #e2e8f0;
-$slate-300: #cbd5e1;
-$slate-400: #94a3b8;
-$slate-500: #64748b;
-$slate-600: #475569;
+@import "../../../styles.scss";
+
+$emerald-500: #10b981;
 $slate-900: #0f172a;
-$white: #ffffff;
 
 :host {
-    display: block;
-    background: #fdfdfd;
-    background-image: 
-        radial-gradient(at 0% 0%, rgba($primary, 0.03) 0, transparent 50%), 
-        radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.03) 0, transparent 50%);
-    min-height: 100vh;
-    font-family: 'Outfit', sans-serif;
-    padding-top: 0; /* Let background reach top */
-    position: relative;
-    overflow-x: hidden;
+  display: block;
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 120px 24px 60px;
+  position: relative;
+  overflow-x: hidden;
 }
 
-/* ── Hero Section ── */
-.hero-section {
-    padding-top: 140px; /* Clearance for fixed navbar */
-    text-align: center;
-    margin-bottom: 60px;
-    padding-left: 20px;
-    padding-right: 20px;
-    position: relative;
-
-    .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px 24px;
-        background: $white;
-        border: 1.5px solid $slate-100;
-        border-radius: 100px;
-        font-size: 13px;
-        font-weight: 800;
-        color: $slate-900;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        margin-bottom: 32px;
-        .badge-dot { width: 8px; height: 8px; background: $primary; border-radius: 50%; }
-    }
-
-    .hero-title {
-        font-size: 52px;
-        font-weight: 800;
-        color: $slate-900;
-        letter-spacing: -0.02em;
-        line-height: 1.1;
-        margin-bottom: 24px;
-        font-family: 'Inter', sans-serif;
-
-        .amber {
-            background: linear-gradient(135deg, $primary 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        @media (max-width: 768px) { font-size: 36px; }
-    }
-
-    .hero-sub {
-        font-size: 18px;
-        font-weight: 600;
-        color: $slate-500;
-        max-width: 600px;
-        margin: 0 auto 48px;
-        line-height: 1.6;
-    }
+.page-inner {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-/* ── Search Bar ── */
-.search-bar {
-    max-width: 700px;
-    margin: 0 auto 40px;
-    background: rgba($white, 0.7);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba($slate-200, 0.5);
-    border-radius: 100px;
-    padding: 8px 32px;
+// ── Header ───────────────────────────────────────
+.directory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+
+  @media (max-width: 768px) { flex-direction: column; align-items: flex-start; gap: 20px; }
+
+  .page-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: $slate-900;
+    letter-spacing: -0.04em;
+    margin-bottom: 6px;
+  }
+  .page-sub {
+    color: var(--slate-500);
+    font-size: 16px;
+    font-weight: 500;
+    max-width: 600px;
+  }
+}
+
+.stat-pill {
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate-600);
+  border: 1px solid rgba(255,255,255,0.3);
+  strong { color: $emerald-500; font-weight: 800; }
+}
+
+// ── Control Bar ──────────────────────────────────
+.control-bar {
+  padding: 12px;
+  border-radius: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+  border: 1px solid rgba(255,255,255,0.4);
+
+  @media (max-width: 1024px) { flex-direction: column; align-items: stretch; }
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+
+  i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--slate-400); font-size: 14px; }
+  input {
+    width: 100%;
+    padding: 14px 20px 14px 52px;
+    background: white;
+    border: 1.5px solid var(--slate-100);
+    border-radius: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $slate-900;
+    transition: all 0.2s;
+    &:focus { outline: none; border-color: $emerald-500; box-shadow: 0 0 0 4px rgba($emerald-500, 0.1); }
+  }
+}
+
+.industry-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  
+  &::-webkit-scrollbar { height: 0; }
+}
+
+.filter-chip {
+  padding: 10px 20px;
+  background: white;
+  border: 1.5px solid var(--slate-100);
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--slate-500);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+
+  &:hover { border-color: $emerald-500; color: $emerald-500; }
+  &.active { background: $emerald-500; border-color: $emerald-500; color: white; box-shadow: 0 4px 12px rgba($emerald-500, 0.2); }
+}
+
+// ── Companies Grid ──────────────────────────────
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+.company-card {
+  padding: 32px;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  border: 1px solid rgba(255,255,255,0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 60px -12px rgba(0,0,0,0.08);
+    background: white;
+    .view-link i { transform: translateX(5px); }
+  }
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+
+  .company-logo {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, $emerald-500 0%, #059669 100%);
+    color: white;
+    border-radius: 16px;
     display: flex;
     align-items: center;
-    gap: 16px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &:focus-within {
-        transform: translateY(-4px) scale(1.02);
-        background: $white;
-        border-color: $primary;
-        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.12);
-    }
-
-    i { color: $primary; font-size: 20px; }
-    input {
-        flex: 1;
-        height: 56px;
-        border: none;
-        background: transparent;
-        font-size: 16px;
-        font-weight: 600;
-        color: $slate-900;
-        &::placeholder { color: $slate-400; font-weight: 500; }
-        &:focus { outline: none; }
-    }
-}
-
-/* ── Filter Chips ── */
-.filter-chips {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
-}
-
-.chip {
-    padding: 12px 28px;
-    background: $white;
-    border: 1.5px solid $slate-100;
-    border-radius: 100px;
-    font-size: 14px;
+    font-size: 24px;
     font-weight: 800;
-    color: $slate-500;
-    cursor: pointer;
-    transition: all 0.2s;
+    box-shadow: 0 8px 16px rgba($emerald-500, 0.15);
+  }
 
-    &:hover {
-        border-color: $primary;
-        color: $primary;
-        transform: translateY(-2px);
-    }
+  .brand-meta {
+    flex: 1;
+    .company-name { font-size: 18px; font-weight: 800; color: $slate-900; margin-bottom: 2px; }
+    .industry-tag { font-size: 11px; font-weight: 800; text-transform: uppercase; color: $emerald-500; letter-spacing: 0.05em; }
+  }
 
-    &.active {
-        background: $primary;
-        border-color: $primary;
-        color: white;
-        box-shadow: 0 10px 20px rgba($primary, 0.2);
-    }
-}
-
-/* ── Grid Section ── */
-.grid-section {
-    max-width: 1400px;
-    margin: 60px auto 0;
-    padding: 0 20px;
-}
-
-.count-row {
-    margin-bottom: 40px;
-    font-size: 16px;
-    font-weight: 600;
-    color: $slate-500;
-    strong { color: $slate-900; font-weight: 800; }
-}
-
-.co-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 32px;
-}
-
-/* ── Company Card ── */
-.co-card {
-    background: rgba($white, 0.8);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba($white, 0.5);
-    border-radius: 40px;
-    padding: 40px;
+  .roles-badge {
+    position: absolute; top: -10px; right: -10px;
+    background: #ecfdf5;
+    color: #059669;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 800;
     display: flex;
-    flex-direction: column;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0; right: 0;
-        width: 150px; height: 150px;
-        background: radial-gradient(circle at 100% 0%, rgba($primary, 0.04) 0%, transparent 70%);
-        pointer-events: none;
-    }
-
-    &:hover {
-        transform: translateY(-12px) scale(1.02);
-        background: $white;
-        box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.1);
-        border-color: rgba($primary, 0.2);
-    }
-
-    .co-card-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 32px;
-    }
-
-    .co-logo {
-        width: 72px;
-        height: 72px;
-        background: $slate-50;
-        border: 2px solid $slate-100;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 32px;
-        font-weight: 900;
-        color: $primary;
-        transition: all 0.4s;
-    }
-
-    .co-jobs-badge {
-        background: $primary-light;
-        color: $primary-dark;
-        padding: 10px 20px;
-        border-radius: 100px;
-        font-size: 13px;
-        font-weight: 900;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .co-name {
-        font-family: 'Inter', sans-serif;
-        font-size: 26px;
-        font-weight: 700;
-        color: $slate-900;
-        margin-bottom: 8px;
-    }
-
-    .co-industry {
-        font-size: 13px;
-        font-weight: 800;
-        color: $primary;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-bottom: 32px;
-    }
-
-    .co-meta {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        margin-bottom: 32px;
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            color: $slate-500;
-            i { color: $slate-300; font-size: 16px; }
-        }
-    }
-
-    .co-recent-jobs {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-bottom: 32px;
-        flex: 1;
-
-        .co-job-preview {
-            padding: 14px 20px;
-            background: $slate-50;
-            border-radius: 16px;
-            font-size: 15px;
-            font-weight: 700;
-            color: $slate-900;
-            font-family: 'Outfit', sans-serif;
-            border: 1px solid rgba($slate-200, 0.3);
-            transition: all 0.2s;
-            &:hover { background: $white; border-color: $primary; color: $primary; transform: translateX(6px); }
-        }
-    }
-
-    .co-card-footer {
-        padding-top: 24px;
-        border-top: 1px solid $slate-100;
-
-        .btn-view-co {
-            width: 100%;
-            height: 52px;
-            background: $slate-900;
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-weight: 800;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            i { transition: transform 0.2s; }
-
-            &:hover {
-                background: $primary;
-                i { transform: translateX(4px); }
-            }
-        }
-    }
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #d1fae5;
+  }
 }
 
-/* ── Animations ── */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+.company-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--slate-500);
+  font-weight: 500;
 }
 
-.co-card {
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-    @for $i from 1 through 10 {
-        &:nth-child(#{$i}) { animation-delay: #{$i * 0.1}s; }
-    }
+.location-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--slate-400);
+  font-weight: 600;
+  i { font-size: 12px; }
 }
+
+.job-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  
+  .preview-tag {
+    padding: 6px 14px;
+    background: var(--slate-50);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--slate-600);
+    border: 1px solid var(--slate-100);
+  }
+}
+
+.card-footer {
+  padding-top: 20px;
+  border-top: 1px solid var(--slate-50);
+  
+  .view-link {
+    font-size: 13px;
+    font-weight: 800;
+    color: $slate-900;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    i { color: $emerald-500; transition: transform 0.2s; }
+  }
+}
+
+// ── Empty State ─────────────────────────────────
+.empty-state {
+  text-align: center;
+  padding: 100px 40px;
+  .empty-icon { font-size: 64px; color: var(--slate-200); margin-bottom: 24px; }
+  h3 { font-size: 24px; font-weight: 800; color: $slate-900; margin-bottom: 12px; }
+  p { font-size: 16px; color: var(--slate-500); max-width: 400px; margin: 0 auto 32px; }
+  .btn-reset {
+    background: $slate-900; color: white; border: none; padding: 12px 32px; border-radius: 12px;
+    font-weight: 700; cursor: pointer; transition: all 0.2s;
+    &:hover { background: $emerald-500; transform: translateY(-2px); }
+  }
+}
+
+// ── Skeleton ────────────────────────────────────
+.skeleton-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+.sk-card {
+  height: 280px;
+  background: linear-gradient(90deg, white 25%, var(--slate-50) 50%, white 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 28px;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }

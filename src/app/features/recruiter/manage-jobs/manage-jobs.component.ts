@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -16,15 +16,32 @@ import { JobResponse } from '../../../core/models/recruiter.models';
 export class ManageJobsComponent implements OnInit {
 
   jobs       = signal<JobResponse[]>([]);
-  filtered   = signal<JobResponse[]>([]);
   loading    = signal(true);
   activeTab  = signal<'all' | 'active' | 'inactive'>('all');
   confirmId  = signal<number | null>(null);
+  searchQuery = signal('');
   
   // Edit Popup State
   isEditModalOpen = signal(false);
   editingJob = signal<any>(null);
   saving = signal(false);
+
+  filtered = computed(() => {
+    let list = this.jobs();
+    const tab = this.activeTab();
+    const query = this.searchQuery().toLowerCase().trim();
+
+    if (tab === 'active')        list = list.filter(j => j.isActive);
+    else if (tab === 'inactive') list = list.filter(j => !j.isActive);
+
+    if (query) {
+      list = list.filter(j => 
+        j.title.toLowerCase().includes(query) || 
+        j.location.toLowerCase().includes(query)
+      );
+    }
+    return list;
+  });
 
   constructor(
     private service: RecruiterService,
@@ -39,7 +56,6 @@ export class ManageJobsComponent implements OnInit {
       next: res => {
         if (res.success) {
           this.jobs.set(res.data || []);
-          this.applyTab('all');
         }
         this.loading.set(false);
       },
@@ -49,10 +65,6 @@ export class ManageJobsComponent implements OnInit {
 
   applyTab(tab: 'all' | 'active' | 'inactive'): void {
     this.activeTab.set(tab);
-    const all = this.jobs();
-    if (tab === 'active')   this.filtered.set(all.filter(j => j.isActive));
-    else if (tab === 'inactive') this.filtered.set(all.filter(j => !j.isActive));
-    else                    this.filtered.set(all);
   }
 
   count(tab: string): number {

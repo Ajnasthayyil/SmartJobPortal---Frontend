@@ -1,120 +1,139 @@
-<div class="admin-users-page">
+<div class="admin-users-wrapper">
+  
+  <!-- Organic Background Blobs -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
   <div class="page-inner">
-
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">User Management</h1>
-        <p class="page-sub">
-          {{ filtered().length }} users found
-        </p>
+    
+    <!-- ── Header Section ─────────────────────────────────── -->
+    <header class="page-header reveal">
+      <div class="header-left">
+        <h1 class="page-title">User Ecosystem</h1>
+        <p class="page-sub">Audit participants, manage access levels, and maintain security.</p>
       </div>
-    </div>
+      <div class="header-stats" *ngIf="!loading()">
+        <div class="quick-stat glass">
+          <span class="label">Auditing</span>
+          <span class="value">{{ filtered().length }} Accounts</span>
+        </div>
+      </div>
+    </header>
 
-    <!-- Filters -->
-    <div class="filters-row">
+    <!-- ── Filters Card ─────────────────────────────────── -->
+    <section class="filters-card glass reveal delay-1">
       <div class="search-box">
-        <svg width="15" height="15" fill="none" stroke="currentColor"
-             stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.35-4.35"/>
-        </svg>
-        <input type="text" placeholder="Search name or email..."
-               [(ngModel)]="search"
-               (ngModelChange)="applySearch()"/>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" 
+               [(ngModel)]="search" 
+               (input)="applySearch()"
+               placeholder="Search by name, email or ID..." />
       </div>
 
-      <select class="filter-select" [(ngModel)]="roleFilter"
-              (ngModelChange)="load()">
-        <option value="">All Roles</option>
-        <option value="Admin">Admin</option>
-        <option value="Recruiter">Recruiter</option>
-        <option value="Candidate">Candidate</option>
-      </select>
+      <div class="filter-group">
+        <div class="select-wrap">
+          <i class="fa-solid fa-user-tag"></i>
+          <select [(ngModel)]="roleFilter" (change)="load()">
+            <option value="">All Roles</option>
+            <option value="Admin">Administrators</option>
+            <option value="Recruiter">Recruiters</option>
+            <option value="Candidate">Candidates</option>
+          </select>
+        </div>
 
-      <select class="filter-select" [(ngModel)]="statusFilter"
-              (ngModelChange)="load()">
-        <option value="">All Status</option>
-        <option value="active">Active</option>
-        <option value="blocked">Blocked</option>
-      </select>
-    </div>
-
-    <!-- Table -->
-    <ng-container *ngIf="loading()">
-      <div class="table-skeleton">
-        <ng-container *ngFor="let i of [1,2,3,4,5]">
-          <div class="skeleton" style="height:56px;border-radius:8px"></div>
-        </ng-container>
+        <div class="select-wrap">
+          <i class="fa-solid fa-shield-halved"></i>
+          <select [(ngModel)]="statusFilter" (change)="load()">
+            <option value="">Security Status</option>
+            <option value="active">Active Members</option>
+            <option value="blocked">Restricted Accounts</option>
+          </select>
+        </div>
+        
+        <button class="btn-refresh" (click)="load()" [disabled]="loading()">
+          <i class="fa-solid fa-rotate" [class.fa-spin]="loading()"></i>
+        </button>
       </div>
-    </ng-container>
+    </section>
 
-    <ng-container *ngIf="!loading()">
-      <div class="table-card">
-        <div class="table-wrap">
-          <table class="data-table">
+    <!-- ── Results Area ──────────────────────────────────── -->
+    <main class="results-area reveal delay-2">
+      
+      <!-- Loading State -->
+      <div class="table-skeleton" *ngIf="loading()">
+        <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
+      </div>
+
+      <!-- User Table -->
+      <div class="data-card glass" *ngIf="!loading()">
+        <div class="table-container">
+          <table class="premium-table">
             <thead>
               <tr>
-                <th>User</th>
-                <th>Role</th>
-                <th>Phone</th>
-                <th>Status</th>
-                <th>Joined</th>
-                <th>Actions</th>
+                <th>Participant Identity</th>
+                <th>Access Level</th>
+                <th>Communication</th>
+                <th>Account Status</th>
+                <th>Joined Date</th>
+                <th class="text-right">Management</th>
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let u of filtered()">
-                <tr>
-                  <td>
-                    <div class="user-cell">
-                      <div class="avatar">{{ u.fullName.charAt(0) }}</div>
-                      <div>
-                        <div class="uname">{{ u.fullName }}</div>
-                        <div class="uemail">{{ u.email }}</div>
-                      </div>
+              <tr *ngFor="let u of filtered()" class="user-row-item">
+                <td>
+                  <div class="user-identity">
+                    <div class="avatar-box">{{ u.fullName.charAt(0) }}</div>
+                    <div class="u-info">
+                      <span class="u-name">{{ u.fullName }}</span>
+                      <span class="u-email">{{ u.email }}</span>
                     </div>
-                  </td>
-                  <td>
-                    <span [class]="'role-badge ' + getRoleClass(u.roleName)">
-                      {{ u.roleName }}
-                    </span>
-                  </td>
-                  <td class="phone">{{ u.phoneNumber || '—' }}</td>
-                  <td>
-                    <span [class]="u.isActive ? 'active-badge' : 'blocked-badge'">
-                      {{ u.isActive ? 'Active' : 'Blocked' }}
-                    </span>
-                  </td>
-                  <td class="date">{{ u.createdAt | date:'MMM d, y' }}</td>
-                  <td>
-                    <ng-container *ngIf="u.roleName !== 'Admin'">
-                      <button
-                        [class]="u.isActive ? 'btn-block' : 'btn-unblock'"
-                        [disabled]="processing() === u.userId"
-                        (click)="toggleBlock(u)">
-                        <ng-container *ngIf="processing() === u.userId">
-                          ...
-                        </ng-container>
-                        <ng-container *ngIf="processing() !== u.userId">
-                          {{ u.isActive ? 'Block' : 'Unblock' }}
-                        </ng-container>
-                      </button>
-                    </ng-container>
-                  </td>
-                </tr>
-              </ng-container>
+                  </div>
+                </td>
+                <td>
+                  <span [class]="'role-badge ' + u.roleName.toLowerCase()">
+                    {{ u.roleName }}
+                  </span>
+                </td>
+                <td>
+                  <span class="contact-info">{{ u.phoneNumber || 'No verified phone' }}</span>
+                </td>
+                <td>
+                  <div class="status-indicator" [class.active]="u.isActive">
+                    <span class="status-dot"></span>
+                    {{ u.isActive ? 'Active' : 'Restricted' }}
+                  </div>
+                </td>
+                <td class="date-cell">{{ u.createdAt | date:'MMM d, y' }}</td>
+                <td class="text-right">
+                  <ng-container *ngIf="u.roleName !== 'Admin'">
+                    <button
+                      [class]="u.isActive ? 'btn-action block' : 'btn-action unblock'"
+                      [disabled]="processing() === u.userId"
+                      (click)="toggleBlock(u)">
+                      <i class="fa-solid" [class.fa-ban]="u.isActive" [class.fa-unlock]="!u.isActive"></i>
+                      {{ u.isActive ? 'Restrict' : 'Restore' }}
+                    </button>
+                  </ng-container>
+                  <span class="admin-lock" *ngIf="u.roleName === 'Admin'">
+                    <i class="fa-solid fa-lock"></i> Protected
+                  </span>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <ng-container *ngIf="filtered().length === 0">
-          <div class="empty-state">
-            <p>No users match your search.</p>
-          </div>
-        </ng-container>
-
+        <!-- Empty State -->
+        <div class="empty-results" *ngIf="filtered().length === 0">
+          <div class="empty-icon"><i class="fa-solid fa-users-slash"></i></div>
+          <h3>No users found</h3>
+          <p>We couldn't find any accounts matching your current search parameters.</p>
+        </div>
       </div>
-    </ng-container>
+
+    </main>
 
   </div>
 </div>

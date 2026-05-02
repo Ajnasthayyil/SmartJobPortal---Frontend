@@ -16,14 +16,14 @@
     <div class="search-bar">
       <div class="search-field">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" [(ngModel)]="keyword" placeholder="What are you looking for?" (keyup.enter)="search()" />
+        <input type="text" [(ngModel)]="keyword" placeholder="What are you looking for?" (input)="onSearchChange()" />
       </div>
       <div class="search-divider"></div>
       <div class="search-field">
         <i class="fa-solid fa-location-arrow"></i>
-        <input type="text" [(ngModel)]="location" placeholder="Where? (City or Remote)" (keyup.enter)="search()" />
+        <input type="text" [(ngModel)]="location" placeholder="Where? (City or Remote)" (input)="onSearchChange()" />
       </div>
-      <button class="btn-search" (click)="search()">
+      <button class="btn-search" (click)="executeSearch()">
         Search Jobs
       </button>
     </div>
@@ -70,7 +70,7 @@
           </select>
         </div>
 
-        <button class="btn-reset-all" (click)="keyword='';location='';setFilter('All')">
+        <button class="btn-reset-all" (click)="keyword='';location='';setFilter('All');executeSearch()">
           Reset All Filters
         </button>
       </div>

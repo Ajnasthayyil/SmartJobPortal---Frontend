@@ -147,6 +147,13 @@ export class ApplicantsComponent implements OnInit {
     this.load();
   }
 
+  onStatusChange(applicationId: number, event: any): void {
+    const status = event.target.value;
+    if (status) {
+      this.updateStatus(applicationId, status);
+    }
+  }
+
   updateStatus(applicationId: number, status: string): void {
     this.updatingId.set(applicationId);
     
@@ -166,11 +173,29 @@ export class ApplicantsComponent implements OnInit {
           this.toast.error(res.message);
         }
       },
-      error: () => {
+      error: (err) => {
         this.updatingId.set(null);
-        this.toast.error('Failed to update status.');
+        const msg = err.error?.message || err.message || 'Server error';
+        this.toast.error(`Update failed: ${msg}`);
       }
     });
+  }
+
+  isStatusAllowed(current: string, target: string): boolean {
+    if (current === target) return true;
+    if (target === 'Rejected') return true; // Can always reject
+
+    const levels: Record<string, number> = {
+      'Applied': 0,
+      'UnderReview': 1,
+      'Shortlisted': 2,
+      'Interview': 3,
+      'Offered': 4,
+      'Rejected': 99
+    };
+
+    // Only allow moving forward in the lifecycle
+    return (levels[target] || 0) > (levels[current] || 0);
   }
 
   getScoreColor(score: number | null): string {

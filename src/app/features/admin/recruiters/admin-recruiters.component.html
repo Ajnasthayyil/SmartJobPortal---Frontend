@@ -1,103 +1,97 @@
-<div class="recruiters-page">
+<div class="admin-recruiters-wrapper">
+  
+  <!-- Organic Background Blobs -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
   <div class="page-inner">
-
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">Recruiter Approvals</h1>
-        <p class="page-sub">Review and approve recruiter registrations</p>
+    
+    <!-- ── Header Section ─────────────────────────────────── -->
+    <header class="page-header reveal">
+      <div class="header-left">
+        <h1 class="page-title">Recruiter Verifications</h1>
+        <p class="page-sub">Review and validate corporate entities for platform access.</p>
       </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab"
-              [class.active]="activeTab() === 'pending'"
-              (click)="switchTab('pending')">
-        Pending Approvals
-      </button>
-      <button class="tab"
-              [class.active]="activeTab() === 'all'"
-              (click)="switchTab('all')">
-        All Recruiters
-      </button>
-    </div>
-
-    <!-- Loading -->
-    <ng-container *ngIf="loading()">
-      <div class="card-list">
-        <ng-container *ngFor="let i of [1,2,3]">
-          <div class="skeleton" style="height:140px;border-radius:14px"></div>
-        </ng-container>
+      <div class="header-tabs glass">
+        <button class="tab" [class.active]="activeTab() === 'pending'" (click)="switchTab('pending')">
+          <span class="pulse-ring" *ngIf="recruiters().length > 0 && activeTab() === 'pending'"></span>
+          Pending Reviews <span class="badge" *ngIf="activeTab() === 'pending'">{{ recruiters().length }}</span>
+        </button>
+        <button class="tab" [class.active]="activeTab() === 'all'" (click)="switchTab('all')">
+          All Partners
+        </button>
       </div>
-    </ng-container>
+    </header>
 
-    <!-- Empty -->
-    <ng-container *ngIf="!loading() && recruiters().length === 0">
-      <div class="empty-state">
-        <div class="empty-icon">✅</div>
-        <h3>
-          <ng-container *ngIf="activeTab() === 'pending'">
-            No pending approvals!
-          </ng-container>
-          <ng-container *ngIf="activeTab() !== 'pending'">
-            No recruiters yet.
-          </ng-container>
-        </h3>
-        <p>All recruiter requests have been processed.</p>
+    <!-- ── Results Area ──────────────────────────────────── -->
+    <main class="results-area reveal delay-1">
+      
+      <!-- Loading State -->
+      <div class="skeleton-list" *ngIf="loading()">
+        <div class="skeleton-card" *ngFor="let i of [1,2,3]"></div>
       </div>
-    </ng-container>
 
-    <!-- Recruiter cards -->
-    <ng-container *ngIf="!loading() && recruiters().length > 0">
-      <div class="card-list">
-        <ng-container *ngFor="let r of recruiters()">
-          <div class="recruiter-card"
-               [class.approved]="r.isApproved"
-               [class.pending]="!r.isApproved">
+      <!-- Empty State -->
+      <div class="empty-state glass" *ngIf="!loading() && recruiters().length === 0">
+        <div class="empty-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+        <h3>No Pending Approvals</h3>
+        <p>Excellent! All recruiter applications have been processed. The ecosystem is up to date.</p>
+        <button class="btn-ghost" (click)="switchTab('all')">View All Partners</button>
+      </div>
 
-            <div class="rc-left">
-              <div class="rc-avatar">{{ r.fullName.charAt(0) }}</div>
-              <div class="rc-info">
-                <div class="rc-name">{{ r.fullName }}</div>
-                <div class="rc-email">{{ r.email }}</div>
-                <div class="rc-company">
-                  🏢 {{ r.companyName || 'Company not set' }}
-                  <ng-container *ngIf="r.industry"> · {{ r.industry }} </ng-container>
-                  <ng-container *ngIf="r.location"> · {{ r.location }} </ng-container>
-                </div>
-                <div class="rc-date">
-                  Registered {{ r.registeredAt | date:'mediumDate' }}
-                </div>
+      <!-- Recruiters List -->
+      <div class="recruiters-list" *ngIf="!loading() && recruiters().length > 0">
+        <div class="recruiter-card glass reveal" *ngFor="let r of recruiters(); let i = index" [style.animation-delay]="(i * 0.1) + 's'">
+          
+          <div class="card-main">
+            <div class="company-brand">
+              <div class="logo-box">{{ r.companyName.charAt(0) }}</div>
+              <div class="brand-info">
+                <h3 class="company-name">{{ r.companyName }}</h3>
+                <span class="website">{{ r.website || 'No website provided' }}</span>
               </div>
             </div>
 
-            <div class="rc-right">
-              <span [class]="r.isApproved ? 'badge-approved' : 'badge-pending'">
-                {{ r.isApproved ? '✓ Approved' : '⏳ Pending' }}
-              </span>
-
-              <ng-container *ngIf="!r.isApproved">
-                <div class="rc-actions">
-                  <button class="btn-approve"
-                          [disabled]="processingId() === r.userId"
-                          (click)="approve(r.userId)">
-                    <ng-container *ngIf="processingId() === r.userId"> ... </ng-container>
-                    <ng-container *ngIf="processingId() !== r.userId"> ✓ Approve </ng-container>
-                  </button>
-                  <button class="btn-reject"
-                          [disabled]="processingId() === r.userId"
-                          (click)="reject(r.userId)">
-                    <ng-container *ngIf="processingId() === r.userId"> ... </ng-container>
-                    <ng-container *ngIf="processingId() !== r.userId"> ✕ Reject </ng-container>
-                  </button>
-                </div>
-              </ng-container>
+            <div class="representative-info">
+              <div class="rep-label">Authorized Representative</div>
+              <div class="rep-details">
+                <span class="rep-name">{{ r.fullName }}</span>
+                <span class="rep-email">{{ r.email }}</span>
+              </div>
             </div>
 
+            <div class="meta-info">
+              <div class="meta-item">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Applied {{ r.registeredAt | date:'MMM d, y' }}</span>
+              </div>
+              <div class="status-pill" [class.approved]="r.isApproved">
+                {{ r.isApproved ? 'Verified Partner' : 'Verification Pending' }}
+              </div>
+            </div>
           </div>
-        </ng-container>
+
+          <div class="card-actions" *ngIf="!r.isApproved">
+            <button class="btn-reject" 
+                    [disabled]="processingId() === r.userId"
+                    (click)="reject(r.userId)">
+              <i class="fa-solid fa-xmark"></i>
+              {{ processingId() === r.userId ? '...' : 'Reject' }}
+            </button>
+            <button class="btn-approve" 
+                    [disabled]="processingId() === r.userId"
+                    (click)="approve(r.userId)">
+              <i class="fa-solid fa-check"></i>
+              {{ processingId() === r.userId ? '...' : 'Approve Access' }}
+            </button>
+          </div>
+
+        </div>
       </div>
-    </ng-container>
+
+    </main>
 
   </div>
 </div>

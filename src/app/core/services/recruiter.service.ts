@@ -57,7 +57,7 @@ export class RecruiterService {
 
   updateStatus(applicationId: number, status: string): Observable<ApiResponse<string>> {
     return this.http.put<ApiResponse<string>>
-      (`${this.api}/applications/${applicationId}/status`, { status });
+      (`${this.api}/applications/${applicationId}/status`, { Status: status });
   }
   getApplicantsAcrossAllJobs(): Observable<ApiResponse<ApplicantResponse[]>> {
     return this.http.get<ApiResponse<ApplicantResponse[]>>(`${this.api}/applicants`);

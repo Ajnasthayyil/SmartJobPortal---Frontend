@@ -1,165 +1,199 @@
-<div class="admin-page">
-  <div class="page-inner">
+<div class="admin-dashboard-wrapper">
+  
+  <!-- Organic Background Blobs -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
 
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">Admin Dashboard</h1>
-        <p class="page-sub">Platform overview and system health</p>
+  <div class="page-inner">
+    
+    <!-- ── Header Section ─────────────────────────────────── -->
+    <header class="page-header reveal">
+      <div class="header-left">
+        <h1 class="page-title">Admin Command Center</h1>
+        <p class="page-sub">Monitor ecosystem health and manage platform participants.</p>
       </div>
+      <div class="header-actions">
+        <div class="system-badge">
+          <span class="pulse-dot"></span>
+          System Online
+        </div>
+      </div>
+    </header>
+
+    <!-- Loading State -->
+    <div class="skeleton-grid" *ngIf="loading()">
+      <div *ngFor="let i of [1,2,3,4,5,6]" class="skeleton-card"></div>
     </div>
 
-    <ng-container *ngIf="loading()">
-      <div class="skeleton-grid">
-        <ng-container *ngFor="let i of [1,2,3,4,5,6]">
-          <div class="skeleton" style="height:110px;border-radius:14px"></div>
-        </ng-container>
-      </div>
-    </ng-container>
-
     <ng-container *ngIf="!loading() && data()">
-
-      <!-- Stats grid -->
+      
+      <!-- ── Stats Grid ───────────────────────────────────── -->
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon users">👥</div>
-          <div class="stat-val">{{ data()!.totalUsers }}</div>
-          <div class="stat-label">Total Users</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon candidates">🎯</div>
-          <div class="stat-val">{{ data()!.totalCandidates }}</div>
-          <div class="stat-label">Candidates</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon recruiters">🏢</div>
-          <div class="stat-val">{{ data()!.totalRecruiters }}</div>
-          <div class="stat-label">Recruiters</div>
-        </div>
-        <div class="stat-card highlight">
-          <div class="stat-icon pending">⏳</div>
-          <div class="stat-val">{{ data()!.pendingRecruiterApprovals }}</div>
-          <div class="stat-label">Pending Approvals</div>
-          <ng-container *ngIf="data()!.pendingRecruiterApprovals > 0">
-            <a routerLink="/admin/recruiters" class="stat-action">
-              Review now →
-            </a>
-          </ng-container>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon jobs">💼</div>
-          <div class="stat-val">{{ data()!.activeJobs }}</div>
-          <div class="stat-label">Active Jobs</div>
-          <div class="stat-sub">of {{ data()!.totalJobs }} total</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon apps">📋</div>
-          <div class="stat-val">{{ data()!.totalApplications }}</div>
-          <div class="stat-label">Applications</div>
-          <div class="stat-sub">{{ data()!.applicationsToday }} today</div>
-        </div>
-      </div>
-
-      <!-- Quick nav -->
-      <div class="quick-nav">
-        <a routerLink="/admin/users" class="qn-btn">
-          <span class="qn-icon">👤</span>
-          <span class="qn-label">Manage Users</span>
-          <span class="qn-count">{{ data()!.totalUsers }}</span>
-        </a>
-        <a routerLink="/admin/recruiters" class="qn-btn">
-          <span class="qn-icon">✅</span>
-          <span class="qn-label">Recruiter Approvals</span>
-          <span class="qn-count pending-count">
-            {{ data()!.pendingRecruiterApprovals }} pending
-          </span>
-        </a>
-        <a routerLink="/admin/jobs" class="qn-btn">
-          <span class="qn-icon">💼</span>
-          <span class="qn-label">Monitor Jobs</span>
-          <span class="qn-count">{{ data()!.activeJobs }} active</span>
-        </a>
-      </div>
-
-      <div class="content-grid">
-
-        <!-- Recent users -->
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Recent Registrations</h3>
-            <a routerLink="/admin/users" class="link-amber">View all</a>
+        <div class="stat-card glass reveal delay-1">
+          <div class="stat-icon users">
+            <i class="fa-solid fa-users"></i>
           </div>
-          <div class="table-wrap">
-            <table class="data-table">
+          <div class="stat-info">
+            <h2 class="stat-value">{{ data()!.totalUsers }}</h2>
+            <p class="stat-label">Total Users</p>
+          </div>
+          <div class="stat-chart-mini">
+            <div class="bar" style="height: 40%"></div>
+            <div class="bar" style="height: 60%"></div>
+            <div class="bar" style="height: 45%"></div>
+            <div class="bar" style="height: 80%"></div>
+          </div>
+        </div>
+
+        <div class="stat-card glass reveal delay-2">
+          <div class="stat-icon candidates">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-value">{{ data()!.totalCandidates }}</h2>
+            <p class="stat-label">Candidates</p>
+          </div>
+          <div class="stat-trend positive">
+            <i class="fa-solid fa-arrow-up"></i> 12%
+          </div>
+        </div>
+
+        <div class="stat-card glass reveal delay-3">
+          <div class="stat-icon recruiters">
+            <i class="fa-solid fa-building"></i>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-value">{{ data()!.totalRecruiters }}</h2>
+            <p class="stat-label">Recruiters</p>
+          </div>
+          <div class="stat-trend positive">
+            <i class="fa-solid fa-arrow-up"></i> 8%
+          </div>
+        </div>
+
+        <div class="stat-card glass highlight reveal delay-4" [class.pulse]="data()!.pendingRecruiterApprovals > 0">
+          <div class="stat-icon pending">
+            <i class="fa-solid fa-user-check"></i>
+          </div>
+          <div class="stat-info">
+            <h2 class="stat-value">{{ data()!.pendingRecruiterApprovals }}</h2>
+            <p class="stat-label">Pending Approvals</p>
+          </div>
+          <a routerLink="/admin/recruiters" class="btn-review" *ngIf="data()!.pendingRecruiterApprovals > 0">
+            Review <i class="fa-solid fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── Quick Actions ────────────────────────────────── -->
+      <section class="quick-actions-section reveal delay-3">
+        <h3 class="section-title">Quick Management</h3>
+        <div class="actions-grid">
+          <a routerLink="/admin/users" class="action-card glass">
+            <div class="icon-wrap user"><i class="fa-solid fa-user-gear"></i></div>
+            <div class="text">
+              <h4>Manage Users</h4>
+              <p>Audit and control all accounts</p>
+            </div>
+            <i class="fa-solid fa-arrow-right-long arrow"></i>
+          </a>
+          <a routerLink="/admin/recruiters" class="action-card glass">
+            <div class="icon-wrap check"><i class="fa-solid fa-shield-check"></i></div>
+            <div class="text">
+              <h4>Verifications</h4>
+              <p>Review recruiter profiles</p>
+            </div>
+            <i class="fa-solid fa-arrow-right-long arrow"></i>
+          </a>
+          <a routerLink="/admin/jobs" class="action-card glass">
+            <div class="icon-wrap job"><i class="fa-solid fa-briefcase"></i></div>
+            <div class="text">
+              <h4>Job Monitoring</h4>
+              <p>Moderate active listings</p>
+            </div>
+            <i class="fa-solid fa-arrow-right-long arrow"></i>
+          </a>
+        </div>
+      </section>
+
+      <!-- ── Data Tables ─────────────────────────────────── -->
+      <div class="dashboard-content-grid">
+        
+        <!-- Recent Users -->
+        <div class="data-card glass reveal delay-4">
+          <div class="card-header">
+            <h3>Recent Registrations</h3>
+            <a routerLink="/admin/users" class="btn-view-all">View All</a>
+          </div>
+          <div class="table-container">
+            <table class="premium-table">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Participant</th>
                   <th>Role</th>
                   <th>Joined</th>
                 </tr>
               </thead>
               <tbody>
-                <ng-container *ngFor="let u of data()!.recentUsers">
-                  <tr>
-                    <td>
-                      <div class="user-cell">
-                        <div class="mini-avatar">
-                          {{ u.fullName.charAt(0) }}
-                        </div>
-                        <div>
-                          <div class="user-name">{{ u.fullName }}</div>
-                          <div class="user-email">{{ u.email }}</div>
-                        </div>
+                <tr *ngFor="let u of data()!.recentUsers">
+                  <td>
+                    <div class="user-row">
+                      <div class="avatar-sm">{{ u.fullName.charAt(0) }}</div>
+                      <div class="u-info">
+                        <span class="u-name">{{ u.fullName }}</span>
+                        <span class="u-email">{{ u.email }}</span>
                       </div>
-                    </td>
-                    <td>
-                      <span [class]="'role-badge role-' + u.roleName.toLowerCase()">
-                        {{ u.roleName }}
-                      </span>
-                    </td>
-                    <td class="date-cell">
-                      {{ u.createdAt | date:'MMM d, y' }}
-                    </td>
-                  </tr>
-                </ng-container>
+                    </div>
+                  </td>
+                  <td>
+                    <span [class]="'role-pill ' + u.roleName.toLowerCase()">
+                      {{ u.roleName }}
+                    </span>
+                  </td>
+                  <td>{{ u.createdAt | date:'MMM d' }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Recent jobs -->
-        <div class="card">
+        <!-- Recent Jobs -->
+        <div class="data-card glass reveal delay-4">
           <div class="card-header">
-            <h3 class="card-title">Recent Job Posts</h3>
-            <a routerLink="/admin/jobs" class="link-amber">View all</a>
+            <h3>Recent Job Posts</h3>
+            <a routerLink="/admin/jobs" class="btn-view-all">View All</a>
           </div>
-          <div class="table-wrap">
-            <table class="data-table">
+          <div class="table-container">
+            <table class="premium-table">
               <thead>
                 <tr>
-                  <th>Job</th>
+                  <th>Job Title</th>
                   <th>Company</th>
-                  <th>Applicants</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                <ng-container *ngFor="let j of data()!.recentJobs">
-                  <tr>
-                    <td class="job-name">{{ j.title }}</td>
-                    <td class="company-name">{{ j.companyName }}</td>
-                    <td>
-                      <span class="applicant-count">
-                        {{ j.totalApplicants }}
-                      </span>
-                    </td>
-                  </tr>
-                </ng-container>
+                <tr *ngFor="let j of data()!.recentJobs">
+                  <td>
+                    <span class="job-name-cell">{{ j.title }}</span>
+                  </td>
+                  <td>{{ j.companyName }}</td>
+                  <td>
+                    <div class="applicant-badge">
+                      <i class="fa-solid fa-users"></i> {{ j.totalApplicants }}
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
 
       </div>
-    </ng-container>
 
+    </ng-container>
   </div>
 </div>
