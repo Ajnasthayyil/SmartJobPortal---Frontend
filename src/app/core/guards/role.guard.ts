@@ -10,6 +10,10 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
 
   if (currentRole && allowedRoles.includes(currentRole)) return true;
 
-  router.navigate(['/login']);
+  if (currentRole) {
+    auth.redirectByRole(); // Redirect to their own dashboard
+  } else {
+    router.navigate(['/login']);
+  }
   return false;
 };

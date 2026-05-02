@@ -47,6 +47,7 @@ export interface JobListItem {
   requiredSkills: string[];
   matchScore: number | null;
   postedAt: string;
+  isApplied?: boolean;
 }
 
 export interface MatchScoreResponse {

@@ -4,12 +4,12 @@
   font-family: 'Outfit', sans-serif;
   background: #ffffff;
   min-height: 100vh;
-  padding-top: 80px;
+  padding-top: 0; /* Remove top padding to let search-section background reach the top */
 }
 
 // ── Hero / Search Section ─────────────────────────────────────────
 .search-section {
-  padding: 60px 5% 64px;
+  padding: 140px 5% 64px; /* Increased top padding for content clearance, while background fills the gap */
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -50,7 +50,7 @@
 .badge-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; }
 
 .hero-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: clamp(40px, 6vw, 64px); font-weight: 800; line-height: 1;
   letter-spacing: -0.04em; color: #020617; margin-bottom: 24px;
   
@@ -192,7 +192,7 @@
   &.good { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
 }
 
-.jc-title { font-size: 22px; font-weight: 700; color: #020617; line-height: 1.2; margin-bottom: 6px; }
+.jc-title { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 700; color: #020617; line-height: 1.2; margin-bottom: 6px; }
 .jc-company { font-size: 15px; color: #64748b; font-weight: 500; margin-bottom: 20px; }
 
 .jc-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }

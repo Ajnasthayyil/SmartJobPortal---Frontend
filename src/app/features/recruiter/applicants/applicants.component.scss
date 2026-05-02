@@ -1,295 +1,312 @@
-// ── Design Tokens ────────────────────────────────────────────────
-$primary: #10b981;
-$primary-light: #d1fae5;
-$primary-dark: #059669;
-$slate-50: #f8fafc;
-$slate-100: #f1f5f9;
-$slate-200: #e2e8f0;
-$slate-300: #cbd5e1;
-$slate-400: #94a3b8;
-$slate-500: #64748b;
-$slate-600: #475569;
-$slate-900: #0f172a;
-$white: #ffffff;
-$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-$glass-bg: rgba(255, 255, 255, 0.7);
-$glass-border: rgba(255, 255, 255, 0.4);
-
-:host {
-    display: block;
-    background: $slate-100;
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-    padding: 140px 32px 60px;
-    position: relative;
-    overflow-x: hidden;
+.applicants-container {
+  padding: 140px 32px 60px;
+  font-family: 'Outfit', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-h1, h2, h3, h4 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    letter-spacing: -0.02em;
+// ── Header Section ───────────────────────────────────────────────
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
-.page-inner {
-    max-width: 1200px;
-    margin: 0 auto;
+.premium-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
 }
 
-// ── Header ───────────────────────────────────────
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-
-    @media (max-width: 768px) {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 24px;
-    }
+.premium-sub {
+  font-size: 16px;
+  color: #64748b;
+  font-weight: 500;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 24px;
+.tabs-container {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 14px;
 }
 
-.btn-back {
+.tab-pill {
+  border: none;
+  background: transparent;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &.active {
+    background: white;
+    color: #10b981;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .tab-count {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+}
+
+// ── Applicant Grid & Cards ───────────────────────────────────────
+.applicants-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.applicant-card {
+  background: white;
+  border-radius: 28px;
+  padding: 32px;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+}
+
+.card-main {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+}
+
+.avatar-circle {
+  width: 64px;
+  height: 64px;
+  background: #8b5cf6;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.candidate-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.match-badge {
+  background: #ecfdf5;
+  color: #10b981;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.current-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.meta-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+
+  .meta-item {
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
     display: flex;
     align-items: center;
     gap: 8px;
-    color: $slate-500;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 14px;
-    transition: all 0.2s;
-
-    &:hover { color: $slate-900; transform: translateX(-4px); }
+    i { color: #cbd5e1; }
+  }
 }
 
-.page-title {
-    font-size: 32px;
-    font-weight: 800;
-    color: $slate-900;
-    margin: 0;
-    letter-spacing: -0.02em;
+.skills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.page-sub {
-    font-size: 15px;
-    color: $slate-500;
-    margin-top: 4px;
-}
-
-// ── Tabs ─────────────────────────────────────────
-.glass-tabs {
-    display: inline-flex;
-    background: $white;
-    border: 1px solid $slate-200;
-    padding: 6px;
-    border-radius: 16px;
-    gap: 4px;
-    box-shadow: $shadow-sm;
-}
-
-.tab {
-    padding: 8px 20px;
-    border-radius: 12px;
-    border: none;
+.skill-tag {
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 10px;
+  
+  &.more {
     background: transparent;
+    border: 1px solid #f1f5f9;
+  }
+}
+
+// ── Card Aside ───────────────────────────────────────────────────
+.card-aside {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  border-left: 1px solid #f1f5f9;
+  padding-left: 40px;
+
+  @media (max-width: 992px) {
+    border-left: none;
+    border-top: 1px solid #f1f5f9;
+    padding-left: 0;
+    padding-top: 24px;
+    justify-content: space-between;
+  }
+}
+
+.context-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  
+  @media (max-width: 992px) { text-align: left; }
+
+  .context-label { font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .job-applied-name { font-size: 15px; font-weight: 800; color: #0f172a; margin: 4px 0; }
+  .applied-date { font-size: 13px; color: #94a3b8; font-weight: 500; }
+}
+
+.match-score-visual {
+  position: relative;
+  width: 64px;
+  height: 64px;
+
+  svg { transform: rotate(-90deg); width: 64px; height: 64px; }
+  circle {
+    fill: none;
+    stroke-width: 4;
+    &.bg { stroke: #f1f5f9; }
+    &.meter {
+      stroke-linecap: round;
+      stroke-dasharray: 138.2; // 2 * PI * 22
+      transition: stroke-dashoffset 1s ease-out;
+    }
+  }
+
+  .score-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 14px;
-    font-weight: 700;
-    color: $slate-600;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &.active {
-        background: $primary;
-        color: $white;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-    }
-
-    .badge {
-        font-size: 11px;
-        background: rgba($slate-900, 0.05);
-        padding: 2px 6px;
-        border-radius: 6px;
-        margin-left: 6px;
-    }
-    &.active .badge { background: rgba($white, 0.2); }
-}
-
-// ── Table Card ──────────────────────────────────
-.glass-card {
-    background: $glass-bg;
-    backdrop-filter: blur(20px);
-    border: 1px solid $glass-border;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-}
-
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-}
-
-.premium-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-
-    thead th {
-        padding: 20px 24px;
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: $slate-500;
-        border-bottom: 1px solid $slate-200;
-        background: rgba($white, 0.4);
-    }
-
-    tbody tr {
-        border-bottom: 1px solid rgba($slate-200, 0.5);
-        transition: all 0.2s;
-        background: $white;
-        &:hover { background: $slate-50; }
-        &:last-child { border: none; }
-    }
-
-    tbody td {
-        padding: 20px 24px;
-        vertical-align: middle;
-    }
-}
-
-// ── Cell Styles ──────────────────────────────────
-.candidate-info {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    .avatar {
-        width: 44px;
-        height: 44px;
-        background: $primary-light;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        color: $primary-dark;
-        font-size: 16px;
-    }
-
-    .name { font-size: 15px; font-weight: 700; color: $slate-900; margin-bottom: 2px;}
-    .email { font-size: 13px; color: $slate-500; }
-}
-
-.meta-box {
-    .exp { font-size: 14px; font-weight: 700; color: $slate-900; display: block; margin-bottom: 2px; }
-    .loc { font-size: 13px; color: $slate-500; }
-}
-
-.skill-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-
-    .skill-tag {
-        font-size: 11px;
-        font-weight: 600;
-        padding: 4px 10px;
-        background: $slate-50;
-        border: 1px solid $slate-100;
-        border-radius: 8px;
-        color: $slate-600;
-    }
-    .more { font-size: 11px; color: $slate-400; margin-left: 4px; font-weight: 600; }
-}
-
-.score-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 13px;
     font-weight: 800;
+    color: #0f172a;
+  }
 }
 
-.status-pill {
-    font-size: 11px;
-    font-weight: 800;
-    padding: 4px 12px;
-    border-radius: 100px;
-    text-transform: capitalize;
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
-    &.applied     { background: rgba(#3b82f6, 0.1); color: #3b82f6; }
-    &.shortlisted { background: rgba(#f59e0b, 0.1); color: #f59e0b; }
-    &.rejected    { background: rgba(#ef4444, 0.1); color: #ef4444; }
+  @media (max-width: 992px) { flex-direction: row; }
 }
 
-// ── Actions ──────────────────────────────────────
-.action-btns {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
+.action-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  background: white;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+
+  &:hover {
+    background: #f8fafc;
+    color: #10b981;
+    border-color: #10b981;
+  }
+  
+  &.delete:hover {
+    color: #ef4444;
+    border-color: #ef4444;
+    background: #fef2f2;
+  }
 }
 
-.btn-icon-outline {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    border: 1.5px solid $slate-200;
-    background: $white;
-    color: $slate-600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    &:hover { border-color: $slate-900; color: $slate-900; }
+// ── Empty State ──────────────────────────────────────────────────
+.ultra-empty {
+  text-align: center;
+  padding: 80px 40px;
+  background: white;
+  border-radius: 32px;
+  border: 1px solid #f1f5f9;
+
+  .icon-wrap {
+    font-size: 64px;
+    color: #cbd5e1;
+    margin-bottom: 24px;
+  }
+
+  h3 { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 12px; }
+  p { font-size: 16px; color: #64748b; }
 }
 
-.btn-icon-amber {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    border: none;
-    background: $slate-900;
-    color: $white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    &:hover { background: $primary; transform: scale(1.1); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
-}
-
-.text-right { text-align: right; }
-
-// ── Empty & Skeletons ─────────────────────────────
-.empty-state {
-    padding: 80px 40px;
-    text-align: center;
-    .empty-icon { font-size: 64px; margin-bottom: 24px; color: $slate-300; }
-    h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; color: $slate-900; }
-    p { color: $slate-500; font-size: 16px; }
-}
-
-.skeleton-row {
-    height: 80px;
-    background: linear-gradient(90deg, $slate-100 25%, $slate-200 50%, $slate-100 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    margin-bottom: 12px;
-    border-radius: 16px;
+// ── Skeleton ─────────────────────────────────────────────────────
+.skeleton-card {
+  height: 180px;
+  background: linear-gradient(90deg, #f8fafc 25%, #f1f5f9 50%, #f8fafc 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 28px;
+  margin-bottom: 20px;
 }
 
 @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }

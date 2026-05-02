@@ -25,7 +25,7 @@ export class AuthService {
 
   login(request: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>
-      (`${this.apiUrl}/login`, request).pipe(
+      (`${this.apiUrl}/login`, request, { withCredentials: true }).pipe(
         tap(res => {
           if (res.success && res.data && res.data.token) {
             const token = res.data.token;
@@ -61,12 +61,41 @@ export class AuthService {
   }
 
   logout(): void {
+    // Call the backend to clear cookies before clearing local storage
+    this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({
+      next: () => this.clearSession(),
+      error: () => this.clearSession()
+    });
+  }
+
+  private clearSession(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('authUser');
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
     this.toast.info('Logged out successfully.');
     this.router.navigate(['/login']);
+  }
+
+  refreshToken(): Observable<ApiResponse<AuthResponse>> {
+    return this.http.post<ApiResponse<AuthResponse>>(
+      `${this.apiUrl}/refresh`,
+      {},
+      { withCredentials: true }
+    ).pipe(
+      tap(res => {
+        if (res.success && res.data && res.data.token) {
+          const token = res.data.token;
+          localStorage.setItem('authToken', token);
+          const current = this.currentUser();
+          if (current) {
+            const updated = { ...current, accessToken: token };
+            localStorage.setItem('authUser', JSON.stringify(updated));
+            this.currentUser.set(updated);
+          }
+        }
+      })
+    );
   }
 
   uploadPhoto(file: File): Observable<ApiResponse<{ url: string }>> {

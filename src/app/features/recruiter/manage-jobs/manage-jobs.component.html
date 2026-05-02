@@ -61,13 +61,19 @@
                         
                         <div class="job-meta">
                             <span class="meta-item">
-                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <i class="fa-solid fa-location-dot"></i>
                                 {{ job.location }}
                             </span>
                             <span class="sep"></span>
-                            <span class="meta-item">{{ job.jobType }}</span>
+                            <span class="meta-item">
+                                <i class="fa-solid fa-clock"></i>
+                                {{ job.jobType }}
+                            </span>
                             <span class="sep"></span>
-                            <span class="meta-item">{{ job.minExperienceYears }}+ yrs Exp</span>
+                            <span class="meta-item">
+                                <i class="fa-solid fa-briefcase"></i>
+                                {{ job.minExperienceYears }}+ yrs Exp
+                            </span>
                             <span class="sep" *ngIf="job.minSalary"></span>
                             <span class="meta-item salary" *ngIf="job.minSalary">
                                 ₹{{ job.minSalary | number }} <ng-container *ngIf="job.maxSalary">- ₹{{ job.maxSalary | number }}</ng-container>
@@ -87,23 +93,21 @@
                         </div>
                         
                         <div class="actions-group">
-                            <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="btn-manage">
-                                View Applicants
+                            <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="icon-btn view" title="View Applicants">
+                                <i class="fa-solid fa-users-viewfinder"></i>
                             </a>
-                            <a [routerLink]="['/jobs', job.jobId]" class="btn-manage" style="background: white; color: #059669; border: 1px solid #c7d2fe;" target="_blank">
-                                View Job
+                            <a [routerLink]="['/jobs', job.jobId]" class="icon-btn preview" title="View Job Listing" target="_blank">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
                             </a>
-                            <a [routerLink]="['/recruiter/jobs', job.jobId, 'edit']" class="btn-manage" style="background: white; color: #475569; border: 1px solid #e2e8f0;">
-                                Edit Job
+                            <a (click)="openEditModal(job)" class="icon-btn edit" title="Edit Job">
+                                <i class="fa-solid fa-pen-to-square"></i>
                             </a>
-                            <button *ngIf="job.isActive" class="btn-icon-danger" (click)="toggleStatus(job.jobId)" title="Deactivate">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-                                    <line x1="12" y1="2" x2="12" y2="12"></line>
-                                </svg>
+                            
+                            <button *ngIf="job.isActive" class="icon-btn toggle active" (click)="toggleStatus(job.jobId)" title="Deactivate Job">
+                                <i class="fa-solid fa-power-off"></i>
                             </button>
-                            <button *ngIf="!job.isActive" class="btn-icon-success" style="background: #ecfdf5; color: #10b981; border: 1px solid #a7f3d0;" (click)="toggleStatus(job.jobId)" title="Reactivate">
-                                <i class="fa-solid fa-bolt"></i>
+                            <button *ngIf="!job.isActive" class="icon-btn toggle" (click)="toggleStatus(job.jobId)" title="Reactivate Job">
+                                <i class="fa-solid fa-power-off"></i>
                             </button>
                         </div>
                     </div>
@@ -124,4 +128,84 @@
             </div>
         </ng-container>
 
+        <!-- ── Edit Job Modal ─────────────────────────────────── -->
+    <div class="modal-overlay" *ngIf="isEditModalOpen()" (click)="closeEditModal()">
+        <div class="modal-content glass-card" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Edit Job Listing</h3>
+                <button class="btn-close" (click)="closeEditModal()">&times;</button>
+            </div>
+
+            <div class="modal-body" *ngIf="editingJob() as job">
+                <div class="edit-form-grid">
+                    <div class="form-group full">
+                        <label>Job Title</label>
+                        <input type="text" [(ngModel)]="job.title" placeholder="e.g. Senior Developer">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" [(ngModel)]="job.location" placeholder="e.g. New York or Remote">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Job Type</label>
+                        <select [(ngModel)]="job.jobType">
+                            <option value="Full-Time">Full-Time</option>
+                            <option value="Part-Time">Part-Time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Freelance">Freelance</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Min Experience (Years)</label>
+                        <input type="number" [(ngModel)]="job.minExperienceYears">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Min Salary (₹)</label>
+                        <input type="number" [(ngModel)]="job.minSalary">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Max Salary (₹)</label>
+                        <input type="number" [(ngModel)]="job.maxSalary">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="date" [ngModel]="job.expiresAt | date:'yyyy-MM-dd'" (ngModelChange)="job.expiresAt = $event">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <div class="status-toggle-wrap">
+                            <span [class.active]="job.isActive">Active</span>
+                            <button class="toggle-btn" [class.on]="job.isActive" (click)="job.isActive = !job.isActive">
+                                <div class="toggle-circle"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Required Skills (Comma separated)</label>
+                        <input type="text" [(ngModel)]="skillsString" placeholder="e.g. Angular, React, Node.js">
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Job Description</label>
+                        <textarea rows="4" [(ngModel)]="job.description"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-ghost" (click)="closeEditModal()">Cancel</button>
+                <button class="btn-primary" (click)="saveJobEdit()" [disabled]="saving()">
+                    {{ saving() ? 'Saving...' : 'Save Changes' }}
+                </button>
+            </div>
+        </div>
     </div>
+</div>

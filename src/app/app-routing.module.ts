@@ -19,35 +19,68 @@ import { JobSearchComponent } from './features/candidate/job-search/job-search.c
 import { ApplicationsComponent } from './features/candidate/applications/applications.component';
 import { PostJobComponent } from './features/recruiter/post-job/post-job.component';
 import { ManageJobsComponent } from './features/recruiter/manage-jobs/manage-jobs.component';
+import { RecruiterProfileComponent } from './features/recruiter/profile/recruiter-profile.component';
+import { ApplicantsComponent } from './features/recruiter/applicants/applicants.component';
+import { JobDetailComponent } from './features/candidate/job-detail/job-detail.component';
+
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 const routes: Routes = [
+  // Public Pages (Accessible to everyone)
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'candidate/dashboard', component: CandidateDashboardComponent },
-  { path: 'candidate/profile', component: CandidateProfileComponent },
-  { path: 'candidate/jobs', component: JobSearchComponent },
-  { path: 'candidate/applications', component: ApplicationsComponent },
-  { path: 'candidate/companies', component: CompaniesComponent },
-  { path: 'candidate/notifications', component: CandidateDashboardComponent }, // Fallback
-  { path: 'candidate/settings', component: CandidateDashboardComponent },      // Fallback
-  { path: 'candidate/skill-gap', component: CandidateDashboardComponent },     // Fallback
-  
-  { path: 'recruiter/dashboard', component: RecruiterDashboardComponent },
-  { path: 'recruiter/post-job', component: PostJobComponent },
-  { path: 'recruiter/jobs', component: ManageJobsComponent },
-  { path: 'recruiter/profile', component: CandidateProfileComponent }, // Reusing profile for now
-
-  { path: 'admin/dashboard', component: AdminDashboardComponent },
-  { path: 'admin/users', component: AdminUsersComponent },
-  { path: 'admin/recruiters', component: AdminRecruitersComponent },
-  { path: 'admin/jobs', component: AdminJobsComponent },
-  
-  // Public Pages
   { path: 'jobs', component: JobsListComponent },
   { path: 'jobs/:id', component: JobPublicDetailComponent },
   { path: 'companies', component: CompaniesComponent },
+
+  // Candidate Routes (Auth + Candidate Role required)
+  { 
+    path: 'candidate', 
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Candidate'] },
+    children: [
+      { path: 'dashboard', component: CandidateDashboardComponent },
+      { path: 'profile', component: CandidateProfileComponent },
+      { path: 'jobs', component: JobSearchComponent },
+      { path: 'jobs/:id', component: JobDetailComponent },
+      { path: 'applications', component: ApplicationsComponent },
+      { path: 'companies', component: CompaniesComponent },
+      { path: 'notifications', component: CandidateDashboardComponent },
+      { path: 'settings', component: CandidateDashboardComponent },
+      { path: 'skill-gap', component: CandidateDashboardComponent },
+    ]
+  },
+  
+  // Recruiter Routes (Auth + Recruiter Role required)
+  {
+    path: 'recruiter',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Recruiter'] },
+    children: [
+      { path: 'dashboard', component: RecruiterDashboardComponent },
+      { path: 'post-job', component: PostJobComponent },
+      { path: 'jobs', component: ManageJobsComponent },
+      { path: 'applicants', component: ApplicantsComponent },
+      { path: 'jobs/:id/applicants', component: ApplicantsComponent },
+      { path: 'profile', component: RecruiterProfileComponent },
+    ]
+  },
+
+  // Admin Routes (Auth + Admin Role required)
+  {
+    path: 'admin',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Admin'] },
+    children: [
+      { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'users', component: AdminUsersComponent },
+      { path: 'recruiters', component: AdminRecruitersComponent },
+      { path: 'jobs', component: AdminJobsComponent },
+    ]
+  },
 
   { path: '**', redirectTo: '' }
 ];

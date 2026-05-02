@@ -6,6 +6,8 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { JobResponse, ApplicantResponse } from '../../../core/models/recruiter.models';
 import { Chart, registerables } from 'chart.js';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 Chart.register(...registerables);
 
@@ -32,6 +34,23 @@ export class RecruiterDashboardComponent implements OnInit {
   private activityChart?: Chart;
   private statusChart?: Chart;
 
+  chartData = this.getDefaultChartData();
+
+  getDefaultChartData() {
+    const now = new Date();
+    const monthLabels: string[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      monthLabels.push(d.toLocaleString('default', { month: 'short' }));
+    }
+    return {
+      labels: monthLabels,
+      newApplicants: [0, 0, 0, 0, 0, 0],
+      hires: [0, 0, 0, 0, 0, 0],
+      statusCounts: [0, 0, 0, 0]
+    };
+  }
+
   constructor(
     private recruiterService: RecruiterService,
     public  authService:      AuthService,
@@ -42,28 +61,41 @@ export class RecruiterDashboardComponent implements OnInit {
     this.loadDashboard();
   }
 
-  ngAfterViewInit(): void {
-    this.initActivityChart();
-    this.initStatusChart();
+  private finishLoading(): void {
+    this.loading.set(false);
+    
+    const checkAndInit = (attempts = 0) => {
+      if (document.getElementById('activityChart') && document.getElementById('statusChart')) {
+        this.initActivityChart();
+        this.initStatusChart();
+      } else if (attempts < 10) {
+        setTimeout(() => checkAndInit(attempts + 1), 50);
+      }
+    };
+    
+    checkAndInit();
   }
 
   private initActivityChart(): void {
+    if (this.activityChart) {
+      this.activityChart.destroy();
+    }
     const ctx = document.getElementById('activityChart') as HTMLCanvasElement;
     if (!ctx) return;
 
     this.activityChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        labels: this.chartData.labels,
         datasets: [{
           label: 'New Applicants',
-          data: [40, 55, 68, 85, 92, 110],
+          data: this.chartData.newApplicants,
           backgroundColor: '#10b981',
           borderRadius: 8,
           barThickness: 32
         }, {
           label: 'Hires',
-          data: [5, 7, 9, 12, 10, 15],
+          data: this.chartData.hires,
           backgroundColor: '#6366f1',
           borderRadius: 8,
           barThickness: 32
@@ -87,6 +119,9 @@ export class RecruiterDashboardComponent implements OnInit {
   }
 
   private initStatusChart(): void {
+    if (this.statusChart) {
+      this.statusChart.destroy();
+    }
     const ctx = document.getElementById('statusChart') as HTMLCanvasElement;
     if (!ctx) return;
 
@@ -95,7 +130,7 @@ export class RecruiterDashboardComponent implements OnInit {
       data: {
         labels: ['New', 'Interview', 'Shortlisted', 'Rejected'],
         datasets: [{
-          data: [120, 32, 28, 45],
+          data: this.chartData.statusCounts,
           backgroundColor: ['#3b82f6', '#06b6d4', '#10b981', '#f43f5e'],
           borderWidth: 0,
           hoverOffset: 20
@@ -133,18 +168,72 @@ export class RecruiterDashboardComponent implements OnInit {
             totalApplicants: total
           }));
 
-          // Load top applicants for the first active job
-          const firstJob = jobs.find(j => j.isActive);
-          if (firstJob) {
-            this.loadTopApplicants(firstJob.jobId);
+          // Prepare to fetch applicants for all jobs to populate charts
+          if (jobs.length > 0) {
+            const reqs = jobs.map(j => this.recruiterService.getApplicants(j.jobId).pipe(
+              catchError(() => of({ success: false, data: [] }))
+            ));
+
+            forkJoin(reqs).subscribe(results => {
+              const allApplicants = results.flatMap(r => (r as any).data || []);
+              
+              let newCount = 0; let interviewCount = 0;
+              let shortlistedCount = 0; let rejectedCount = 0;
+              let hiredCount = 0;
+
+              const monthCounts = new Array(6).fill(0);
+              const hireCounts = new Array(6).fill(0);
+              const now = new Date();
+
+              allApplicants.forEach(a => {
+                const s = a.status;
+                if (s === 'New') newCount++;
+                else if (s === 'Interview') interviewCount++;
+                else if (s === 'Shortlisted') shortlistedCount++;
+                else if (s === 'Rejected') rejectedCount++;
+                else if (s === 'Hired') hiredCount++;
+                else newCount++; // Treat unknown as New
+
+                if (a.appliedAt) {
+                  const applied = new Date(a.appliedAt);
+                  const monthDiff = (now.getFullYear() - applied.getFullYear()) * 12 + (now.getMonth() - applied.getMonth());
+                  if (monthDiff >= 0 && monthDiff < 6) {
+                    const idx = 5 - monthDiff;
+                    monthCounts[idx]++;
+                    if (s === 'Hired') hireCounts[idx]++;
+                  }
+                }
+              });
+
+              this.stats.update(st => ({ ...st, hiresThisMonth: hiredCount }));
+              
+              this.chartData = {
+                labels: this.getDefaultChartData().labels,
+                newApplicants: monthCounts,
+                hires: hireCounts,
+                statusCounts: [newCount, interviewCount, shortlistedCount, rejectedCount]
+              };
+
+              const firstJob = jobs.find(j => j.isActive);
+              if (firstJob) {
+                this.loadTopApplicants(firstJob.jobId);
+              } else {
+                this.finishLoading();
+              }
+            });
           } else {
-            this.loading.set(false);
+            this.chartData = this.getDefaultChartData();
+            this.finishLoading();
           }
         } else {
-          this.loading.set(false);
+          this.chartData = this.getDefaultChartData();
+          this.finishLoading();
         }
       },
-      error: () => this.loading.set(false)
+      error: () => {
+        this.chartData = this.getDefaultChartData();
+        this.finishLoading();
+      }
     });
   }
 
@@ -165,9 +254,9 @@ export class RecruiterDashboardComponent implements OnInit {
             }));
           }
         }
-        this.loading.set(false);
+        this.finishLoading();
       },
-      error: () => this.loading.set(false)
+      error: () => this.finishLoading()
     });
   }
 
@@ -203,10 +292,22 @@ export class RecruiterDashboardComponent implements OnInit {
   }
 
   deleteJob(jobId: number): void {
+    if (!confirm('Are you sure you want to deactivate this job?')) return;
     this.recruiterService.deleteJob(jobId).subscribe({
       next: res => {
         if (res.success) {
           this.toast.success('Job deactivated.');
+          this.loadDashboard();
+        }
+      }
+    });
+  }
+
+  toggleStatus(jobId: number): void {
+    this.recruiterService.toggleJobStatus(jobId).subscribe({
+      next: res => {
+        if (res.success) {
+          this.toast.success(res.message || 'Status updated');
           this.loadDashboard();
         }
       }

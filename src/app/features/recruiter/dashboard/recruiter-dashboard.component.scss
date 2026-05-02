@@ -17,7 +17,7 @@ $shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   display: block;
   background: $slate-100;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   padding: 140px 32px 60px;
   position: relative;
   overflow-x: hidden;
@@ -25,7 +25,7 @@ $shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 
 // ── Typography ───────────────────────────────────────────────────
 h1, h2, h3, h4 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   color: $slate-900;
   letter-spacing: -0.02em;
 }
@@ -319,20 +319,48 @@ h1, h2, h3, h4 {
   .welcome-box .actions { position: static; transform: none; margin-top: 24px; }
 }
 
-.btn-manage {
-  padding: 8px 16px;
-  background: $slate-50;
-  color: $slate-900;
-  text-decoration: none;
+.actions-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
-  font-size: 12px;
-  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
   border: 1px solid $slate-200;
-  transition: all 0.2s;
+  background: $white;
+  color: $slate-600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
 
   &:hover {
-      background: $slate-900;
-      color: $white;
-      border-color: $slate-900;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  &.view {
+    &:hover { background: #eff6ff; color: #3b82f6; border-color: #3b82f6; }
+  }
+
+  &.edit {
+    &:hover { background: #fffbeb; color: #f59e0b; border-color: #f59e0b; }
+  }
+
+  &.toggle {
+    background: #fef2f2; color: #ef4444; border-color: #fee2e2;
+    &.active {
+      background: #f0fdf4; color: #10b981; border-color: #dcfce7;
+    }
+    
+    &:hover {
+      transform: scale(1.1) rotate(10deg);
+    }
   }
 }

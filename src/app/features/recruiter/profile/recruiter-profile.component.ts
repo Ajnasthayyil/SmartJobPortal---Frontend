@@ -90,7 +90,7 @@ export class RecruiterProfileComponent implements OnInit {
     // Only send what the API expects
     const payload = {
       companyName: this.form.value.companyName,
-      website:     this.form.value.website     || null,
+      website:     this.form.value.website     || '',
       industry:    this.form.value.industry,
       description: this.form.value.description,
       location:    this.form.value.location

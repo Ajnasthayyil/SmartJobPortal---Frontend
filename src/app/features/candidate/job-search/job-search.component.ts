@@ -110,4 +110,41 @@ export class JobSearchComponent implements OnInit {
     const c = 2 * Math.PI * 18;
     return c * (1 - (score || 0) / 100);
   }
+
+  applyingId = signal<number | null>(null);
+  showApplyModal = signal(false);
+  currentJobId = signal<number | null>(null);
+  coverNote = '';
+
+  openApplyModal(jobId: number): void {
+    this.currentJobId.set(jobId);
+    this.coverNote = '';
+    this.showApplyModal.set(true);
+  }
+
+  submitApplication(): void {
+    const jobId = this.currentJobId();
+    if (!jobId) return;
+
+    this.applyingId.set(jobId);
+    this.service.applyJob(jobId, this.coverNote).subscribe({
+      next: res => {
+        this.applyingId.set(null);
+        this.showApplyModal.set(false);
+        if (res.success) {
+          this.toast.success('Successfully applied for the job!');
+          // Update local state to show "Applied"
+          this.jobs.update(jobs => jobs.map(j => 
+            j.jobId === jobId ? { ...j, isApplied: true } : j
+          ));
+        } else {
+          this.toast.error(res.message || 'Failed to apply.');
+        }
+      },
+      error: (err) => {
+        this.applyingId.set(null);
+        this.toast.error(err.error?.message || 'An error occurred while applying.');
+      }
+    });
+  }
 }

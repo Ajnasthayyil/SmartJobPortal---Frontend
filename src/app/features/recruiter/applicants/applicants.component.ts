@@ -34,15 +34,23 @@ export class ApplicantsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.jobId = Number(this.route.snapshot.paramMap.get('id'));
+    const idParam = this.route.snapshot.paramMap.get('id');
+    this.jobId = idParam ? Number(idParam) : 0;
     this.load();
   }
 
   load(): void {
     this.loading.set(true);
-    const call = this.viewMode() === 'ranked'
-      ? this.service.getRankedApplicants(this.jobId)
-      : this.service.getApplicants(this.jobId);
+    let call;
+
+    if (this.jobId > 0) {
+      call = this.viewMode() === 'ranked'
+        ? this.service.getRankedApplicants(this.jobId)
+        : this.service.getApplicants(this.jobId);
+    } else {
+      // Global applicants across all jobs
+      call = this.service.getApplicantsAcrossAllJobs();
+    }
 
     call.subscribe({
       next: res => {

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-landing',
@@ -9,8 +11,10 @@ import { RouterLink } from '@angular/router';
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
-export class LandingComponent {
+export class LandingComponent implements OnInit {
   activeFilter = 'All';
+  jobs: any[] = [];
+  loading = true;
 
   filters = ['All', 'Full Time', 'Remote', 'Internship', 'Part Time', '₹0–₹20k', '₹20k–₹60k', '₹60k+'];
 
@@ -19,15 +23,6 @@ export class LandingComponent {
     { num: '12', suffix: 'K+', label: 'Companies' },
     { num: '3.2', suffix: 'M+', label: 'Candidates' },
     { num: '94', suffix: '%', label: 'Placement Rate' },
-  ];
-
-  jobs = [
-    { logoClass: 'logo-a', logoText: 'GG', title: 'Senior React Developer', company: 'Google India', badgeClass: 'badge-remote', badgeLabel: 'Remote', tags: ['React', 'TypeScript', 'GraphQL'], salary: '₹45–₹65L/yr', timeAgo: '2h ago', match: 98 },
-    { logoClass: 'logo-b', logoText: 'AZ', title: 'Cloud Solutions Architect', company: 'Amazon Web Services', badgeClass: 'badge-full', badgeLabel: 'Full Time', tags: ['AWS', 'Terraform', 'Kubernetes'], salary: '₹80–₹1.2Cr/yr', timeAgo: '5h ago', match: 95 },
-    { logoClass: 'logo-c', logoText: 'SW', title: 'Product Designer', company: 'Swiggy', badgeClass: 'badge-full', badgeLabel: 'Full Time', tags: ['Figma', 'UX Research', 'Prototyping'], salary: '₹25–₹40L/yr', timeAgo: '1d ago', match: 91 },
-    { logoClass: 'logo-d', logoText: 'ZM', title: 'Data Science Intern', company: 'Zepto', badgeClass: 'badge-intern', badgeLabel: 'Internship', tags: ['Python', 'ML', 'SQL'], salary: '₹30–₹50k/mo', timeAgo: '3h ago', match: 89 },
-    { logoClass: 'logo-e', logoText: 'RZ', title: 'Backend Engineer — Go', company: 'Razorpay', badgeClass: 'badge-remote', badgeLabel: 'Remote', tags: ['Go', 'Kafka', 'PostgreSQL'], salary: '₹35–₹55L/yr', timeAgo: '6h ago', match: 87 },
-    { logoClass: 'logo-f', logoText: 'BY', title: 'Growth Marketing Lead', company: "BYJU'S", badgeClass: 'badge-part', badgeLabel: 'Part Time', tags: ['SEO', 'Analytics', 'Content'], salary: '₹15–₹25L/yr', timeAgo: '12h ago', match: 84 },
   ];
 
   categories = [
@@ -41,19 +36,36 @@ export class LandingComponent {
     { icon: 'fa-solid fa-robot', name: 'AI & Machine Learning', count: 2150 },
   ];
 
-  // For animated counters
   displayCounts: number[] = [];
+  private startTime: number | null = null;
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
+    this.fetchFeaturedJobs();
     this.categories.forEach((cat, i) => {
       this.displayCounts[i] = 0;
       this.animateCount(i, cat.count);
     });
   }
 
+  fetchFeaturedJobs() {
+    this.loading = true;
+    this.http.get<any>(`${environment.apiUrl}/candidate/jobs?page=1&pageSize=6`).subscribe({
+      next: res => {
+        if (res.success) {
+          this.jobs = res.data?.jobs || [];
+        }
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
+  }
+
   animateCount(index: number, target: number) {
     const duration = 2000;
-    const start = 0;
     const step = (timestamp: number) => {
       if (!this.startTime) this.startTime = timestamp;
       const progress = Math.min((timestamp - this.startTime) / duration, 1);
@@ -64,8 +76,6 @@ export class LandingComponent {
     };
     window.requestAnimationFrame(step);
   }
-
-  private startTime: number | null = null;
 
   companies = [
     { logoClass: 'logo-a', logoText: 'GG', name: 'Google', industry: 'Technology', openRoles: 142 },

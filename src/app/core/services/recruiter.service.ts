@@ -55,4 +55,7 @@ export class RecruiterService {
     return this.http.put<ApiResponse<string>>
       (`${this.api}/applications/${applicationId}/status`, { status });
   }
+  getApplicantsAcrossAllJobs(): Observable<ApiResponse<ApplicantResponse[]>> {
+    return this.http.get<ApiResponse<ApplicantResponse[]>>(`${this.api}/applicants`);
+  }
 }

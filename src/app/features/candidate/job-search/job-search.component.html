@@ -1,37 +1,43 @@
-<div class="jobs-page">
+<div class="jobs-page-wrapper">
 
   <!-- ── Search Hero ─────────────────────────────────── -->
-  <div class="search-hero">
-    <h1 class="search-title">Discover Your Next Move</h1>
+  <header class="search-hero">
+    <div class="hero-bg-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+    
+    <h1 class="search-title">Find Your Future.</h1>
     <p class="search-sub">
-      <i class="fa-solid fa-wand-magic-sparkles"></i> 
-      Explore thousands of AI-matched opportunities tailored to your expertise
+      <i class="fa-solid fa-sparkles"></i> 
+      AI-powered job matching for the next generation of talent.
     </p>
     
     <div class="search-bar">
       <div class="search-field">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" [(ngModel)]="keyword" placeholder="Job title, skills, or company..." (keyup.enter)="search()" />
+        <input type="text" [(ngModel)]="keyword" placeholder="What are you looking for?" (keyup.enter)="search()" />
       </div>
       <div class="search-divider"></div>
       <div class="search-field">
-        <i class="fa-solid fa-location-dot"></i>
-        <input type="text" [(ngModel)]="location" placeholder="City, State, or Remote" (keyup.enter)="search()" />
+        <i class="fa-solid fa-location-arrow"></i>
+        <input type="text" [(ngModel)]="location" placeholder="Where? (City or Remote)" (keyup.enter)="search()" />
       </div>
-      <button class="btn-search" (click)="search()">Search</button>
+      <button class="btn-search" (click)="search()">
+        Search Jobs
+      </button>
     </div>
-  </div>
+  </header>
 
   <div class="jobs-layout">
     
     <!-- ── Filter Sidebar ────────────────────────────── -->
     <aside class="filter-sidebar">
       <div class="filter-card">
-        <h3 class="filter-title">Filters</h3>
+        <h3 class="filter-title">Refine Results</h3>
         
-        <!-- Job Type Group -->
         <div class="filter-group">
-          <label>Job Type</label>
+          <label>Job Category</label>
           <div class="chip-grid">
             <button *ngFor="let type of jobTypes" 
                     class="filter-chip" 
@@ -42,9 +48,8 @@
           </div>
         </div>
 
-        <!-- Salary Range Group -->
         <div class="filter-group">
-          <label>Salary Range (Min)</label>
+          <label>Minimum Salary</label>
           <div class="chip-grid">
             <button *ngFor="let range of salaryRanges" 
                     class="filter-chip" 
@@ -53,24 +58,20 @@
               {{ range.label }}
             </button>
           </div>
-          <button *ngIf="selectedSalary" class="clear-link" (click)="selectedSalary = null; search()">
-            Reset Salary
-          </button>
         </div>
 
-        <!-- Experience Group -->
         <div class="filter-group">
-          <label>Experience Level</label>
+          <label>Experience</label>
           <select class="filter-select">
             <option>All Levels</option>
-            <option>Entry Level (0-2 yrs)</option>
-            <option>Mid Level (2-5 yrs)</option>
-            <option>Senior Level (5+ yrs)</option>
+            <option>Junior (0-2 yrs)</option>
+            <option>Intermediate (2-5 yrs)</option>
+            <option>Senior (5+ yrs)</option>
           </select>
         </div>
 
         <button class="btn-reset-all" (click)="keyword='';location='';setFilter('All')">
-          Clear All Filters
+          Reset All Filters
         </button>
       </div>
     </aside>
@@ -78,18 +79,12 @@
     <!-- ── Results Area ──────────────────────────────── -->
     <main class="results-area">
       
-      <!-- Premium Loading State -->
-      <div class="loading-overlay" *ngIf="loading()">
-        <div class="spinner-container">
-          <div class="premium-spinner"></div>
-          <div class="loading-text">Analyzing opportunities...</div>
-        </div>
-      </div>
-
       <div class="results-info">
-        <span *ngIf="!loading()">Showing <strong>{{ totalCount() }}</strong> opportunities</span>
+        <span *ngIf="!loading()">
+          Found <strong>{{ totalCount() }}</strong> opportunities for you
+        </span>
         <div class="sort-dropdown">
-          Sort by: <strong>Most Relevant</strong> <i class="fa-solid fa-chevron-down"></i>
+          Sort: <strong>Most Relevant</strong> <i class="fa-solid fa-chevron-down"></i>
         </div>
       </div>
 
@@ -100,13 +95,13 @@
 
       <!-- Jobs Grid -->
       <div class="jobs-grid" *ngIf="!loading()">
-        
         <ng-container *ngIf="jobs().length > 0; else noJobs">
-          <div *ngFor="let job of jobs()" class="job-card">
+          <article *ngFor="let job of jobs()" class="job-card">
             <div class="card-top">
               <div class="company-logo">{{ job.companyName.charAt(0) }}</div>
               <div class="match-badge" *ngIf="job.matchScore">
-                <i class="fa-solid fa-bolt"></i> {{ job.matchScore }}% Match
+                <i class="fa-solid fa-bolt-lightning"></i> 
+                {{ job.matchScore }}% Match
               </div>
             </div>
 
@@ -115,43 +110,111 @@
               <div class="company-name">{{ job.companyName }}</div>
               
               <div class="meta-row">
-                <span class="meta-item"><i class="fa-solid fa-location-dot"></i> {{ job.location }}</span>
-                <span class="meta-item"><i class="fa-solid fa-clock"></i> {{ job.jobType }}</span>
-                <span class="meta-item accent" *ngIf="job.minSalary"><i class="fa-solid fa-indian-rupee-sign"></i> {{ job.minSalary | number }}k+</span>
+                <span class="meta-item">
+                  <i class="fa-solid fa-location-dot"></i> 
+                  {{ job.location }}
+                </span>
+                <span class="meta-item">
+                  <i class="fa-solid fa-calendar-check"></i> 
+                  {{ job.jobType }}
+                </span>
+                <span class="meta-item accent" *ngIf="job.minSalary">
+                  <i class="fa-solid fa-circle-dollar-to-slot"></i> 
+                  ₹{{ job.minSalary | number }}k+
+                </span>
               </div>
 
               <div class="skills-row">
-                <span *ngFor="let skill of job.requiredSkills.slice(0,3)" class="skill-tag">{{ skill }}</span>
-                <span *ngIf="job.requiredSkills.length > 3" class="skill-more">+{{ job.requiredSkills.length - 3 }}</span>
+                <span *ngFor="let skill of job.requiredSkills.slice(0,3)" class="skill-tag">
+                  {{ skill }}
+                </span>
+                <span *ngIf="job.requiredSkills.length > 3" class="skill-more">
+                  +{{ job.requiredSkills.length - 3 }} more
+                </span>
               </div>
             </div>
 
             <div class="card-footer">
-              <span class="posted-date">Posted {{ job.postedAt | date:'MMM d' }}</span>
-              <a [routerLink]="['/candidate/jobs', job.jobId]" class="btn-view">View Details</a>
+              <span class="posted-date">{{ job.postedAt | date:'mediumDate' }}</span>
+              <div class="card-btns">
+                <a [routerLink]="['/candidate/jobs', job.jobId]" class="btn-view">
+                  Explore
+                </a>
+                <button class="btn-apply" 
+                        [class.applied]="job.isApplied"
+                        (click)="!job.isApplied && openApplyModal(job.jobId)"
+                        [disabled]="applyingId() === job.jobId || job.isApplied">
+                  <ng-container *ngIf="job.isApplied">
+                    <i class="fa-solid fa-circle-check"></i> Applied
+                  </ng-container>
+                  <ng-container *ngIf="!job.isApplied">
+                    Quick Apply
+                  </ng-container>
+                </button>
+              </div>
             </div>
-          </div>
+          </article>
         </ng-container>
 
         <ng-template #noJobs>
           <div class="empty-results">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <h3>No matches found</h3>
-            <p>Try adjusting your filters or searching for different keywords.</p>
+            <i class="fa-solid fa-ghost"></i>
+            <h3>No Jobs Found</h3>
+            <p>Try refining your search or removing some filters to see more results.</p>
           </div>
         </ng-template>
-
       </div>
 
-      <!-- Pagination -->
       <div class="pagination-wrap" *ngIf="page() < totalPages">
         <button class="btn-load-more" (click)="loadMore()" [disabled]="loading()">
-          <span *ngIf="!loading()">Load More Jobs</span>
-          <span *ngIf="loading()">Loading...</span>
+          {{ loading() ? 'Finding more...' : 'Load More Opportunities' }}
         </button>
       </div>
 
     </main>
 
   </div>
+
+  <!-- ── Cover Note Modal ──────────────────────────────── -->
+  <div class="modal-overlay" *ngIf="showApplyModal()" (click)="showApplyModal.set(false)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="header-info">
+          <h3>Apply for this Position</h3>
+          <p>Add a cover letter to stand out to the recruiter.</p>
+        </div>
+        <button class="btn-close" (click)="showApplyModal.set(false)">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Cover Letter / Note</label>
+          <textarea [(ngModel)]="coverNote" 
+                    placeholder="Briefly explain why you're a good fit..."
+                    rows="6"></textarea>
+          <div class="textarea-footer">
+            <span>Minimum 50 characters recommended</span>
+            <span>{{ coverNote.length }} characters</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="showApplyModal.set(false)">Cancel</button>
+        <button class="btn-submit" 
+                (click)="submitApplication()" 
+                [disabled]="applyingId()">
+          <ng-container *ngIf="!applyingId()">
+            Submit Application
+          </ng-container>
+          <ng-container *ngIf="applyingId()">
+            <i class="fa-solid fa-spinner fa-spin"></i> Submitting...
+          </ng-container>
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>

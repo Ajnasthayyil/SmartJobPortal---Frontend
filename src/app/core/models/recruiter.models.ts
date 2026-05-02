@@ -56,4 +56,5 @@ export interface ApplicantResponse {
   skillScore: number | null;
   missingSkills: string[];
   scoreLabel: string;
+  jobTitle?: string;
 }

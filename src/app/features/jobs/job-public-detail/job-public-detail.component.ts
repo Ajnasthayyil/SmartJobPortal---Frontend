@@ -27,7 +27,7 @@ export class JobPublicDetailComponent implements OnInit {
   ngOnInit(): void {
     this.jobId = Number(this.route.snapshot.paramMap.get('id'));
     this.http.get<any>(
-      `${environment.apiUrl}/candidate/jobs/${this.jobId}`
+      `${environment.apiUrl}/jobs/${this.jobId}`
     ).subscribe({
       next: res => {
         if (res.success) this.job.set(res.data);

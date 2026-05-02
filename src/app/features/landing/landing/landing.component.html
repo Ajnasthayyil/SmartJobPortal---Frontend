@@ -63,28 +63,43 @@
         <p class="section-sub">Curated roles from world-class teams, ranked by your personal AI compatibility score.</p>
       </div>
       <a class="see-all" routerLink="/jobs" style="color: var(--primary); font-weight: 700; text-decoration: none; margin-bottom: 16px; display: block;">
-        Explore all 24k+ jobs <i class="fa-solid fa-arrow-right"></i>
+        Explore all jobs <i class="fa-solid fa-arrow-right"></i>
       </a>
     </div>
 
     <div class="jobs-grid">
-      <div class="job-card" *ngFor="let job of jobs">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-          <div class="company-logo" [ngClass]="job.logoClass">{{ job.logoText }}</div>
-          <span class="match-pill">{{ job.match }}% AI Match</span>
+      <!-- Loading Skeletons -->
+      <ng-container *ngIf="loading">
+        <div class="job-card-skeleton" *ngFor="let i of [1,2,3,4,5,6]">
+          <div class="sk-logo"></div>
+          <div class="sk-title"></div>
+          <div class="sk-meta"></div>
+          <div class="sk-tags"></div>
         </div>
-        <h3 class="job-title">{{ job.title }}</h3>
-        <div class="job-meta">{{ job.company }} • {{ job.badgeLabel }}</div>
-        
-        <div class="card-tags">
-          <span class="tag" *ngFor="let tag of job.tags">{{ tag }}</span>
-        </div>
+      </ng-container>
 
-        <div class="card-footer">
-          <div class="salary">{{ job.salary }}</div>
-          <button class="search-btn" style="padding: 10px 20px; font-size: 14px; border-radius: 12px;">View Details</button>
+      <!-- Real Data -->
+      <ng-container *ngIf="!loading">
+        <div class="job-card" *ngFor="let job of jobs" [routerLink]="['/jobs', job.jobId]">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div class="company-logo">{{ job.companyName?.charAt(0) }}</div>
+            <span class="match-pill" *ngIf="job.matchScore">{{ job.matchScore }}% AI Match</span>
+          </div>
+          <h3 class="job-title">{{ job.title }}</h3>
+          <div class="job-meta">{{ job.companyName }} • {{ job.jobType }}</div>
+          
+          <div class="card-tags">
+            <span class="tag" *ngFor="let skill of job.requiredSkills?.slice(0, 3)">{{ skill }}</span>
+            <span class="tag" *ngIf="job.requiredSkills?.length > 3">+{{ job.requiredSkills.length - 3 }}</span>
+          </div>
+
+          <div class="card-footer">
+            <div class="salary" *ngIf="job.minSalary">₹{{ job.minSalary | number }}+</div>
+            <div class="salary" *ngIf="!job.minSalary">Competitive</div>
+            <button class="search-btn">View Details</button>
+          </div>
         </div>
-      </div>
+      </ng-container>
     </div>
   </section>
 

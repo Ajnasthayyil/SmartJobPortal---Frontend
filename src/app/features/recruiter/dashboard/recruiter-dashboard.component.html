@@ -85,28 +85,27 @@
                     <div class="trend up"><i class="fa-solid fa-check"></i> Target met</div>
                 </div>
             </section>
-+
-+            <!-- Charts Section -->
-+            <section class="charts-grid">
-+                <div class="chart-card activity">
-+                    <div class="card-header">
-+                        <h3>Recruitment Activity</h3>
-+                        <span class="period">Last 6 Months</span>
-+                    </div>
-+                    <div class="chart-container">
-+                        <canvas id="activityChart"></canvas>
-+                    </div>
-+                </div>
-+
-+                <div class="chart-card status">
-+                    <div class="card-header">
-+                        <h3>Applicant Status</h3>
-+                    </div>
-+                    <div class="chart-container">
-+                        <canvas id="statusChart"></canvas>
-+                    </div>
-+                </div>
-+            </section>
+            <!-- Charts Section -->
+            <section class="charts-grid">
+                <div class="chart-card activity">
+                    <div class="card-header">
+                        <h3>Recruitment Activity</h3>
+                        <span class="period">Last 6 Months</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card status">
+                    <div class="card-header">
+                        <h3>Applicant Status</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </section>
 
             <!-- Content Grid -->
             <div class="dashboard-content">
@@ -131,9 +130,15 @@
                                     }} applicants</span>
                             </div>
                             <div class="actions-right">
-                                <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="btn-manage">
-                                    Manage
+                                <a [routerLink]="['/recruiter/jobs', job.jobId, 'applicants']" class="icon-btn view" title="View Applicants">
+                                    <i class="fa-solid fa-eye"></i>
                                 </a>
+                                <a [routerLink]="['/recruiter/edit-job', job.jobId]" class="icon-btn edit" title="Edit Job">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <button (click)="toggleStatus(job.jobId)" class="icon-btn toggle" [class.active]="job.isActive" [title]="job.isActive ? 'Deactivate' : 'Activate'">
+                                    <i class="fa-solid fa-power-off"></i>
+                                </button>
                             </div>
                         </div>
                     </div>

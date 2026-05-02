@@ -1,54 +1,46 @@
 <div class="profile-page">
 
   <!-- ── Loading skeleton ────────────────────────────── -->
-  @if (loading()) {
+  <ng-container *ngIf="loading()">
     <div class="skeleton-wrap">
       <div class="sk" style="height:80px;border-radius:16px;margin-bottom:16px"></div>
       <div class="sk" style="height:500px;border-radius:16px"></div>
     </div>
-  }
+  </ng-container>
 
   <!-- ── Main content ────────────────────────────────── -->
-  @if (!loading()) {
+  <ng-container *ngIf="!loading()">
     <div class="profile-container">
 
       <!-- ── Header ───────────────────────────────────── -->
       <header class="profile-header">
         <div class="header-left">
           <div class="profile-badge">
-            <svg width="12" height="12" fill="none" stroke="currentColor"
-                 stroke-width="2" viewBox="0 0 24 24">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
               <polyline points="9 22 9 12 15 12 15 22"/>
             </svg>
             Recruiter Portal
           </div>
           <h1 class="header-title">Company Profile</h1>
-          <p class="header-subtitle">
-            Manage your company information and employer branding
-          </p>
+          <p class="header-subtitle">Manage your company information and employer branding</p>
         </div>
 
         <div class="header-actions">
-          <a routerLink="/recruiter/dashboard" class="btn-back">
-            ← Dashboard
-          </a>
-          <button class="btn-save"
-                  (click)="onSave()"
-                  [disabled]="saving()">
-            @if (saving()) {
+          <a routerLink="/recruiter/dashboard" class="btn-back">← Dashboard</a>
+          <button class="btn-save" (click)="onSave()" [disabled]="saving()">
+            <ng-container *ngIf="saving(); else notSaving">
               <span class="spinner"></span>
               Saving...
-            } @else {
-              <svg width="14" height="14" fill="none"
-                   stroke="currentColor" stroke-width="2.5"
-                   viewBox="0 0 24 24">
+            </ng-container>
+            <ng-template #notSaving>
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
                 <polyline points="17 21 17 13 7 13 7 21"/>
                 <polyline points="7 3 7 8 15 8"/>
               </svg>
               Save Changes
-            }
+            </ng-template>
           </button>
         </div>
       </header>
@@ -61,36 +53,25 @@
 
           <!-- Company card -->
           <div class="card company-card">
-            <div class="company-avatar">
-              {{ getInitials() }}
+            <div class="company-avatar">{{ getInitials() }}</div>
+            <div class="company-name-display">{{ profile()?.companyName || companyName.value || 'Your Company' }}</div>
+            <div class="company-industry-display">{{ profile()?.industry || industry.value || 'Industry not set' }}</div>
+            
+            <div class="company-location-display" *ngIf="profile()?.location || location.value">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              {{ profile()?.location || location.value }}
             </div>
-            <div class="company-name-display">
-              {{ profile()?.companyName || companyName.value || 'Your Company' }}
-            </div>
-            <div class="company-industry-display">
-              {{ profile()?.industry || industry.value || 'Industry not set' }}
-            </div>
-            @if (profile()?.location || location.value) {
-              <div class="company-location-display">
-                <svg width="12" height="12" fill="none" stroke="currentColor"
-                     stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                  <circle cx="12" cy="10" r="3"/>
-                </svg>
-                {{ profile()?.location || location.value }}
-              </div>
-            }
-            @if (profile()?.website || website.value) {
-              <a [href]="profile()?.website || website.value"
-                 target="_blank" class="company-website-link">
-                <svg width="12" height="12" fill="none" stroke="currentColor"
-                     stroke-width="2" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                </svg>
-                Visit Website
-              </a>
-            }
+            
+            <a [href]="profile()?.website || website.value" target="_blank" class="company-website-link" *ngIf="profile()?.website || website.value">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              Visit Website
+            </a>
           </div>
 
           <!-- Recruiter info card -->
@@ -103,14 +84,10 @@
                 <div class="rc-email">{{ getUserEmail() }}</div>
               </div>
             </div>
-            @if (profile()?.totalJobsPosted != null) {
-              <div class="rc-stat">
-                <span class="rc-stat-n">
-                  {{ profile()!.totalJobsPosted }}
-                </span>
-                <span class="rc-stat-l">Jobs Posted</span>
-              </div>
-            }
+            <div class="rc-stat" *ngIf="profile()?.totalJobsPosted != null">
+              <span class="rc-stat-n">{{ profile()!.totalJobsPosted }}</span>
+              <span class="rc-stat-l">Jobs Posted</span>
+            </div>
           </div>
 
           <!-- Tips card -->
@@ -130,12 +107,9 @@
         <div class="form-main">
           <form [formGroup]="form" class="profile-form" novalidate>
 
-            <!-- Company Information Card -->
             <div class="card section-card">
               <h3 class="card-title">
-                <svg width="16" height="16" fill="none"
-                     stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                   <polyline points="9 22 9 12 15 12 15 22"/>
                 </svg>
@@ -144,143 +118,68 @@
 
               <div class="form-grid">
 
-                <!-- Company Name -->
                 <div class="form-group">
-                  <label class="form-label">
-                    Company Name <span class="required">*</span>
-                  </label>
-                  <div class="input-wrapper"
-                       [class.focused]="companyName.dirty"
-                       [class.error-border]="companyName.invalid &&
-                                              companyName.touched">
-                    <svg class="input-icon" width="15" height="15"
-                         fill="none" stroke="currentColor" stroke-width="2"
-                         viewBox="0 0 24 24">
+                  <label class="form-label">Company Name <span class="required">*</span></label>
+                  <div class="input-wrapper" [class.focused]="companyName.dirty" [class.error-border]="companyName.invalid && companyName.touched">
+                    <svg class="input-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                       <rect x="2" y="7" width="20" height="14" rx="2"/>
                       <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
                     </svg>
-                    <input type="text"
-                           formControlName="companyName"
-                           placeholder="e.g. Tech Solutions Inc"
-                           autocomplete="organization"/>
+                    <input type="text" formControlName="companyName" placeholder="e.g. Tech Solutions Inc" autocomplete="organization"/>
                   </div>
-                  @if (companyName.invalid && companyName.touched) {
-                    <p class="field-error">
-                      @if (companyName.errors?.['required']) {
-                        Company name is required.
-                      }
-                      @if (companyName.errors?.['minlength']) {
-                        Minimum 2 characters.
-                      }
-                    </p>
-                  }
+                  <p class="field-error" *ngIf="companyName.invalid && companyName.touched">
+                    <span *ngIf="companyName.errors?.['required']">Company name is required.</span>
+                    <span *ngIf="companyName.errors?.['minlength']">Minimum 2 characters.</span>
+                  </p>
                 </div>
 
-                <!-- Industry -->
                 <div class="form-group">
-                  <label class="form-label">
-                    Industry <span class="required">*</span>
-                  </label>
-                  <div class="input-wrapper"
-                       [class.focused]="industry.dirty"
-                       [class.error-border]="industry.invalid &&
-                                              industry.touched">
-                    <svg class="input-icon" width="15" height="15"
-                         fill="none" stroke="currentColor" stroke-width="2"
-                         viewBox="0 0 24 24">
+                  <label class="form-label">Industry <span class="required">*</span></label>
+                  <div class="input-wrapper" [class.focused]="industry.dirty" [class.error-border]="industry.invalid && industry.touched">
+                    <svg class="input-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                       <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
                       <line x1="7" y1="7" x2="7.01" y2="7"/>
                     </svg>
-                    <input type="text"
-                           formControlName="industry"
-                           placeholder="e.g. Software Development"/>
+                    <input type="text" formControlName="industry" placeholder="e.g. Software Development"/>
                   </div>
-                  @if (industry.invalid && industry.touched) {
-                    <p class="field-error">Industry is required.</p>
-                  }
+                  <p class="field-error" *ngIf="industry.invalid && industry.touched">Industry is required.</p>
                 </div>
 
-                <!-- Website -->
                 <div class="form-group full-width">
                   <label class="form-label">Website URL</label>
-                  <div class="input-wrapper"
-                       [class.error-border]="website.invalid &&
-                                              website.touched">
-                    <svg class="input-icon" width="15" height="15"
-                         fill="none" stroke="currentColor" stroke-width="2"
-                         viewBox="0 0 24 24">
+                  <div class="input-wrapper" [class.error-border]="website.invalid && website.touched">
+                    <svg class="input-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                       <circle cx="12" cy="12" r="10"/>
                       <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                     </svg>
-                    <input type="url"
-                           formControlName="website"
-                           placeholder="https://yourcompany.com"
-                           autocomplete="url"/>
+                    <input type="url" formControlName="website" placeholder="https://yourcompany.com" autocomplete="url"/>
                   </div>
-                  @if (website.invalid && website.touched) {
-                    <p class="field-error">
-                      Enter a valid URL starting with http:// or https://
-                    </p>
-                  }
+                  <p class="field-error" *ngIf="website.invalid && website.touched">Enter a valid URL starting with http:// or https://</p>
                 </div>
 
-                <!-- Location -->
                 <div class="form-group full-width">
-                  <label class="form-label">
-                    Location <span class="required">*</span>
-                  </label>
-                  <div class="input-wrapper"
-                       [class.error-border]="location.invalid &&
-                                              location.touched">
-                    <svg class="input-icon" width="15" height="15"
-                         fill="none" stroke="currentColor" stroke-width="2"
-                         viewBox="0 0 24 24">
+                  <label class="form-label">Location <span class="required">*</span></label>
+                  <div class="input-wrapper" [class.error-border]="location.invalid && location.touched">
+                    <svg class="input-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                       <circle cx="12" cy="10" r="3"/>
                     </svg>
-                    <input type="text"
-                           formControlName="location"
-                           placeholder="e.g. Bangalore, India"
-                           autocomplete="address-level2"/>
+                    <input type="text" formControlName="location" placeholder="e.g. Bangalore, India" autocomplete="address-level2"/>
                   </div>
-                  @if (location.invalid && location.touched) {
-                    <p class="field-error">Location is required.</p>
-                  }
+                  <p class="field-error" *ngIf="location.invalid && location.touched">Location is required.</p>
                 </div>
 
-                <!-- Description -->
                 <div class="form-group full-width">
-                  <label class="form-label">
-                    Company Description <span class="required">*</span>
-                  </label>
-                  <textarea formControlName="description"
-                            class="form-textarea"
-                            [class.error-border]="description.invalid &&
-                                                   description.touched"
-                            rows="6"
-                            placeholder="Describe your company culture, mission, products, and what makes you a great place to work...">
-                  </textarea>
+                  <label class="form-label">Company Description <span class="required">*</span></label>
+                  <textarea formControlName="description" class="form-textarea" [class.error-border]="description.invalid && description.touched" rows="6" placeholder="Describe your company culture, mission, products, and what makes you a great place to work..."></textarea>
                   <div class="textarea-footer">
                     <span class="ta-hint">Minimum 50 characters</span>
-                    <span class="ta-count"
-                          [class.ta-count-error]="description.invalid &&
-                                                   description.touched &&
-                                                   descLength < 50"
-                          [class.ta-count-ok]="descLength >= 50">
-                      {{ descLength }} / 1000
-                    </span>
+                    <span class="ta-count" [class.ta-count-error]="description.invalid && description.touched && descLength < 50" [class.ta-count-ok]="descLength >= 50">{{ descLength }} / 1000</span>
                   </div>
-                  @if (description.invalid && description.touched) {
-                    <p class="field-error">
-                      @if (description.errors?.['required']) {
-                        Description is required.
-                      }
-                      @if (description.errors?.['minlength']) {
-                        Minimum 50 characters required.
-                        ({{ descLength }} / 50)
-                      }
-                    </p>
-                  }
+                  <p class="field-error" *ngIf="description.invalid && description.touched">
+                    <span *ngIf="description.errors?.['required']">Description is required.</span>
+                    <span *ngIf="description.errors?.['minlength']">Minimum 50 characters required. ({{ descLength }} / 50)</span>
+                  </p>
                 </div>
 
               </div>
@@ -288,19 +187,12 @@
 
             <!-- ── Form footer actions ─────────────────── -->
             <div class="form-footer">
-              <a routerLink="/recruiter/dashboard" class="btn-cancel">
-                Cancel
-              </a>
-              <button type="button"
-                      class="btn-save-bottom"
-                      (click)="onSave()"
-                      [disabled]="saving()">
-                @if (saving()) {
-                  <span class="spinner"></span>
-                  Saving...
-                } @else {
-                  Save Profile
-                }
+              <a routerLink="/recruiter/dashboard" class="btn-cancel">Cancel</a>
+              <button type="button" class="btn-save-bottom" (click)="onSave()" [disabled]="saving()">
+                <ng-container *ngIf="saving(); else notSavingBottom">
+                  <span class="spinner"></span> Saving...
+                </ng-container>
+                <ng-template #notSavingBottom>Save Profile</ng-template>
               </button>
             </div>
 
@@ -309,6 +201,6 @@
 
       </div>
     </div>
-  }
+  </ng-container>
 
 </div>
