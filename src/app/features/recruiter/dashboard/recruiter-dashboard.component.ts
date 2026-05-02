@@ -5,6 +5,9 @@ import { RecruiterService } from '../../../core/services/recruiter.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { JobResponse, ApplicantResponse } from '../../../core/models/recruiter.models';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-recruiter-dashboard',
@@ -26,6 +29,9 @@ export class RecruiterDashboardComponent implements OnInit {
     hiresThisMonth: 3
   });
 
+  private activityChart?: Chart;
+  private statusChart?: Chart;
+
   constructor(
     private recruiterService: RecruiterService,
     public  authService:      AuthService,
@@ -34,6 +40,79 @@ export class RecruiterDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDashboard();
+  }
+
+  ngAfterViewInit(): void {
+    this.initActivityChart();
+    this.initStatusChart();
+  }
+
+  private initActivityChart(): void {
+    const ctx = document.getElementById('activityChart') as HTMLCanvasElement;
+    if (!ctx) return;
+
+    this.activityChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'New Applicants',
+          data: [40, 55, 68, 85, 92, 110],
+          backgroundColor: '#10b981',
+          borderRadius: 8,
+          barThickness: 32
+        }, {
+          label: 'Hires',
+          data: [5, 7, 9, 12, 10, 15],
+          backgroundColor: '#6366f1',
+          borderRadius: 8,
+          barThickness: 32
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top', labels: { usePointStyle: true, font: { family: 'Inter', weight: 600 } } }
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: { 
+            beginAtZero: true,
+            grid: { color: '#f1f5f9' }
+          }
+        }
+      }
+    });
+  }
+
+  private initStatusChart(): void {
+    const ctx = document.getElementById('statusChart') as HTMLCanvasElement;
+    if (!ctx) return;
+
+    this.statusChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['New', 'Interview', 'Shortlisted', 'Rejected'],
+        datasets: [{
+          data: [120, 32, 28, 45],
+          backgroundColor: ['#3b82f6', '#06b6d4', '#10b981', '#f43f5e'],
+          borderWidth: 0,
+          hoverOffset: 20
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '75%',
+        plugins: {
+          legend: { 
+            position: 'bottom',
+            labels: { padding: 20, usePointStyle: true, font: { family: 'Inter', weight: 600 } }
+          }
+        }
+      }
+    });
   }
 
   loadDashboard(): void {
