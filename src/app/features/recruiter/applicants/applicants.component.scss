@@ -1,7 +1,7 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #6366f1;
-$primary-light: #eef2ff;
-$primary-dark: #4f46e5;
+$primary: #10b981;
+$primary-light: #d1fae5;
+$primary-dark: #059669;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -109,7 +109,7 @@ h1, h2, h3, h4 {
     &.active {
         background: $primary;
         color: $white;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
     }
 
     .badge {
@@ -266,7 +266,7 @@ h1, h2, h3, h4 {
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
-    &:hover { background: $primary; transform: scale(1.1); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+    &:hover { background: $primary; transform: scale(1.1); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
 }
 
 .text-right { text-align: right; }

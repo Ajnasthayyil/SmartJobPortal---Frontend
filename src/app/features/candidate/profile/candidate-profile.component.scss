@@ -1,5 +1,5 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #6366f1;
+$primary: #10b981;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -72,7 +72,7 @@ $slate-900: #0f172a;
     .avatar-img { width: 100%; height: 100%; border-radius: 42px; object-fit: cover; }
     .avatar-placeholder {
       width: 100%; height: 100%; border-radius: 42px;
-      background: #eef2ff; color: $primary;
+      background: #d1fae5; color: $primary;
       display: flex; align-items: center; justify-content: center;
       font-size: 56px; font-weight: 800;
     }

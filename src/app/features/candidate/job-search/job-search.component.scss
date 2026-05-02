@@ -1,5 +1,5 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #6366f1;
+$primary: #10b981;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -139,7 +139,7 @@ $slate-900: #0f172a;
     box-shadow: 0 10px 20px rgba($primary, 0.2);
     
     &:hover { 
-      background: #4f46e5; 
+      background: #059669; 
       transform: scale(1.02);
       box-shadow: 0 15px 30px rgba($primary, 0.3);
     }
@@ -246,7 +246,7 @@ $slate-900: #0f172a;
   .clear-link {
     background: none; border: none; color: $primary; font-size: 12px; font-weight: 800; cursor: pointer; margin-top: 12px;
     display: flex; align-items: center; gap: 4px;
-    &:hover { color: #4f46e5; text-decoration: underline; }
+    &:hover { color: #059669; text-decoration: underline; }
   }
 
   .btn-reset-all {
@@ -503,7 +503,7 @@ $slate-900: #0f172a;
         transition: transform 0.2s;
       }
       &:hover { 
-        color: #4f46e5;
+        color: #059669;
         &::after { transform: translateX(4px); }
       }
     }
@@ -526,7 +526,7 @@ $slate-900: #0f172a;
   font-size: 15px;
   cursor: pointer;
   transition: all 0.2s;
-  &:hover { background: #eef2ff; transform: translateY(-2px); }
+  &:hover { background: #d1fae5; transform: translateY(-2px); }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 

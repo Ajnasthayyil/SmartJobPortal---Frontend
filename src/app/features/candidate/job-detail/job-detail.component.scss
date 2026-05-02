@@ -1,5 +1,5 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #6366f1;
+$primary: #10b981;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -165,7 +165,7 @@ $slate-900: #0f172a;
   transition: all 0.2s;
   position: relative;
   z-index: 1;
-  &:hover { background: #4f46e5; transform: scale(1.02); box-shadow: 0 10px 25px rgba($primary, 0.4); }
+  &:hover { background: #059669; transform: scale(1.02); box-shadow: 0 10px 25px rgba($primary, 0.4); }
 }
 
 // ── Match Card ───────────────────────────────────────────────────

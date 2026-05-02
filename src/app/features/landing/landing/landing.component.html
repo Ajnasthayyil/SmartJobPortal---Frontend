@@ -1,29 +1,44 @@
 <div class="landing-wrapper">
   
   <!-- HERO SECTION -->
-  <section class="hero">
-    <div class="hero-grid"></div>
+  <section class="hero-split">
+    <!-- Modern background effect -->
+    <div class="hero-bg"></div>
 
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      Next-Gen AI Job Matching — Now in Beta
+    <div class="hero-content">
+      <div class="hero-badge-pill">
+        <span class="badge-new">NEW</span> 
+        <span>Trusted by 500+ top companies worldwide</span>
+      </div>
+
+      <h1>The Smarter Way to<br><span>Manage Your Career</span></h1>
+      <p>Streamline your job search, enhance your professional profile, and connect with top recruiters — all in one powerful platform.</p>
+
+      <div class="hero-actions">
+        <button class="btn-primary-hero" routerLink="/register">Get Started Free <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i></button>
+        <button class="btn-demo"><i class="fa-regular fa-circle-play"></i> Watch Demo</button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-val">500+</span>
+          <span class="stat-label">Institutions</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-val">50K+</span>
+          <span class="stat-label">Students</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-val">98%</span>
+          <span class="stat-label">Satisfaction</span>
+        </div>
+      </div>
     </div>
 
-    <h1>The Future of <span>Talent Discovery</span> is Here.</h1>
-    <p>Empowering millions of professionals and forward-thinking companies with AI-driven precision matching.</p>
-
-    <div class="search-container">
-      <div class="search-box">
-        <div class="search-input-wrap">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" placeholder="Job title, skills, or company...">
-        </div>
-        <div class="search-input-wrap">
-          <i class="fa-solid fa-location-dot"></i>
-          <input type="text" placeholder="Location or Remote">
-        </div>
-        <button class="search-btn" routerLink="/candidate/job-search">Find Jobs</button>
-      </div>
+    <div class="hero-image-wrapper">
+      <img src="assets/hero-illustration.png" alt="Hero Illustration" class="hero-image">
     </div>
   </section>
 

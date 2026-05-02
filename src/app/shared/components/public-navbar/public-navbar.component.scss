@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
 
-$primary:   #6366f1; // Indigo
-$primary-d: #4f46e5;
+$primary:   #10b981; // Emerald
+$primary-d: #059669;
 $black:     #0f172a; 
 $white:     #ffffff;
 $gray200:   #e2e8f0;
@@ -39,13 +39,11 @@ $gray600:   #64748b;
   position: relative;
 }
 
-// Logo
 .logo {
-  text-decoration: none; 
+  text-decoration: none;
   font-weight: 800; 
   font-size: 26px;
   letter-spacing: -0.04em; 
-  flex-shrink: 0;
   display: flex;
   align-items: center;
 }

@@ -144,7 +144,7 @@
             <div class="ring" style="position: relative; width: 80px; height: 80px;">
               <svg width="80" height="80" viewBox="0 0 80 80">
                 <circle cx="40" cy="40" r="36" fill="none" stroke="#f1f5f9" stroke-width="8"/>
-                <circle cx="40" cy="40" r="36" fill="none" stroke="#6366f1" stroke-width="8" stroke-linecap="round"
+                <circle cx="40" cy="40" r="36" fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round"
                         [attr.stroke-dasharray]="2 * 3.14159 * 36"
                         [attr.stroke-dashoffset]="2 * 3.14159 * 36 * (1 - profileCompletion() / 100)"
                         transform="rotate(-90 40 40)"/>
@@ -189,12 +189,12 @@
         </div>
         <div class="list-container" style="padding: 24px;">
           <div style="font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 20px;">
-            Unlock <strong style="color: #6366f1;">{{ skillGaps().length * 5 }}+ new roles</strong> by adding these missing skills:
+            Unlock <strong style="color: #10b981;">{{ skillGaps().length * 5 }}+ new roles</strong> by adding these missing skills:
           </div>
           <div class="skill-tags" style="display: flex; flex-wrap: wrap; gap: 8px;">
             <span *ngFor="let skill of skillGaps()" 
                   style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; color: #475569; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-plus" style="font-size: 10px; color: #6366f1;"></i>
+              <i class="fa-solid fa-plus" style="font-size: 10px; color: #10b981;"></i>
               {{ skill }}
             </span>
           </div>

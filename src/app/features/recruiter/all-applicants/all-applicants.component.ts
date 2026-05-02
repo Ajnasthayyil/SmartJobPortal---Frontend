@@ -39,7 +39,7 @@ import { RouterModule } from '@angular/router';
     p { color: #64748b; line-height: 1.5; }
     .btn-primary {
       display: inline-block;
-      background: #6366f1;
+      background: #10b981;
       color: white;
       padding: 12px 24px;
       border-radius: 12px;
@@ -47,7 +47,7 @@ import { RouterModule } from '@angular/router';
       font-weight: 700;
       transition: all 0.2s;
     }
-    .btn-primary:hover { background: #4f46e5; }
+    .btn-primary:hover { background: #059669; }
   `]
 })
 export class AllApplicantsComponent {}
