@@ -1,0 +1,137 @@
+<div class="analysis-container" *ngIf="data() as d">
+  
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <span class="ai-badge"><i class="fa-solid fa-sparkles"></i> TARGETED OPPORTUNITY ANALYSIS</span>
+      <h1 class="title">Skill Match & Gaps</h1>
+      <p class="subtitle">Personalized analysis of how your current skills map to the highest-paying roles available.</p>
+    </div>
+    <div class="header-right">
+      <button class="btn-refresh" (click)="load()">
+        <i class="fa-solid fa-arrows-rotate" [class.fa-spin]="loading()"></i>
+        Refresh Jobs
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Summary -->
+  <section class="summary-box reveal">
+    <div class="summary-icon">
+      <div class="icon-pulse">
+        <i class="fa-solid fa-bullseye"></i>
+      </div>
+    </div>
+    <div class="summary-content">
+      <h3>Ready for {{ d.potentialJobMatches }} high-potential roles</h3>
+      <p [innerHTML]="d.aiInsight"></p>
+    </div>
+  </section>
+
+  <div class="main-grid">
+    
+    <!-- Primary Column: Job Gaps -->
+    <div class="col-primary">
+      <div class="section-header">
+        <h2 class="section-title">Top Job Matches & Gaps</h2>
+        <p class="section-sub">Identify exactly what skills you need to land these specific roles.</p>
+      </div>
+
+      <div class="job-gap-list">
+        <div class="job-gap-card reveal" *ngFor="let j of d.jobMatches; let i = index" [style.animation-delay]="i * 0.1 + 's'">
+          <div class="job-main">
+            <div class="job-meta">
+              <div class="company-logo">{{ j.company.charAt(0) }}</div>
+              <div class="title-wrap">
+                <h3 class="job-name">{{ j.title }}</h3>
+                <span class="company-name">{{ j.company }} • {{ j.location }}</span>
+              </div>
+            </div>
+            <div class="match-indicator">
+              <div class="match-score">
+                <span class="score-num">{{ j.matchPercentage }}%</span>
+                <span class="score-label">MATCH</span>
+              </div>
+              <div class="match-ring">
+                <svg viewBox="0 0 36 36">
+                  <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="ring-fg" [style.stroke-dasharray]="j.matchPercentage + ', 100'" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="gap-analysis">
+            <div class="analysis-group matched">
+              <label><i class="fa-solid fa-circle-check"></i> SKILLS YOU HAVE</label>
+              <div class="skill-pills">
+                <span class="pill matched" *ngFor="let s of j.matchedSkills">{{ s }}</span>
+              </div>
+            </div>
+            
+            <div class="analysis-group missing">
+              <label><i class="fa-solid fa-circle-exclamation"></i> SKILLS YOU NEED</label>
+              <div class="skill-pills">
+                <span class="pill missing" *ngFor="let s of j.missingSkills">{{ s }}</span>
+              </div>
+              <p class="missing-insight"><i class="fa-solid fa-lightbulb"></i> {{ j.missingInsight }}</p>
+            </div>
+          </div>
+
+          <div class="job-footer">
+            <button class="btn-view-job" [routerLink]="['/candidate/jobs', 1]">
+              View Full Details <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secondary Column: Aggregated Insights -->
+    <div class="col-secondary">
+      
+      <!-- Top Priority Skills -->
+      <div class="side-card reveal">
+        <h3 class="side-title">Priority Skills to Add</h3>
+        <p class="side-sub">Skills appearing most frequently in your top matches.</p>
+        
+        <div class="agg-gap-list">
+          <div class="agg-gap-item" *ngFor="let g of d.aggregatedGaps">
+            <div class="agg-info">
+              <span class="agg-name">{{ g.name }}</span>
+              <span [class]="'agg-importance ' + g.importance.toLowerCase()">{{ g.importance }} Priority</span>
+            </div>
+            <p class="agg-demand">{{ g.demand }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommended Learning -->
+      <div class="side-card reveal">
+        <h3 class="side-title">Accelerated Learning</h3>
+        <p class="side-sub">Close your gaps with these targeted courses.</p>
+        
+        <div class="learning-list">
+          <div class="learning-item" *ngFor="let l of d.recommendedLearning">
+            <div class="learning-icon"><i class="fa-solid fa-play"></i></div>
+            <div class="learning-info">
+              <span class="l-title">{{ l.title }}</span>
+              <span class="l-meta">{{ l.source }} • {{ l.hours }}h intensive</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Loading State -->
+<div class="loading-overlay" *ngIf="loading()">
+  <div class="loader-box">
+    <div class="spinner"></div>
+    <p>Finding your best matches...</p>
+  </div>
+</div>

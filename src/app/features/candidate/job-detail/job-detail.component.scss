@@ -3,14 +3,16 @@ $primary: #10b981;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
+$slate-300: #cbd5e1;
+$slate-400: #94a3b8;
 $slate-500: #64748b;
+$slate-600: #475569;
 $slate-900: #0f172a;
 
 :host {
   display: block;
-  background: $slate-100;
+  background: var(--slate-50);
   min-height: 100vh;
-  font-family: 'Outfit', sans-serif;
   padding: 140px 32px 60px 112px;
   position: relative;
   overflow-x: hidden;
@@ -20,15 +22,13 @@ $slate-900: #0f172a;
     position: absolute;
     top: -100px; left: -100px;
     width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba($primary, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--slate-200) 0%, transparent 70%);
     filter: blur(80px);
     z-index: 0;
   }
 }
 
-h1, h2, h3, h4 {
-  font-family: 'Inter', sans-serif;
-}
+// Typography standardized via global styles.scss
 
 .detail-page {
   position: relative;
@@ -56,31 +56,21 @@ h1, h2, h3, h4 {
 
 .card {
   background: white;
-  border-radius: 24px;
+  border-radius: 12px;
   padding: 32px;
   border: 1px solid $slate-200;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 32px;
 }
 
 // ── Job Header Card ──────────────────────────────────────────────
 .job-header-card {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background: $slate-900;
   color: white;
   position: relative;
   overflow: hidden;
-  border-radius: 40px;
+  border-radius: 12px;
   border: none;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%; right: -10%;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba($primary, 0.2) 0%, transparent 70%);
-    z-index: 0;
-    animation: pulse 10s infinite alternate;
-  }
 
   .jh-top {
     display: flex;
@@ -92,38 +82,32 @@ h1, h2, h3, h4 {
   }
 
   .company-logo {
-    width: 72px; height: 72px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
+    width: 64px; height: 64px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 32px; font-weight: 900; color: white;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    font-size: 24px; font-weight: 800; color: white;
   }
 
   .applied-badge {
-    background: rgba(16, 185, 129, 0.2);
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    color: #10b981;
-    padding: 8px 16px;
-    border-radius: 100px;
-    font-size: 13px;
+    background: white;
+    color: $slate-900;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 11px;
     font-weight: 800;
-    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+    text-transform: uppercase;
   }
 
   .jh-title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 40px;
-    font-weight: 900;
+    font-size: 36px;
+    font-weight: 800;
     margin: 0 0 8px 0;
     position: relative;
     z-index: 1;
-    letter-spacing: -0.04em;
-    background: linear-gradient(to right, #ffffff, #94a3b8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+    color: white;
   }
 
   .jh-company {
@@ -144,32 +128,30 @@ h1, h2, h3, h4 {
     z-index: 1;
 
     .meta-pill {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 8px 16px;
-      border-radius: 100px;
-      font-size: 13px;
-      font-weight: 700;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
       display: flex; align-items: center; gap: 8px;
-      &.amber-pill { color: #fbbf24; }
     }
   }
 }
 
 .btn-apply-main {
-  background: $primary;
-  color: white;
+  background: white;
+  color: $slate-900;
   border: none;
   width: 100%;
-  padding: 16px;
-  border-radius: 14px;
-  font-weight: 800;
-  font-size: 16px;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 15px;
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
   z-index: 1;
-  &:hover { background: #059669; transform: scale(1.02); box-shadow: 0 10px 25px rgba($primary, 0.4); }
+  &:hover { background: $slate-100; transform: translateY(-1px); }
 }
 
 // ── Match Card ───────────────────────────────────────────────────
@@ -190,7 +172,7 @@ h1, h2, h3, h4 {
     display: flex; align-items: center; gap: 12px; font-size: 13px;
     .score-label { flex: 1; text-align: left; font-weight: 700; color: $slate-500; }
     .score-bar { flex: 2; height: 6px; background: $slate-100; border-radius: 3px; overflow: hidden; }
-    .score-fill { height: 100%; background: $primary; border-radius: 3px; }
+    .score-fill { height: 100%; background: $slate-900; border-radius: 3px; }
     .score-pct { width: 40px; font-weight: 800; color: $slate-900; }
   }
 }
@@ -204,17 +186,16 @@ h1, h2, h3, h4 {
 
   .skill-row { display: flex; flex-wrap: wrap; gap: 8px; }
   .skill-matched {
-    background: #ecfdf5; color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);
-    padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+    background: $slate-50; color: $slate-900; border: 1px solid $slate-200;
+    padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600;
   }
   .skill-missing {
-    background: #fef2f2; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.1);
-    padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+    background: $slate-100; color: $slate-400; border: 1px solid transparent;
+    padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600;
   }
 }
 
 .section-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 18px;
   font-weight: 800;
   color: $slate-900;

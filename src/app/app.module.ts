@@ -42,6 +42,7 @@ import { AdminJobsComponent } from './features/admin/jobs/admin-jobs.component';
 import { JobsListComponent } from './features/jobs/jobs-list/jobs-list.component';
 import { JobPublicDetailComponent } from './features/jobs/job-public-detail/job-public-detail.component';
 import { CompaniesComponent } from './features/companies/companies.component';
+import { SkillAnalysisComponent } from './features/candidate/skill-analysis/skill-analysis.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { CompaniesComponent } from './features/companies/companies.component';
     JobSearchComponent,
     JobDetailComponent,
     ApplicationsComponent,
+    SkillAnalysisComponent,
 
     // ✅ Recruiter
     RecruiterDashboardComponent,

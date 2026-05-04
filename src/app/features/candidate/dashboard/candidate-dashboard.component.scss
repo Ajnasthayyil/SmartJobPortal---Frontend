@@ -15,21 +15,15 @@ $shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 
 :host {
   display: block;
-  background: $slate-100;
+  background: var(--slate-100);
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
   padding: 140px 32px 60px;
   position: relative;
   overflow-x: hidden;
 }
 
 // ── Typography ───────────────────────────────────────────────────
-h1, h2, h3, h4 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  color: $slate-900;
-  letter-spacing: -0.02em;
-}
-
+// Standardized via global styles.scss
 .section-title {
   font-size: 20px;
   font-weight: 800;
@@ -37,6 +31,7 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  letter-spacing: -0.01em;
 
   .view-all {
     font-size: 13px;

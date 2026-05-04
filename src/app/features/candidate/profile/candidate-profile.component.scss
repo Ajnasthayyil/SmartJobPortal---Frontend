@@ -14,9 +14,8 @@ $white: #ffffff;
 
 :host {
     display: block;
-    background: #f8fafc;
+    background: var(--slate-50);
     min-height: 100vh;
-    font-family: 'Outfit', sans-serif;
     padding: 120px 40px 60px 120px;
     position: relative;
     overflow-x: hidden;
@@ -42,24 +41,16 @@ $white: #ffffff;
 /* ── Profile Hero ── */
 .profile-hero {
     background: $white;
-    border-radius: 48px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.04);
-    margin-bottom: 48px;
-    border: 1px solid rgba($slate-200, 0.5);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 40px;
+    border: 1px solid $slate-200;
 
     .banner {
-        height: 200px;
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        height: 180px;
+        background: $slate-900;
         position: relative;
-        &::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba($primary, 0.15), transparent 60%),
-                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1), transparent 50%);
-        }
     }
 
     .hero-content {
@@ -71,16 +62,16 @@ $white: #ffffff;
     }
 
     .avatar-wrapper {
-        width: 180px;
-        height: 180px;
-        border-radius: 56px;
+        width: 160px;
+        height: 160px;
+        border-radius: 12px;
         background: $white;
-        padding: 10px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        padding: 6px;
+        box-shadow: var(--shadow-lg);
         cursor: pointer;
         position: relative;
         flex-shrink: 0;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.3s;
 
         &:hover {
             transform: translateY(-5px);
@@ -90,29 +81,28 @@ $white: #ffffff;
 
         .avatar-img, .avatar-placeholder {
             width: 100%; height: 100%;
-            border-radius: 46px;
+            border-radius: 8px;
             object-fit: cover;
         }
         .avatar-placeholder {
-            background: linear-gradient(135deg, #dcfce7 0%, #b9fbc0 100%);
-            color: $primary-dark;
+            background: $slate-100;
+            color: $slate-400;
             display: flex; align-items: center; justify-content: center;
-            font-size: 72px; font-weight: 900;
+            font-size: 64px; font-weight: 700;
         }
 
         .avatar-edit {
             position: absolute;
-            bottom: 12px; right: 12px;
-            width: 48px; height: 48px;
-            background: $primary;
+            bottom: -10px; right: -10px;
+            width: 40px; height: 40px;
+            background: $slate-900;
             color: white;
-            border-radius: 18px;
+            border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
-            border: 5px solid white;
+            border: 3px solid white;
             opacity: 0;
-            transform: translate(10px, 10px);
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba($primary, 0.3);
+            transition: all 0.2s;
+            box-shadow: var(--shadow-md);
         }
     }
 
@@ -121,7 +111,6 @@ $white: #ffffff;
         padding-top: 115px;
 
         .user-name {
-            font-family: 'Inter', sans-serif;
             font-size: 42px;
             font-weight: 900;
             color: $slate-900;
@@ -149,18 +138,17 @@ $white: #ffffff;
     .hero-actions {
         padding-top: 120px;
         .btn-primary {
-            background: $primary;
+            background: $slate-900;
             color: white;
             border: none;
-            padding: 16px 32px;
-            border-radius: 20px;
-            font-weight: 800;
-            font-size: 16px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
-            display: flex; align-items: center; gap: 12px;
-            transition: all 0.3s;
-            box-shadow: 0 10px 25px rgba($primary, 0.25);
-            &:hover { background: $primary-dark; transform: translateY(-3px); box-shadow: 0 15px 35px rgba($primary, 0.35); }
+            display: flex; align-items: center; gap: 8px;
+            transition: all 0.2s;
+            &:hover { background: black; transform: translateY(-1px); }
         }
     }
 }
@@ -179,22 +167,21 @@ $white: #ffffff;
 }
 
 .section-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 22px;
-    font-weight: 900;
+    font-size: 18px;
+    font-weight: 800;
     color: $slate-900;
-    margin-bottom: 32px;
-    display: flex; align-items: center; gap: 16px;
-    letter-spacing: -0.02em;
-    &::after { content: ''; flex: 1; height: 1.5px; background: linear-gradient(to right, $slate-200, transparent); }
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+    letter-spacing: -0.01em;
+    &::after { content: ''; flex: 1; height: 1px; background: $slate-200; }
 }
 
 .card {
     background: $white;
-    border-radius: 32px;
-    padding: 40px;
-    border: 1px solid rgba($slate-200, 0.5);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+    padding: 32px;
+    border: 1px solid $slate-200;
+    box-shadow: var(--shadow-sm);
 }
 
 /* ── Read Only View ── */
@@ -252,10 +239,10 @@ $white: #ffffff;
 
     .exp-header, .edu-header {
         display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;
-        .exp-role, .edu-degree { font-size: 20px; font-weight: 900; color: $slate-900; }
+        .exp-role, .edu-degree { font-size: 18px; font-weight: 800; color: $slate-900; }
         .exp-duration, .edu-duration { 
-            font-size: 13px; font-weight: 800; color: $primary; 
-            background: rgba($primary, 0.08); padding: 6px 16px; border-radius: 100px; 
+            font-size: 12px; font-weight: 700; color: $slate-600; 
+            background: $slate-100; padding: 4px 12px; border-radius: 4px; 
         }
     }
     .exp-company, .edu-details { font-size: 16px; font-weight: 700; color: $slate-500; margin-bottom: 16px; }
@@ -266,15 +253,15 @@ $white: #ffffff;
     .skills-wrap {
         display: flex; flex-wrap: wrap; gap: 14px;
         .skill-pill {
-            background: $slate-50;
-            border: 1.5px solid $slate-100;
-            padding: 10px 20px;
-            border-radius: 18px;
-            font-size: 15px;
-            font-weight: 700;
+            background: $white;
+            border: 1px solid $slate-200;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
             color: $slate-900;
             transition: all 0.2s;
-            &:hover { border-color: $primary; background: $white; transform: translateY(-2px); }
+            &:hover { border-color: $slate-900; background: $slate-50; }
             .skill-lvl { color: $primary; font-size: 12px; margin-left: 10px; font-weight: 900; text-transform: uppercase; }
         }
     }
@@ -288,12 +275,12 @@ $white: #ffffff;
 
 .side-card {
     background: $white;
-    border-radius: 32px;
-    padding: 40px;
-    border: 1px solid rgba($slate-200, 0.5);
-    margin-bottom: 32px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-    .side-title { font-size: 20px; font-weight: 900; color: $slate-900; margin-bottom: 32px; }
+    border-radius: 12px;
+    padding: 32px;
+    border: 1px solid $slate-200;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    .side-title { font-size: 16px; font-weight: 800; color: $slate-900; margin-bottom: 24px; }
 }
 
 .completion-card {
@@ -304,24 +291,24 @@ $white: #ffffff;
 
 .resume-card {
     .current-resume {
-        background: #f8fafc;
-        border-radius: 24px;
-        padding: 24px;
-        display: flex; align-items: center; gap: 20px;
-        margin-bottom: 32px;
-        border: 1px solid $slate-100;
+        background: $slate-50;
+        border-radius: 8px;
+        padding: 16px;
+        display: flex; align-items: center; gap: 16px;
+        margin-bottom: 24px;
+        border: 1px solid $slate-200;
         .resume-icon { font-size: 36px; color: #ef4444; }
         .name { font-size: 15px; font-weight: 800; color: $slate-900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .date { font-size: 12px; font-weight: 700; color: $slate-400; margin-top: 4px; }
     }
     .upload-area {
-        border: 2px dashed $slate-200;
-        border-radius: 24px;
-        padding: 40px 24px;
+        border: 1px dashed $slate-300;
+        border-radius: 8px;
+        padding: 32px 20px;
         text-align: center;
         cursor: pointer;
-        transition: all 0.3s;
-        &:hover, &.active { border-color: $primary; background: rgba($primary, 0.03); color: $primary; .upload-icon { color: $primary; } }
+        transition: all 0.2s;
+        &:hover, &.active { border-color: $slate-900; background: $slate-50; color: $slate-900; .upload-icon { color: $slate-900; } }
         .upload-icon { font-size: 40px; color: $slate-300; margin-bottom: 16px; transition: color 0.3s; }
         .upload-label { font-size: 15px; font-weight: 800; color: $slate-900; margin-bottom: 6px; }
         .upload-hint { font-size: 13px; color: $slate-400; }
@@ -334,7 +321,7 @@ $white: #ffffff;
 }
 
 .modal-content {
-    background: $white; width: 100%; max-width: 900px; max-height: 90vh; border-radius: 40px; box-shadow: 0 50px 100px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: $white; width: 100%; max-width: 800px; max-height: 90vh; border-radius: 12px; box-shadow: var(--shadow-xl); display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-header {

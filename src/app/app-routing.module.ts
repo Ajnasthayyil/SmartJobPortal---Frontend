@@ -22,6 +22,7 @@ import { ManageJobsComponent } from './features/recruiter/manage-jobs/manage-job
 import { RecruiterProfileComponent } from './features/recruiter/profile/recruiter-profile.component';
 import { ApplicantsComponent } from './features/recruiter/applicants/applicants.component';
 import { JobDetailComponent } from './features/candidate/job-detail/job-detail.component';
+import { SkillAnalysisComponent } from './features/candidate/skill-analysis/skill-analysis.component';
 
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
@@ -50,7 +51,7 @@ const routes: Routes = [
       { path: 'companies', component: CompaniesComponent },
       { path: 'notifications', component: CandidateDashboardComponent },
       { path: 'settings', component: CandidateDashboardComponent },
-      { path: 'skill-gap', component: CandidateDashboardComponent },
+      { path: 'skill-gap', component: SkillAnalysisComponent },
     ]
   },
   

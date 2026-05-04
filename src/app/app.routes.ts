@@ -59,6 +59,12 @@ export const routes: Routes = [
             .then(m => m.JobDetailComponent)
       },
       {
+        path: 'skill-gap',
+        loadComponent: () =>
+          import('./features/candidate/skill-analysis/skill-analysis.component')
+            .then(m => m.SkillAnalysisComponent)
+      },
+      {
         path: 'applications',
         loadComponent: () =>
           import('./features/candidate/applications/applications.component')

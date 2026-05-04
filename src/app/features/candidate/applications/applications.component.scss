@@ -3,14 +3,15 @@ $primary: #10b981;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
+$slate-400: #94a3b8;
 $slate-500: #64748b;
+$slate-600: #475569;
 $slate-900: #0f172a;
 
 :host {
   display: block;
-  background: $slate-100;
+  background: var(--slate-50);
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
   padding: 104px 32px 60px;
   position: relative;
   overflow-x: hidden;
@@ -56,8 +57,8 @@ $slate-900: #0f172a;
       opacity: 0.15;
       animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .shape-1 { width: 300px; height: 300px; background: $primary; top: 0; right: 0; }
-    .shape-2 { width: 250px; height: 250px; background: #818cf8; bottom: 0; left: 0; animation-delay: -5s; }
+    .shape-1 { width: 300px; height: 300px; background: $slate-400; top: 0; right: 0; }
+    .shape-2 { width: 250px; height: 250px; background: $slate-200; bottom: 0; left: 0; animation-delay: -5s; }
   }
 }
 
@@ -78,8 +79,8 @@ $slate-900: #0f172a;
 .hero-badge {
   display: inline-flex;
   padding: 6px 16px;
-  background: rgba($primary, 0.08);
-  color: $primary;
+  background: $slate-100;
+  color: $slate-600;
   border-radius: 100px;
   font-size: 12px;
   font-weight: 800;
@@ -89,7 +90,6 @@ $slate-900: #0f172a;
 }
 
 .page-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 42px;
   font-weight: 900;
   color: $slate-900;
@@ -97,9 +97,7 @@ $slate-900: #0f172a;
   letter-spacing: -0.04em;
   
   .highlight {
-    background: linear-gradient(135deg, $primary 0%, #818cf8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: inherit;
   }
 }
 
@@ -163,9 +161,9 @@ $slate-900: #0f172a;
     &:hover { color: $slate-900; background: rgba(255, 255, 255, 0.8); }
     
     &.active {
-      background: white;
-      color: $primary;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      background: $slate-900;
+      color: white;
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.2);
     }
 
     .tab-count {
@@ -217,14 +215,13 @@ $slate-900: #0f172a;
   justify-content: center;
   font-size: 24px;
   font-weight: 900;
-  color: $primary;
+  color: $slate-900;
   border: 1px solid $slate-100;
 }
 
 .app-info {
   flex: 1;
   .app-title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 20px;
     font-weight: 800;
     color: $slate-900;
@@ -290,18 +287,18 @@ $slate-900: #0f172a;
     top: 12px;
     left: 50%;
     z-index: 1;
-    &.filled { background: #10b981; }
+    &.filled { background: $slate-900; }
   }
 
   &.completed {
-    .step-dot { background: #10b981; border-color: #10b981; color: white; }
+    .step-dot { background: $slate-900; border-color: $slate-900; color: white; }
   }
 
   &.current {
     .step-dot { 
-      border-color: $primary; 
-      box-shadow: 0 0 0 4px rgba($primary, 0.1); 
-      color: $primary; 
+      border-color: $slate-900; 
+      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.1); 
+      color: $slate-900; 
       font-weight: 800; 
       transform: scale(1.2);
     }
@@ -326,7 +323,7 @@ $slate-900: #0f172a;
     font-size: 32px; color: $slate-200; margin: 0 auto 24px;
   }
   
-  h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800; color: $slate-900; margin-bottom: 12px; }
+  h3 { font-size: 24px; font-weight: 800; color: $slate-900; margin-bottom: 12px; }
   .empty-desc { font-size: 16px; color: $slate-500; margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.6; }
 }
 
