@@ -3,6 +3,8 @@ import { CommonModule, Location } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
+import { AuthService } from '../../../core/services/auth.service';
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -13,14 +15,20 @@ import { filter } from 'rxjs/operators';
 export class SidebarComponent implements OnInit {
   private router = inject(Router);
   private location = inject(Location);
+  private authService = inject(AuthService);
   
   currentPath = '';
+  
+  logout() {
+    this.authService.logout();
+  }
   
   // Grouped links with headings
   candidateLinks = [
     {
       group: 'MAIN MENU',
       items: [
+        { path: "/", iconClass: "fa-solid fa-house", label: "Home Page" },
         { path: "/candidate/dashboard", iconClass: "fa-solid fa-layer-group", label: "Dashboard" },
         { path: "/candidate/jobs", iconClass: "fa-solid fa-briefcase", label: "Job Search" },
         { path: "/candidate/companies", iconClass: "fa-solid fa-building", label: "Companies" },
@@ -32,13 +40,6 @@ export class SidebarComponent implements OnInit {
         { path: "/candidate/profile", iconClass: "fa-solid fa-user", label: "My Profile" },
         { path: "/candidate/applications", iconClass: "fa-solid fa-file-invoice", label: "Applications" },
         { path: "/candidate/skill-gap", iconClass: "fa-solid fa-graduation-cap", label: "Skill Gap" },
-      ]
-    },
-    {
-      group: 'OTHERS',
-      items: [
-        { path: "/candidate/notifications", iconClass: "fa-solid fa-bell", label: "Notifications" },
-        { path: "/candidate/settings", iconClass: "fa-solid fa-gear", label: "Settings" },
       ]
     }
   ];

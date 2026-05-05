@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SidebarService } from '../../../core/services/sidebar.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-candidate-sidebar',
@@ -11,10 +12,17 @@ import { SidebarService } from '../../../core/services/sidebar.service';
   styleUrls: ['./candidate-sidebar.component.scss']
 })
 export class CandidateSidebarComponent {
-  constructor(public sidebarService: SidebarService) {}
+  constructor(
+    public sidebarService: SidebarService,
+    private authService: AuthService
+  ) {}
 
   onHover(val: boolean) {
     this.sidebarService.setExpanded(val);
+  }
+
+  logout() {
+    this.authService.logout();
   }
   links = [
     {
@@ -32,13 +40,6 @@ export class CandidateSidebarComponent {
         { path: "/candidate/applications", iconClass: "fa-solid fa-file-invoice", label: "Applications" },
         { path: "/candidate/skill-gap", iconClass: "fa-solid fa-graduation-cap", label: "Skill Gap" },
         { path: "/candidate/courses", iconClass: "fa-solid fa-book-open", label: "Courses" },
-      ]
-    },
-    {
-      group: 'OTHERS',
-      items: [
-        { path: "/candidate/notifications", iconClass: "fa-solid fa-bell", label: "Notifications" },
-        { path: "/candidate/settings", iconClass: "fa-solid fa-gear", label: "Settings" },
       ]
     }
   ];

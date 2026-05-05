@@ -40,9 +40,22 @@ export class SkillAnalysisComponent implements OnInit {
             const title = j.title || 'Unknown Role';
             const desc = (j.description || '').toLowerCase();
             
-            // Simple logic: find common tech keywords in description
-            const commonTech = ['c#', '.net', 'sql', 'react', 'angular', 'node', 'javascript', 'typescript', 'css', 'html', 'fullstack'];
-            const requiredSkills = commonTech.filter(tech => desc.includes(tech));
+            // 1. Try to use explicit skills from the backend first
+            let requiredSkills: string[] = [];
+            if (j.requiredSkills && Array.isArray(j.requiredSkills) && j.requiredSkills.length > 0) {
+              requiredSkills = j.requiredSkills.map((s: string) => s.toLowerCase());
+            } else {
+              // 2. Fallback to extracting common tech from description
+              const commonTech = [
+                'c#', '.net', 'sql', 'react', 'angular', 'node', 'javascript', 'typescript', 
+                'css', 'html', 'python', 'java', 'aws', 'azure', 'docker', 'kubernetes',
+                'fullstack', 'frontend', 'backend', 'devops', 'mobile', 'flutter'
+              ];
+              requiredSkills = commonTech.filter(tech => desc.includes(tech));
+            }
+            
+            // Ensure unique skills and remove empty values
+            requiredSkills = [...new Set(requiredSkills)].filter(s => !!s);
             
             const matchedSkills = requiredSkills.filter(s => userSkills.includes(s));
             const missingSkills = requiredSkills.filter(s => !userSkills.includes(s));
@@ -56,11 +69,11 @@ export class SkillAnalysisComponent implements OnInit {
               title: j.title,
               company: j.companyName || 'Local Tech Partner',
               location: j.location || 'Not Specified',
-              matchPercentage: matchPercentage > 0 ? matchPercentage : 50,
+              matchPercentage: Math.max(matchPercentage, 30), // Minimum 30% to avoid empty UI
               matchedSkills: matchedSkills.map(s => s.toUpperCase()),
               missingSkills: missingSkills.map(s => s.toUpperCase()),
               missingInsight: missingSkills.length > 0 
-                ? `Highly requested for this ${j.title} role in ${j.location}.`
+                ? `Highly requested for this ${j.title} role.`
                 : 'You have a perfect core match for this position!'
             };
           });

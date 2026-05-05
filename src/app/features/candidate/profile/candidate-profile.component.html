@@ -1,26 +1,11 @@
-<div class="profile-page">
-
-  <!-- ── Loading Skeleton ─────────────────────────── -->
-  <ng-container *ngIf="loading()">
-    <div class="skeleton-wrap">
-      <div class="skeleton-banner"></div>
-      <div class="skeleton-content">
-        <div class="skeleton-side"></div>
-        <div class="skeleton-main"></div>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-container *ngIf="!loading()">
-    
 <div class="dashboard-page">
 
   <!-- ── Loading Skeleton ─────────────────────────── -->
   <ng-container *ngIf="loading()">
     <div class="skeleton-wrap">
       <div class="skeleton-block" style="height: 180px; border-radius: 24px; margin-bottom: 40px;"></div>
-      <div class="skeleton-grid" style="display: grid; grid-template-columns: 1fr 300px; gap: 32px;">
-        <div class="skeleton-block" style="height: 400px; border-radius: 20px;"></div>
+      <div class="skeleton-grid" style="display: grid; grid-template-columns: 1fr 400px; gap: 32px;">
+        <div class="skeleton-block" style="height: 600px; border-radius: 20px;"></div>
         <div class="skeleton-block" style="height: 400px; border-radius: 20px;"></div>
       </div>
     </div>
@@ -30,7 +15,7 @@
     
     <!-- Welcome Box / Hero -->
     <div class="welcome-box profile-welcome">
-      <div class="content">
+      <div class="content-left">
         <div class="avatar-group">
           <div class="avatar-wrapper" (click)="photoInput.click()">
             <img *ngIf="profile()?.profilePictureUrl" [src]="profile()?.profilePictureUrl" class="avatar-img">
@@ -46,7 +31,7 @@
           </div>
         </div>
       </div>
-      <div class="actions">
+      <div class="actions-right">
         <button class="btn-primary" (click)="openEditModal()">
           <i class="fa-solid fa-user-pen"></i> Edit Details
         </button>
@@ -81,7 +66,7 @@
 
     <div class="dashboard-content">
       
-      <!-- Left Column -->
+      <!-- Left Column: Professional History -->
       <div class="col-main">
         
         <!-- Summary Section -->
@@ -102,16 +87,20 @@
           <h2 class="section-title">Work Experience</h2>
         </div>
         <div class="list-container">
-          <div *ngFor="let exp of profile()?.workExperience" class="job-item">
-            <div class="logo-circle"><i class="fa-solid fa-briefcase"></i></div>
+          <div *ngFor="let exp of profile()?.workExperience" class="item-modern">
+            <div class="icon-box"><i class="fa-solid fa-briefcase"></i></div>
             <div class="info">
-              <span class="title">{{ exp.role }}</span>
-              <span class="subtitle">{{ exp.company }} · {{ exp.duration }}</span>
+              <div class="top-row">
+                <span class="title">{{ exp.role }}</span>
+                <span class="date">{{ exp.duration }}</span>
+              </div>
+              <span class="subtitle">{{ exp.company }}</span>
               <p class="description">{{ exp.description }}</p>
             </div>
           </div>
           <div *ngIf="!profile()?.workExperience?.length" class="empty-state">
-            <p>No work experience added.</p>
+            <i class="fa-solid fa-folder-open"></i>
+            <p>No work experience added yet.</p>
           </div>
         </div>
 
@@ -120,29 +109,53 @@
           <h2 class="section-title">Education</h2>
         </div>
         <div class="list-container">
-          <div *ngFor="let edu of profile()?.education" class="app-item">
-            <div class="logo-circle" style="background: #eff6ff;"><i class="fa-solid fa-graduation-cap" style="color: #2563eb;"></i></div>
+          <div *ngFor="let edu of profile()?.education" class="item-modern">
+            <div class="icon-box academic"><i class="fa-solid fa-graduation-cap"></i></div>
             <div class="info">
-              <span class="title">{{ edu.degree }}</span>
-              <span class="subtitle">{{ edu.institution }} · {{ edu.duration }}</span>
-              <p class="description">{{ edu.fieldOfStudy }}</p>
+              <div class="top-row">
+                <span class="title">{{ edu.degree }}</span>
+                <span class="date">{{ edu.duration }}</span>
+              </div>
+              <span class="subtitle">{{ edu.institution }} · {{ edu.fieldOfStudy }}</span>
             </div>
           </div>
           <div *ngIf="!profile()?.education?.length" class="empty-state">
-            <p>No education details added.</p>
+            <i class="fa-solid fa-school-circle-xmark"></i>
+            <p>No education details added yet.</p>
           </div>
+        </div>
+
+        <!-- Documents Section -->
+        <div class="section-header" style="margin-top: 48px;">
+          <h2 class="section-title">Professional Documents</h2>
+        </div>
+        <div class="list-container summary-box doc-row">
+          <div *ngIf="profile()?.hasResume" class="resume-item-modern main-doc">
+            <div class="file-icon"><i class="fa-solid fa-file-pdf"></i></div>
+            <div class="file-meta">
+              <span class="name">{{ profile()?.resumeOriginalName }}</span>
+              <span class="date">Uploaded on {{ profile()?.resumeUploadedAt | date:'MMMM d, yyyy' }}</span>
+            </div>
+          </div>
+          <div *ngIf="!profile()?.hasResume" class="empty-doc">
+            <p>No resume uploaded yet. Add one to improve your matching score.</p>
+          </div>
+          <button class="btn-primary" (click)="resumeInput.click()">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            {{ profile()?.hasResume ? 'Update CV / Resume' : 'Upload CV / Resume' }}
+          </button>
         </div>
 
       </div>
 
-      <!-- Right Column -->
+      <!-- Right Column: Sidebar Stats & Skills -->
       <div class="col-side">
         
         <!-- Profile Strength -->
         <div class="section-header">
           <h2 class="section-title">Profile Strength</h2>
         </div>
-        <div class="list-container side-widget">
+        <div class="side-widget strength-card">
           <div class="progress-ring-container">
             <div class="ring">
               <svg width="80" height="80" viewBox="0 0 80 80">
@@ -155,8 +168,8 @@
               <div class="percent">{{ completion() }}%</div>
             </div>
             <div class="ring-info">
-              <div class="status">{{ completion() > 80 ? 'Perfect!' : 'Keep going' }}</div>
-              <div class="hint">Complete your profile to get 3x more visibility.</div>
+              <div class="status">{{ completion() >= 90 ? 'Perfect!' : 'Nearly There' }}</div>
+              <div class="hint">Complete your profile to unlock 3x more recruiters.</div>
             </div>
           </div>
         </div>
@@ -165,166 +178,222 @@
         <div class="section-header" style="margin-top: 40px;">
           <h2 class="section-title">Skills & Expertise</h2>
         </div>
-        <div class="list-container side-widget">
-          <div class="skill-tags">
-            <span *ngFor="let skill of profile()?.skills" class="skill-tag" [attr.data-level]="skill.level">
+        <div class="side-widget">
+          <div class="skill-pills-grid">
+            <span *ngFor="let skill of profile()?.skills" class="skill-pill" [attr.data-level]="skill.level">
               {{ skill.skillName }}
             </span>
-            <div *ngIf="!profile()?.skills?.length" class="empty-text">No skills added yet.</div>
-          </div>
-        </div>
-
-        <!-- Documents -->
-        <div class="section-header" style="margin-top: 40px;">
-          <h2 class="section-title">Documents</h2>
-        </div>
-        <div class="list-container side-widget">
-          <div *ngIf="profile()?.hasResume" class="resume-item">
-            <div class="icon-red"><i class="fa-solid fa-file-pdf"></i></div>
-            <div class="file-info">
-              <span class="file-name">{{ profile()?.resumeOriginalName }}</span>
-              <span class="file-date">{{ profile()?.resumeUploadedAt | date:'MMM d, yyyy' }}</span>
+            <div *ngIf="!profile()?.skills?.length" class="empty-text">
+              <i class="fa-solid fa-lightbulb"></i> Add skills to stand out.
             </div>
           </div>
-          <button class="btn-outline-full" (click)="resumeInput.click()">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            {{ profile()?.hasResume ? 'Update Resume' : 'Upload Resume' }}
-          </button>
+   <!-- ── Edit Modal (Overhauled) ──────────────────────────────── -->
+  <div class="modal-overlay" *ngIf="isEditModalOpen()" (click)="closeEditModal()">
+    <div class="modal-content premium-modal" (click)="$event.stopPropagation()" [formGroup]="form">
+      
+      <!-- Modal Sidebar -->
+      <div class="modal-sidebar">
+        <div class="sidebar-header">
+          <div class="logo-mini"><i class="fa-solid fa-user-gear"></i></div>
+          <div class="header-text">
+            <h3>Profile Settings</h3>
+            <p>Refine your identity</p>
+          </div>
         </div>
+        
+        <nav class="modal-nav">
+          <button class="nav-btn" [class.active]="activeModalTab() === 'identity'" (click)="activeModalTab.set('identity')">
+            <i class="fa-solid fa-address-card"></i> Identity & Contact
+          </button>
+          <button class="nav-btn" [class.active]="activeModalTab() === 'experience'" (click)="activeModalTab.set('experience')">
+            <i class="fa-solid fa-briefcase"></i> Work Experience
+          </button>
+          <button class="nav-btn" [class.active]="activeModalTab() === 'education'" (click)="activeModalTab.set('education')">
+            <i class="fa-solid fa-graduation-cap"></i> Academic History
+          </button>
+          <button class="nav-btn" [class.active]="activeModalTab() === 'skills'" (click)="activeModalTab.set('skills')">
+            <i class="fa-solid fa-star"></i> Skills & Expertise
+          </button>
+        </nav>
 
+        <div class="sidebar-footer">
+          <div class="strength-mini">
+            <div class="label">Profile Strength</div>
+            <div class="mini-bar-bg"><div class="mini-bar-fill" [style.width.%]="completion()"></div></div>
+          </div>
+        </div>
       </div>
 
-    </div>
-  </ng-container>
-
-</div>
-
-    <!-- ── Edit Modal ──────────────────────────────── -->
-    <div class="modal-overlay" *ngIf="isEditModalOpen()" (click)="closeEditModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()" [formGroup]="form">
-        <div class="modal-header">
-          <div class="header-info">
-            <h3>Update Profile</h3>
-            <p>Keep your professional information current.</p>
-          </div>
-          <button class="btn-close" (click)="closeEditModal()">✕</button>
+      <!-- Modal Main Area -->
+      <div class="modal-main">
+        <div class="main-header">
+          <h2 class="tab-title">
+            {{ activeModalTab() === 'identity' ? 'Identity & Contact' : 
+               activeModalTab() === 'experience' ? 'Work Experience' : 
+               activeModalTab() === 'education' ? 'Academic History' : 'Skills & Expertise' }}
+          </h2>
+          <button class="btn-close-circle" (click)="closeEditModal()">✕</button>
         </div>
 
-        <div class="modal-body">
+        <div class="main-body custom-scrollbar">
           
-          <!-- Summary Section -->
-          <div class="form-section">
-            <h4 class="form-sec-title">Summary</h4>
-            <div class="premium-field">
-              <label>Headline</label>
-              <input type="text" formControlName="headline" placeholder="e.g. Senior Software Engineer" />
-            </div>
-            <div class="premium-field">
-              <label>About Me</label>
-              <textarea formControlName="summary" placeholder="Tell your story..." rows="4"></textarea>
-            </div>
-          </div>
-
-          <!-- Location & Exp -->
-          <div class="form-section">
-            <h4 class="form-sec-title">Core Details</h4>
-            <div class="form-row">
+          <!-- Identity Tab -->
+          <div class="tab-pane" *ngIf="activeModalTab() === 'identity'">
+            <div class="form-section">
+              <h4 class="form-sec-title">Professional Branding</h4>
               <div class="premium-field">
-                <label>Location</label>
-                <input type="text" formControlName="location" placeholder="City, Country" />
+                <label>Professional Headline</label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-tag"></i>
+                  <input type="text" formControlName="headline" placeholder="e.g. Lead Software Engineer @ TechCorp" />
+                </div>
               </div>
               <div class="premium-field">
-                <label>Experience (Years)</label>
+                <label>Professional Summary</label>
+                <textarea formControlName="summary" placeholder="Write a compelling bio..." rows="5"></textarea>
+                <div class="field-hint">Minimum 50 characters required for AI analysis.</div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4 class="form-sec-title">Contact & Presence</h4>
+              <div class="form-row-two">
+                <div class="premium-field">
+                  <label>Current Location</label>
+                  <div class="input-with-icon">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <input type="text" formControlName="location" placeholder="City, Country" />
+                  </div>
+                </div>
+                <div class="premium-field">
+                  <label>Phone Number</label>
+                  <div class="input-with-icon">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="tel" formControlName="phoneNumber" placeholder="+1 (555) 000-0000" />
+                  </div>
+                </div>
+              </div>
+              <div class="premium-field">
+                <label>Experience (Total Years)</label>
                 <input type="number" formControlName="experienceYears" />
               </div>
-              <div class="premium-field">
-                <label>Phone Number</label>
-                <input type="tel" formControlName="phoneNumber" placeholder="+1 (555) 000-0000" />
-              </div>
             </div>
           </div>
 
-          <!-- Work Experience -->
-          <div class="form-section">
-            <div class="form-sec-header">
-              <h4 class="form-sec-title">Work Experience</h4>
-              <button class="btn-add-mini" (click)="addExperience()">+ Add</button>
+          <!-- Experience Tab -->
+          <div class="tab-pane" *ngIf="activeModalTab() === 'experience'">
+            <div class="tab-header-flex">
+              <p class="tab-desc">Highlight your career journey and major achievements.</p>
+              <button class="btn-add-action" (click)="addExperience()">+ Add Experience</button>
             </div>
-            <div formArrayName="workExperience" class="dynamic-list">
-              <div *ngFor="let exp of experienceGroups.controls; let i = index" [formGroupName]="i" class="dynamic-item">
-                <button type="button" class="btn-remove-mini" (click)="removeExperience(i)">✕</button>
-                <div class="form-row">
+            
+            <div formArrayName="workExperience" class="dynamic-stack">
+              <div *ngFor="let exp of experienceGroups.controls; let i = index" [formGroupName]="i" class="modern-edit-card">
+                <button type="button" class="btn-delete" (click)="removeExperience(i)">✕</button>
+                <div class="form-grid">
                   <div class="premium-field">
-                    <label>Company</label>
+                    <label>Organization</label>
                     <input type="text" formControlName="company" />
                   </div>
                   <div class="premium-field">
                     <label>Role</label>
                     <input type="text" formControlName="role" />
                   </div>
+                  <div class="premium-field">
+                    <label>Period (Start - End)</label>
+                    <input type="text" formControlName="duration" placeholder="e.g. Jan 2020 - Present" />
+                  </div>
                 </div>
-                <div class="premium-field">
-                  <label>Duration</label>
-                  <input type="text" formControlName="duration" />
-                </div>
-                <div class="premium-field">
-                  <label>Description</label>
-                  <textarea formControlName="description" rows="2"></textarea>
+                <div class="premium-field no-margin">
+                  <label>Description & Impact</label>
+                  <textarea formControlName="description" rows="3"></textarea>
                 </div>
               </div>
             </div>
+            
+            <div *ngIf="experienceGroups.length === 0" class="tab-empty-state">
+              <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+              <p>No work history added. Start by adding your most recent role.</p>
+            </div>
           </div>
 
-          <!-- Skills -->
-          <div class="form-section">
-            <h4 class="form-sec-title">Skills & Expertise</h4>
-            <div class="skill-manager-container">
-              <div class="skill-input-wrapper">
-                <i class="fa-solid fa-wand-magic-sparkles input-icon"></i>
-                <input type="text" [ngModel]="skillInput()" 
-                       (ngModelChange)="skillInput.set($event)"
-                       [ngModelOptions]="{standalone: true}"
-                       (keydown.enter)="addSkill(skillInput())"
-                       placeholder="Type a skill (e.g. Angular, Python)..." />
-                <button type="button" class="btn-add-skill" (click)="addSkill(skillInput())">
-                  Add Skill
-                </button>
-              </div>
+          <!-- Education Tab -->
+          <div class="tab-pane" *ngIf="activeModalTab() === 'education'">
+            <div class="tab-header-flex">
+              <p class="tab-desc">Manage your degrees and certifications.</p>
+              <button class="btn-add-action" (click)="addEducation()">+ Add Education</button>
+            </div>
 
-              <div class="skills-grid-managed" formArrayName="skills">
-                <div *ngFor="let skill of skillGroups.controls; let i = index" [formGroupName]="i" class="skill-manage-card">
-                  <div class="skill-info">
-                    <span class="skill-name">{{ skill.get('skillName')?.value }}</span>
+            <div formArrayName="education" class="dynamic-stack">
+              <div *ngFor="let edu of educationGroups.controls; let i = index" [formGroupName]="i" class="modern-edit-card education">
+                <button type="button" class="btn-delete" (click)="removeEducation(i)">✕</button>
+                <div class="form-grid">
+                  <div class="premium-field">
+                    <label>Institution</label>
+                    <input type="text" formControlName="institution" />
                   </div>
-                  <div class="skill-actions">
-                    <select formControlName="level" class="level-select">
-                      <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
-                    </select>
-                    <button type="button" class="btn-remove-skill" (click)="removeSkill(i)" title="Remove skill">
-                      <i class="fa-solid fa-trash-can"></i>
-                    </button>
+                  <div class="premium-field">
+                    <label>Degree</label>
+                    <input type="text" formControlName="degree" />
+                  </div>
+                  <div class="premium-field">
+                    <label>Field of Study</label>
+                    <input type="text" formControlName="fieldOfStudy" />
+                  </div>
+                  <div class="premium-field">
+                    <label>Duration</label>
+                    <input type="text" formControlName="duration" placeholder="e.g. 2016 - 2020" />
                   </div>
                 </div>
               </div>
-              
-              <div *ngIf="skillGroups.length === 0" class="skills-empty-state">
-                <i class="fa-solid fa-lightbulb"></i>
-                <p>Add your top skills to help recruiters find you.</p>
+            </div>
+
+            <div *ngIf="educationGroups.length === 0" class="tab-empty-state">
+              <div class="icon"><i class="fa-solid fa-graduation-cap"></i></div>
+              <p>Your academic background is empty.</p>
+            </div>
+          </div>
+
+          <!-- Skills Tab -->
+          <div class="tab-pane" *ngIf="activeModalTab() === 'skills'">
+            <p class="tab-desc">Add technical skills and soft skills to improve matching.</p>
+            
+            <div class="skill-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" [ngModel]="skillInput()" 
+                     (ngModelChange)="skillInput.set($event)"
+                     [ngModelOptions]="{standalone: true}"
+                     (keydown.enter)="addSkill(skillInput())"
+                     placeholder="Search skills (e.g. Java, AWS, React)..." />
+              <button class="btn-add-pill" (click)="addSkill(skillInput())">Add</button>
+            </div>
+
+            <div class="skills-manager-list" formArrayName="skills">
+              <div *ngFor="let skill of skillGroups.controls; let i = index" [formGroupName]="i" class="skill-row-edit">
+                <div class="skill-name">{{ skill.get('skillName')?.value }}</div>
+                <div class="skill-ctrl">
+                  <select formControlName="level" class="modern-select">
+                    <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</option>
+                  </select>
+                  <button type="button" class="btn-trash" (click)="removeSkill(i)">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
         </div>
 
-        <div class="modal-footer">
-          <button class="btn-secondary" (click)="closeEditModal()">Cancel</button>
-          <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
-            {{ saving() ? 'Saving...' : 'Save Changes' }}
+        <div class="modal-actions">
+          <button class="btn-ghost" (click)="closeEditModal()">Cancel</button>
+          <button class="btn-save-premium" (click)="onSave()" [disabled]="saving()">
+            <i class="fa-solid fa-cloud-check" *ngIf="!saving()"></i>
+            {{ saving() ? 'Syncing Profile...' : 'Update Profile' }}
           </button>
         </div>
       </div>
     </div>
-
-  </ng-container>
+  </div>
 
 </div>

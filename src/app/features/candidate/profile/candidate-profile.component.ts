@@ -28,6 +28,7 @@ export class CandidateProfileComponent implements OnInit {
   dragOver = signal(false);
   completion = signal(0);
   isEditModalOpen = signal(false);
+  activeModalTab = signal<'identity' | 'experience' | 'education' | 'skills'>('identity');
 
   readonly levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
