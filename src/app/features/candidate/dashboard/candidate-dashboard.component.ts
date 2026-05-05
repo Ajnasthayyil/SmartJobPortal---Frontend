@@ -27,10 +27,10 @@ export class CandidateDashboardComponent implements OnInit {
 
   // Stats
   stats = signal({
-    profileViews:   248,
     jobMatches:     0,
+    shortlisted:    0,
     applications:   0,
-    savedJobs:      12
+    interviews:     0
   });
 
   // Profile completion
@@ -89,9 +89,14 @@ export class CandidateDashboardComponent implements OnInit {
     this.candidateService.getApplications().subscribe({
       next: res => {
         if (res.success) {
-          this.applications.set(res.data || []);
+          const apps = res.data || [];
+          this.applications.set(apps);
+          
           this.stats.update(s => ({
-            ...s, applications: res.data?.length || 0
+            ...s, 
+            applications: apps.length,
+            shortlisted: apps.filter((a: any) => a.status === 'Shortlisted').length,
+            interviews: apps.filter((a: any) => a.status === 'Interview').length
           }));
         } else {
           this.toast.error(res.message);

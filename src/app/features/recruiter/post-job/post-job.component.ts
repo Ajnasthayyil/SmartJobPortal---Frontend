@@ -99,7 +99,7 @@ export class PostJobComponent {
         },
         error: (err) => {
           this.saving.set(false);
-          let msg = `HTTP ${err.status}: `;
+          let msg = '';
           if (err.error && typeof err.error === 'string') {
             msg += err.error.substring(0, 100);
           } else if (err.error?.message) {
@@ -112,7 +112,6 @@ export class PostJobComponent {
             msg += 'Unknown error';
           }
           this.toast.error(msg);
-          alert("DEVELOPER DIAGNOSTIC:\n" + JSON.stringify(err, null, 2));
         }
       });
   }

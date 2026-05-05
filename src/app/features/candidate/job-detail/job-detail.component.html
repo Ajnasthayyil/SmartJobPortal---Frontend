@@ -53,7 +53,7 @@
                     <!-- Apply section -->
                     <ng-container *ngIf="!applied(); else appliedBlock">
                     <ng-container *ngIf="!showApply(); else showApplyBlock">
-                    <button class="btn-apply-main" (click)="showApply.set(true)">
+                    <button class="btn-apply-main" (click)="toggleApply()">
                         Apply Now
                     </button>
                     </ng-container>

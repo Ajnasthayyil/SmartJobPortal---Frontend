@@ -35,13 +35,7 @@
 
     <!-- Stats Row -->
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="icon-box blue"><i class="fa-solid fa-eye"></i></div>
-        <span class="value">{{ stats().profileViews }}</span>
-        <span class="label">Profile Views</span>
-        <div class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> 12% this month</div>
-      </div>
-
+      <!-- 1. Job Matches -->
       <div class="stat-card">
         <div class="icon-box indigo"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
         <span class="value">{{ stats().jobMatches }}</span>
@@ -49,6 +43,15 @@
         <div class="trend">AI-Ranked precision</div>
       </div>
 
+      <!-- 2. Shortlisted -->
+      <div class="stat-card">
+        <div class="icon-box blue"><i class="fa-solid fa-user-check"></i></div>
+        <span class="value">{{ stats().shortlisted }}</span>
+        <span class="label">Shortlisted</span>
+        <div class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> Profile impact</div>
+      </div>
+
+      <!-- 3. Applications -->
       <div class="stat-card">
         <div class="icon-box purple"><i class="fa-solid fa-paper-plane"></i></div>
         <span class="value">{{ stats().applications }}</span>
@@ -56,11 +59,12 @@
         <div class="trend">Active hiring flows</div>
       </div>
 
+      <!-- 4. Interviews -->
       <div class="stat-card">
-        <div class="icon-box rose"><i class="fa-solid fa-bookmark"></i></div>
-        <span class="value">{{ stats().savedJobs }}</span>
-        <span class="label">Saved Jobs</span>
-        <div class="trend">Review and apply</div>
+        <div class="icon-box rose"><i class="fa-solid fa-calendar-check"></i></div>
+        <span class="value">{{ stats().interviews }}</span>
+        <span class="label">Interviews</span>
+        <div class="trend">Next steps</div>
       </div>
     </div>
 

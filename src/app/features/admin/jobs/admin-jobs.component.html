@@ -17,7 +17,7 @@
       <div class="header-stats" *ngIf="!loading()">
         <div class="quick-stat glass">
           <span class="label">Inventory</span>
-          <span class="value">{{ filtered().length }} Active Jobs</span>
+          <span class="value">{{ activeCount() }} Unblocked Jobs</span>
         </div>
       </div>
     </header>
@@ -31,19 +31,25 @@
                (input)="applySearch()"
                placeholder="Search by job title, company, or tech stack..." />
       </div>
-      <button class="btn-refresh" (click)="load()" [disabled]="loading()">
-        <i class="fa-solid fa-rotate" [class.fa-spin]="loading()"></i>
-      </button>
+      <div class="filter-actions">
+        <button class="btn-filter" (click)="toggleSort()" [class.active]="sortActiveFirst">
+          <i class="fa-solid fa-arrow-down-short-wide"></i>
+          <span>{{ sortActiveFirst ? 'Unblocked First' : 'Blocked First' }}</span>
+        </button>
+        <button class="btn-refresh" (click)="load()" [disabled]="loading()">
+          <i class="fa-solid fa-rotate" [class.fa-spin]="loading()"></i>
+        </button>
+      </div>
     </section>
 
     <!-- ── Results Area ──────────────────────────────────── -->
-    <main class="results-area reveal delay-2">
+    <main class="results-container reveal delay-2">
       
       <!-- Loading State -->
       <div class="table-skeleton" *ngIf="loading()">
         <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
       </div>
-
+ 
       <!-- Jobs Table -->
       <div class="data-card glass" *ngIf="!loading()">
         <div class="table-container">
@@ -59,10 +65,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let j of filtered()" class="job-row-item">
+              <tr *ngFor="let j of filtered()" class="job-row-item" [class.blocked-row]="j.isAdminBlocked">
                 <td>
                   <div class="job-identity">
                     <span class="job-name">{{ j.title }}</span>
+                    <span class="status-badge" [class.active]="!j.isAdminBlocked" [class.blocked]="j.isAdminBlocked">
+                      {{ j.isAdminBlocked ? 'Blocked' : 'Unblocked' }}
+                    </span>
                   </div>
                 </td>
                 <td>
@@ -85,18 +94,18 @@
                 </td>
                 <td class="date-cell">{{ j.postedAt | date:'MMM d, y' }}</td>
                 <td class="text-right">
-                  <button class="btn-deactivate"
+                  <button [class]="j.isAdminBlocked ? 'btn-activate' : 'btn-deactivate'"
                           [disabled]="processing() === j.jobId"
-                          (click)="deactivate(j.jobId)">
-                    <i class="fa-solid fa-power-off"></i>
-                    {{ processing() === j.jobId ? '...' : 'Deactivate' }}
+                          (click)="toggleStatus(j.jobId)">
+                    <i class="fa-solid" [class.fa-check]="j.isAdminBlocked" [class.fa-power-off]="!j.isAdminBlocked"></i>
+                    {{ processing() === j.jobId ? '...' : (j.isAdminBlocked ? 'Unblock' : 'Block') }}
                   </button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-
+ 
         <!-- Empty State -->
         <div class="empty-results" *ngIf="filtered().length === 0">
           <div class="empty-icon"><i class="fa-solid fa-briefcase-slash"></i></div>

@@ -58,9 +58,9 @@ export class AdminService {
     return this.http.get<ApiResponse<any[]>>(`${this.api}/jobs`);
   }
 
-  deactivateJob(jobId: number): Observable<ApiResponse<string>> {
+  toggleJobStatus(jobId: number): Observable<ApiResponse<string>> {
     return this.http.put<ApiResponse<string>>
-      (`${this.api}/jobs/${jobId}/deactivate`, {});
+      (`${this.api}/jobs/${jobId}/toggle-status`, {});
   }
 
   getProfile(): Observable<ApiResponse<any>> {

@@ -25,6 +25,8 @@ export interface RecentJob {
   title: string;
   companyName: string;
   location: string;
+  isActive: boolean;
+  isAdminBlocked: boolean;
   totalApplicants: number;
   postedAt: string;
 }

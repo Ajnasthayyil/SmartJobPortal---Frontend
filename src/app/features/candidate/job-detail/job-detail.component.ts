@@ -22,6 +22,7 @@ export class JobDetailComponent implements OnInit {
   applied = signal(false);
   coverNote = '';
   showApply = signal(false);
+  profileComplete = signal(true);
   jobId = 0;
 
   constructor(
@@ -33,6 +34,18 @@ export class JobDetailComponent implements OnInit {
   ngOnInit(): void {
     this.jobId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadJob();
+    this.checkProfile();
+  }
+
+  checkProfile(): void {
+    this.service.getProfile().subscribe({
+      next: res => {
+        if (res.success && res.data) {
+          // If no resume path is present, consider profile incomplete for applying
+          this.profileComplete.set(!!res.data.hasResume);
+        }
+      }
+    });
   }
 
   loadJob(): void {
@@ -55,6 +68,14 @@ export class JobDetailComponent implements OnInit {
         if (res.success) this.matchScore.set(res.data);
       }
     });
+  }
+
+  toggleApply(): void {
+    if (!this.profileComplete()) {
+      this.toast.warning('Please complete your profile and upload a resume before applying.');
+      return;
+    }
+    this.showApply.set(true);
   }
 
   applyJob(): void {

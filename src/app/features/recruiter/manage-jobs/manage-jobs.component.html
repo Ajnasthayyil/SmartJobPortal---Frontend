@@ -62,8 +62,10 @@
                     <div class="job-main-info">
                         <div class="job-title-row">
                             <h3>{{ job.title }}</h3>
-                            <span class="status-pill" [class.active]="job.isActive">
-                                {{ job.isActive ? 'Active' : 'Inactive' }}
+                            <span class="status-pill" 
+                                  [class.active]="job.isActive && !job.isAdminBlocked"
+                                  [class.blocked]="job.isAdminBlocked">
+                                {{ job.isAdminBlocked ? 'Blocked by Admin' : (job.isActive ? 'Active' : 'Inactive') }}
                             </span>
                         </div>
                         
@@ -111,10 +113,16 @@
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                             
-                            <button *ngIf="job.isActive" class="icon-btn toggle active" (click)="toggleStatus(job.jobId)" title="Deactivate Job">
+                            <button *ngIf="job.isActive" class="icon-btn toggle active" 
+                                    (click)="toggleStatus(job.jobId)" 
+                                    [disabled]="job.isAdminBlocked"
+                                    [title]="job.isAdminBlocked ? 'Blocked by Admin' : 'Deactivate Job'">
                                 <i class="fa-solid fa-power-off"></i>
                             </button>
-                            <button *ngIf="!job.isActive" class="icon-btn toggle" (click)="toggleStatus(job.jobId)" title="Reactivate Job">
+                            <button *ngIf="!job.isActive" class="icon-btn toggle" 
+                                    (click)="toggleStatus(job.jobId)" 
+                                    [disabled]="job.isAdminBlocked"
+                                    [title]="job.isAdminBlocked ? 'Blocked by Admin' : 'Reactivate Job'">
                                 <i class="fa-solid fa-power-off"></i>
                             </button>
                         </div>

@@ -33,6 +33,7 @@ export interface JobResponse {
   maxSalary: number | null;
   minExperienceYears: number;
   isActive: boolean;
+  isAdminBlocked: boolean;
   postedAt: string;
   requiredSkills: string[];
   totalApplicants: number;

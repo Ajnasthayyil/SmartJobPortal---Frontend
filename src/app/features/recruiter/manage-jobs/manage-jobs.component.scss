@@ -239,6 +239,12 @@ h1, h2, h3, h4 {
             background: #ecfdf5;
             color: #059669;
         }
+
+        &.blocked {
+            background: #fef2f2;
+            color: #ef4444;
+            border: 1px solid rgba(#ef4444, 0.2);
+        }
     }
 }
 
@@ -365,6 +371,13 @@ h1, h2, h3, h4 {
     &:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        filter: grayscale(1);
+        &:hover { transform: none; box-shadow: none; }
     }
 
     &.view {

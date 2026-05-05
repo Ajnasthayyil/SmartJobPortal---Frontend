@@ -97,22 +97,22 @@ $gray600:   #64748b;
 }
 
 .btn-login {
-  padding: 14px 44px;
-  background: $primary;
+  padding: 12px 36px;
+  background: linear-gradient(135deg, $primary 0%, $primary-d 100%);
   color: $white;
   border-radius: 100px; 
   text-decoration: none;
-  font-size: 14px; 
-  font-weight: 700;
-  transition: all 0.3s;
-  box-shadow: 0 10px 20px -5px rgba($primary, 0.3);
+  font-size: 13px; 
+  font-weight: 800;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 20px -5px rgba($primary, 0.4);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   
   &:hover { 
-    background: $primary-d;
-    transform: translateY(-2px);
-    box-shadow: 0 15px 25px -5px rgba($primary, 0.4);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 15px 30px -5px rgba($primary, 0.5);
+    filter: brightness(1.1);
   }
 }
 

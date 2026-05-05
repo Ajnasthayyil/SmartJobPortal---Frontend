@@ -16,7 +16,7 @@ footer {
 .footer-brand { 
   p { 
     font-size: 14px; 
-    color: rgba(255, 255, 255, 0.4); 
+    color: #ffffff; 
     line-height: 1.6; 
     font-weight: 400; 
     max-width: 280px; 
@@ -43,7 +43,7 @@ footer {
 .logo-subtitle {
   font-size: 8px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-top: 4px;
@@ -61,7 +61,7 @@ footer {
   ul { list-style: none; display: flex; flex-direction: column; gap: 10px; padding: 0; } 
   a { 
     font-size: 14px; 
-    color: rgba(255, 255, 255, 0.4); 
+    color: #ffffff; 
     text-decoration: none; 
     transition: all 0.2s; 
     &:hover { color: #10b981; } 
@@ -74,7 +74,7 @@ footer {
   justify-content: space-between; 
   padding-top: 30px; 
   border-top: 1px solid rgba(255,255,255,0.05); 
-  p { font-size: 13px; color: rgba(255, 255, 255, 0.3); } 
+  p { font-size: 13px; color: #ffffff; } 
 }
 
 .social-links  { display: flex; gap: 14px; }
@@ -91,7 +91,7 @@ footer {
   cursor: pointer; 
   transition: all 0.3s; 
   font-size: 16px; 
-  color: rgba(255, 255, 255, 0.5); 
+  color: #ffffff; 
   &:hover { border-color: #10b981; color: #10b981; background: rgba(16, 185, 129, 0.05); transform: translateY(-4px); } 
 }
 

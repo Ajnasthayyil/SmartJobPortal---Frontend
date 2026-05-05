@@ -88,6 +88,12 @@ export class ManageJobsComponent implements OnInit {
   }
 
   toggleStatus(jobId: number): void {
+    const job = this.jobs().find(j => j.jobId === jobId);
+    if (job?.isAdminBlocked) {
+      this.toast.error('This job is blocked by Admin and cannot be activated.');
+      return;
+    }
+
     // Optimistic Update: Instantly flip UI state
     this.jobs.update(jobs => 
       jobs.map(j => j.jobId === jobId ? { ...j, isActive: !j.isActive } : j)
@@ -101,7 +107,8 @@ export class ManageJobsComponent implements OnInit {
           this.toast.error(res.message);
           this.load(); 
         } else {
-          this.toast.success('Job status updated instantly.');
+          const msg = job?.isActive ? 'Job successfully deactivated' : 'Job successfully activated';
+          this.toast.success(msg);
         }
       },
       error: () => {
