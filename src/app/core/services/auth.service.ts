@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ToastService } from './toast.service';
 import {
@@ -129,10 +129,31 @@ export class AuthService {
 
   redirectByRole(): void {
     const role = this.getRole();
-    if      (role === 'Admin')     this.router.navigate(['/admin/dashboard']);
-    else if (role === 'Recruiter') this.router.navigate(['/recruiter/dashboard']);
-    else if (role === 'Candidate') this.router.navigate(['/candidate/dashboard']);
-    else                           this.router.navigate(['/login']);
+    if (role === 'Admin') {
+      this.router.navigate(['/admin/dashboard']);
+    } else if (role === 'Recruiter') {
+      this.router.navigate(['/recruiter/dashboard']);
+    } else if (role === 'Candidate') {
+      // For candidates, check if profile is complete (headline and summary are good indicators)
+      this.http.get<ApiResponse<any>>(`${environment.apiUrl}/candidate/profile`).subscribe({
+        next: res => {
+          if (res.success && res.data) {
+            const p = res.data;
+            const isComplete = p.headline && p.summary && p.skills?.length > 0;
+            if (isComplete) {
+              this.router.navigate(['/candidate/dashboard']);
+            } else {
+              this.router.navigate(['/candidate/profile']);
+            }
+          } else {
+            this.router.navigate(['/candidate/profile']);
+          }
+        },
+        error: () => this.router.navigate(['/candidate/profile'])
+      });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   private loadFromStorage(): UserSession | null {

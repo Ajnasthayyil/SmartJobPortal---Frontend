@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+import { CoursesComponent } from './features/courses/courses.component';
 
 export const routes: Routes = [
   {
@@ -75,6 +76,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/companies/companies.component')
             .then(m => m.CompaniesComponent)
+      },
+      {
+        path: 'courses',
+        loadComponent: () =>
+          import('./features/courses/courses.component')
+            .then(m => m.CoursesComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
@@ -201,6 +208,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/companies/companies.component')
         .then(m => m.CompaniesComponent)
+  },
+  {
+    path: 'courses',
+    component: CoursesComponent
   },
 
   { path: '**', redirectTo: '' }

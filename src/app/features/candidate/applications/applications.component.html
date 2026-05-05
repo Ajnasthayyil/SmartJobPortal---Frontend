@@ -1,137 +1,147 @@
-<div class="apps-page">
-    <div class="apps-inner">
+<div class="dashboard-page">
+  <div class="dashboard-inner" *ngIf="!loading()">
+    
+    <!-- Welcome Box -->
+    <div class="welcome-box">
+      <div class="user-meta-info">
+        <span class="hi-text">Application Tracker</span>
+        <h1>My Applications</h1>
+        <p class="headline-text">Monitor your career progress and interview stages in real-time.</p>
+      </div>
+      <div class="actions">
+        <a routerLink="/candidate/jobs" class="btn-primary">
+          <i class="fa-solid fa-plus"></i>
+          Browse More Jobs
+        </a>
+      </div>
+    </div>
 
-        <!-- Premium Hero -->
-        <header class="apps-hero">
-            <div class="hero-bg">
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-            </div>
-            <div class="hero-content">
-                <div class="title-group">
-                    <span class="hero-badge">Application Tracker</span>
-                    <h1 class="page-title">My <span class="highlight">Applications</span></h1>
-                    <p class="page-sub">Monitor your career progress and interview stages in real-time.</p>
-                </div>
-                <a routerLink="/candidate/jobs" class="btn-browse-hero">
-                    <i class="fa-solid fa-plus"></i>
-                    Browse More Jobs
-                </a>
-            </div>
-        </header>
-
-        <!-- Filter tabs -->
-        <div class="filter-tabs">
-            <ng-container *ngFor="let f of filters">
-                <button class="filter-tab" [class.active]="activeFilter() === f" (click)="setFilter(f)">
-                    {{ f === 'UnderReview' ? 'Under Review' : f }}
-                    <span class="tab-count">{{ countByStatus(f) }}</span>
-                </button>
-            </ng-container>
+    <!-- Layout Grid -->
+    <div class="dashboard-content">
+      
+      <!-- Main Content -->
+      <div class="col-main">
+        
+        <!-- Filter Tabs -->
+        <div class="filter-pills-container">
+          <button *ngFor="let f of filters" 
+                  class="filter-pill" 
+                  [class.active]="activeFilter() === f" 
+                  (click)="setFilter(f)">
+            {{ f === 'UnderReview' ? 'Under Review' : f }}
+            <span class="count-badge">{{ countByStatus(f) }}</span>
+          </button>
         </div>
 
-        <!-- Loading Skeleton -->
-        <ng-container *ngIf="loading()">
-            <div class="apps-list">
-                <div *ngFor="let i of [1,2,3]" class="card-skeleton">
-                    <div class="sk-header">
-                        <div class="sk-logo"></div>
-                        <div class="sk-text">
-                            <div class="sk-line w-40"></div>
-                            <div class="sk-line w-20"></div>
-                        </div>
-                    </div>
-                    <div class="sk-footer"></div>
-                </div>
+        <div class="section-header" style="margin-top: 40px;">
+          <h2 class="section-title">
+            {{ activeFilter() }} Applications
+            <span style="font-size: 14px; font-weight: 600; color: #64748b;">(Showing {{ filtered().length }} results)</span>
+          </h2>
+        </div>
+
+        <!-- Applications List -->
+        <div class="list-container" *ngIf="filtered().length > 0">
+          <div *ngFor="let app of filtered()" class="app-item-modern">
+            <div class="item-header">
+              <div class="logo-circle">
+                {{ app.companyName.charAt(0) }}
+              </div>
+              <div class="item-info">
+                <span class="title">{{ app.jobTitle }}</span>
+                <span class="subtitle">{{ app.companyName }} • Applied {{ app.appliedAt | date:'MMM d, yyyy' }}</span>
+              </div>
+              <div class="status-wrap">
+                <span [class]="'status-badge ' + getStatusClass(app.status)">
+                  <i class="fa-solid" [class.fa-clock]="app.status === 'Applied' || app.status === 'UnderReview'"
+                                    [class.fa-calendar-check]="app.status === 'Interview'"
+                                    [class.fa-circle-check]="app.status === 'Offered'"
+                                    [class.fa-circle-xmark]="app.status === 'Rejected'"></i>
+                  {{ getStatusLabel(app.status) }}
+                </span>
+              </div>
             </div>
-        </ng-container>
+
+            <!-- Timeline Integration -->
+            <div class="app-timeline-modern" *ngIf="app.timeline?.length">
+              <div class="timeline-track">
+                <div *ngFor="let step of app.timeline; let last = last" 
+                     class="timeline-node" 
+                     [class.completed]="step.isCompleted" 
+                     [class.current]="step.isCurrent">
+                  <div class="node-dot">
+                    <i class="fa-solid fa-check" *ngIf="step.isCompleted"></i>
+                  </div>
+                  <div class="node-content">
+                    <span class="node-label">{{ step.status === 'UnderReview' ? 'Review' : step.status }}</span>
+                    <span class="node-date" *ngIf="step.occurredAt">{{ step.occurredAt | date:'MMM d' }}</span>
+                  </div>
+                  <div class="node-line" *ngIf="!last" [class.active]="step.isCompleted"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Empty State -->
-        <ng-container *ngIf="!loading() && filtered().length === 0">
-            <div class="empty-state-card">
-                <div class="empty-illustration">
-                    <div class="icon-circle">
-                        <i class="fa-solid fa-file-circle-exclamation"></i>
-                    </div>
-                </div>
-                <h3>No applications found</h3>
-                <p class="empty-desc">
-                    <ng-container *ngIf="activeFilter() === 'All'; else notAll">
-                        You haven't started any application journeys yet.
-                    </ng-container>
-                    <ng-template #notAll>
-                        We couldn't find any applications marked as "<strong>{{ activeFilter() }}</strong>"
-                    </ng-template>
-                </p>
-                <a routerLink="/candidate/jobs" class="btn-primary-glow">
-                    Discover Opportunities
-                </a>
+        <div class="empty-state-card-modern" *ngIf="filtered().length === 0">
+          <div class="icon-box">
+            <i class="fa-solid fa-file-circle-exclamation"></i>
+          </div>
+          <h3>No applications found</h3>
+          <p>We couldn't find any applications in the "{{ activeFilter() }}" stage.</p>
+          <a routerLink="/candidate/jobs" class="btn-primary">Explore Jobs</a>
+        </div>
+
+      </div>
+
+      <!-- Side Content (Widgets) -->
+      <div class="col-side">
+        <div class="side-widget">
+          <div class="section-title" style="margin-bottom: 20px;">
+            Quick Insights
+          </div>
+          <div class="stat-row">
+            <div class="stat-item">
+              <span class="stat-val">{{ filtered().length }}</span>
+              <span class="stat-lbl">Active</span>
             </div>
-        </ng-container>
-
-        <!-- Applications list -->
-        <ng-container *ngIf="!loading() && filtered().length > 0">
-            <div class="apps-list">
-                <ng-container *ngFor="let app of filtered()">
-                    <div class="app-card">
-
-                        <div class="app-card-top">
-
-                            <!-- Company logo -->
-                            <div class="company-logo">
-                                {{ app.companyName.charAt(0) }}
-                            </div>
-
-                            <!-- Job info -->
-                            <div class="app-info">
-                                <h3 class="app-title">{{ app.jobTitle }}</h3>
-                                <div class="app-company">{{ app.companyName }}</div>
-                                <div class="app-meta">
-                                    <span>Applied {{ app.appliedAt | date:'mediumDate' }}</span>
-                                    <ng-container *ngIf="app.matchScore">
-                                        <span class="match-score">
-                                            🎯 {{ app.matchScore }}% match
-                                        </span>
-                                    </ng-container>
-                                </div>
-                            </div>
-
-                            <!-- Status badge -->
-                            <span [class]="'status-badge ' + getStatusClass(app.status)">
-                                {{ getStatusLabel(app.status) }}
-                            </span>
-
-                        </div>
-
-                        <!-- Status timeline -->
-                        <ng-container *ngIf="app.timeline && app.timeline.length > 0">
-                            <div class="timeline">
-                                <ng-container *ngFor="let step of app.timeline; let last = last">
-                                    <div class="timeline-step" [class.completed]="step.isCompleted" [class.current]="step.isCurrent">
-                                        <div class="step-dot">
-                                            <ng-container *ngIf="step.isCompleted"> ✓ </ng-container>
-                                        </div>
-                                        <ng-container *ngIf="!last">
-                                            <div class="step-line" [class.filled]="step.isCompleted">
-                                            </div>
-                                        </ng-container>
-                                        <div class="step-label">
-                                            {{ step.status === 'UnderReview' ? 'Under Review' : step.status }}
-                                        </div>
-                                        <ng-container *ngIf="step.occurredAt">
-                                            <div class="step-date">
-                                                {{ step.occurredAt | date:'MMM d' }}
-                                            </div>
-                                        </ng-container>
-                                    </div>
-                                </ng-container>
-                            </div>
-                        </ng-container>
-
-                    </div>
-                </ng-container>
+            <div class="stat-item">
+              <span class="stat-val">{{ countByStatus('Interview') }}</span>
+              <span class="stat-lbl">Interviews</span>
             </div>
-        </ng-container>
+          </div>
+          <div class="hint-box" style="margin-top: 24px;">
+            <i class="fa-solid fa-lightbulb"></i>
+            Keep your profile updated to increase your match score by up to 40%.
+          </div>
+        </div>
+
+        <div class="side-widget" style="margin-top: 24px;">
+          <div class="section-title" style="margin-bottom: 20px;">
+            Recommended
+          </div>
+          <div class="recommendation-card">
+            <p>Based on your applications, we recommend checking your Skill Gap Analysis.</p>
+            <a routerLink="/candidate/skill-gap" class="btn-outline-full">Check Skills</a>
+          </div>
+        </div>
+      </div>
 
     </div>
+
+  </div>
+
+  <!-- Skeleton Loading -->
+  <div class="dashboard-inner" *ngIf="loading()">
+    <div class="welcome-box skeleton-block" style="height: 200px; opacity: 0.5;"></div>
+    <div class="dashboard-content">
+      <div class="col-main">
+        <div class="list-container skeleton-block" style="height: 500px; opacity: 0.3;"></div>
+      </div>
+      <div class="col-side">
+        <div class="side-widget skeleton-block" style="height: 300px; opacity: 0.3;"></div>
+      </div>
+    </div>
+  </div>
 </div>

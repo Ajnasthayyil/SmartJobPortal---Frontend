@@ -1,0 +1,136 @@
+// ── Design Tokens ────────────────────────────────────────────────
+$primary: #10b981;
+$primary-light: #d1fae5;
+$primary-dark: #059669;
+$slate-50: #f8fafc;
+$slate-100: #f1f5f9;
+$slate-200: #e2e8f0;
+$slate-300: #cbd5e1;
+$slate-400: #94a3b8;
+$slate-500: #64748b;
+$slate-600: #475569;
+$slate-900: #0f172a;
+$white: #ffffff;
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+:host {
+    display: block;
+    background: $slate-100;
+    min-height: 100vh;
+    padding: 140px 32px 60px 112px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+// ── Shared Dashboard Patterns ──
+.welcome-box {
+    background: $white; padding: 48px; border-radius: 20px; margin-bottom: 40px;
+    box-shadow: $shadow-sm; border: 1px solid $slate-200; position: relative;
+    display: flex; justify-content: space-between; align-items: center;
+    overflow: hidden;
+
+    .hi-text { font-size: 13px; font-weight: 800; color: $slate-500; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px; display: block; }
+    h1 { font-size: 36px; font-weight: 900; color: black; letter-spacing: -0.04em; margin: 0 0 8px 0; }
+    .headline-text { font-size: 18px; font-weight: 600; color: $slate-500; }
+}
+
+.dashboard-content { display: grid; grid-template-columns: 400px 1fr; gap: 32px; }
+
+.section-header { margin-bottom: 24px; }
+.section-title { font-size: 20px; font-weight: 800; color: $slate-900; }
+
+// ── Side Widgets & Filters ──
+.side-widget {
+    background: white; padding: 32px; border-radius: 20px; border: 1px solid $slate-200;
+    .section-title { font-size: 18px; font-weight: 800; color: $slate-900; }
+}
+
+.filter-group-modern {
+    margin-bottom: 32px;
+    label { display: block; font-size: 11px; font-weight: 800; color: $slate-400; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+}
+
+.pill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill-btn {
+    background: $slate-50; border: 1px solid transparent; padding: 10px 16px; border-radius: 12px;
+    font-size: 13px; font-weight: 700; color: $slate-600; cursor: pointer; transition: all 0.2s;
+    &:hover { background: $slate-100; }
+    &.active { background: $primary; color: white; border-color: $primary; box-shadow: 0 8px 16px rgba($primary, 0.2); }
+}
+
+.premium-toggle {
+    display: flex; align-items: center; gap: 16px; cursor: pointer;
+    input { display: none; }
+    .slider { width: 44px; height: 24px; background: $slate-200; border-radius: 20px; position: relative; transition: 0.3s; &::after { content: ''; position: absolute; top: 4px; left: 4px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.3s; } }
+    input:checked + .slider { background: $primary; &::after { left: 24px; } }
+    .lbl { font-size: 14px; font-weight: 700; color: $slate-900; }
+}
+
+.btn-reset-full {
+    width: 100%; padding: 14px; border-radius: 14px; border: 1.5px solid $slate-100;
+    background: transparent; color: $slate-400; font-weight: 800; font-size: 13px; cursor: pointer;
+    transition: all 0.2s; &:hover { border-color: $slate-900; color: $slate-900; }
+}
+
+// ── Course Cards ──
+.course-modern-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+
+.course-card-premium {
+    background: white; border-radius: 24px; border: 1px solid $slate-200; overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer;
+    &:hover { transform: translateY(-8px); border-color: $primary; box-shadow: 0 30px 60px rgba(0,0,0,0.06); }
+
+    .card-image-placeholder {
+        height: 180px; background: $slate-900; color: white; display: flex; align-items: center; justify-content: center;
+        font-size: 48px; position: relative;
+        .platform-float { position: absolute; top: 16px; right: 16px; padding: 4px 12px; border-radius: 8px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; }
+    }
+
+    .card-content { padding: 24px; }
+    .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .instructor { font-size: 13px; font-weight: 700; color: $primary; }
+    .free-badge { background: $primary-light; color: $primary-dark; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 900; }
+    
+    .course-title { font-size: 18px; font-weight: 900; color: $slate-900; margin-bottom: 12px; line-height: 1.4; height: 50px; overflow: hidden; }
+    .course-desc { font-size: 14px; color: $slate-500; line-height: 1.6; margin-bottom: 24px; height: 45px; overflow: hidden; }
+
+    .course-stats {
+        display: flex; gap: 16px; margin-bottom: 24px;
+        .stat { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: $slate-400; i { color: $slate-300; } }
+    }
+
+    .course-footer {
+        padding-top: 20px; border-top: 1px solid $slate-100; display: flex; justify-content: space-between; align-items: center;
+        .price { font-size: 18px; font-weight: 900; color: $slate-900; &.is-free { color: $primary; } }
+        .view-btn { font-size: 14px; font-weight: 800; color: $slate-900; display: flex; align-items: center; gap: 8px; transition: 0.2s; &:hover { color: $primary; gap: 12px; } }
+    }
+}
+
+// ── Search Box Premium ──
+.search-box-premium {
+    background: $slate-50; border: 1.5px solid $slate-200; border-radius: 16px; padding: 4px 4px 4px 20px;
+    display: flex; align-items: center; gap: 12px; width: 400px; transition: all 0.3s;
+    &:focus-within { border-color: $primary; background: white; box-shadow: 0 10px 25px rgba($primary, 0.08); }
+    i { color: $slate-400; }
+    input { flex: 1; border: none; background: transparent; height: 44px; font-size: 15px; font-weight: 600; color: $slate-900; &:focus { outline: none; } }
+    .btn-clear { width: 32px; height: 32px; border-radius: 10px; border: none; background: white; color: $slate-400; cursor: pointer; &:hover { color: #dc2626; } }
+}
+
+@media (max-width: 1200px) {
+    :host { padding-left: 32px; }
+    .dashboard-content { grid-template-columns: 1fr; }
+    .welcome-box { flex-direction: column; align-items: flex-start; gap: 24px; .actions { width: 100%; .search-box-premium { width: 100%; } } }
+}
+
+.empty-state-card-modern {
+    background: white; border-radius: 24px; border: 1px dashed $slate-200; padding: 80px 40px; text-align: center;
+    .icon-box { font-size: 48px; color: $slate-100; margin-bottom: 24px; }
+    h3 { font-size: 24px; font-weight: 900; color: $slate-900; margin-bottom: 8px; }
+    p { font-size: 16px; color: $slate-400; margin-bottom: 32px; }
+}
+
+.btn-primary {
+    background: $slate-900; color: white; border: none; padding: 14px 32px; border-radius: 16px;
+    font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s;
+    &:hover { background: black; transform: translateY(-2px); }
+}

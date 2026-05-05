@@ -1,5 +1,7 @@
 // ── Design Tokens ────────────────────────────────────────────────
 $primary: #10b981;
+$primary-light: #d1fae5;
+$primary-dark: #059669;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -7,345 +9,144 @@ $slate-300: #cbd5e1;
 $slate-400: #94a3b8;
 $slate-500: #64748b;
 $slate-600: #475569;
-$slate-700: #334155;
 $slate-900: #0f172a;
 $white: #ffffff;
-$amber: #f59e0b;
-$rose: #f43f5e;
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
 :host {
-  display: block;
-  background: var(--slate-50);
-  min-height: 100vh;
-  padding: 140px 32px 60px 112px;
-  position: relative;
-  overflow-x: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -100px; left: -100px;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, var(--slate-200) 0%, transparent 70%);
-    filter: blur(80px);
-    z-index: 0;
-  }
-}
-
-.analysis-container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-// ── Header ───────────────────────────────────────────────────────
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 48px;
-
-  .ai-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
+    display: block;
     background: $slate-100;
-    color: $slate-900;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 16px;
-    i { color: $amber; }
-  }
-
-  .title {
-    font-size: 42px;
-    font-weight: 900;
-    color: #000000;
-    margin: 0 0 8px 0;
-    letter-spacing: -0.04em;
-  }
-
-  .subtitle { font-size: 18px; color: $slate-500; font-weight: 500; }
-
-  .btn-refresh {
-    background: $slate-900;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 14px;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.2s;
-    &:hover { background: black; transform: translateY(-1px); }
-  }
+    min-height: 100vh;
+    padding: 140px 32px 60px 112px;
+    position: relative;
+    overflow-x: hidden;
 }
 
-// ── Summary Box ──────────────────────────────────────────────────
-.summary-box {
-  background: $white;
-  border-radius: 12px;
-  padding: 32px 40px;
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  color: #000000;
-  margin-bottom: 56px;
-  border: 1px solid $slate-200;
-  box-shadow: var(--shadow-sm);
+// ── Shared Dashboard Patterns ──
+.welcome-box {
+    background: $white; padding: 48px; border-radius: 20px; margin-bottom: 32px;
+    box-shadow: $shadow-sm; border: 1px solid $slate-200; position: relative;
+    display: flex; justify-content: space-between; align-items: center;
+    overflow: hidden;
 
-  .summary-icon {
-    .icon-pulse {
-      width: 64px; height: 64px; background: #ecfdf5; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 24px; color: $primary;
-      animation: pulse-soft 2s infinite;
+    .hi-text { 
+        font-size: 13px; font-weight: 800; color: $slate-500; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px; display: flex; align-items: center; gap: 12px;
+        
+        .simulation-badge {
+            background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; padding: 2px 8px; border-radius: 6px; font-size: 10px; letter-spacing: 0.05em;
+        }
     }
-  }
-
-  h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: #000000; }
-  p { font-size: 16px; color: $slate-500; line-height: 1.6; max-width: 800px; 
-    strong { color: $primary; }
-  }
+    h1 { font-size: 36px; font-weight: 900; color: black; letter-spacing: -0.04em; margin: 0 0 8px 0; }
+    .headline-text { font-size: 18px; font-weight: 600; color: $slate-500; }
 }
 
-@keyframes pulse-soft {
-  0% { box-shadow: 0 0 0 0 rgba($primary, 0.4); }
-  70% { box-shadow: 0 0 0 15px rgba($primary, 0); }
-  100% { box-shadow: 0 0 0 0 rgba($primary, 0); }
-}
-
-// ── Main Content Layout ──────────────────────────────────────────
-.main-grid {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 48px;
-}
-
-.section-header {
-  margin-bottom: 32px;
-  .section-title { font-size: 24px; font-weight: 900; color: #000000; margin-bottom: 8px; }
-  .section-sub { font-size: 15px; color: $slate-500; font-weight: 500; }
-}
-
-// ── Job Gap Cards ────────────────────────────────────────────────
-.job-gap-list {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-.job-gap-card {
-  background: $white;
-  border-radius: 12px;
-  border: 1px solid $slate-200;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: $slate-400;
-  }
-}
-
-.job-main {
-  padding: 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid $slate-100;
-
-  .job-meta {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+.ai-insight-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white;
+    padding: 32px 40px; border-radius: 24px; display: flex; align-items: center; gap: 32px;
+    margin-bottom: 48px; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
     
-    .company-logo {
-      width: 56px; height: 56px; background: $slate-50; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; font-weight: 900; color: $slate-900; border: 1px solid $slate-100;
+    .insight-icon { width: 64px; height: 64px; border-radius: 16px; background: rgba($primary, 0.1); color: $primary; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+    .insight-text { flex: 1; h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; } p { font-size: 15px; opacity: 0.7; line-height: 1.6; } }
+}
+
+.dashboard-content { display: grid; grid-template-columns: 1fr 400px; gap: 32px; }
+
+.section-header { margin-bottom: 24px; }
+.section-title { font-size: 20px; font-weight: 800; color: $slate-900; }
+
+// ── Gap Card Modern ──
+.gap-card-modern {
+    background: white; border-radius: 24px; border: 1px solid $slate-200; padding: 32px; margin-bottom: 24px;
+    transition: all 0.3s ease;
+    &:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.04); border-color: $primary; }
+
+    .gap-card-header { display: flex; align-items: center; gap: 20px; margin-bottom: 32px; }
+    .logo-circle { width: 56px; height: 56px; background: $slate-50; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: $primary; font-size: 24px; }
+    .info { flex: 1; .title { display: block; font-size: 20px; font-weight: 900; color: $slate-900; margin-bottom: 4px; } .subtitle { font-size: 14px; font-weight: 600; color: $slate-400; } }
+}
+
+.match-score-widget {
+    .score-circle {
+        position: relative; width: 64px; height: 64px;
+        svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .ring-bg { fill: none; stroke: $slate-100; stroke-width: 3; }
+        .ring-fg { fill: none; stroke: $primary; stroke-width: 3; stroke-linecap: round; transition: stroke-dasharray 1s ease; }
+        .score-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; color: $slate-900; }
     }
-
-    .job-name { font-size: 20px; font-weight: 800; color: $slate-900; margin: 0 0 4px 0; }
-    .company-name { font-size: 14px; font-weight: 600; color: $slate-500; }
-  }
 }
 
-.match-indicator {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  .match-score {
-    text-align: right;
-    .score-num { display: block; font-size: 24px; font-weight: 900; color: $slate-900; line-height: 1; }
-    .score-label { font-size: 10px; font-weight: 800; color: $slate-400; letter-spacing: 0.1em; }
-  }
-
-  .match-ring {
-    width: 44px; height: 44px;
-    svg { transform: rotate(-90deg); }
-    .ring-bg { fill: none; stroke: $slate-100; stroke-width: 3.8; }
-    .ring-fg { fill: none; stroke: $primary; stroke-width: 3.8; stroke-linecap: round; }
-  }
+.gap-analysis-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px;
+    @media (max-width: 768px) { grid-template-columns: 1fr; }
 }
 
-.gap-analysis {
-  padding: 32px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  background: $slate-50;
-
-  .analysis-group {
-    label {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 11px; font-weight: 800; color: $slate-400;
-      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;
-      i { font-size: 14px; }
-    }
-    &.matched i { color: $primary; }
-    &.missing i { color: $rose; }
-  }
-}
-
-.skill-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  
-  .pill {
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 700;
+.analysis-box {
+    background: $slate-50; padding: 24px; border-radius: 16px;
+    label { display: block; font-size: 11px; font-weight: 800; color: $slate-400; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; i { margin-right: 8px; } }
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; background: white; border: 1.5px solid $slate-200; color: $slate-600; }
     
-    &.matched { background: $white; border: 1px solid $slate-200; color: $slate-700; }
-    &.missing { background: #fee2e2; border: 1px solid #fecaca; color: #b91c1c; }
-  }
+    &.matched { label i { color: $primary; } .pill { border-color: rgba($primary, 0.3); color: $primary-dark; } }
+    &.missing { label i { color: #f59e0b; } .pill { border-color: #fef3c7; color: #92400e; } }
 }
 
-.missing-insight {
-  margin-top: 16px;
-  font-size: 12px;
-  color: $slate-500;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  i { color: $amber; }
+.insight-tip { margin-top: 20px; font-size: 13px; font-weight: 600; color: $slate-500; line-height: 1.6; i { color: #f59e0b; margin-right: 8px; } }
+
+.gap-card-footer { border-top: 1px solid $slate-100; padding-top: 24px; display: flex; justify-content: flex-end; }
+.btn-link { font-size: 14px; font-weight: 800; color: $primary; text-decoration: none; display: flex; align-items: center; gap: 8px; &:hover { color: $primary-dark; } }
+
+// ── Side Widgets ──
+.side-widget {
+    background: white; padding: 32px; border-radius: 20px; border: 1px solid $slate-200;
+    .section-title { font-size: 18px; font-weight: 800; color: $slate-900; }
 }
 
-.job-footer {
-  padding: 20px 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: $white;
-
-  .salary-tag { font-size: 15px; font-weight: 800; color: $slate-900; }
-  
-  .btn-view-job {
-    background: $slate-900;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s;
-    &:hover { background: black; transform: translateY(-1px); }
-  }
+.agg-item {
+    padding: 16px 0; border-bottom: 1px solid $slate-50;
+    &:last-child { border-bottom: none; }
+    .agg-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .name { font-size: 15px; font-weight: 800; color: $slate-900; }
+    .demand-text { font-size: 13px; color: $slate-400; font-weight: 600; }
 }
 
-// ── Sidebar Cards ────────────────────────────────────────────────
-.side-card {
-  background: $white;
-  border-radius: 12px;
-  padding: 32px;
-  border: 1px solid $slate-200;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow-sm);
-
-  .side-title { font-size: 18px; font-weight: 800; color: $slate-900; margin-bottom: 8px; }
-  .side-sub { font-size: 13px; color: $slate-500; margin-bottom: 24px; font-weight: 500; }
+.priority-badge {
+    padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 900; text-transform: uppercase;
+    &.high { background: #fee2e2; color: #dc2626; }
+    &.medium { background: #fef3c7; color: #92400e; }
+    &.low { background: #ecfdf5; color: $primary-dark; }
 }
 
-.agg-gap-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.learning-item-modern {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+    .icon { width: 40px; height: 40px; border-radius: 10px; background: $slate-50; display: flex; align-items: center; justify-content: center; color: $primary; font-size: 14px; }
+    .info { .l-title { display: block; font-size: 14px; font-weight: 800; color: $slate-900; } .l-meta { font-size: 12px; color: $slate-400; font-weight: 600; } }
 }
 
-.agg-gap-item {
-  padding: 16px; background: $slate-50; border-radius: 8px; border: 1px solid transparent;
-  &:hover { border-color: $slate-200; background: $white; }
-
-  .agg-info {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
-    .agg-name { font-size: 14px; font-weight: 800; color: $slate-900; }
-    .agg-importance {
-      font-size: 9px; font-weight: 900; text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
-      &.high { background: #fee2e2; color: #ef4444; }
-      &.medium { background: #fef3c7; color: #d97706; }
-      &.low { background: #f1f5f9; color: #64748b; }
-    }
-  }
-  .agg-demand { font-size: 12px; color: $slate-500; font-weight: 600; }
+.btn-primary {
+    background: $slate-900; color: white; border: none; padding: 14px 32px; border-radius: 16px;
+    font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 12px;
+    &:hover { background: black; transform: translateY(-2px); }
 }
 
-.learning-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.btn-outline-full {
+    width: 100%; padding: 14px; border-radius: 14px; border: 2px solid $slate-100;
+    background: transparent; color: $slate-900; font-weight: 800; font-size: 14px; cursor: pointer;
+    transition: all 0.2s; &:hover { border-color: $slate-900; background: $slate-50; }
 }
 
-.learning-item {
-  display: flex; gap: 16px; align-items: center;
-  .learning-icon { width: 36px; height: 36px; background: $slate-100; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: $primary; font-size: 12px; }
-  .l-title { display: block; font-size: 14px; font-weight: 700; color: $slate-900; margin-bottom: 2px; }
-  .l-meta { display: block; font-size: 12px; color: $slate-500; font-weight: 500; }
-}
-
-// ── Loading ──────────────────────────────────────────────────────
+// ── Loading Overlay ──
 .loading-overlay {
-  position: fixed; inset: 0; background: rgba($white, 0.8); backdrop-filter: blur(8px);
-  z-index: 5000; display: flex; align-items: center; justify-content: center;
-  .loader-box { text-align: center; }
-  .spinner {
-    width: 48px; height: 48px; border: 4px solid $slate-100; border-top-color: $slate-900;
-    border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 24px;
-  }
-  p { font-size: 16px; font-weight: 700; color: $slate-900; }
+    position: fixed; inset: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; z-index: 1000;
+    .loader-box { text-align: center; p { margin-top: 20px; font-weight: 800; color: $slate-900; } }
 }
 
+.spinner { width: 40px; height: 40px; border: 4px solid $slate-100; border-top-color: $primary; border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.reveal {
-  animation: reveal 0.8s cubic-bezier(0, 0, 0.2, 1) forwards;
-  opacity: 0;
-}
-
-@keyframes reveal {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
-.delay-4 { animation-delay: 0.4s; }
-
-@media (max-width: 1100px) {
-  .main-grid { grid-template-columns: 1fr; }
-  .header { flex-direction: column; align-items: flex-start; gap: 24px; }
-  :host { padding-left: 32px; }
+@media (max-width: 1200px) {
+    :host { padding-left: 32px; }
+    .dashboard-content { grid-template-columns: 1fr; }
+    .welcome-box { flex-direction: column; align-items: flex-start; gap: 24px; }
 }

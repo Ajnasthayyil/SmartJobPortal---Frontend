@@ -23,6 +23,7 @@ import { RecruiterProfileComponent } from './features/recruiter/profile/recruite
 import { ApplicantsComponent } from './features/recruiter/applicants/applicants.component';
 import { JobDetailComponent } from './features/candidate/job-detail/job-detail.component';
 import { SkillAnalysisComponent } from './features/candidate/skill-analysis/skill-analysis.component';
+import { CoursesComponent } from './features/courses/courses.component';
 
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'jobs', component: JobsListComponent },
   { path: 'jobs/:id', component: JobPublicDetailComponent },
   { path: 'companies', component: CompaniesComponent },
+  { path: 'courses', component: CoursesComponent },
 
   // Candidate Routes (Auth + Candidate Role required)
   { 
@@ -52,6 +54,7 @@ const routes: Routes = [
       { path: 'notifications', component: CandidateDashboardComponent },
       { path: 'settings', component: CandidateDashboardComponent },
       { path: 'skill-gap', component: SkillAnalysisComponent },
+      { path: 'courses', component: CoursesComponent },
     ]
   },
   

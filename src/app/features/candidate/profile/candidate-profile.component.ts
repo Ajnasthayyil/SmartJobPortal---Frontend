@@ -42,6 +42,7 @@ export class CandidateProfileComponent implements OnInit {
       summary: ['', [Validators.required, Validators.minLength(50)]],
       location: ['', Validators.required],
       experienceYears: [0, [Validators.required, Validators.min(0)]],
+      phoneNumber: [''],
       skills: this.fb.array([]),
       education: this.fb.array([]),
       workExperience: this.fb.array([])
@@ -110,7 +111,8 @@ export class CandidateProfileComponent implements OnInit {
       headline: data.headline,
       summary: data.summary,
       location: data.location,
-      experienceYears: data.experienceYears
+      experienceYears: data.experienceYears,
+      phoneNumber: data.phoneNumber || ''
     });
 
     // Handle education array
@@ -152,7 +154,8 @@ export class CandidateProfileComponent implements OnInit {
     if (p.summary) s += 15;
     if (p.location) s += 10;
     if (p.skills?.length) s += 20;
-    if (p.hasResume) s += 20;
+    if (p.hasResume) s += 15;
+    if (p.phoneNumber) s += 5;
     this.completion.set(s);
   }
 

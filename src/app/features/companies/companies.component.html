@@ -1,95 +1,127 @@
-<div class="companies-directory-wrapper">
-  
-  <div class="page-inner">
-    
-    <!-- ── Header ────────────────────────────────────────── -->
-    <header class="directory-header reveal">
-      <div class="header-left">
-        <h1 class="page-title">Company Directory</h1>
-        <p class="page-sub">Explore our curated ecosystem of high-growth companies and global industry leaders.</p>
+<div class="jobs-public-page">
+
+  <!-- Hero search section -->
+  <div class="search-section">
+    <div class="search-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Global Partnership Network
       </div>
-      <div class="header-stats" *ngIf="!loading()">
-        <div class="stat-pill glass">
-          <strong>{{ getFilteredCompanies().length }}</strong> Companies Active
+
+      <h1 class="hero-title">
+        Discover <span class="amber">Industry Leaders</span><br>
+        Partner with <span class="amber">Innovation</span>
+      </h1>
+
+      <p class="hero-sub">
+        Explore a curated directory of high-growth companies and global innovators looking for exceptional talent like you.
+      </p>
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" [(ngModel)]="searchTerm"
+                 (input)="onSearch()"
+                 placeholder="Search by name, industry or location..."
+                 (keyup.enter)="onSearch()"/>
+          <button class="btn-clear" *ngIf="searchTerm" (click)="searchTerm=''; onSearch()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
-      </div>
-    </header>
-
-    <!-- ── Control Bar ──────────────────────────────────── -->
-    <section class="control-bar glass reveal delay-1">
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()"
-               placeholder="Search by name, industry or location..." />
+        <button class="btn-search" (click)="onSearch()">Find Companies</button>
       </div>
 
-      <div class="industry-filters">
-        <button class="filter-chip" 
-                *ngFor="let ind of industries" 
-                [class.active]="activeIndustry === ind"
-                (click)="setIndustry(ind)">
-          {{ ind }}
-        </button>
+      <!-- Filter chips -->
+      <div class="filter-chips">
+        <ng-container *ngFor="let ind of industries">
+          <button class="chip"
+                  [class.active]="activeIndustry === ind"
+                  (click)="setIndustry(ind)">
+            {{ ind }}
+          </button>
+        </ng-container>
       </div>
-    </section>
+    </div>
+  </div>
 
-    <!-- ── Content Area ─────────────────────────────────── -->
-    <main class="content-area">
-      
-      <!-- Loading State -->
-      <div class="skeleton-grid" *ngIf="loading()">
-        <div class="sk-card" *ngFor="let i of [1,2,3,4,5,6]"></div>
+  <!-- Results -->
+  <div class="results-section">
+    <div class="results-inner">
+
+      <!-- Results count -->
+      <div class="results-bar">
+        <span class="results-count" *ngIf="!loading()">
+          Showing <strong>{{ getFilteredCompanies().length }}</strong> leading organizations
+        </span>
       </div>
 
-      <!-- Companies Grid -->
-      <div class="companies-grid" *ngIf="!loading() && getFilteredCompanies().length > 0">
-        <div class="company-card glass reveal" 
+      <!-- Skeleton loading -->
+      <ng-container *ngIf="loading()">
+        <div class="jobs-grid">
+          <ng-container *ngFor="let i of [1,2,3,4,5,6]">
+            <div class="job-card-skeleton">
+              <div class="sk sk-logo"></div>
+              <div class="sk sk-title"></div>
+              <div class="sk sk-sub"></div>
+              <div class="sk sk-tags"></div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <!-- Companies grid -->
+      <div class="jobs-grid" *ngIf="!loading() && getFilteredCompanies().length > 0">
+        <div class="job-card company-card-rev" 
              *ngFor="let co of getFilteredCompanies(); let i = index"
-             [style.animation-delay]="(i * 0.05) + 's'"
              [routerLink]="['/companies', co.id]">
           
-          <div class="card-body">
-            <div class="brand-row">
-              <div class="company-logo">{{ co.name.charAt(0) }}</div>
-              <div class="brand-meta">
-                <h3 class="company-name">{{ co.name }}</h3>
-                <span class="industry-tag">{{ co.industry }}</span>
-              </div>
-              <div class="roles-badge">
-                <i class="fa-solid fa-briefcase"></i> {{ co.openJobsCount || 0 }} Roles
-              </div>
+          <div class="card-top">
+            <div class="co-logo">
+              {{ co.name.charAt(0) }}
             </div>
-
-            <p class="company-desc" *ngIf="co.description">
-              {{ co.description | slice:0:100 }}{{ co.description.length > 100 ? '...' : '' }}
-            </p>
-
-            <div class="location-row" *ngIf="co.location">
-              <i class="fa-solid fa-location-dot"></i>
-              <span>{{ co.location }}</span>
-            </div>
-
-            <!-- Job Previews -->
-            <div class="job-previews" *ngIf="co.recentJobs?.length">
-              <div class="preview-tag" *ngFor="let job of co.recentJobs.slice(0, 2)">
-                {{ job.title }}
-              </div>
+            <div class="roles-badge-rev">
+              <i class="fa-solid fa-briefcase"></i> {{ co.openJobsCount || 0 }} Roles
             </div>
           </div>
 
+          <h3 class="jc-title">{{ co.name }}</h3>
+          <p class="jc-company">{{ co.industry }}</p>
 
+          <p class="jc-desc" *ngIf="co.description">
+            {{ co.description | slice:0:120 }}{{ co.description.length > 120 ? '...' : '' }}
+          </p>
+
+          <div class="jc-meta">
+            <span class="meta-pill" *ngIf="co.location">
+              <i class="fa-solid fa-location-dot"></i>
+              {{ co.location }}
+            </span>
+          </div>
+
+          <!-- Job Previews -->
+          <div class="jc-skills" *ngIf="co.recentJobs?.length">
+            <span class="skill-chip" *ngFor="let job of co.recentJobs.slice(0, 2)">
+              {{ job.title }}
+            </span>
+          </div>
+
+          <div class="jc-footer">
+            <span class="view-link">View Profile <i class="fa-solid fa-arrow-right"></i></span>
+          </div>
         </div>
       </div>
 
-      <!-- Empty State -->
-      <div class="empty-state reveal" *ngIf="!loading() && getFilteredCompanies().length === 0">
-        <div class="empty-icon"><i class="fa-solid fa-building-circle-exclamation"></i></div>
-        <h3>No matches found</h3>
-        <p>We couldn't find any companies matching your current filters. Try resetting or expanding your search.</p>
-        <button class="btn-reset" (click)="searchTerm=''; activeIndustry='All'">Reset Filters</button>
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="!loading() && getFilteredCompanies().length === 0">
+        <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <h3>No matching companies found</h3>
+        <p>Try adjusting your search terms or filters to see more results.</p>
+        <button class="btn-reset" (click)="searchTerm=''; activeIndustry='All'">
+          Reset Filters
+        </button>
       </div>
 
-    </main>
-
+    </div>
   </div>
 </div>

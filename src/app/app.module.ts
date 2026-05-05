@@ -18,31 +18,8 @@ import { CandidateSidebarComponent } from './features/candidate/candidate-sideba
 import { RecruiterSidebarComponent } from './features/recruiter/recruiter-sidebar/recruiter-sidebar.component';
 import { AdminSidebarComponent } from './features/admin/admin-sidebar/admin-sidebar.component';
 
-// ✅ Directive (Standalone)
 import { ShellVisibilityDirective } from './core/directives/shell-visibility.directive';
-
-// ✅ Candidate (Standalone)
-import { CandidateDashboardComponent } from './features/candidate/dashboard/candidate-dashboard.component';
-import { CandidateProfileComponent } from './features/candidate/profile/candidate-profile.component';
-import { JobSearchComponent } from './features/candidate/job-search/job-search.component';
-import { JobDetailComponent } from './features/candidate/job-detail/job-detail.component';
-import { ApplicationsComponent } from './features/candidate/applications/applications.component';
-
-// ✅ Recruiter (Standalone)
-import { RecruiterDashboardComponent } from './features/recruiter/dashboard/recruiter-dashboard.component';
-import { PostJobComponent } from './features/recruiter/post-job/post-job.component';
-import { ManageJobsComponent } from './features/recruiter/manage-jobs/manage-jobs.component';
-import { ApplicantsComponent } from './features/recruiter/applicants/applicants.component';
-
-// ✅ Admin (Standalone)
-import { AdminDashboardComponent } from './features/admin/dashboard/admin-dashboard.component';
-import { AdminUsersComponent } from './features/admin/users/admin-users.component';
-import { AdminRecruitersComponent } from './features/admin/recruiters/admin-recruiters.component';
-import { AdminJobsComponent } from './features/admin/jobs/admin-jobs.component';
-import { JobsListComponent } from './features/jobs/jobs-list/jobs-list.component';
-import { JobPublicDetailComponent } from './features/jobs/job-public-detail/job-public-detail.component';
-import { CompaniesComponent } from './features/companies/companies.component';
-import { SkillAnalysisComponent } from './features/candidate/skill-analysis/skill-analysis.component';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -54,42 +31,15 @@ import { SkillAnalysisComponent } from './features/candidate/skill-analysis/skil
     AppRoutingModule,
     RouterModule,
 
-    // Standalone declarations moved to imports
-    JobsListComponent,
-    JobPublicDetailComponent,
-    CompaniesComponent,
-    PublicNavbarComponent,
-
-    // ✅ Shared
+    // ✅ Shared Shell Components (Standalone)
     FooterComponent,
     DashboardHeaderComponent,
-    ToastContainerComponent,
-    ShellVisibilityDirective,
-
-    // ✅ Sidebars
     CandidateSidebarComponent,
     RecruiterSidebarComponent,
     AdminSidebarComponent,
-
-    // ✅ Candidate
-    CandidateDashboardComponent,
-    CandidateProfileComponent,
-    JobSearchComponent,
-    JobDetailComponent,
-    ApplicationsComponent,
-    SkillAnalysisComponent,
-
-    // ✅ Recruiter
-    RecruiterDashboardComponent,
-    PostJobComponent,
-    ManageJobsComponent,
-    ApplicantsComponent,
-
-    // ✅ Admin
-    AdminDashboardComponent,
-    AdminUsersComponent,
-    AdminRecruitersComponent,
-    AdminJobsComponent
+    PublicNavbarComponent,
+    ToastContainerComponent,
+    ShellVisibilityDirective
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true }

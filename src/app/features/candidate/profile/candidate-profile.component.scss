@@ -1,374 +1,223 @@
 // ── Design Tokens ────────────────────────────────────────────────
 $primary: #10b981;
+$primary-light: #d1fae5;
 $primary-dark: #059669;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
-$slate-300: #cbd5e1;
 $slate-400: #94a3b8;
 $slate-500: #64748b;
 $slate-600: #475569;
-$slate-700: #334155;
 $slate-900: #0f172a;
 $white: #ffffff;
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
 :host {
     display: block;
-    background: var(--slate-50);
+    background: $slate-100;
     min-height: 100vh;
     padding: 140px 32px 60px 112px;
     position: relative;
     overflow-x: hidden;
-
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0; right: 0;
-        width: 600px; height: 600px;
-        background: radial-gradient(circle, rgba($primary, 0.03) 0%, transparent 70%);
-        z-index: 0;
-        pointer-events: none;
-    }
 }
 
-.profile-page {
-    max-width: 1400px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-}
-
-/* ── Profile Hero ── */
-.profile-hero {
-    background: $white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    margin-bottom: 40px;
-    border: 1px solid $slate-200;
-
-    .banner {
-        height: 180px;
-        background: $slate-900;
-        position: relative;
-    }
-
-    .hero-content {
-        padding: 0 60px 48px;
-        display: flex;
-        align-items: flex-start;
-        gap: 40px;
-        margin-top: -100px;
-    }
-
-    .avatar-wrapper {
-        width: 160px;
-        height: 160px;
-        border-radius: 12px;
-        background: $white;
-        padding: 6px;
-        box-shadow: var(--shadow-lg);
-        cursor: pointer;
-        position: relative;
-        flex-shrink: 0;
-        transition: all 0.3s;
-
-        &:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.2);
-            .avatar-edit { opacity: 1; transform: translate(0, 0); }
-        }
-
-        .avatar-img, .avatar-placeholder {
-            width: 100%; height: 100%;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-        .avatar-placeholder {
-            background: $slate-100;
-            color: $slate-400;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 64px; font-weight: 700;
-        }
-
-        .avatar-edit {
-            position: absolute;
-            bottom: -10px; right: -10px;
-            width: 40px; height: 40px;
-            background: $slate-900;
-            color: white;
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            border: 3px solid white;
-            opacity: 0;
-            transition: all 0.2s;
-            box-shadow: var(--shadow-md);
-        }
-    }
-
-    .user-info {
-        flex: 1;
-        padding-top: 115px;
-
-        .user-name {
-            font-size: 42px;
-            font-weight: 900;
-            color: $slate-900;
-            margin: 0 0 8px 0;
-            letter-spacing: -0.05em;
-            line-height: 1.1;
-        }
-        .user-headline {
-            font-size: 20px;
-            font-weight: 600;
-            color: $slate-500;
-            margin: 0 0 24px 0;
-        }
-        .user-meta {
-            display: flex;
-            gap: 32px;
-            span {
-                display: flex; align-items: center; gap: 10px;
-                font-size: 15px; font-weight: 700; color: $slate-400;
-                i { color: $primary; font-size: 18px; }
-            }
-        }
-    }
-
-    .hero-actions {
-        padding-top: 120px;
-        .btn-primary {
-            background: $slate-900;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex; align-items: center; gap: 8px;
-            transition: all 0.2s;
-            &:hover { background: black; transform: translateY(-1px); }
-        }
-    }
-}
-
-/* ── Layout Grid ── */
-.profile-layout {
-    display: grid;
-    grid-template-columns: 1fr 420px;
-    gap: 48px;
-}
-
-/* ── Common Section ── */
-.profile-section {
-    margin-bottom: 48px;
-    &:last-child { margin-bottom: 0; }
-}
-
+// ── Shared Dashboard Patterns ──
+.section-header { margin-bottom: 24px; }
 .section-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: $slate-900;
-    margin-bottom: 24px;
-    display: flex; align-items: center; gap: 12px;
+    font-size: 20px; font-weight: 800; color: $slate-900;
+    display: flex; align-items: center; justify-content: space-between;
     letter-spacing: -0.01em;
-    &::after { content: ''; flex: 1; height: 1px; background: $slate-200; }
 }
 
-.card {
-    background: $white;
-    border-radius: 12px;
-    padding: 32px;
-    border: 1px solid $slate-200;
-    box-shadow: var(--shadow-sm);
+.list-container {
+    background: $white; border-radius: 20px; border: 1px solid $slate-200;
+    overflow: hidden; box-shadow: $shadow-sm;
 }
 
-/* ── Read Only View ── */
-.read-only-card {
-    .display-item {
-        margin-bottom: 32px;
-        &:last-child { margin-bottom: 0; }
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 900;
-            color: $slate-400;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            margin-bottom: 12px;
-        }
-        .display-val {
-            font-size: 18px;
-            font-weight: 700;
-            color: $slate-900;
-            &.summary-text { 
-                line-height: 1.8; 
-                color: $slate-600; 
-                font-weight: 500;
-                white-space: pre-line; 
-            }
-        }
+.job-item, .app-item {
+    display: flex; align-items: center; gap: 20px; padding: 24px;
+    background: $white; border-bottom: 1px solid $slate-100;
+    transition: all 0.2s ease;
+    text-decoration: none; color: inherit;
+    &:nth-child(even) { background: $slate-50; }
+    &:hover { background: $slate-100; }
+    &:last-child { border-bottom: none; }
+}
+
+.logo-circle {
+    width: 48px; height: 48px; background: $slate-100; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; color: $primary; font-size: 18px; flex-shrink: 0;
+}
+
+.info {
+    flex: 1; min-width: 0;
+    .title { font-size: 16px; font-weight: 800; color: $slate-900; margin-bottom: 4px; display: block; }
+    .subtitle { font-size: 13px; font-weight: 600; color: $slate-500; display: block; }
+    .description { font-size: 14px; color: $slate-500; margin-top: 12px; line-height: 1.6; }
+}
+
+// ── Profile Specific Overrides ──
+.welcome-box {
+    background: $white; padding: 48px; border-radius: 20px; margin-bottom: 40px;
+    box-shadow: $shadow-sm; border: 1px solid $slate-200; position: relative;
+    display: flex; justify-content: space-between; align-items: center;
+    overflow: hidden;
+
+    .hi-text { font-size: 13px; font-weight: 800; color: $slate-500; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px; display: block; }
+    h1 { font-size: 36px; font-weight: 900; color: black; letter-spacing: -0.04em; margin: 0 0 8px 0; }
+    .headline-text { font-size: 18px; font-weight: 600; color: $slate-500; }
+
+    .avatar-group { display: flex; align-items: center; gap: 32px; }
+}
+
+.avatar-wrapper {
+    width: 120px; height: 120px; border-radius: 20px; background: $white; padding: 6px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); cursor: pointer; position: relative; flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    &:hover { transform: scale(1.05); .avatar-edit { opacity: 1; transform: translate(0,0); } }
+    .avatar-img, .avatar-placeholder { width: 100%; height: 100%; border-radius: 14px; object-fit: cover; }
+    .avatar-placeholder { background: $slate-100; color: $slate-400; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 800; }
+    .avatar-edit { position: absolute; bottom: -8px; right: -8px; width: 36px; height: 36px; background: $slate-900; color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 3px solid white; opacity: 0; transition: all 0.2s; }
+}
+
+.onboarding-banner {
+    margin-bottom: 48px;
+    .onboarding-card {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white;
+        padding: 32px 40px; border-radius: 24px; display: flex; align-items: center; gap: 32px;
+        cursor: pointer; transition: all 0.3s; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+        &:hover { transform: translateY(-4px); box-shadow: 0 30px 60px rgba(15, 23, 42, 0.2); }
+        
+        .icon-l { width: 64px; height: 64px; border-radius: 16px; background: rgba($primary, 0.1); color: $primary; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+        .info { flex: 1; h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; } p { font-size: 15px; opacity: 0.7; } }
+        .btn-action { background: $primary; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 12px; .spinner { width: 16px; height: 16px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; } }
+    }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.dashboard-content { display: grid; grid-template-columns: 1fr 400px; gap: 32px; }
+
+.summary-box { 
+    padding: 32px; 
+    .summary-content { font-size: 16px; line-height: 1.8; color: $slate-600; font-weight: 500; margin-bottom: 24px; white-space: pre-line; }
+    .location-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: $slate-500; background: $slate-50; padding: 8px 16px; border-radius: 100px; i { color: $primary; } }
+}
+
+.side-widget {
+    padding: 24px;
+    .progress-ring-container { 
+        display: flex; align-items: center; gap: 24px; 
+        .ring { position: relative; width: 80px; height: 80px; }
+        .percent { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; }
+        .status { font-weight: 800; font-size: 16px; margin-bottom: 4px; }
+        .hint { font-size: 13px; color: $slate-500; line-height: 1.5; }
     }
 }
 
-.card-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-}
-
-.display-card {
-    padding: 32px;
-    label { display: block; font-size: 12px; font-weight: 900; color: $slate-400; text-transform: uppercase; margin-bottom: 12px; }
-    .display-val { 
-        font-size: 18px; font-weight: 800; color: $slate-900; 
-        display: flex; align-items: center; gap: 12px;
-        i { color: $primary; font-size: 20px; } 
+.skill-tags {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    .skill-tag {
+        background: $slate-50; border: 1px solid $slate-200; padding: 8px 16px; border-radius: 10px;
+        font-size: 13px; font-weight: 700; color: $slate-600;
+        &[data-level="Expert"] { border-color: rgba($primary, 0.3); color: $primary-dark; }
     }
+    .empty-text { font-size: 13px; color: $slate-400; font-weight: 600; }
 }
 
-/* ── Lists ── */
-.experience-list, .education-list {
-    display: flex; flex-direction: column; gap: 24px;
+.resume-item {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    .icon-red { width: 48px; height: 48px; border-radius: 12px; background: #fff1f2; color: #e11d48; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .file-name { font-size: 14px; font-weight: 800; color: $slate-900; display: block; margin-bottom: 2px; }
+    .file-date { font-size: 12px; font-weight: 600; color: $slate-400; }
 }
 
-.experience-item, .education-item {
-    transition: transform 0.3s;
-    &:hover { transform: translateX(8px); border-color: $primary; }
-
-    .exp-header, .edu-header {
-        display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;
-        .exp-role, .edu-degree { font-size: 18px; font-weight: 800; color: $slate-900; }
-        .exp-duration, .edu-duration { 
-            font-size: 12px; font-weight: 700; color: $slate-600; 
-            background: $slate-100; padding: 4px 12px; border-radius: 4px; 
-        }
-    }
-    .exp-company, .edu-details { font-size: 16px; font-weight: 700; color: $slate-500; margin-bottom: 16px; }
-    .exp-desc { font-size: 15px; line-height: 1.7; color: $slate-500; font-weight: 500; }
+.btn-outline-full {
+    width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid $slate-200; background: white;
+    font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: all 0.2s; &:hover { border-color: $slate-900; background: $slate-50; }
 }
 
-.skills-display {
-    .skills-wrap {
-        display: flex; flex-wrap: wrap; gap: 14px;
-        .skill-pill {
-            background: $white;
-            border: 1px solid $slate-200;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            color: $slate-900;
-            transition: all 0.2s;
-            &:hover { border-color: $slate-900; background: $slate-50; }
-            .skill-lvl { color: $primary; font-size: 12px; margin-left: 10px; font-weight: 900; text-transform: uppercase; }
-        }
-    }
+.btn-primary {
+    background: $slate-900; color: white; border: none; padding: 12px 24px; border-radius: 12px;
+    font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+    transition: all 0.2s; &:hover { background: black; transform: translateY(-2px); }
 }
 
-/* ── Sidebar ── */
-.profile-side {
-    position: sticky;
-    top: 120px;
+.empty-state { padding: 40px; text-align: center; color: $slate-400; font-weight: 600; }
+
+@media (max-width: 1200px) {
+    :host { padding-left: 32px; }
+    .dashboard-content { grid-template-columns: 1fr; }
+    .welcome-box { flex-direction: column; align-items: flex-start; gap: 24px; .actions { width: 100%; position: static; transform: none; } }
 }
 
-.side-card {
-    background: $white;
-    border-radius: 12px;
-    padding: 32px;
-    border: 1px solid $slate-200;
-    margin-bottom: 24px;
-    box-shadow: var(--shadow-sm);
-    .side-title { font-size: 16px; font-weight: 800; color: $slate-900; margin-bottom: 24px; }
-}
+// ── Skeleton Styles (Integrated) ──
+.skeleton-block { background: linear-gradient(90deg, #f1f5f9 25%, #f8fafc 50%, #f1f5f9 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; }
+@keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-.completion-card {
-    text-align: center;
-    .ring-container { margin: 32px 0; }
-    .completion-text { font-size: 15px; color: $slate-500; line-height: 1.6; strong { color: $slate-900; } }
-}
-
-.resume-card {
-    .current-resume {
-        background: $slate-50;
-        border-radius: 8px;
-        padding: 16px;
-        display: flex; align-items: center; gap: 16px;
-        margin-bottom: 24px;
-        border: 1px solid $slate-200;
-        .resume-icon { font-size: 36px; color: #ef4444; }
-        .name { font-size: 15px; font-weight: 800; color: $slate-900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .date { font-size: 12px; font-weight: 700; color: $slate-400; margin-top: 4px; }
-    }
-    .upload-area {
-        border: 1px dashed $slate-300;
-        border-radius: 8px;
-        padding: 32px 20px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.2s;
-        &:hover, &.active { border-color: $slate-900; background: $slate-50; color: $slate-900; .upload-icon { color: $slate-900; } }
-        .upload-icon { font-size: 40px; color: $slate-300; margin-bottom: 16px; transition: color 0.3s; }
-        .upload-label { font-size: 15px; font-weight: 800; color: $slate-900; margin-bottom: 6px; }
-        .upload-hint { font-size: 13px; color: $slate-400; }
-    }
-}
-
-/* ── Modal ── */
+// ── Edit Modal Styles (Preserved) ──
 .modal-overlay {
-    position: fixed; inset: 0; background: rgba($slate-900, 0.6); backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s ease;
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px;
 }
-
 .modal-content {
-    background: $white; width: 100%; max-width: 800px; max-height: 90vh; border-radius: 12px; box-shadow: var(--shadow-xl); display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: white; width: 100%; max-width: 900px; max-height: 90vh; border-radius: 32px;
+    overflow: hidden; display: flex; flex-direction: column; animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
+@keyframes modalSlide { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
 .modal-header {
-    padding: 32px 48px; border-bottom: 1px solid $slate-100; display: flex; justify-content: space-between; align-items: center; background: $slate-50;
-    .header-info { h3 { font-size: 26px; font-weight: 900; color: $slate-900; margin-bottom: 4px; } p { font-size: 15px; color: $slate-500; } }
-    .btn-close { width: 44px; height: 44px; border-radius: 50%; border: none; background: $white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.2s; &:hover { background: #fee2e2; color: #ef4444; } }
+    padding: 32px 40px; border-bottom: 1.5px solid $slate-100; display: flex; justify-content: space-between; align-items: center;
+    .header-info h3 { font-size: 24px; font-weight: 900; color: $slate-900; margin-bottom: 4px; }
+    .header-info p { font-size: 15px; color: $slate-500; font-weight: 500; }
+    .btn-close { width: 40px; height: 40px; border-radius: 12px; border: none; background: $slate-50; color: $slate-400; font-size: 18px; cursor: pointer; transition: all 0.2s; &:hover { background: #fee2e2; color: #ef4444; transform: rotate(90deg); } }
 }
 
 .modal-body {
-    padding: 48px; overflow-y: auto; flex: 1; background: $white;
-    &::-webkit-scrollbar { width: 8px; }
-    &::-webkit-scrollbar-thumb { background: $slate-200; border-radius: 10px; }
-
+    padding: 40px; overflow-y: auto; flex: 1;
     .form-section { margin-bottom: 48px; }
     .form-sec-title { font-size: 14px; font-weight: 900; color: $primary; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 32px; display: flex; align-items: center; gap: 16px; &::after { content: ''; flex: 1; height: 1.5px; background: $slate-100; } }
+}
 
-    .premium-field {
-        margin-bottom: 32px;
-        label { display: block; font-size: 14px; font-weight: 800; color: $slate-900; margin-bottom: 12px; }
-        input, textarea, select {
-            width: 100%; padding: 16px 24px; border-radius: 18px; border: 2.5px solid $slate-100; background: $slate-50; font-family: inherit; font-size: 15px; font-weight: 600; color: $slate-900; transition: all 0.3s;
-            &:focus { outline: none; border-color: $primary; background: $white; box-shadow: 0 10px 25px rgba($primary, 0.08); }
-        }
-        textarea { resize: vertical; min-height: 120px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+
+.premium-field {
+    margin-bottom: 32px;
+    label { display: block; font-size: 14px; font-weight: 800; color: $slate-900; margin-bottom: 12px; }
+    input, textarea, select {
+        width: 100%; padding: 16px 24px; border-radius: 18px; border: 2.5px solid $slate-100; background: $slate-50; font-family: inherit; font-size: 15px; font-weight: 600; color: $slate-900; transition: all 0.3s;
+        &:focus { outline: none; border-color: $primary; background: $white; box-shadow: 0 10px 25px rgba($primary, 0.08); }
     }
+    textarea { resize: vertical; min-height: 120px; }
+}
 
-    .dynamic-item {
-        background: $slate-50; border-radius: 28px; padding: 40px; position: relative; border: 1.5px solid $slate-100; margin-bottom: 24px;
-        .btn-remove-mini { position: absolute; top: 20px; right: 20px; width: 36px; height: 36px; border-radius: 12px; border: none; background: $white; color: $slate-400; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.05); &:hover { background: #fee2e2; color: #ef4444; } }
+.dynamic-item {
+    background: $white; border-radius: 24px; padding: 40px; position: relative; border: 2.5px solid $slate-100; margin-bottom: 32px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    &:hover { border-color: $primary; transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+    .btn-remove-mini { position: absolute; top: 24px; right: 24px; width: 38px; height: 38px; border-radius: 12px; border: none; background: $slate-50; color: $slate-400; cursor: pointer; transition: all 0.2s; &:hover { background: #fee2e2; color: #ef4444; transform: rotate(90deg); } }
+}
+
+.btn-add-mini { padding: 10px 24px; border-radius: 14px; border: 2.5px solid $primary; background: transparent; color: $primary; font-weight: 800; font-size: 14px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; &:hover { background: $primary; color: white; transform: scale(1.05); } }
+
+.skill-manager-container {
+    .skill-input-wrapper {
+        position: relative; margin-bottom: 32px;
+        .input-icon { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: $primary; font-size: 20px; }
+        input { padding-left: 60px; padding-right: 140px; }
+        .btn-add-skill { position: absolute; right: 8px; top: 8px; bottom: 8px; background: $slate-900; color: white; border: none; padding: 0 24px; border-radius: 12px; font-weight: 800; font-size: 13px; cursor: pointer; transition: all 0.2s; &:hover { background: black; } }
     }
-
-    .btn-add-mini { padding: 8px 20px; border-radius: 12px; border: 2px solid $primary; background: transparent; color: $primary; font-weight: 800; font-size: 14px; cursor: pointer; transition: all 0.2s; &:hover { background: $primary; color: white; } }
+    .skill-grid-managed { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .skill-card-managed {
+        background: $white; border: 2.5px solid $slate-100; border-radius: 20px; padding: 20px; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s;
+        &:hover { border-color: $primary; box-shadow: 0 10px 25px rgba(0,0,0,0.04); }
+        .skill-info { h5 { font-size: 16px; font-weight: 900; color: $slate-900; margin-bottom: 8px; } .level-selector { display: flex; gap: 6px; .lvl-btn { padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; background: $slate-50; color: $slate-400; border: none; cursor: pointer; transition: all 0.2s; &.active { background: $primary; color: white; } } } }
+        .btn-remove-skill { width: 32px; height: 32px; border-radius: 8px; border: none; background: $slate-50; color: $slate-400; cursor: pointer; transition: all 0.2s; &:hover { background: #fee2e2; color: #ef4444; } }
+    }
 }
 
 .modal-footer {
-    padding: 32px 48px; border-top: 1px solid $slate-100; display: flex; justify-content: flex-end; gap: 20px; background: $slate-50;
-    .btn-secondary { padding: 16px 32px; border-radius: 18px; border: 2px solid $slate-200; background: white; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s; &:hover { background: $slate-100; } }
-    .btn-primary { padding: 16px 36px; border-radius: 18px; background: $primary; color: white; border: none; font-weight: 800; font-size: 15px; cursor: pointer; box-shadow: 0 10px 20px rgba($primary, 0.2); transition: all 0.2s; &:hover { background: $primary-dark; transform: translateY(-2px); } }
-}
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(40px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
-/* ── Skeleton ── */
-.skeleton-wrap {
-    background: $white; border-radius: 48px; overflow: hidden;
-    .skeleton-banner { height: 200px; background: $slate-100; }
-    .skeleton-content { padding: 60px; display: grid; grid-template-columns: 1fr 420px; gap: 48px; }
-    .skeleton-side, .skeleton-main { height: 600px; background: $slate-50; border-radius: 32px; }
+    padding: 24px 40px; border-top: 1.5px solid $slate-100; display: flex; justify-content: flex-end; gap: 16px;
+    .btn-secondary { background: $slate-50; color: $slate-600; border: none; padding: 14px 32px; border-radius: 16px; font-weight: 800; cursor: pointer; transition: all 0.2s; &:hover { background: $slate-100; } }
+    .btn-primary-modal { background: $primary; color: white; border: none; padding: 14px 40px; border-radius: 16px; font-weight: 800; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 20px rgba($primary, 0.2); &:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba($primary, 0.3); } }
 }

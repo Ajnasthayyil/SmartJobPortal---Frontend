@@ -99,18 +99,6 @@ $white: #ffffff;
         background: $slate-200;
     }
 
-    .btn-view {
-        background: $slate-900;
-        color: white;
-        border: none;
-        padding: 10px 24px;
-        border-radius: 12px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s;
-        &:hover { background: #000000; transform: translateY(-1px); }
-    }
-
     .btn-search {
         background: $slate-900;
         color: white;
@@ -136,24 +124,40 @@ $white: #ffffff;
 
 /* ── Layout ── */
 .jobs-layout {
-    max-width: 1320px;
+    max-width: 1400px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 48px;
+    grid-template-columns: 340px 1fr;
+    gap: 0;
+    background: $white;
+    border-radius: 32px;
+    border: 1px solid $slate-200;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.04);
+    height: calc(100vh - 380px);
+    min-height: 600px;
+    overflow: hidden;
 
-    @media (max-width: 1024px) { grid-template-columns: 1fr; }
+    @media (max-width: 1024px) { 
+        display: block; 
+        height: auto; 
+        background: transparent; 
+        border: none; 
+        box-shadow: none;
+    }
 }
 
 /* ── Sidebar ── */
-.filter-card {
-    background: $white;
-    border: 1px solid $slate-200;
-    border-radius: 12px;
-    padding: 32px;
-    position: sticky;
-    top: 120px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+.filter-sidebar {
+    background: $slate-50;
+    border-right: 1px solid $slate-200;
+    height: 100%;
+    overflow-y: auto;
+    padding: 40px;
+
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-thumb { background: $slate-200; border-radius: 10px; }
+
+    @media (max-width: 1024px) { border-right: none; height: auto; padding: 0; margin-bottom: 32px; }
 
     .filter-title {
         font-size: 20px;
@@ -245,6 +249,19 @@ $white: #ffffff;
     }
 }
 
+.results-area {
+    height: 100%;
+    overflow-y: auto;
+    padding: 40px;
+    background: $white;
+
+    &::-webkit-scrollbar { width: 8px; }
+    &::-webkit-scrollbar-thumb { background: $slate-100; border-radius: 10px; }
+    &:hover::-webkit-scrollbar-thumb { background: $slate-200; }
+
+    @media (max-width: 1024px) { height: auto; padding: 0; }
+}
+
 /* ── Results Info ── */
 .results-info {
     display: flex;
@@ -254,21 +271,6 @@ $white: #ffffff;
     padding: 0 12px;
 
     span { font-size: 15px; font-weight: 600; color: $slate-500; strong { color: $slate-900; } }
-
-    .sort-dropdown {
-        background: $white;
-        border: 1.5px solid $slate-200;
-        padding: 10px 20px;
-        border-radius: 14px;
-        font-size: 14px;
-        font-weight: 700;
-        color: $slate-900;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        cursor: pointer;
-        strong { color: $primary; }
-    }
 }
 
 /* ── Jobs Grid ── */

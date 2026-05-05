@@ -20,9 +20,9 @@ export class CandidateSidebarComponent {
     {
       group: 'MAIN MENU',
       items: [
+        { path: "/", iconClass: "fa-solid fa-house", label: "Home Page" },
         { path: "/candidate/dashboard", iconClass: "fa-solid fa-layer-group", label: "Dashboard" },
         { path: "/candidate/jobs", iconClass: "fa-solid fa-briefcase", label: "Job Search" },
-        { path: "/candidate/companies", iconClass: "fa-solid fa-building", label: "Companies" },
       ]
     },
     {
@@ -31,6 +31,7 @@ export class CandidateSidebarComponent {
         { path: "/candidate/profile", iconClass: "fa-solid fa-user", label: "My Profile" },
         { path: "/candidate/applications", iconClass: "fa-solid fa-file-invoice", label: "Applications" },
         { path: "/candidate/skill-gap", iconClass: "fa-solid fa-graduation-cap", label: "Skill Gap" },
+        { path: "/candidate/courses", iconClass: "fa-solid fa-book-open", label: "Courses" },
       ]
     },
     {

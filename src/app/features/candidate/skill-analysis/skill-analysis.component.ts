@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { CandidateService } from '../../../core/services/candidate.service';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -16,76 +17,89 @@ export class SkillAnalysisComponent implements OnInit {
   data    = signal<any>(null);
   loading = signal(true);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private candidateService: CandidateService) {}
 
   ngOnInit(): void { this.load(); }
 
   load(): void {
     this.loading.set(true);
-    // Refactored Job-Centric Mock Data
-    const mockData = {
-      readiness: 68,
-      missingSkillsCount: 4,
-      potentialJobMatches: 24,
-      jobMatches: [
-        {
-          title: 'Senior Full Stack Developer',
-          company: 'TechCorp Solutions',
-          location: 'Remote',
-          salary: '$120k - $150k',
-          matchPercentage: 82,
-          matchedSkills: ['React.js', 'Node.js', 'SQL', 'TypeScript'],
-          missingSkills: ['Docker', 'AWS'],
-          missingInsight: 'Critical for their infrastructure'
-        },
-        {
-          title: 'Lead Frontend Engineer',
-          company: 'Innovate AI',
-          location: 'San Francisco (Hybrid)',
-          salary: '$140k+',
-          matchPercentage: 75,
-          matchedSkills: ['React.js', 'TypeScript', 'Jest'],
-          missingSkills: ['GraphQL', 'Apollo'],
-          missingInsight: 'Used for all data fetching'
-        },
-        {
-          title: 'Backend Developer (Node.js)',
-          company: 'CloudFlow',
-          location: 'Remote',
-          salary: '$110k+',
-          matchPercentage: 70,
-          matchedSkills: ['Node.js', 'SQL', 'Redis'],
-          missingSkills: ['Kubernetes', 'Go'],
-          missingInsight: 'Needed for microservices'
-        },
-        {
-          title: 'Product Engineer',
-          company: 'FinTech Hub',
-          location: 'London',
-          salary: '£80k+',
-          matchPercentage: 65,
-          matchedSkills: ['React.js', 'Node.js'],
-          missingSkills: ['TypeScript', 'Testing Library'],
-          missingInsight: 'High quality standards'
-        }
-      ],
-      aggregatedGaps: [
-        { name: 'Docker', demand: 'Found in 18 available jobs', importance: 'High' },
-        { name: 'AWS', demand: 'Found in 15 available jobs', importance: 'High' },
-        { name: 'GraphQL', demand: 'Found in 12 available jobs', importance: 'Medium' },
-        { name: 'Kubernetes', demand: 'Found in 8 available jobs', importance: 'Low' }
-      ],
-      aiInsight: 'Your core skills (React, Node) are strong. Adding **Docker** and **AWS** would allow you to apply for 15+ "High Salary" Senior roles that you are currently just 2 skills away from.',
-      recommendedLearning: [
-        { title: 'Docker Mastery for Developers', source: 'Udemy', hours: '12' },
-        { title: 'AWS Certified Developer Associate', source: 'A Cloud Guru', hours: '20' }
-      ]
-    };
     
-    setTimeout(() => {
-      this.data.set(mockData);
-      this.loading.set(false);
-    }, 800);
+    // Fetch both Profile and Jobs to calculate real gaps
+    import('rxjs').then(({ forkJoin }) => {
+      forkJoin({
+        profile: this.candidateService.getProfile(),
+        jobs: this.candidateService.searchJobs({ pageSize: 10 })
+      }).subscribe({
+        next: (results: any) => {
+          const profile = results.profile.data;
+          const jobs = results.jobs.data.jobs || [];
+          const userSkills = profile?.skills?.map((s: any) => s.skillName.toLowerCase()) || [];
+          
+          // Map real DB jobs to the analysis format
+          const jobMatches = jobs.map((j: any) => {
+            const title = j.title || 'Unknown Role';
+            const desc = (j.description || '').toLowerCase();
+            
+            // Simple logic: find common tech keywords in description
+            const commonTech = ['c#', '.net', 'sql', 'react', 'angular', 'node', 'javascript', 'typescript', 'css', 'html', 'fullstack'];
+            const requiredSkills = commonTech.filter(tech => desc.includes(tech));
+            
+            const matchedSkills = requiredSkills.filter(s => userSkills.includes(s));
+            const missingSkills = requiredSkills.filter(s => !userSkills.includes(s));
+            
+            // Calculate match percentage
+            const matchPercentage = requiredSkills.length > 0 
+              ? Math.round((matchedSkills.length / requiredSkills.length) * 100)
+              : 50;
+
+            return {
+              title: j.title,
+              company: j.companyName || 'Local Tech Partner',
+              location: j.location || 'Not Specified',
+              matchPercentage: matchPercentage > 0 ? matchPercentage : 50,
+              matchedSkills: matchedSkills.map(s => s.toUpperCase()),
+              missingSkills: missingSkills.map(s => s.toUpperCase()),
+              missingInsight: missingSkills.length > 0 
+                ? `Highly requested for this ${j.title} role in ${j.location}.`
+                : 'You have a perfect core match for this position!'
+            };
+          });
+
+          // Aggregate gaps from real data
+          const allMissing = jobMatches.flatMap((m: any) => m.missingSkills);
+          const gapCounts: Record<string, number> = {};
+          allMissing.forEach((s: string) => gapCounts[s] = (gapCounts[s] || 0) + 1);
+          
+          const aggregatedGaps = Object.keys(gapCounts)
+            .sort((a, b) => gapCounts[b] - gapCounts[a])
+            .slice(0, 4)
+            .map(name => ({
+              name,
+              demand: `Found in ${gapCounts[name]} of your matches`,
+              importance: gapCounts[name] > 1 ? 'High' : 'Medium'
+            }));
+
+          this.data.set({
+            readiness: jobMatches.length > 0 ? Math.round(jobMatches.reduce((acc: number, curr: any) => acc + curr.matchPercentage, 0) / jobMatches.length) : 0,
+            potentialJobMatches: jobMatches.length,
+            isSimulation: false,
+            jobMatches: jobMatches,
+            aggregatedGaps: aggregatedGaps,
+            aiInsight: jobMatches.length > 0 
+              ? `We found **${jobMatches.length} jobs** in your area (Kerala/Kochi/Calicut). By adding **${aggregatedGaps[0]?.name || 'more niche skills'}** to your profile, you can increase your match score for the ${jobMatches[0]?.title} role.`
+              : 'Add more skills to your profile to see how you match against the 3 jobs currently in our database.',
+            recommendedLearning: aggregatedGaps.slice(0, 2).map(g => ({
+              title: `${g.name} Fundamentals for Professionals`,
+              source: 'Platform Recommended',
+              hours: '10'
+            }))
+          });
+
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false)
+      });
+    });
   }
 
   getStrengthLabel(pct: number): string {

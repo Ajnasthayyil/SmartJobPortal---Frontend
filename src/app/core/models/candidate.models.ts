@@ -14,6 +14,7 @@ export interface CandidateProfile {
   education: EducationItem[];
   workExperience: WorkExperienceItem[];
   profilePictureUrl?: string;
+  phoneNumber?: string;
 }
 
 export interface SkillItem {
