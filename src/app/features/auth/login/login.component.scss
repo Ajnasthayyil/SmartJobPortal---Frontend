@@ -70,7 +70,7 @@ $border-light: rgba(255, 255, 255, 0.1);
   .logo-subtitle {
     font-size: 8px;
     font-weight: 700;
-    color: $slate-500;
+    color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-top: 4px;
@@ -81,10 +81,10 @@ $border-light: rgba(255, 255, 255, 0.1);
   position: relative; z-index: 10; max-width: 480px;
   h1 {
     font-family: 'Syne', sans-serif; font-size: clamp(32px, 3.5vw, 48px);
-    line-height: 1.1; margin-bottom: 16px;
+    line-height: 1.1; margin-bottom: 16px; color: #ffffff;
     span { background: linear-gradient(to right, $primary, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   }
-  p { font-size: 16px; color: $slate-400; line-height: 1.5; margin-bottom: 32px; }
+  p { font-size: 16px; color: #ffffff; opacity: 0.8; line-height: 1.5; margin-bottom: 32px; }
 }
 
 .feature-cards {
@@ -94,11 +94,11 @@ $border-light: rgba(255, 255, 255, 0.1);
     padding: 20px; border-radius: 20px; backdrop-filter: blur(10px);
     i { font-size: 20px; color: $primary; margin-bottom: 12px; display: block; }
     h4 { font-weight: 700; margin-bottom: 6px; font-size: 14px; }
-    span { font-size: 12px; color: $slate-500; line-height: 1.3; }
+    span { font-size: 12px; color: rgba(255, 255, 255, 0.6); line-height: 1.3; }
   }
 }
 
-.left-footer { font-size: 11px; opacity: 0.5; }
+.left-footer { font-size: 11px; color: white; opacity: 0.4; }
 
 // ── Right Side: The Form Panel ──────────────────────────────────
 .right-panel {

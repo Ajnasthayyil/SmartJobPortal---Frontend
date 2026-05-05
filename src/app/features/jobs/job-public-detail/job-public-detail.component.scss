@@ -294,8 +294,8 @@ $white: #ffffff;
     }
 
     .card-details {
-        .label { font-size: 12px; font-weight: 800; color: $slate-400; text-transform: uppercase; letter-spacing: 0.1em; }
-        .value { font-size: 22px; font-weight: 800; color: $slate-900; margin-top: 6px; }
+        .label { font-size: 12px; font-weight: 800 ; text-transform: uppercase; letter-spacing: 0.1em; }
+        .value { font-size: 22px; font-weight: 800; margin-top: 6px; }
     }
 }
 

@@ -74,12 +74,12 @@
                 <p>Verified Employer</p>
               </div>
             </div>
-            <a routerLink="/companies" class="view-co-btn">
-              View Company Profile
-              <i class="fa-solid fa-chevron-right"></i>
-            </a>
+            <div class="co-details">
+              <p><i class="fa-solid fa-building"></i> Industry: {{ j.companyIndustry }}</p>
+              <p><i class="fa-solid fa-location-dot"></i> Location: {{ j.location }}</p>
           </div>
         </div>
+      </div>
       </main>
 
       <aside class="sidebar-content">

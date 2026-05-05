@@ -1,13 +1,18 @@
 @import "../../../styles.scss";
 
 $emerald-500: #10b981;
+$slate-100: #f1f5f9;
+$slate-200: #e2e8f0;
+$slate-400: #94a3b8;
+$slate-500: #64748b;
+$slate-600: #475569;
 $slate-900: #0f172a;
 
 :host {
   display: block;
   min-height: 100vh;
   background: #f8fafc;
-  padding: 120px 24px 60px;
+  padding: 140px 32px 60px 112px;
   position: relative;
   overflow-x: hidden;
 }
@@ -70,7 +75,7 @@ $slate-900: #0f172a;
   flex: 1;
   max-width: 400px;
 
-  i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--slate-400); font-size: 14px; }
+  i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: $emerald-500; font-size: 14px; }
   input {
     width: 100%;
     padding: 14px 20px 14px 52px;
@@ -106,8 +111,8 @@ $slate-900: #0f172a;
   white-space: nowrap;
   transition: all 0.2s;
 
-  &:hover { border-color: $emerald-500; color: $emerald-500; }
-  &.active { background: $emerald-500; border-color: $emerald-500; color: white; box-shadow: 0 4px 12px rgba($emerald-500, 0.2); }
+  &:hover { border-color: $slate-900; color: $slate-900; }
+  &.active { background: $slate-900; border-color: $slate-900; color: white; box-shadow: 0 4px 12px rgba($slate-900, 0.2); }
 }
 
 // ── Companies Grid ──────────────────────────────
@@ -119,60 +124,73 @@ $slate-900: #0f172a;
 
 .company-card {
   padding: 32px;
-  border-radius: 28px;
+  background: white;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 24px;
-  border: 1px solid rgba(255,255,255,0.4);
+  gap: 32px;
+  border: 1px solid $slate-200;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
 
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 30px 60px -12px rgba(0,0,0,0.08);
-    background: white;
-    .view-link i { transform: translateX(5px); }
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: $slate-900;
   }
 }
 
 .brand-row {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  align-items: flex-start;
+  gap: 20px;
   position: relative;
 
   .company-logo {
-    width: 56px; height: 56px;
-    background: linear-gradient(135deg, $emerald-500 0%, #059669 100%);
+    width: 60px; height: 60px;
+    background: $slate-900;
     color: white;
-    border-radius: 16px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    font-weight: 800;
-    box-shadow: 0 8px 16px rgba($emerald-500, 0.15);
+    font-weight: 900;
   }
 
   .brand-meta {
     flex: 1;
-    .company-name { font-size: 18px; font-weight: 800; color: $slate-900; margin-bottom: 2px; }
-    .industry-tag { font-size: 11px; font-weight: 800; text-transform: uppercase; color: $emerald-500; letter-spacing: 0.05em; }
+    .company-name { 
+      font-size: 20px; 
+      font-weight: 800; 
+      color: $slate-900; 
+      margin-bottom: 6px; 
+      letter-spacing: -0.02em;
+    }
+    .industry-tag { 
+      font-size: 11px; 
+      font-weight: 800; 
+      text-transform: uppercase; 
+      color: $slate-400; 
+      letter-spacing: 0.1em; 
+    }
   }
 
   .roles-badge {
-    position: absolute; top: -10px; right: -10px;
-    background: #ecfdf5;
-    color: #059669;
-    padding: 6px 12px;
-    border-radius: 100px;
+    background: #f1f5f9;
+    color: $slate-900;
+    padding: 6px 14px;
+    border-radius: 6px;
     font-size: 11px;
     font-weight: 800;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    i { color: $emerald-500; }
     border: 1px solid #d1fae5;
+    white-space: nowrap;
   }
 }
 
@@ -190,13 +208,14 @@ $slate-900: #0f172a;
   font-size: 13px;
   color: var(--slate-400);
   font-weight: 600;
-  i { font-size: 12px; }
+  i { font-size: 12px; color: $emerald-500; }
 }
 
 .job-previews {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
+  margin-top: 8px;
   
   .preview-tag {
     padding: 6px 14px;
