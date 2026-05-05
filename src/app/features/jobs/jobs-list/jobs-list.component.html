@@ -22,15 +22,23 @@
         <div class="search-input-wrap">
           <i class="fa-solid fa-magnifying-glass"></i>
           <input type="text" [(ngModel)]="keyword"
+                 (input)="onSearchChange()"
                  placeholder="Job title, skill, or keyword..."
                  (keyup.enter)="search()"/>
+          <button class="btn-clear" *ngIf="keyword" (click)="clearKeyword()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
         <div class="search-divider"></div>
         <div class="search-input-wrap">
           <i class="fa-solid fa-location-dot"></i>
           <input type="text" [(ngModel)]="location"
+                 (input)="onSearchChange()"
                  placeholder="City, state, or remote..."
                  (keyup.enter)="search()"/>
+          <button class="btn-clear" *ngIf="location" (click)="clearLocation()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
         <button class="btn-search" (click)="search()">Find Jobs</button>
       </div>
@@ -59,8 +67,8 @@
   <!-- Results -->
   <div class="results-section">
 
-    <!-- Premium Loading State -->
-    <div class="loading-overlay" *ngIf="loading()">
+    <!-- Premium Loading State (Only on full search) -->
+    <div class="loading-overlay" *ngIf="loading() && !isTyping()">
       <div class="spinner-container">
         <div class="premium-spinner"></div>
         <div class="loading-text">Scanning global opportunities...</div>
@@ -72,11 +80,14 @@
       <!-- Results count -->
       <div class="results-bar">
         <span class="results-count">
-          <ng-container *ngIf="!loading()">
-            Showing <strong>{{ jobs().length }}</strong>
+          <ng-container *ngIf="!loading() || isTyping()">
+            Showing <strong>{{ filteredJobs().length }}</strong>
             of <strong>{{ totalCount() }}</strong> opportunities
+            <span class="live-indicator" *ngIf="isTyping()">
+              <i class="fa-solid fa-circle-notch fa-spin"></i> Refining results...
+            </span>
           </ng-container> 
-          <ng-container *ngIf="loading()">
+          <ng-container *ngIf="loading() && !isTyping()">
             <span class="searching-text">Scanning opportunities...</span>
           </ng-container>
         </span>
@@ -97,9 +108,9 @@
       </ng-container>
 
       <!-- Jobs grid -->
-      <ng-container *ngIf="!loading() && jobs().length > 0">
+      <ng-container *ngIf="(!loading() || isTyping()) && filteredJobs().length > 0">
         <div class="jobs-grid">
-          <ng-container *ngFor="let job of jobs()">
+          <ng-container *ngFor="let job of filteredJobs()">
             <a [routerLink]="['/jobs', job.jobId]" class="job-card">
 
               <!-- Card top -->
@@ -170,7 +181,7 @@
       </ng-container>
 
       <!-- Empty state -->
-      <ng-container *ngIf="!loading() && jobs().length === 0">
+      <ng-container *ngIf="!loading() && !isTyping() && filteredJobs().length === 0">
         <div class="empty-state">
           <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
           <h3>No matching jobs found</h3>

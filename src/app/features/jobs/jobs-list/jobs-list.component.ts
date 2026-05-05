@@ -1,4 +1,6 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -26,6 +28,21 @@ export class JobsListComponent implements OnInit {
   activeFilter = 'All';
   selectedSalary: any = null;
 
+  private searchSubject = new Subject<string>();
+  isTyping = signal(false);
+
+  // Computed signal for instant UI feedback (filters what's already loaded)
+  filteredJobs = computed(() => {
+    const k = this.keyword.toLowerCase().trim();
+    const list = this.jobs();
+    if (!k) return list;
+    return list.filter(j => 
+      j.title?.toLowerCase().includes(k) || 
+      j.companyName?.toLowerCase().includes(k) ||
+      j.requiredSkills?.some((s: string) => s.toLowerCase().includes(k))
+    );
+  });
+
   readonly jobTypes = [
     'All', 'Full Time', 'Remote', 'Internship', 'Part Time'
   ];
@@ -37,10 +54,35 @@ export class JobsListComponent implements OnInit {
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void { this.search(); }
+  ngOnInit(): void { 
+    this.search(); 
 
-  search(): void {
-    this.loading.set(true);
+    // Debounced search for server-side refresh
+    this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.search(true);
+    });
+  }
+
+  onSearchChange(): void {
+    this.searchSubject.next(this.keyword);
+  }
+
+  clearKeyword(): void {
+    this.keyword = '';
+    this.search();
+  }
+
+  clearLocation(): void {
+    this.location = '';
+    this.search();
+  }
+
+  search(silent = false): void {
+    if (!silent) this.loading.set(true);
+    this.isTyping.set(true);
     this.page.set(1);
 
     let params = new HttpParams()
@@ -65,8 +107,12 @@ export class JobsListComponent implements OnInit {
           this.totalCount.set(res.data?.totalCount || 0);
         }
         this.loading.set(false);
+        this.isTyping.set(false);
       },
-      error: () => this.loading.set(false)
+      error: () => {
+        this.loading.set(false);
+        this.isTyping.set(false);
+      }
     });
   }
 
