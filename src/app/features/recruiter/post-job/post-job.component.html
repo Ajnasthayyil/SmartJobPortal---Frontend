@@ -86,7 +86,12 @@
               <label>Location <span class="req">*</span></label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-location-dot"></i>
-                <input type="text" formControlName="location" placeholder="e.g. San Francisco or Remote">
+                <select formControlName="location">
+                  <option value="" disabled selected>Select State</option>
+                  <ng-container *ngFor="let state of indianStates">
+                    <option [value]="state">{{ state }}</option>
+                  </ng-container>
+                </select>
               </div>
             </div>
 
@@ -130,8 +135,9 @@
               <label>Expiry Date</label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-calendar"></i>
-                <input type="date" formControlName="expiresAt">
+                <input type="date" formControlName="expiresAt" [min]="minDate">
               </div>
+              <span style="font-size: 11px; color: #94a3b8; margin-top: 4px; margin-left: 4px;">Format: MM/DD/YYYY</span>
             </div>
           </div>
         </div>

@@ -25,6 +25,16 @@ export class EditJobComponent implements OnInit {
     'FullTime', 'PartTime', 'Remote', 'Internship', 'Contract'
   ];
 
+  readonly indianStates = [
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 
+    'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 
+    'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 
+    'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 
+    'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi'
+  ];
+
+  readonly minDate = new Date().toISOString().split('T')[0];
+
   constructor(
     private fb:      FormBuilder,
     private service: RecruiterService,
@@ -123,6 +133,16 @@ export class EditJobComponent implements OnInit {
     if (v.minSalary && v.maxSalary && v.minSalary > v.maxSalary) {
       this.toast.error('Min salary cannot exceed max salary.');
       return;
+    }
+
+    if (v.expiresAt) {
+      const selected = new Date(v.expiresAt);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selected < today) {
+        this.toast.error('Expiry date cannot be in the past.');
+        return;
+      }
     }
 
     const payload = { ...v, requiredSkills: this.skills() };

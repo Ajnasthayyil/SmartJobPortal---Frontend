@@ -32,6 +32,14 @@ export class CandidateProfileComponent implements OnInit {
 
   readonly levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
+  readonly indianStates = [
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 
+    'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 
+    'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 
+    'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 
+    'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi'
+  ];
+
   constructor(
     private fb: FormBuilder,
     private service: CandidateService,

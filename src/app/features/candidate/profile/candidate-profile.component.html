@@ -262,7 +262,12 @@
                   <label>Current Location</label>
                   <div class="input-with-icon">
                     <i class="fa-solid fa-location-dot"></i>
-                    <input type="text" formControlName="location" placeholder="City, Country" />
+                    <select formControlName="location">
+                      <option value="" disabled selected>Select State</option>
+                      <ng-container *ngFor="let state of indianStates">
+                        <option [value]="state">{{ state }}</option>
+                      </ng-container>
+                    </select>
                   </div>
                 </div>
                 <div class="premium-field">

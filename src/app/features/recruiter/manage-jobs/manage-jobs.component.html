@@ -161,7 +161,12 @@
                     
                     <div class="form-group">
                         <label>Location</label>
-                        <input type="text" [(ngModel)]="job.location" placeholder="e.g. New York or Remote">
+                        <select [(ngModel)]="job.location">
+                            <option value="" disabled selected>Select State</option>
+                            <ng-container *ngFor="let state of indianStates">
+                                <option [value]="state">{{ state }}</option>
+                            </ng-container>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -191,7 +196,8 @@
 
                     <div class="form-group">
                         <label>Expiry Date</label>
-                        <input type="date" [ngModel]="job.expiresAt | date:'yyyy-MM-dd'" (ngModelChange)="job.expiresAt = $event">
+                        <input type="date" [ngModel]="job.expiresAt | date:'yyyy-MM-dd'" (ngModelChange)="job.expiresAt = $event" [min]="minDate">
+                        <span style="font-size: 11px; color: #94a3b8; margin-top: 4px; display: block;">Format: MM/DD/YYYY</span>
                     </div>
 
                     <div class="form-group">

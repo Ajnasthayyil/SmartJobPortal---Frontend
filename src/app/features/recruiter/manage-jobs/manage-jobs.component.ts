@@ -26,6 +26,16 @@ export class ManageJobsComponent implements OnInit {
   editingJob = signal<any>(null);
   saving = signal(false);
 
+  readonly indianStates = [
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 
+    'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 
+    'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 
+    'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 
+    'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi'
+  ];
+
+  readonly minDate = new Date().toISOString().split('T')[0];
+
   filtered = computed(() => {
     let list = this.jobs();
     const tab = this.activeTab();
@@ -133,6 +143,16 @@ export class ManageJobsComponent implements OnInit {
   saveJobEdit(): void {
     const jobData = this.editingJob();
     if (!jobData) return;
+
+    if (jobData.expiresAt) {
+      const selected = new Date(jobData.expiresAt);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selected < today) {
+        this.toast.error('Expiry date cannot be in the past.');
+        return;
+      }
+    }
 
     this.saving.set(true);
     this.service.updateJob(jobData.jobId, jobData).subscribe({
