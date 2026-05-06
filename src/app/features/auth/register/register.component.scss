@@ -2,61 +2,62 @@
 
 // Role selector styles specifically for registration
 .role-selector {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px; // Reduced from 16
-  margin-bottom: 20px; // Reduced from 32
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
 }
 
 .role-option {
-  display: flex;
-  flex-direction: row; 
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  padding: 16px; 
-  border: 1px solid #e2e8f0;
-  border-radius: 16px; 
-  cursor: pointer;
-  background: #fdfdfd;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  color: $slate-500;
-  
-  input { display: none; }
-
-  .role-icon {
-    font-size: 20px; 
-    color: $slate-400;
-    transition: all 0.4s;
-    width: 40px; height: 40px;
-    display: flex; align-items: center; justify-content: center;
-    background: #f1f5f9; border-radius: 12px;
-  }
-
-  .role-label {
-    font-size: 13px; 
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  &:hover {
-    border-color: $primary;
-    background: white;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.04);
-  }
-
-  &.active {
-    background: white;
-    border-color: $primary;
-    color: $slate-900;
-    box-shadow: 0 15px 30px rgba(16, 185, 129, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 12px;
+    background: $white;
+    border: 2px solid $slate-200;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: $slate-500;
+    position: relative;
+    overflow: hidden;
     
+    input { display: none; }
+
     .role-icon {
-      color: white;
-      background: linear-gradient(135deg, $primary 0%, #059669 100%);
-      transform: scale(1.05);
+        font-size: 20px; 
+        color: $slate-400;
+        transition: all 0.4s;
+        width: 44px; height: 44px;
+        display: flex; align-items: center; justify-content: center;
+        background: $slate-100; border-radius: 12px;
     }
-  }
+
+    .role-label {
+        font-size: 12px; 
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    &:hover {
+        background: $slate-100;
+        border-color: $slate-300;
+        transform: translateY(-2px);
+    }
+
+    &.active {
+        background: $white;
+        border-color: $primary;
+        color: $slate-900;
+        box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15);
+        
+        .role-icon {
+            color: white;
+            background: linear-gradient(135deg, $primary 0%, #059669 100%);
+            box-shadow: 0 8px 16px rgba($primary, 0.3);
+        }
+    }
 }
