@@ -17,7 +17,7 @@ $shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   display: block;
   background: var(--slate-100);
   min-height: 100vh;
-  padding: 140px 60px 60px 80px;
+  padding: 120px 60px 40px 60px;
   position: relative;
   overflow-x: hidden;
 }
@@ -47,12 +47,12 @@ $shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 
 // ── Welcome Box ──────────────────────────────────────────────────
 .welcome-box {
-  background: $white;
-  padding: 48px;
-  border-radius: 20px;
-  margin-bottom: 40px;
-  box-shadow: $shadow-sm;
-  border: 1px solid $slate-200;
+  background: transparent;
+  padding: 0 0 10px 20px;
+  border-radius: 0;
+  margin-bottom: 16px;
+  box-shadow: none;
+  border: none;
   position: relative;
   overflow: hidden;
   color: $slate-900;
@@ -65,7 +65,8 @@ $shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     color: $slate-500;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    margin-bottom: 16px;
+    margin-top: 12px;
+    margin-bottom: 8px;
     display: block;
   }
 

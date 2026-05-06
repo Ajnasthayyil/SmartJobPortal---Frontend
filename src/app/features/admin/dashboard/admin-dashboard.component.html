@@ -9,19 +9,18 @@
 
   <div class="page-inner">
     
-    <!-- ── Header Section ─────────────────────────────────── -->
-    <header class="page-header reveal">
-      <div class="header-left">
-        <h1 class="page-title">Admin Command Center</h1>
-        <p class="page-sub">Monitor ecosystem health and manage platform participants.</p>
+    <!-- Welcome Box -->
+    <div class="welcome-box">
+      <div class="content">
+        <span class="hi-text">Hi Admin,</span>
+        <h1 class="page-title">Welcome to Smart Admin!</h1>
+        <p class="subtitle">Real-time system oversight and platform management.</p>
       </div>
-      <div class="header-actions">
-        <div class="system-badge">
-          <span class="pulse-dot"></span>
-          System Online
-        </div>
+      <div class="system-badge">
+        <div class="pulse-dot"></div>
+        System Online
       </div>
-    </header>
+    </div>
 
     <!-- Loading State -->
     <div class="skeleton-grid" *ngIf="loading()">
@@ -37,8 +36,8 @@
             <i class="fa-solid fa-users"></i>
           </div>
           <div class="stat-info">
-            <h2 class="stat-value">{{ data()!.totalUsers }}</h2>
-            <p class="stat-label">Total Users</p>
+            <span class="stat-value">{{ data()!.totalUsers }}</span>
+            <span class="stat-label">Total Users</span>
           </div>
           <div class="stat-chart-mini">
             <div class="bar" style="height: 40%"></div>
@@ -53,8 +52,8 @@
             <i class="fa-solid fa-graduation-cap"></i>
           </div>
           <div class="stat-info">
-            <h2 class="stat-value">{{ data()!.totalCandidates }}</h2>
-            <p class="stat-label">Candidates</p>
+            <span class="stat-value">{{ data()!.totalCandidates }}</span>
+            <span class="stat-label">Candidates</span>
           </div>
           <div class="stat-trend positive">
             <i class="fa-solid fa-arrow-up"></i> 12%
@@ -66,8 +65,8 @@
             <i class="fa-solid fa-building"></i>
           </div>
           <div class="stat-info">
-            <h2 class="stat-value">{{ data()!.totalRecruiters }}</h2>
-            <p class="stat-label">Recruiters</p>
+            <span class="stat-value">{{ data()!.totalRecruiters }}</span>
+            <span class="stat-label">Recruiters</span>
           </div>
           <div class="stat-trend positive">
             <i class="fa-solid fa-arrow-up"></i> 8%
@@ -79,8 +78,8 @@
             <i class="fa-solid fa-user-check"></i>
           </div>
           <div class="stat-info">
-            <h2 class="stat-value">{{ data()!.pendingRecruiterApprovals }}</h2>
-            <p class="stat-label">Pending Approvals</p>
+            <span class="stat-value">{{ data()!.pendingRecruiterApprovals }}</span>
+            <span class="stat-label">Pending Approvals</span>
           </div>
           <a routerLink="/admin/recruiters" class="btn-review" *ngIf="data()!.pendingRecruiterApprovals > 0">
             Review <i class="fa-solid fa-chevron-right"></i>
