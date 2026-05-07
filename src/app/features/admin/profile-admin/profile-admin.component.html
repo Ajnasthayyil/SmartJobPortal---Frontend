@@ -1,0 +1,118 @@
+<div class="admin-profile-wrapper reveal">
+    <!-- Header Section -->
+    <header class="profile-hero">
+        <div class="hero-glass">
+            <div class="hero-content">
+                <div class="status-badge"><i class="fa-solid fa-shield-halved"></i> MASTER ADMINISTRATIVE ACCESS</div>
+                <h1 class="hero-title">Administrative <span>Profile</span></h1>
+                <p class="hero-desc">Securely manage your system credentials and executive information.</p>
+            </div>
+            <div class="hero-actions">
+                <button class="btn-sync" (click)="onSave()" [disabled]="saving()">
+                    <i class="fa-solid" [class.fa-rotate]="saving()" [class.fa-cloud-arrow-up]="!saving()"></i>
+                    <span>{{ saving() ? 'Synchronizing...' : 'Save Changes' }}</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-profile-grid">
+        <!-- Sidebar Card -->
+        <aside class="profile-sidebar">
+            <div class="glass-card identity-card">
+                <div class="avatar-container">
+                    <div class="avatar-wrapper">
+                        <img [src]="'assets/default-admin.png'" alt="Admin Avatar">
+                        <button class="edit-avatar"><i class="fa-solid fa-camera"></i></button>
+                    </div>
+                </div>
+                <div class="identity-info">
+                    <h2>{{ profile()?.fullName }}</h2>
+                    <span class="role-pill">Super Admin</span>
+                    <p class="email-text"><i class="fa-solid fa-envelope"></i> {{ profile()?.email }}</p>
+                </div>
+                <div class="activity-stats">
+                    <div class="stat-item">
+                        <span class="stat-val">2.4k</span>
+                        <span class="stat-label">Users</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-val">Active</span>
+                        <span class="stat-label">Status</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card quick-links">
+                <h3>Quick Actions</h3>
+                <button class="action-link"><i class="fa-solid fa-key"></i> Reset Password</button>
+                <button class="action-link"><i class="fa-solid fa-shield-check"></i> Security Audit</button>
+                <button class="action-link danger"><i class="fa-solid fa-power-off"></i> Terminate Session</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Form -->
+        <main class="profile-main-content">
+            <form [formGroup]="form" class="admin-form">
+                <div class="glass-card section-card">
+                    <div class="section-header">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <h3>Account Credentials</h3>
+                    </div>
+                    
+                    <div class="input-grid">
+                        <div class="field-group full">
+                            <label>Full Legal Name</label>
+                            <div class="input-host">
+                                <i class="fa-solid fa-signature"></i>
+                                <input type="text" formControlName="fullName" placeholder="Enter full name">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Primary Email Address</label>
+                            <div class="input-host readonly">
+                                <i class="fa-solid fa-envelope-open-text"></i>
+                                <input type="email" formControlName="email">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Secure Phone Line</label>
+                            <div class="input-host">
+                                <i class="fa-solid fa-phone-lock"></i>
+                                <input type="text" formControlName="phoneNumber" placeholder="+1 (000) 000-0000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card section-card">
+                    <div class="section-header">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <h3>Professional Context</h3>
+                    </div>
+
+                    <div class="input-grid">
+                        <div class="field-group full">
+                            <label>Work Address / Office Location</label>
+                            <div class="input-host">
+                                <i class="fa-solid fa-building-circle-check"></i>
+                                <input type="text" formControlName="address" placeholder="HQ Address">
+                            </div>
+                        </div>
+
+                        <div class="field-group full">
+                            <label>Professional Bio / Admin Notes</label>
+                            <div class="input-host textarea">
+                                <i class="fa-solid fa-quote-left"></i>
+                                <textarea formControlName="bio" rows="4" placeholder="Brief professional overview..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+</div>

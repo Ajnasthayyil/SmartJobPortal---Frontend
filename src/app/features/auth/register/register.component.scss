@@ -4,8 +4,8 @@
 .role-selector {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 8px;
+    margin-bottom: 16px;
 }
 
 .role-option {
@@ -13,11 +13,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 16px 12px;
+    gap: 6px;
+    padding: 10px 8px;
     background: $white;
     border: 2px solid $slate-200;
-    border-radius: 20px;
+    border-radius: 14px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     color: $slate-500;
@@ -27,19 +27,19 @@
     input { display: none; }
 
     .role-icon {
-        font-size: 20px; 
+        font-size: 16px; 
         color: $slate-400;
         transition: all 0.4s;
-        width: 44px; height: 44px;
+        width: 32px; height: 32px;
         display: flex; align-items: center; justify-content: center;
-        background: $slate-100; border-radius: 12px;
+        background: $slate-100; border-radius: 8px;
     }
 
     .role-label {
-        font-size: 12px; 
+        font-size: 10px; 
         font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.05em;
     }
 
     &:hover {

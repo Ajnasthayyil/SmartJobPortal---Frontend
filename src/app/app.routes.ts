@@ -184,8 +184,8 @@ export const routes: Routes = [
       {
         path: 'profile',
         loadComponent: () =>
-          import('./features/admin/profile/admin-profile.component')
-            .then(m => m.AdminProfileComponent)
+          import('./features/admin/profile-admin/profile-admin.component')
+            .then(m => m.ProfileAdminComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

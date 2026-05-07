@@ -1,0 +1,187 @@
+$primary: #10b981;
+$primary-light: #34d399;
+$slate-900: #0f172a;
+$slate-800: #1e293b;
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-500: #64748b;
+$slate-400: #94a3b8;
+$slate-300: #cbd5e1;
+$slate-200: #e2e8f0;
+$slate-100: #f1f5f9;
+$white: #ffffff;
+$black: #000000;
+
+.admin-profile-wrapper {
+    padding: 40px;
+    background: #f8fafc;
+    min-height: 100vh;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+// ── Header Section ──────────────────────────────────────────────
+.profile-hero {
+    margin-bottom: 40px;
+    
+    .hero-glass {
+        background: linear-gradient(135deg, $black 0%, $slate-900 100%);
+        border-radius: 32px;
+        padding: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+
+        &::before {
+            content: '';
+            position: absolute; top: -50%; right: -10%; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba($primary, 0.15), transparent 70%);
+            border-radius: 50%;
+        }
+    }
+
+    .status-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba($primary, 0.1); border: 1px solid rgba($primary, 0.2);
+        color: $primary; padding: 8px 16px; border-radius: 100px;
+        font-size: 11px; font-weight: 800; letter-spacing: 0.15em; margin-bottom: 20px;
+    }
+
+    .hero-title {
+        font-size: 42px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.02em;
+        span { color: $primary; }
+    }
+    .hero-desc { color: $slate-400; font-size: 18px; max-width: 500px; }
+}
+
+.btn-sync {
+    background: $primary; color: $black; border: none; padding: 16px 32px;
+    border-radius: 16px; font-weight: 800; font-size: 15px;
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 25px rgba($primary, 0.3);
+
+    &:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba($primary, 0.4); background: $white; }
+    &:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    
+    i { font-size: 18px; &.fa-rotate { animation: spin 1s infinite linear; } }
+}
+
+// ── Grid Layout ──────────────────────────────────────────────
+.main-profile-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 32px;
+}
+
+.glass-card {
+    background: $white;
+    border: 1px solid $slate-200;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+
+    &:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+}
+
+// ── Sidebar Styles ──────────────────────────────────────────
+.profile-sidebar {
+    display: flex; flex-direction: column; gap: 32px;
+
+    .identity-card {
+        text-align: center;
+        .avatar-container {
+            margin-bottom: 24px;
+            .avatar-wrapper {
+                position: relative; width: 140px; height: 140px; margin: 0 auto;
+                img { width: 100%; height: 100%; border-radius: 40px; object-fit: cover; border: 4px solid $slate-100; }
+                .edit-avatar {
+                    position: absolute; bottom: -10px; right: -10px;
+                    width: 44px; height: 44px; border-radius: 15px;
+                    background: $black; color: white; border: 4px solid $white;
+                    display: flex; align-items: center; justify-content: center;
+                    cursor: pointer; transition: all 0.3s;
+                    &:hover { background: $primary; color: $black; }
+                }
+            }
+        }
+
+        h2 { font-size: 24px; font-weight: 800; color: $slate-900; margin-bottom: 8px; }
+        .role-pill { 
+            display: inline-block; padding: 4px 12px; background: $slate-100; 
+            color: $slate-600; border-radius: 100px; font-size: 12px; font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .email-text { font-size: 14px; color: $slate-500; font-weight: 500; i { color: $primary; margin-right: 6px; } }
+    }
+
+    .activity-stats {
+        display: flex; justify-content: center; align-items: center; gap: 30px; margin-top: 24px;
+        padding-top: 24px; border-top: 1px solid $slate-100;
+        .stat-item {
+            display: flex; flex-direction: column; align-items: center;
+            .stat-val { font-size: 20px; font-weight: 800; color: $slate-900; }
+            .stat-label { font-size: 12px; color: $slate-500; font-weight: 600; }
+        }
+        .stat-divider { width: 1px; height: 30px; background: $slate-200; }
+    }
+
+    .quick-links {
+        h3 { font-size: 18px; font-weight: 800; color: $slate-900; margin-bottom: 20px; }
+        .action-link {
+            width: 100%; text-align: left; background: none; border: none;
+            padding: 14px 16px; border-radius: 12px; color: $slate-700;
+            font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px;
+            cursor: pointer; transition: all 0.3s;
+            i { font-size: 16px; color: $slate-400; width: 20px; }
+            &:hover { background: $slate-100; color: $black; i { color: $primary; } }
+            &.danger:hover { background: rgba(#ef4444, 0.05); color: #ef4444; i { color: #ef4444; } }
+        }
+    }
+}
+
+// ── Main Content Form ─────────────────────────────────────────
+.profile-main-content {
+    display: flex; flex-direction: column; gap: 32px;
+}
+
+.section-card {
+    .section-header {
+        display: flex; align-items: center; gap: 12px; margin-bottom: 30px;
+        i { font-size: 20px; color: $primary; }
+        h3 { font-size: 20px; font-weight: 800; color: $slate-900; margin: 0; }
+    }
+}
+
+.input-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    .full { grid-column: span 2; }
+}
+
+.field-group {
+    label { display: block; font-size: 12px; font-weight: 800; color: $slate-900; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+}
+
+.input-host {
+    position: relative;
+    i { position: absolute; left: 18px; top: 18px; color: $slate-400; font-size: 16px; transition: color 0.3s; }
+    
+    input, textarea {
+        width: 100%; padding: 16px 16px 16px 52px; background: $slate-100; border: 2px solid transparent; 
+        border-radius: 16px; font-size: 15px; color: $slate-900; font-family: inherit; font-weight: 500;
+        transition: all 0.3s;
+        &::placeholder { color: $slate-400; }
+        &:focus { outline: none; background: $white; border-color: $primary; box-shadow: 0 8px 20px rgba($primary, 0.1); i { color: $primary; } }
+    }
+
+    &.textarea i { top: 20px; }
+    &.readonly input { background: #f1f5f9; color: $slate-500; cursor: not-allowed; }
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes reveal { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1); }

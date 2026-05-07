@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap');
 
 $primary: #10b981;
 $primary-dark: #059669;
@@ -15,11 +15,11 @@ $white: #ffffff;
 
 .login-page {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: 1.25fr 0.75fr;
     min-height: 100vh;
     height: 100vh;
-    background: #f8fafc;
-    font-family: 'Inter', sans-serif;
+    background: #fdfdfd;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     overflow: hidden;
 
     @media (max-width: 1100px) {
@@ -30,126 +30,102 @@ $white: #ffffff;
     }
 }
 
-// ── Left Panel: Character Focused ───────────────────────────────
+// ── Left Panel: Dynamic Career Imagery ─────────────────────────
 .left-panel {
     position: relative;
-    padding: 40px 60px;
+    padding: 60px 80px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
     color: $slate-900;
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    background: #ffffff;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url('/auth_active_seeker_premium_1778131765037.png');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.15;
+        z-index: 0;
+    }
 
     &::after {
         content: '';
         position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        height: 80%;
-        background-image: url('/auth_professionals_pair_1778066532061.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: bottom center;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
         z-index: 1;
     }
 
     .panel-bg-overlay {
         position: absolute;
         inset: 0;
-        background: radial-gradient(circle at 20% 20%, rgba($primary, 0.05), transparent 50%);
-        z-index: 0;
+        background: radial-gradient(circle at 10% 10%, rgba($primary, 0.08), transparent 40%);
+        z-index: 2;
     }
 
     .glow-orb {
         position: absolute;
-        width: 400px; height: 400px;
+        width: 500px; height: 500px;
         border-radius: 50%;
-        filter: blur(100px);
-        z-index: 0;
-        &.orb-1 { top: -100px; left: -100px; background: rgba($primary, 0.1); }
-        &.orb-2 { bottom: -100px; right: -100px; background: rgba(59, 130, 246, 0.08); }
+        filter: blur(120px);
+        z-index: 2;
+        &.orb-1 { top: -150px; left: -150px; background: rgba($primary, 0.12); }
+        &.orb-2 { bottom: -150px; right: 0; background: rgba(59, 130, 246, 0.1); }
     }
 
     .logo-row {
         position: relative; z-index: 10;
-        .brand-name { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: $slate-900; span { color: $primary; } }
-        .logo-subtitle { font-size: 10px; font-weight: 800; letter-spacing: 0.15em; color: $slate-500; margin-top: 2px; }
+        .brand-name { font-family: 'Outfit', sans-serif; font-size: 34px; font-weight: 800; color: $slate-900; span { color: $primary; } }
+        .logo-subtitle { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: $slate-500; margin-top: 4px; text-transform: uppercase; }
     }
 
     .left-content {
-        position: relative; z-index: 10; max-width: 440px;
-        margin-bottom: 15vh;
+        position: relative; z-index: 10; max-width: 520px;
+        margin-bottom: 10vh;
         
         .badge-premium {
             display: inline-block;
-            padding: 6px 12px;
-            background: $white;
-            border: 1px solid $slate-200;
+            padding: 8px 16px;
+            background: rgba($primary, 0.08);
+            border: 1px solid rgba($primary, 0.1);
             color: $primary;
             border-radius: 100px;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 800;
-            letter-spacing: 0.1em;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            letter-spacing: 0.15em;
+            margin-bottom: 24px;
+            text-transform: uppercase;
         }
 
         h1 {
-            font-family: 'Outfit', sans-serif; font-size: clamp(32px, 3.5vw, 52px);
-            line-height: 1.1; margin-bottom: 16px; font-weight: 800; color: $slate-900;
-            span { color: $primary; }
-        }
-        p { font-size: 16px; color: $slate-600; font-weight: 500; line-height: 1.5; margin-bottom: 32px; }
-    }
-
-    // ── Floating Widgets ──
-    .floating-widgets {
-        position: absolute;
-        right: 40px;
-        top: 35%;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        z-index: 5;
-        
-        .glass-widget {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            padding: 16px 20px;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            width: fit-content;
-            animation: float 6s infinite ease-in-out;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
-            margin-left: auto; // Keep them aligned to the right side of the container
-
-            &.w-parsing { animation-delay: 2s; }
-
-            .widget-icon {
-                width: 44px; height: 44px; border-radius: 14px;
-                background: rgba(59, 130, 246, 0.1); color: #3b82f6;
-                display: flex; align-items: center; justify-content: center; font-size: 18px;
-                &.green { background: rgba($primary, 0.1); color: $primary; }
-            }
-            .widget-info {
-                .w-label { font-size: 10px; font-weight: 700; color: $slate-500; text-transform: uppercase; margin-bottom: 2px; }
-                .w-val { font-size: 22px; font-weight: 800; font-family: 'Outfit', sans-serif; color: $slate-900; }
-                .w-status { font-size: 13px; font-weight: 600; color: $slate-900; }
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(40px, 4vw, 68px);
+            line-height: 1.05; margin-bottom: 24px; font-weight: 800; color: $slate-900;
+            letter-spacing: -0.03em;
+            span { 
+                background: linear-gradient(135deg, $primary 0%, #34d399 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
             }
         }
-    }
+        p { font-size: 19px; color: $slate-600; font-weight: 500; line-height: 1.6; margin-bottom: 48px; max-width: 90%; }
 
-    .left-footer {
-        position: relative; z-index: 10;
         .footer-pills {
-            display: flex; gap: 12px;
-            span { padding: 6px 12px; background: $white; border-radius: 100px; font-size: 11px; font-weight: 600; border: 1px solid $slate-200; color: $slate-600; }
+            display: flex; gap: 16px; margin-top: 32px;
+            span { 
+                padding: 10px 20px; 
+                background: rgba($white, 0.6); 
+                backdrop-filter: blur(10px); 
+                border-radius: 100px; 
+                font-size: 12px; 
+                font-weight: 700; 
+                border: 1px solid $slate-200; 
+                color: $slate-700; 
+                box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
+            }
         }
     }
 
@@ -162,8 +138,8 @@ $white: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 40px;
+    justify-content: flex-start;
+    padding: 50px 40px 40px 40px;
     position: relative;
     overflow-y: auto;
     max-height: 100vh;
@@ -178,62 +154,61 @@ $white: #ffffff;
 
 .form-box {
     width: 100%;
-    max-width: 400px;
+    max-width: 380px;
     position: relative;
     z-index: 10;
-    padding: 20px 0;
 }
 
 .form-header {
     text-align: center;
-    margin-bottom: 32px;
-    h2 { font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800; color: $slate-900; margin-bottom: 8px; }
-    p { color: $slate-500; font-size: 15px; font-weight: 500; }
+    margin-bottom: 24px;
+    h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; font-weight: 800; color: $slate-900; margin-bottom: 8px; letter-spacing: -0.02em; }
+    p { color: $slate-500; font-size: 14px; font-weight: 500; }
 }
 
 .field-group {
-    margin-bottom: 16px;
-    label { display: block; font-size: 11px; font-weight: 700; color: $slate-900; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+    margin-bottom: 12px;
+    label { display: block; font-size: 11px; font-weight: 800; color: $slate-900; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.1em; }
 }
 
 .input-wrapper {
     position: relative;
     i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: $slate-400; font-size: 16px; transition: color 0.3s; z-index: 5; }
     .form-control {
-        width: 100%; padding: 14px 52px; background: $slate-100; border: 2px solid transparent; border-radius: 16px; font-size: 14px; color: $slate-900;
-        transition: all 0.3s;
+        width: 100%; padding: 12px 52px; background: $slate-100; border: 2px solid transparent; border-radius: 14px; font-size: 14px; color: $slate-900;
+        transition: all 0.3s; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500;
         &::placeholder { color: $slate-400; }
-        &:focus { outline: none; background: $white; border-color: $primary; box-shadow: 0 8px 20px rgba($primary, 0.1); i { color: $primary; } }
+        &:focus { outline: none; background: $white; border-color: $primary; box-shadow: 0 10px 25px rgba($primary, 0.12); i { color: $primary; } }
         &.error { border-color: #ef4444; }
     }
-    .eye-toggle { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: $slate-400; cursor: pointer; padding: 10px; z-index: 5; &:hover { color: $primary; } }
+    .eye-toggle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: $slate-400; cursor: pointer; padding: 8px; z-index: 5; &:hover { color: $primary; } }
 }
 
 .form-footer-actions {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 13px;
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 13px;
     .remember-me { display: flex; align-items: center; gap: 8px; cursor: pointer; color: $slate-600; font-weight: 600; input { width: 16px; height: 16px; accent-color: $primary; } }
-    .forgot-link { color: $primary; font-weight: 700; text-decoration: none; &:hover { text-decoration: underline; } }
+    .forgot-link { color: $primary; font-weight: 800; text-decoration: none; &:hover { text-decoration: underline; } }
 }
 
 .btn-primary-auth {
-    width: 100%; padding: 16px; 
+    width: 100%; padding: 14px; 
     background: linear-gradient(135deg, $primary 0%, #059669 100%); 
-    color: white; border: none; border-radius: 16px; font-size: 15px; font-weight: 800;
+    color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 800;
     cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
-    box-shadow: 0 10px 25px rgba($primary, 0.2);
+    box-shadow: 0 12px 30px rgba($primary, 0.3);
     display: flex; align-items: center; justify-content: center; gap: 10px;
-    &:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba($primary, 0.3); }
+    &:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba($primary, 0.4); }
     &:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 }
 
 .divider {
-    display: flex; align-items: center; gap: 12px; margin: 24px 0;
+    display: flex; align-items: center; gap: 12px; margin: 16px 0;
     span { height: 1px; flex: 1; background: $slate-200; }
-    em { font-size: 11px; color: $slate-500; font-style: normal; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+    em { font-size: 10px; color: $slate-500; font-style: normal; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; }
 }
 
 .btn-social {
-    width: 100%; padding: 14px; background: $white; border: 2px solid $slate-200; border-radius: 16px;
+    width: 100%; padding: 12px; background: $white; border: 2px solid $slate-200; border-radius: 14px;
     display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; font-weight: 700; color: $slate-900;
     cursor: pointer; transition: all 0.3s;
     img { width: 20px; height: 20px; }
@@ -241,9 +216,10 @@ $white: #ffffff;
 }
 
 .auth-switch {
-    margin-top: 24px; text-align: center; font-size: 14px; color: $slate-600; font-weight: 600; padding: 20px; border-radius: 20px; background: $slate-100;
+    margin-top: 20px; text-align: center; font-size: 14px; color: $slate-600; font-weight: 600; padding: 16px; border-radius: 16px; background: $slate-100;
     a { color: $primary; font-weight: 800; text-decoration: none; margin-left: 6px; &:hover { text-decoration: underline; } }
 }
+
 
 @keyframes float {
     0%, 100% { transform: translateY(0); }
