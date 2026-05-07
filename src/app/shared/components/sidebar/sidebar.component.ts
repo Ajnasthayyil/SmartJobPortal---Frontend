@@ -44,6 +44,44 @@ export class SidebarComponent implements OnInit {
     }
   ];
 
+  recruiterLinks = [
+    {
+      group: 'MAIN MENU',
+      items: [
+        { path: "/", iconClass: "fa-solid fa-house", label: "Home Page" },
+        { path: "/recruiter/dashboard", iconClass: "fa-solid fa-layer-group", label: "Dashboard" },
+        { path: "/recruiter/post-job", iconClass: "fa-solid fa-circle-plus", label: "Post New Job" },
+        { path: "/recruiter/jobs", iconClass: "fa-solid fa-briefcase", label: "Manage Jobs" },
+      ]
+    },
+    {
+      group: 'RECRUITER AREA',
+      items: [
+        { path: "/recruiter/profile", iconClass: "fa-solid fa-user-tie", label: "Company Profile" },
+        { path: "/recruiter/applicants", iconClass: "fa-solid fa-users", label: "All Applicants" },
+      ]
+    }
+  ];
+
+  adminLinks = [
+    {
+      group: 'CONTROL PANEL',
+      items: [
+        { path: "/", iconClass: "fa-solid fa-house", label: "Home Page" },
+        { path: "/admin/dashboard", iconClass: "fa-solid fa-gauge-high", label: "Dashboard" },
+        { path: "/admin/users", iconClass: "fa-solid fa-users-gear", label: "User Management" },
+        { path: "/admin/recruiters", iconClass: "fa-solid fa-user-check", label: "Recruiter Approvals" },
+      ]
+    },
+    {
+      group: 'CONTENT',
+      items: [
+        { path: "/admin/jobs", iconClass: "fa-solid fa-clipboard-list", label: "Active Jobs" },
+        { path: "/admin/profile", iconClass: "fa-solid fa-user-shield", label: "Admin Account" },
+      ]
+    }
+  ];
+
   links: any[] = [];
 
   ngOnInit() {
@@ -59,8 +97,12 @@ export class SidebarComponent implements OnInit {
     this.currentPath = this.location.path();
     if (this.currentPath.includes('/candidate')) {
       this.links = this.candidateLinks;
+    } else if (this.currentPath.includes('/recruiter')) {
+      this.links = this.recruiterLinks;
+    } else if (this.currentPath.includes('/admin')) {
+      this.links = this.adminLinks;
     } else {
-      // Default or other roles
+      // Default fallback
       this.links = this.candidateLinks; 
     }
   }

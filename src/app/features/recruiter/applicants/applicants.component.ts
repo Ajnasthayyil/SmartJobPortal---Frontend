@@ -7,6 +7,8 @@ import { catchError, map } from 'rxjs/operators';
 import { RecruiterService } from '../../../core/services/recruiter.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ApplicantResponse } from '../../../core/models/recruiter.models';
+import { NotificationService } from '../../../core/services/notification.service';
+
 
 @Component({
   selector: 'app-applicants',
@@ -25,6 +27,13 @@ export class ApplicantsComponent implements OnInit {
   
   searchQuery  = signal('');
   activeCategory = signal<'All' | 'New' | 'Screening' | 'Interview' | 'Shortlisted'>('All');
+
+  // Notification Modal State
+  notificationModalOpen = signal(false);
+  notifyingApplicant = signal<ApplicantResponse | null>(null);
+  notificationForm = { title: '', message: '' };
+  sendingNotification = signal(false);
+
 
   readonly categories: ('All' | 'New' | 'Screening' | 'Interview' | 'Shortlisted')[] = 
     ['All', 'New', 'Screening', 'Interview', 'Shortlisted'];
@@ -60,8 +69,10 @@ export class ApplicantsComponent implements OnInit {
   constructor(
     private route:   ActivatedRoute,
     private service: RecruiterService,
-    private toast:   ToastService
+    private toast:   ToastService,
+    private notify:  NotificationService
   ) {}
+
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -213,5 +224,49 @@ export class ApplicantsComponent implements OnInit {
   getInitials(name: string): string {
     if (!name) return '?';
     return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+  }
+
+  // ── Custom Notification Logic ─────────────────────────────────
+
+  openNotificationModal(a: ApplicantResponse): void {
+    this.notifyingApplicant.set(a);
+    this.notificationForm = { 
+      title: 'Update on your Application', 
+      message: `Hi ${a.fullName.split(' ')[0]}, regarding your application for ${a.jobTitle} at ${a.companyName}: ` 
+    };
+    this.notificationModalOpen.set(true);
+  }
+
+  closeNotificationModal(): void {
+    this.notificationModalOpen.set(false);
+    this.notifyingApplicant.set(null);
+  }
+
+  sendCustomNotification(): void {
+    const a = this.notifyingApplicant();
+    if (!a) return;
+
+    if (!this.notificationForm.title || !this.notificationForm.message) {
+      this.toast.warning('Please fill in both title and message.');
+      return;
+    }
+
+    this.sendingNotification.set(true);
+    this.notify.sendNotification(a.candidateUserId, this.notificationForm.title, this.notificationForm.message)
+      .subscribe({
+        next: res => {
+          this.sendingNotification.set(false);
+          if (res.success) {
+            this.toast.success('Notification sent to candidate.');
+            this.closeNotificationModal();
+          } else {
+            this.toast.error(res.message);
+          }
+        },
+        error: () => {
+          this.sendingNotification.set(false);
+          this.toast.error('Failed to send notification.');
+        }
+      });
   }
 }

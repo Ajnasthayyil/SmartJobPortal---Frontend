@@ -25,6 +25,10 @@ import { JobDetailComponent } from './features/candidate/job-detail/job-detail.c
 import { SkillAnalysisComponent } from './features/candidate/skill-analysis/skill-analysis.component';
 import { CoursesComponent } from './features/courses/courses.component';
 
+// ✅ NEW COMPONENTS
+import { ProfileAdminComponent } from './features/admin/profile-admin/profile-admin.component';
+import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
+
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
@@ -83,10 +87,11 @@ const routes: Routes = [
       { path: 'users', component: AdminUsersComponent },
       { path: 'recruiters', component: AdminRecruitersComponent },
       { path: 'jobs', component: AdminJobsComponent },
+      { path: 'profile', component: ProfileAdminComponent }, // ✅ CONNECTED!
     ]
   },
 
-  { path: '**', redirectTo: '' }
+  { path: '**', component: NotFoundComponent } // ✅ CONNECTED!
 ];
 
 @NgModule({

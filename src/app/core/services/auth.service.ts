@@ -8,6 +8,7 @@ import {
   LoginRequest, AuthResponse, ApiResponse, UserSession,
   RegisterCandidateRequest, RegisterRecruiterRequest
 } from '../models/auth.models';
+import { NotificationService } from './notification.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -20,8 +21,13 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private toast: ToastService
-  ) {}
+    private toast: ToastService,
+    private notifications: NotificationService
+  ) {
+    if (this.isLoggedIn()) {
+      this.notifications.startPolling();
+    }
+  }
 
   login(request: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>
@@ -44,6 +50,8 @@ export class AuthService {
               localStorage.setItem('authUser', JSON.stringify(session));
               this.currentUser.set(session);
               this.isLoggedIn.set(true);
+              this.notifications.startPolling(); 
+
             }
           }
         })
@@ -66,6 +74,7 @@ export class AuthService {
       next: () => this.clearSession(),
       error: () => this.clearSession()
     });
+    
   }
 
   private clearSession(): void {
@@ -74,6 +83,7 @@ export class AuthService {
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
     this.toast.info('Logged out successfully.');
+    this.notifications.stopPolling();
     this.router.navigate(['/login']);
   }
 

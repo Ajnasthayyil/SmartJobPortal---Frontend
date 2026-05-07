@@ -20,6 +20,7 @@ import { AdminSidebarComponent } from './features/admin/admin-sidebar/admin-side
 
 import { ShellVisibilityDirective } from './core/directives/shell-visibility.directive';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { NotificationBellComponent } from './shared/components/notification-bell/notification-bell.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { SidebarComponent } from './shared/components/sidebar/sidebar.component'
     AdminSidebarComponent,
     PublicNavbarComponent,
     ToastContainerComponent,
+    NotificationBellComponent, // ✅ Correctly imported as standalone
     ShellVisibilityDirective
   ],
   providers: [

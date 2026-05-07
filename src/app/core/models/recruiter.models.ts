@@ -58,4 +58,5 @@ export interface ApplicantResponse {
   missingSkills: string[];
   scoreLabel: string;
   jobTitle?: string;
+  companyName?: string;
 }

@@ -1,39 +1,36 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule, FormBuilder,
-  FormGroup, Validators, FormsModule
-} from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../../core/services/admin.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { Observable, of } from 'rxjs';
+import { ApiResponse } from '../../../core/models/auth.models';
 
 @Component({
   selector: 'app-profile-admin',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './profile-admin.component.html',
-  styleUrls: ['./profile-admin.component.scss']
+  styleUrls: ['./profile-admin.component.scss'] // ✅ Reverted to plural for compatibility
 })
 export class ProfileAdminComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private adminService = inject(AdminService);
+  private toast = inject(ToastService);
+  private authService = inject(AuthService);
 
   form: FormGroup;
   profile = signal<any>(null);
-  loading = signal(true);
   saving = signal(false);
+  loading = signal(true);
+  isEditModalOpen = signal(false);
 
-  constructor(
-    private fb: FormBuilder,
-    private service: AdminService,
-    public auth: AuthService,
-    private toast: ToastService
-  ) {
+  constructor() {
     this.form = this.fb.group({
-      fullName: ['', Validators.required],
-      email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
-      address: [''],
-      bio: ['']
+      fullName: ['', [Validators.required]],
+      email: [{ value: '', disabled: true }],
+      phoneNumber: ['']
     });
   }
 
@@ -43,62 +40,76 @@ export class ProfileAdminComponent implements OnInit {
 
   loadProfile(): void {
     this.loading.set(true);
-    // Since API might not be ready, we provide a fallback for demo/dev
-    this.service.getProfile().subscribe({
-      next: res => {
-        if (res.success && res.data) {
+    this.adminService.getProfile().subscribe({
+      next: (res) => {
+        if (res.success) {
           this.profile.set(res.data);
           this.form.patchValue(res.data);
         } else {
-          // Mock data if API is empty
-          this.profile.set({
-            fullName: this.auth.currentUser()?.fullName || 'System Admin',
-            email: this.auth.currentUser()?.email || 'admin@talex.ai',
-            phoneNumber: '+1 (555) 000-1234',
-            address: 'Silicon Valley, CA',
-            bio: 'Senior System Administrator at TalEx Ecosystem.'
-          });
-          this.form.patchValue(this.profile());
+          this.useFallback();
         }
         this.loading.set(false);
       },
       error: () => {
-        // Mock data on error too
-        this.profile.set({
-          fullName: 'System Admin',
-          email: 'admin@talex.ai',
-          phoneNumber: '+1 (555) 000-1234',
-          address: 'Silicon Valley, CA',
-          bio: 'Senior System Administrator at TalEx Ecosystem.'
-        });
-        this.form.patchValue(this.profile());
+        this.useFallback();
         this.loading.set(false);
       }
     });
   }
 
+  openEditModal(): void {
+    this.form.patchValue(this.profile());
+    this.isEditModalOpen.set(true);
+  }
+
+  closeEditModal(): void {
+    this.isEditModalOpen.set(false);
+  }
+
+  private useFallback(): void {
+    // High-fidelity fallback for dev mode
+    const mock = {
+      fullName: 'AJNAS THAYYIL',
+      email: 'admin@smartjobportal.com',
+      phoneNumber: '7025882784'
+    };
+    this.profile.set(mock);
+    this.form.patchValue(mock);
+  }
+
+  onPhotoSelect(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    this.authService.uploadPhoto(file).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.toast.success('Professional portrait updated.');
+          // Profile signal will update via AuthService.uploadPhoto's tap() logic
+        }
+      },
+      error: () => this.toast.error('Portrait synchronization failed.')
+    });
+  }
+
   onSave(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+    if (this.form.invalid) return;
+
     this.saving.set(true);
-    this.service.updateProfile(this.form.getRawValue()).subscribe({
-      next: res => {
+    this.adminService.updateProfile(this.form.getRawValue()).subscribe({
+      next: (res) => {
         this.saving.set(false);
         if (res.success) {
-          this.toast.success('Admin Profile Synchronized!');
+          this.toast.success('Executive profile synchronized successfully.');
           this.profile.set(res.data);
+          this.closeEditModal();
         } else {
-          // For now, allow local update even if API fails (Dev mode)
-          this.profile.set(this.form.getRawValue());
-          this.toast.success('Profile updated (Local Dev Mode)');
+          this.toast.error('Synchronization failed.');
         }
       },
       error: () => {
         this.saving.set(false);
-        this.profile.set(this.form.getRawValue());
-        this.toast.success('Profile updated (Local Dev Mode)');
+        this.toast.error('Network synchronization error.');
       }
     });
   }

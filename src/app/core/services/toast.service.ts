@@ -15,6 +15,11 @@ export class ToastService {
   private nextId = 0;
 
   show(message: string, type: ToastType = 'info', duration = 4000): void {
+    // If it's a success or error, clear existing ones to avoid clutter
+    if (type === 'success' || type === 'error') {
+      this.toasts.set([]);
+    }
+
     // Prevent duplicate toasts within a short timeframe
     const active = this.toasts();
     if (active.some(t => t.message === message && t.type === type && !t.removing)) {

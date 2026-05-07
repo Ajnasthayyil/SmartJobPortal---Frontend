@@ -1,71 +1,65 @@
 <nav class="public-nav">
   <div class="nav-inner">
-
-    <!-- Logo -->
+    
+    <!-- Left: Logo -->
     <a routerLink="/" class="logo">
       <span class="logo-tal">Tal</span><span class="logo-ex">Ex</span>
     </a>
 
-    <!-- Center pill nav -->
+    <!-- Center: Navigation Links -->
     <div class="nav-pill">
-      <a routerLink="/" routerLinkActive="active"
-         [routerLinkActiveOptions]="{ exact: true }">HOME</a>
-      <a routerLink="/jobs" routerLinkActive="active">JOBS</a>
-      <a routerLink="/companies" routerLinkActive="active">COMPANIES</a>
-      <a routerLink="/courses" routerLinkActive="active">COURSES</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/jobs" routerLinkActive="active">Jobs</a>
+      <a routerLink="/companies" routerLinkActive="active">Companies</a>
+      <a routerLink="/courses" routerLinkActive="active">Courses</a>
     </div>
 
-    <!-- Right CTA -->
+    <!-- Right: User Session / CTA -->
     <div class="nav-right">
+      
+      <!-- Logged In State -->
       <ng-container *ngIf="auth.isLoggedIn()">
-        <button class="btn-dashboard" (click)="goToDashboard()">
-          Dashboard
+        <app-notification-bell></app-notification-bell>
+        
+        <div class="user-session" (click)="goToDashboard()">
+          <span class="user-name hide-mobile">{{ auth.currentUser()?.fullName }}</span>
+          <div class="avatar-circle">
+            {{ getUserInitials() }}
+          </div>
+        </div>
+
+        <button class="logout-btn hide-mobile" (click)="logout()">
+          <i class="fa-solid fa-power-off"></i>
         </button>
-      </ng-container> 
-      <ng-container *ngIf="!auth.isLoggedIn()">
-        <a routerLink="/login" class="btn-login">LOGIN</a>
       </ng-container>
 
-      <!-- Mobile toggle -->
+      <!-- Logged Out State -->
+      <ng-container *ngIf="!auth.isLoggedIn()">
+        <a routerLink="/login" class="btn-login">Login</a>
+      </ng-container>
+
+      <!-- Mobile Toggle -->
       <button class="mobile-btn" (click)="mobileOpen.set(!mobileOpen())">
-        <ng-container *ngIf="!mobileOpen()">
-          <svg width="20" height="20" fill="none" stroke="currentColor"
-               stroke-width="2" viewBox="0 0 24 24">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </ng-container> 
-<ng-container *ngIf="mobileOpen()">
-          <svg width="20" height="20" fill="none" stroke="currentColor"
-               stroke-width="2" viewBox="0 0 24 24">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </ng-container>
+        <svg *ngIf="!mobileOpen()" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg *ngIf="mobileOpen()" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
       </button>
     </div>
-
   </div>
 
-  <!-- Mobile menu -->
-  <ng-container *ngIf="mobileOpen()">
-    <div class="mobile-menu">
-      <a routerLink="/"         (click)="mobileOpen.set(false)">Home</a>
-      <a routerLink="/jobs"     (click)="mobileOpen.set(false)">Jobs</a>
-      <a routerLink="/companies"(click)="mobileOpen.set(false)">Companies</a>
-      <a routerLink="/courses"  (click)="mobileOpen.set(false)">Courses</a>
-      <ng-container *ngIf="auth.isLoggedIn()">
-        <button class="mobile-dash"
-                (click)="goToDashboard(); mobileOpen.set(false)">
-          Dashboard
-        </button>
-      </ng-container> 
-<ng-container *ngIf="!auth.isLoggedIn()">
-        <a routerLink="/login"    (click)="mobileOpen.set(false)">Login</a>
-        <a routerLink="/register" (click)="mobileOpen.set(false)">Register</a>
-      </ng-container>
-    </div>
-  </ng-container>
-
+  <!-- Mobile Menu Dropdown -->
+  <div class="mobile-menu" *ngIf="mobileOpen()">
+    <a routerLink="/" (click)="mobileOpen.set(false)">Home</a>
+    <a routerLink="/jobs" (click)="mobileOpen.set(false)">Jobs</a>
+    <a routerLink="/companies" (click)="mobileOpen.set(false)">Companies</a>
+    
+    <ng-container *ngIf="auth.isLoggedIn()">
+      <hr style="border: 0; border-top: 1px solid #f1f5f9; margin: 10px 0;">
+      <a (click)="goToDashboard(); mobileOpen.set(false)">Dashboard</a>
+      <a (click)="logout(); mobileOpen.set(false)" style="color: #ef4444;">Logout</a>
+    </ng-container>
+  </div>
 </nav>

@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { CoursesComponent } from './features/courses/courses.component';
+import { ProfileAdminComponent } from './features/admin/profile-admin/profile-admin.component';
+import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -29,7 +31,7 @@ export const routes: Routes = [
         .then(m => m.ForgotPasswordComponent)
   },
 
-  // ── Candidate ─────────────────────────────────────────
+  // ── Candidate ──────────────────────────────────────────────
   {
     path: 'candidate',
     canActivate: [authGuard, roleGuard],
@@ -42,52 +44,46 @@ export const routes: Routes = [
             .then(m => m.CandidateDashboardComponent)
       },
       {
+        path: 'jobs',
+        loadComponent: () =>
+          import('./features/candidate/job-search/candidate-job-search.component')
+            .then(m => m.CandidateJobSearchComponent)
+      },
+      {
+        path: 'job-detail/:id',
+        loadComponent: () =>
+          import('./features/candidate/job-detail/candidate-job-detail.component')
+            .then(m => m.CandidateJobDetailComponent)
+      },
+      {
+        path: 'companies',
+        loadComponent: () =>
+          import('./features/candidate/dashboard/candidate-dashboard.component') // Placeholder
+            .then(m => m.CandidateDashboardComponent)
+      },
+      {
         path: 'profile',
         loadComponent: () =>
           import('./features/candidate/profile/candidate-profile.component')
             .then(m => m.ProfileComponent)
       },
       {
-        path: 'jobs',
+        path: 'applications',
         loadComponent: () =>
-          import('./features/candidate/job-search/job-search.component')
-            .then(m => m.JobSearchComponent)
-      },
-      {
-        path: 'jobs/:id',
-        loadComponent: () =>
-          import('./features/candidate/job-detail/job-detail.component')
-            .then(m => m.JobDetailComponent)
+          import('./features/candidate/applications/candidate-applications.component')
+            .then(m => m.CandidateApplicationsComponent)
       },
       {
         path: 'skill-gap',
         loadComponent: () =>
-          import('./features/candidate/skill-analysis/skill-analysis.component')
-            .then(m => m.SkillAnalysisComponent)
-      },
-      {
-        path: 'applications',
-        loadComponent: () =>
-          import('./features/candidate/applications/applications.component')
-            .then(m => m.ApplicationsComponent)
-      },
-      {
-        path: 'companies',
-        loadComponent: () =>
-          import('./features/companies/companies.component')
-            .then(m => m.CompaniesComponent)
-      },
-      {
-        path: 'courses',
-        loadComponent: () =>
-          import('./features/courses/courses.component')
-            .then(m => m.CoursesComponent)
+          import('./features/candidate/skill-analysis/candidate-skill-analysis.component')
+            .then(m => m.CandidateSkillAnalysisComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
 
-  // ── Recruiter ──────────────────────────────────────────
+  // ── Recruiter ──────────────────────────────────────────────
   {
     path: 'recruiter',
     canActivate: [authGuard, roleGuard],
@@ -100,52 +96,28 @@ export const routes: Routes = [
             .then(m => m.RecruiterDashboardComponent)
       },
       {
-        path: 'post-job',
-        loadComponent: () =>
-          import('./features/recruiter/post-job/post-job.component')
-            .then(m => m.PostJobComponent)
-      },
-      {
         path: 'jobs',
         loadComponent: () =>
-          import('./features/recruiter/manage-jobs/manage-jobs.component')
-            .then(m => m.ManageJobsComponent)
+          import('./features/recruiter/jobs/recruiter-jobs.component')
+            .then(m => m.RecruiterJobsComponent)
       },
       {
-        path: 'jobs/:id/applicants',
+        path: 'post-job',
         loadComponent: () =>
-          import('./features/recruiter/applicants/applicants.component')
-            .then(m => m.ApplicantsComponent)
+          import('./features/recruiter/jobs/recruiter-jobs.component') // Placeholder
+            .then(m => m.RecruiterJobsComponent)
       },
       {
-        path: 'jobs/:id/edit',
+        path: 'applicants',
         loadComponent: () =>
-          import('./features/recruiter/edit-job/edit-job.component')
-            .then(m => m.EditJobComponent)
+          import('./features/recruiter/dashboard/recruiter-dashboard.component') // Placeholder
+            .then(m => m.RecruiterDashboardComponent)
       },
       {
         path: 'profile',
         loadComponent: () =>
           import('./features/recruiter/profile/recruiter-profile.component')
             .then(m => m.RecruiterProfileComponent)
-      },
-      {
-        path: 'applicants',
-        loadComponent: () =>
-          import('./features/recruiter/applicants/applicants.component')
-            .then(m => m.ApplicantsComponent)
-      },
-      {
-        path: 'notifications',
-        loadComponent: () =>
-          import('./features/recruiter/notifications/recruiter-notifications.component')
-            .then(m => m.RecruiterNotificationsComponent)
-      },
-      {
-        path: 'settings',
-        loadComponent: () =>
-          import('./features/recruiter/settings/recruiter-settings.component')
-            .then(m => m.RecruiterSettingsComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
@@ -183,9 +155,7 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        loadComponent: () =>
-          import('./features/admin/profile-admin/profile-admin.component')
-            .then(m => m.ProfileAdminComponent)
+        component: ProfileAdminComponent
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
@@ -198,21 +168,11 @@ export const routes: Routes = [
         .then(m => m.JobsListComponent)
   },
   {
-    path: 'jobs/:id',
-    loadComponent: () =>
-      import('./features/jobs/job-public-detail/job-public-detail.component')
-        .then(m => m.JobPublicDetailComponent)
-  },
-  {
-    path: 'companies',
-    loadComponent: () =>
-      import('./features/companies/companies.component')
-        .then(m => m.CompaniesComponent)
-  },
-  {
     path: 'courses',
     component: CoursesComponent
   },
-
-  { path: '**', redirectTo: '' }
+  {
+    path: '**',
+    component: NotFoundComponent
+  }
 ];

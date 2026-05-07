@@ -3,11 +3,15 @@ import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { RecruiterApproval } from '../../../core/models/admin.models';
+import { NotificationService } from '../../../core/services/notification.service';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-admin-recruiters',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
+
   templateUrl: './admin-recruiters.component.html',
   styleUrls: ['./admin-recruiters.component.scss']
 })
@@ -18,10 +22,19 @@ export class AdminRecruitersComponent implements OnInit {
   processingId = signal<number | null>(null);
   activeTab    = signal<'pending' | 'all'>('pending');
 
+  // Notification State
+  notificationModalOpen = signal(false);
+  notifyingRecruiter = signal<RecruiterApproval | null>(null);
+  notificationForm = { title: '', message: '' };
+  sendingNotification = signal(false);
+
+
   constructor(
     private service: AdminService,
-    private toast:   ToastService
+    private toast:   ToastService,
+    private notify:  NotificationService
   ) {}
+
 
   ngOnInit(): void { this.load(); }
 
@@ -87,5 +100,49 @@ export class AdminRecruitersComponent implements OnInit {
   switchTab(tab: 'pending' | 'all'): void {
     this.activeTab.set(tab);
     this.load();
+  }
+
+  // ── Custom Notification Logic ─────────────────────────────────
+
+  openNotificationModal(r: RecruiterApproval): void {
+    this.notifyingRecruiter.set(r);
+    this.notificationForm = { 
+      title: 'Message from Administrator', 
+      message: `Hi ${r.fullName.split(' ')[0]}, ` 
+    };
+    this.notificationModalOpen.set(true);
+  }
+
+  closeNotificationModal(): void {
+    this.notificationModalOpen.set(false);
+    this.notifyingRecruiter.set(null);
+  }
+
+  sendCustomNotification(): void {
+    const r = this.notifyingRecruiter();
+    if (!r) return;
+
+    if (!this.notificationForm.title || !this.notificationForm.message) {
+      this.toast.warning('Please fill in both title and message.');
+      return;
+    }
+
+    this.sendingNotification.set(true);
+    this.notify.sendNotification(r.userId, this.notificationForm.title, this.notificationForm.message)
+      .subscribe({
+        next: res => {
+          this.sendingNotification.set(false);
+          if (res.success) {
+            this.toast.success('Notification sent to recruiter.');
+            this.closeNotificationModal();
+          } else {
+            this.toast.error(res.message);
+          }
+        },
+        error: () => {
+          this.sendingNotification.set(false);
+          this.toast.error('Failed to send notification.');
+        }
+      });
   }
 }

@@ -73,19 +73,25 @@
             </div>
           </div>
 
-          <div class="card-actions" *ngIf="!r.isApproved">
-            <button class="btn-reject" 
-                    [disabled]="processingId() === r.userId"
-                    (click)="reject(r.userId)">
-              <i class="fa-solid fa-xmark"></i>
-              {{ processingId() === r.userId ? '...' : 'Reject' }}
+          <div class="card-actions">
+            <button class="btn-notify" (click)="openNotificationModal(r)" title="Notify Recruiter">
+              <i class="fa-solid fa-paper-plane"></i>
+              Notify
             </button>
-            <button class="btn-approve" 
-                    [disabled]="processingId() === r.userId"
-                    (click)="approve(r.userId)">
-              <i class="fa-solid fa-check"></i>
-              {{ processingId() === r.userId ? '...' : 'Approve Access' }}
-            </button>
+            <ng-container *ngIf="!r.isApproved">
+              <button class="btn-reject" 
+                      [disabled]="processingId() === r.userId"
+                      (click)="reject(r.userId)">
+                <i class="fa-solid fa-xmark"></i>
+                {{ processingId() === r.userId ? '...' : 'Reject' }}
+              </button>
+              <button class="btn-approve" 
+                      [disabled]="processingId() === r.userId"
+                      (click)="approve(r.userId)">
+                <i class="fa-solid fa-check"></i>
+                {{ processingId() === r.userId ? '...' : 'Approve Access' }}
+              </button>
+            </ng-container>
           </div>
 
         </div>
@@ -93,5 +99,40 @@
 
     </main>
 
+  </div>
+
+  <!-- ── Custom Notification Modal ── -->
+  <div class="modal-overlay" *ngIf="notificationModalOpen()">
+    <div class="notify-modal glass">
+      <header class="modal-header">
+        <div class="header-main">
+          <i class="fa-solid fa-paper-plane header-icon"></i>
+          <div>
+            <h3>Send Notification</h3>
+            <p>To: {{ notifyingRecruiter()?.companyName }} ({{ notifyingRecruiter()?.fullName }})</p>
+          </div>
+        </div>
+        <button class="btn-close" (click)="closeNotificationModal()"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" [(ngModel)]="notificationForm.title" placeholder="Notification Title" class="notify-input">
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea [(ngModel)]="notificationForm.message" rows="4" placeholder="Type your message here..." class="notify-input"></textarea>
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <button class="btn-secondary" (click)="closeNotificationModal()">Cancel</button>
+        <button class="btn-primary" (click)="sendCustomNotification()" [disabled]="sendingNotification()">
+          <span *ngIf="!sendingNotification()">Send Now</span>
+          <span *ngIf="sendingNotification()"><i class="fa-solid fa-circle-notch fa-spin"></i> Sending...</span>
+        </button>
+      </footer>
+    </div>
   </div>
 </div>

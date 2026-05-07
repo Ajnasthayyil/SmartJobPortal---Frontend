@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
+import { NotificationBellComponent } from '../notification-bell/notification-bell.component';
+
 @Component({
   selector: 'app-dashboard-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NotificationBellComponent],
   templateUrl: './dashboard-header.component.html',
   styleUrls: ['./dashboard-header.component.scss']
 })

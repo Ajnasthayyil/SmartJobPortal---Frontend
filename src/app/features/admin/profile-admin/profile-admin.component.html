@@ -1,118 +1,136 @@
-<div class="admin-profile-wrapper reveal">
-    <!-- Header Section -->
-    <header class="profile-hero">
-        <div class="hero-glass">
-            <div class="hero-content">
-                <div class="status-badge"><i class="fa-solid fa-shield-halved"></i> MASTER ADMINISTRATIVE ACCESS</div>
-                <h1 class="hero-title">Administrative <span>Profile</span></h1>
-                <p class="hero-desc">Securely manage your system credentials and executive information.</p>
-            </div>
-            <div class="hero-actions">
-                <button class="btn-sync" (click)="onSave()" [disabled]="saving()">
-                    <i class="fa-solid" [class.fa-rotate]="saving()" [class.fa-cloud-arrow-up]="!saving()"></i>
-                    <span>{{ saving() ? 'Synchronizing...' : 'Save Changes' }}</span>
-                </button>
-            </div>
-        </div>
-    </header>
+<div class="profile-page">
 
-    <div class="main-profile-grid">
-        <!-- Sidebar Card -->
-        <aside class="profile-sidebar">
-            <div class="glass-card identity-card">
-                <div class="avatar-container">
-                    <div class="avatar-wrapper">
-                        <img [src]="'assets/default-admin.png'" alt="Admin Avatar">
-                        <button class="edit-avatar"><i class="fa-solid fa-camera"></i></button>
-                    </div>
-                </div>
-                <div class="identity-info">
-                    <h2>{{ profile()?.fullName }}</h2>
-                    <span class="role-pill">Super Admin</span>
-                    <p class="email-text"><i class="fa-solid fa-envelope"></i> {{ profile()?.email }}</p>
-                </div>
-                <div class="activity-stats">
-                    <div class="stat-item">
-                        <span class="stat-val">2.4k</span>
-                        <span class="stat-label">Users</span>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <span class="stat-val">Active</span>
-                        <span class="stat-label">Status</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-card quick-links">
-                <h3>Quick Actions</h3>
-                <button class="action-link"><i class="fa-solid fa-key"></i> Reset Password</button>
-                <button class="action-link"><i class="fa-solid fa-shield-check"></i> Security Audit</button>
-                <button class="action-link danger"><i class="fa-solid fa-power-off"></i> Terminate Session</button>
-            </div>
-        </aside>
-
-        <!-- Main Content Form -->
-        <main class="profile-main-content">
-            <form [formGroup]="form" class="admin-form">
-                <div class="glass-card section-card">
-                    <div class="section-header">
-                        <i class="fa-solid fa-user-gear"></i>
-                        <h3>Account Credentials</h3>
-                    </div>
-                    
-                    <div class="input-grid">
-                        <div class="field-group full">
-                            <label>Full Legal Name</label>
-                            <div class="input-host">
-                                <i class="fa-solid fa-signature"></i>
-                                <input type="text" formControlName="fullName" placeholder="Enter full name">
-                            </div>
-                        </div>
-
-                        <div class="field-group">
-                            <label>Primary Email Address</label>
-                            <div class="input-host readonly">
-                                <i class="fa-solid fa-envelope-open-text"></i>
-                                <input type="email" formControlName="email">
-                            </div>
-                        </div>
-
-                        <div class="field-group">
-                            <label>Secure Phone Line</label>
-                            <div class="input-host">
-                                <i class="fa-solid fa-phone-lock"></i>
-                                <input type="text" formControlName="phoneNumber" placeholder="+1 (000) 000-0000">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card section-card">
-                    <div class="section-header">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <h3>Professional Context</h3>
-                    </div>
-
-                    <div class="input-grid">
-                        <div class="field-group full">
-                            <label>Work Address / Office Location</label>
-                            <div class="input-host">
-                                <i class="fa-solid fa-building-circle-check"></i>
-                                <input type="text" formControlName="address" placeholder="HQ Address">
-                            </div>
-                        </div>
-
-                        <div class="field-group full">
-                            <label>Professional Bio / Admin Notes</label>
-                            <div class="input-host textarea">
-                                <i class="fa-solid fa-quote-left"></i>
-                                <textarea formControlName="bio" rows="4" placeholder="Brief professional overview..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </main>
+  <!-- ── Loading Overlay ─────────────────────────── -->
+  <div class="loading-overlay" *ngIf="loading()">
+    <div class="spinner-container">
+      <div class="premium-spinner"></div>
+      <p>Synchronizing admin profile...</p>
     </div>
+  </div>
+
+  <ng-container *ngIf="!loading()">
+    
+    <!-- ── Profile Hero Section (Executive Style) ── -->
+    <div class="profile-hero">
+      <div class="hero-content">
+        <div class="avatar-wrapper" (click)="photoInput.click()">
+          <img *ngIf="profile()?.profilePictureUrl" [src]="profile()?.profilePictureUrl" class="avatar-img">
+          <div *ngIf="!profile()?.profilePictureUrl" class="avatar-placeholder">
+            {{ profile()?.fullName?.charAt(0) }}
+          </div>
+          <div class="avatar-edit"><i class="fa-solid fa-camera"></i></div>
+        </div>
+        
+        <div class="user-info">
+          <div class="badge">System Administrator</div>
+          <h1 class="user-name">{{ profile()?.fullName }}</h1>
+          <p class="user-headline">Principal Administrator • TalEx Ecosystem</p>
+          <div class="user-meta">
+            <span><i class="fa-solid fa-envelope"></i> {{ profile()?.email }}</span>
+            <span><i class="fa-solid fa-phone"></i> {{ profile()?.phoneNumber || 'No phone linked' }}</span>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn-primary" (click)="openEditModal()">
+            <i class="fa-solid fa-user-gear"></i> Edit Details
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <input #photoInput type="file" hidden accept="image/*" (change)="onPhotoSelect($event)" />
+
+    <div class="profile-layout">
+      
+      <!-- ── Left Column: Administrative Details ───── -->
+      <main class="profile-main">
+        
+        <section class="profile-section">
+          <h2 class="section-title">Personal Information</h2>
+          <div class="card read-only-card">
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Full Name</label>
+                <p>{{ profile()?.fullName }}</p>
+              </div>
+              <div class="info-item">
+                <label>Email Address</label>
+                <p>{{ profile()?.email }}</p>
+              </div>
+              <div class="info-item">
+                <label>Contact Number</label>
+                <p>{{ profile()?.phoneNumber || 'N/A' }}</p>
+              </div>
+              <div class="info-item">
+                <label>Account Status</label>
+                <p class="status-active"><i class="fa-solid fa-circle-check"></i> Active & Verified</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ── Right Column: System Context ──────────── -->
+      <aside class="profile-side">
+        <div class="card side-card context-card">
+          <h3 class="side-title">System Context</h3>
+          <div class="context-info">
+            <div class="context-item">
+              <span class="label">Access Level</span>
+              <span class="value high-access">Super Admin</span>
+            </div>
+            <div class="context-item">
+              <span class="label">Registered On</span>
+              <span class="value">{{ profile()?.createdAt | date:'longDate' }}</span>
+            </div>
+          </div>
+          <div class="context-note">
+            Your administrative profile is secured with enterprise-grade encryption and synchronized across the ecosystem.
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- ── Edit Modal ──────────────────────────────── -->
+    <div class="modal-overlay" *ngIf="isEditModalOpen()" (click)="closeEditModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()" [formGroup]="form">
+        <div class="modal-header">
+          <div class="header-info">
+            <h3>Update Administrator Details</h3>
+            <p>Update your personal information for system records.</p>
+          </div>
+          <button class="btn-close" (click)="closeEditModal()">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="premium-field">
+            <label>Full Name</label>
+            <input type="text" formControlName="fullName" placeholder="Enter your full name" />
+          </div>
+
+          <div class="premium-field">
+            <label>Email Address (Read-only)</label>
+            <input type="email" [value]="profile()?.email" readonly class="readonly-input" />
+          </div>
+
+          <div class="premium-field">
+            <label>Phone Number</label>
+            <input type="text" formControlName="phoneNumber" placeholder="Enter phone number" />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeEditModal()">Cancel</button>
+          <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
+            {{ saving() ? 'Synchronizing...' : 'Update Records' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
 </div>
