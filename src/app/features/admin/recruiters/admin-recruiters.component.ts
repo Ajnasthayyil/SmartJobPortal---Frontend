@@ -27,6 +27,10 @@ export class AdminRecruitersComponent implements OnInit {
   notifyingRecruiter = signal<RecruiterApproval | null>(null);
   notificationForm = { title: '', message: '' };
   sendingNotification = signal(false);
+  
+  // Details Modal State
+  detailsModalOpen = signal(false);
+  selectedRecruiter = signal<RecruiterApproval | null>(null);
 
 
   constructor(
@@ -97,6 +101,44 @@ export class AdminRecruitersComponent implements OnInit {
     });
   }
 
+  block(userId: number): void {
+    this.processingId.set(userId);
+    this.service.blockUser(userId).subscribe({
+      next: res => {
+        this.processingId.set(null);
+        if (res.success) {
+          this.toast.success('Recruiter blocked successfully.');
+          this.load();
+        } else {
+          this.toast.error(res.message);
+        }
+      },
+      error: () => {
+        this.processingId.set(null);
+        this.toast.error('Failed to block recruiter.');
+      }
+    });
+  }
+
+  unblock(userId: number): void {
+    this.processingId.set(userId);
+    this.service.unblockUser(userId).subscribe({
+      next: res => {
+        this.processingId.set(null);
+        if (res.success) {
+          this.toast.success('Recruiter unblocked successfully.');
+          this.load();
+        } else {
+          this.toast.error(res.message);
+        }
+      },
+      error: () => {
+        this.processingId.set(null);
+        this.toast.error('Failed to unblock recruiter.');
+      }
+    });
+  }
+
   switchTab(tab: 'pending' | 'all'): void {
     this.activeTab.set(tab);
     this.load();
@@ -144,5 +186,17 @@ export class AdminRecruitersComponent implements OnInit {
           this.toast.error('Failed to send notification.');
         }
       });
+  }
+
+  // ── Details Modal Logic ──────────────────────────────────────
+  
+  openDetailsModal(r: RecruiterApproval): void {
+    this.selectedRecruiter.set(r);
+    this.detailsModalOpen.set(true);
+  }
+
+  closeDetailsModal(): void {
+    this.detailsModalOpen.set(false);
+    this.selectedRecruiter.set(null);
   }
 }

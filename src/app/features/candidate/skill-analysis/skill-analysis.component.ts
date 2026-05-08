@@ -45,11 +45,14 @@ export class SkillAnalysisComponent implements OnInit {
             if (j.requiredSkills && Array.isArray(j.requiredSkills) && j.requiredSkills.length > 0) {
               requiredSkills = j.requiredSkills.map((s: string) => s.toLowerCase());
             } else {
-              // 2. Fallback to extracting common tech from description
+              // 2. Fallback to extracting common skills from description
               const commonTech = [
                 'c#', '.net', 'sql', 'react', 'angular', 'node', 'javascript', 'typescript', 
-                'css', 'html', 'python', 'java', 'aws', 'azure', 'docker', 'kubernetes',
-                'fullstack', 'frontend', 'backend', 'devops', 'mobile', 'flutter'
+                'python', 'java', 'aws', 'azure', 'docker', 'kubernetes',
+                'communication', 'management', 'leadership', 'sales', 'marketing', 
+                'hr', 'recruitment', 'administration', 'finance', 'accounting',
+                'teaching', 'counseling', 'advising', 'planning', 'analysis', 'ms office',
+                'excel', 'customer service', 'project management', 'operations'
               ];
               requiredSkills = commonTech.filter(tech => desc.includes(tech));
             }
@@ -61,20 +64,26 @@ export class SkillAnalysisComponent implements OnInit {
             const missingSkills = requiredSkills.filter(s => !userSkills.includes(s));
             
             // Calculate match percentage
-            const matchPercentage = requiredSkills.length > 0 
-              ? Math.round((matchedSkills.length / requiredSkills.length) * 100)
-              : 50;
+            let matchPercentage = 50;
+            if (requiredSkills.length > 0) {
+                matchPercentage = Math.round((matchedSkills.length / requiredSkills.length) * 100);
+            }
+
+            let insight = 'No specific skills listed for this role.';
+            if (requiredSkills.length > 0) {
+                insight = missingSkills.length > 0 
+                    ? `Highly requested for this ${j.title} role.`
+                    : 'You have a perfect core match for this position!';
+            }
 
             return {
               title: j.title,
               company: j.companyName || 'Local Tech Partner',
               location: j.location || 'Not Specified',
-              matchPercentage: Math.max(matchPercentage, 30), // Minimum 30% to avoid empty UI
+              matchPercentage: Math.max(matchPercentage, 30), 
               matchedSkills: matchedSkills.map(s => s.toUpperCase()),
               missingSkills: missingSkills.map(s => s.toUpperCase()),
-              missingInsight: missingSkills.length > 0 
-                ? `Highly requested for this ${j.title} role.`
-                : 'You have a perfect core match for this position!'
+              missingInsight: insight
             };
           });
 

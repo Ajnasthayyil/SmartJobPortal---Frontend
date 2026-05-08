@@ -8,9 +8,11 @@ let isRefreshing = false;
 let refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
 export const jwtInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
-  const auth   = inject(AuthService);
   const router = inject(Router);
-  const token  = auth.getToken();
+  
+  // Lazily inject AuthService to break circular dependency
+  const auth = inject(AuthService);
+  const token = auth.getToken();
 
   // Attach token and withCredentials (required to send cookies to the backend)
   let authReq = req.clone({

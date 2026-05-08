@@ -25,7 +25,8 @@ export class AuthService {
     private notifications: NotificationService
   ) {
     if (this.isLoggedIn()) {
-      this.notifications.startPolling();
+      // Defer polling to break circular dependency with HttpClient/Interceptors
+      setTimeout(() => this.notifications.startPolling(), 0);
     }
   }
 

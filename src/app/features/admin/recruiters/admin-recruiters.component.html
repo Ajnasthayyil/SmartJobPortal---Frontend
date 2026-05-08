@@ -49,8 +49,11 @@
             <div class="company-brand">
               <div class="logo-box">{{ r.companyName.charAt(0) }}</div>
               <div class="brand-info">
-                <h3 class="company-name">{{ r.companyName }}</h3>
-                <span class="website">{{ r.website || 'No website provided' }}</span>
+                <h3 class="company-name" (click)="openDetailsModal(r)" title="View Details">{{ r.companyName }}</h3>
+                <a [href]="r.website.startsWith('http') ? r.website : 'https://' + r.website" target="_blank" class="website" *ngIf="r.website">
+                  <i class="fa-solid fa-link"></i> {{ r.website }}
+                </a>
+                <span class="website no-link" *ngIf="!r.website">No website provided</span>
               </div>
             </div>
 
@@ -67,8 +70,12 @@
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <span>Applied {{ r.registeredAt | date:'MMM d, y' }}</span>
               </div>
-              <div class="status-pill" [class.approved]="r.isApproved">
-                {{ r.isApproved ? 'Verified Partner' : 'Verification Pending' }}
+              <div class="status-pill" 
+                   [class.approved]="r.isApproved && r.isActive" 
+                   [class.blocked]="!r.isActive"
+                   [class.pending]="!r.isApproved && r.isActive">
+                <i class="fa-solid" [class.fa-check-circle]="r.isApproved && r.isActive" [class.fa-ban]="!r.isActive" [class.fa-clock]="!r.isApproved && r.isActive"></i>
+                {{ !r.isActive ? 'Account Blocked' : (r.isApproved ? 'Verified Partner' : 'Verification Pending') }}
               </div>
             </div>
           </div>
@@ -78,6 +85,8 @@
               <i class="fa-solid fa-paper-plane"></i>
               Notify
             </button>
+
+            <!-- Case: Pending Approval -->
             <ng-container *ngIf="!r.isApproved">
               <button class="btn-reject" 
                       [disabled]="processingId() === r.userId"
@@ -89,7 +98,25 @@
                       [disabled]="processingId() === r.userId"
                       (click)="approve(r.userId)">
                 <i class="fa-solid fa-check"></i>
-                {{ processingId() === r.userId ? '...' : 'Approve Access' }}
+                {{ processingId() === r.userId ? '...' : 'Approve' }}
+              </button>
+            </ng-container>
+
+            <!-- Case: Approved (Verified) - Show Block/Unblock -->
+            <ng-container *ngIf="r.isApproved">
+              <button *ngIf="r.isActive" 
+                      class="btn-block" 
+                      [disabled]="processingId() === r.userId"
+                      (click)="block(r.userId)">
+                <i class="fa-solid fa-ban"></i>
+                {{ processingId() === r.userId ? '...' : 'Block' }}
+              </button>
+              <button *ngIf="!r.isActive" 
+                      class="btn-unblock" 
+                      [disabled]="processingId() === r.userId"
+                      (click)="unblock(r.userId)">
+                <i class="fa-solid fa-unlock"></i>
+                {{ processingId() === r.userId ? '...' : 'Unblock' }}
               </button>
             </ng-container>
           </div>
@@ -132,6 +159,65 @@
           <span *ngIf="!sendingNotification()">Send Now</span>
           <span *ngIf="sendingNotification()"><i class="fa-solid fa-circle-notch fa-spin"></i> Sending...</span>
         </button>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- ── Company Details Modal ── -->
+  <div class="modal-overlay" *ngIf="detailsModalOpen()">
+    <div class="details-modal glass">
+      <header class="modal-header">
+        <div class="header-main">
+          <div class="modal-logo">{{ selectedRecruiter()?.companyName?.charAt(0) }}</div>
+          <div>
+            <h3>{{ selectedRecruiter()?.companyName }}</h3>
+            <p>Platform Partner since {{ selectedRecruiter()?.registeredAt | date:'MMMM y' }}</p>
+          </div>
+        </div>
+        <button class="btn-close" (click)="closeDetailsModal()"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+
+      <div class="modal-body">
+        <div class="details-grid">
+          <div class="detail-item">
+            <label>Industry</label>
+            <p>{{ selectedRecruiter()?.industry || 'Not Specified' }}</p>
+          </div>
+          <div class="detail-item">
+            <label>Location</label>
+            <p>{{ selectedRecruiter()?.location || 'Not Specified' }}</p>
+          </div>
+          <div class="detail-item full">
+            <label>Website</label>
+            <p>
+              <a [href]="selectedRecruiter()?.website" target="_blank" *ngIf="selectedRecruiter()?.website">
+                {{ selectedRecruiter()?.website }}
+              </a>
+              <span *ngIf="!selectedRecruiter()?.website">No website listed</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="about-section" *ngIf="selectedRecruiter()?.description">
+          <h4>About Company</h4>
+          <p class="description-text">{{ selectedRecruiter()?.description }}</p>
+        </div>
+
+        <div class="representative-section">
+          <h4>Authorized Representative</h4>
+          <div class="rep-card">
+            <div class="rep-avatar"><i class="fa-solid fa-user-tie"></i></div>
+            <div class="rep-info">
+              <p class="name">{{ selectedRecruiter()?.fullName }}</p>
+              <p class="email">{{ selectedRecruiter()?.email }}</p>
+              <p class="phone" *ngIf="selectedRecruiter()?.phoneNumber">{{ selectedRecruiter()?.phoneNumber }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <button class="btn-secondary" (click)="closeDetailsModal()">Close Details</button>
       </footer>
     </div>
   </div>

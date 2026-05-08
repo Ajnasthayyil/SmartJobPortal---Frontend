@@ -52,6 +52,7 @@ export interface RecruiterApproval {
   industry: string;
   location: string;
   website: string;
+  description: string;
   isApproved: boolean;
   isActive: boolean;
   registeredAt: string;
