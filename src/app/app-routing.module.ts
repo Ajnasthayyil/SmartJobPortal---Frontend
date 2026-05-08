@@ -9,7 +9,7 @@ import { CandidateDashboardComponent } from './features/candidate/dashboard/cand
 import { RecruiterDashboardComponent } from './features/recruiter/dashboard/recruiter-dashboard.component';
 import { AdminDashboardComponent } from './features/admin/dashboard/admin-dashboard.component';
 import { CandidateProfileComponent } from './features/candidate/profile/candidate-profile.component';
-import { AdminUsersComponent } from './features/admin/users/admin-users.component';
+import { AdminCandidatesComponent } from './features/admin/candidates/admin-candidates.component';
 import { AdminRecruitersComponent } from './features/admin/recruiters/admin-recruiters.component';
 import { AdminJobsComponent } from './features/admin/jobs/admin-jobs.component';
 import { JobsListComponent } from './features/jobs/jobs-list/jobs-list.component';
@@ -84,7 +84,7 @@ const routes: Routes = [
     data: { roles: ['Admin'] },
     children: [
       { path: 'dashboard', component: AdminDashboardComponent },
-      { path: 'users', component: AdminUsersComponent },
+      { path: 'candidates', component: AdminCandidatesComponent },
       { path: 'recruiters', component: AdminRecruitersComponent },
       { path: 'jobs', component: AdminJobsComponent },
       { path: 'profile', component: ProfileAdminComponent }, // ✅ CONNECTED!

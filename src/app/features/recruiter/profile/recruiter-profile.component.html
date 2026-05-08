@@ -98,23 +98,26 @@
         </div>
 
         <div class="modal-body">
-          <div class="premium-field">
+          <div class="premium-field" [class.has-error]="form.get('companyName')?.invalid && form.get('companyName')?.touched">
             <label>Company Name</label>
             <input type="text" formControlName="companyName" placeholder="Enter company name" />
+            <span class="error-msg" *ngIf="form.get('companyName')?.errors?.['required'] && form.get('companyName')?.touched">Company name is required.</span>
           </div>
 
           <div class="form-row">
-            <div class="premium-field">
+            <div class="premium-field" [class.has-error]="form.get('industry')?.invalid && form.get('industry')?.touched">
               <label>Industry</label>
               <input type="text" formControlName="industry" placeholder="e.g. Technology" />
+              <span class="error-msg" *ngIf="form.get('industry')?.invalid && form.get('industry')?.touched">Industry is required.</span>
             </div>
-            <div class="premium-field">
+            <div class="premium-field" [class.has-error]="form.get('website')?.invalid && form.get('website')?.touched">
               <label>Website</label>
-              <input type="text" formControlName="website" placeholder="https://company.com" />
+              <input type="text" formControlName="website" placeholder="www.company.com" />
+              <span class="error-msg" *ngIf="form.get('website')?.invalid && form.get('website')?.touched">Please enter a valid URL.</span>
             </div>
           </div>
 
-          <div class="premium-field">
+          <div class="premium-field" [class.has-error]="form.get('location')?.invalid && form.get('location')?.touched">
             <label>Location</label>
             <select formControlName="location">
               <option value="" disabled selected>Select State</option>
@@ -122,11 +125,14 @@
                 <option [value]="state">{{ state }}</option>
               </ng-container>
             </select>
+            <span class="error-msg" *ngIf="form.get('location')?.invalid && form.get('location')?.touched">Location is required.</span>
           </div>
 
-          <div class="premium-field">
+          <div class="premium-field" [class.has-error]="form.get('description')?.invalid && form.get('description')?.touched">
             <label>About Company</label>
             <textarea formControlName="description" placeholder="Describe your company culture, mission..." rows="6"></textarea>
+            <span class="error-msg" *ngIf="form.get('description')?.errors?.['required'] && form.get('description')?.touched">Description is required.</span>
+            <span class="error-msg" *ngIf="form.get('description')?.errors?.['minlength'] && form.get('description')?.touched">About section must be at least 50 characters.</span>
           </div>
         </div>
 

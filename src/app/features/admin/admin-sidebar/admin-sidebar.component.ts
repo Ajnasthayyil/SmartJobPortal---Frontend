@@ -31,8 +31,8 @@ export class AdminSidebarComponent {
       items: [
         { path: "/", iconClass: "fa-solid fa-house", label: "Home Page" },
         { path: "/admin/dashboard", iconClass: "fa-solid fa-gauge-high", label: "Dashboard" },
-        { path: "/admin/users", iconClass: "fa-solid fa-users-gear", label: "User Management" },
-        { path: "/admin/recruiters", iconClass: "fa-solid fa-user-check", label: "Recruiter Approvals" },
+        { path: "/admin/candidates", iconClass: "fa-solid fa-users", label: "Candidate Management" },
+        { path: "/admin/recruiters", iconClass: "fa-solid fa-user-check", label: "Recruiter Management" },
       ]
     },
     {

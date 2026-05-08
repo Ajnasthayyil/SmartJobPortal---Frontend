@@ -6,13 +6,13 @@ import { ToastService } from '../../../core/services/toast.service';
 import { UserListItem } from '../../../core/models/admin.models';
 
 @Component({
-  selector: 'app-admin-users',
+  selector: 'app-admin-candidates',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './admin-users.component.html',
-  styleUrls: ['./admin-users.component.scss']
+  templateUrl: './admin-candidates.component.html',
+  styleUrls: ['./admin-candidates.component.scss']
 })
-export class AdminUsersComponent implements OnInit {
+export class AdminCandidatesComponent implements OnInit {
 
   users      = signal<UserListItem[]>([]);
   filtered   = signal<UserListItem[]>([]);
@@ -20,7 +20,7 @@ export class AdminUsersComponent implements OnInit {
   processing = signal<number | null>(null);
 
   search     = '';
-  roleFilter = '';
+  roleFilter = 'Candidate';
   statusFilter = '';
 
   constructor(

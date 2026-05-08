@@ -11,8 +11,8 @@
     <!-- ── Header Section ─────────────────────────────────── -->
     <header class="page-header reveal">
       <div class="header-left">
-        <h1 class="page-title">User Ecosystem</h1>
-        <p class="page-sub">Audit participants, manage access levels, and maintain security.</p>
+        <h1 class="page-title">Candidate Ecosystem</h1>
+        <p class="page-sub">Manage talent accounts, monitor activity, and maintain community standards.</p>
       </div>
       <div class="header-stats" *ngIf="!loading()">
         <div class="quick-stat glass">
@@ -33,14 +33,9 @@
       </div>
 
       <div class="filter-group">
-        <div class="select-wrap">
+        <div class="select-wrap readonly">
           <i class="fa-solid fa-user-tag"></i>
-          <select [(ngModel)]="roleFilter" (change)="load()">
-            <option value="">All Roles</option>
-            <option value="Admin">Administrators</option>
-            <option value="Recruiter">Recruiters</option>
-            <option value="Candidate">Candidates</option>
-          </select>
+          <span class="static-label">Role: Candidates</span>
         </div>
 
         <div class="select-wrap">

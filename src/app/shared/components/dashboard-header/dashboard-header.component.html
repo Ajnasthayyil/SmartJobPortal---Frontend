@@ -14,7 +14,7 @@
       </button>
 
       <!-- Notifications -->
-      <app-notification-bell></app-notification-bell>
+      <app-notification-bell *ngIf="authService.currentUser()?.role !== 'Admin'"></app-notification-bell>
 
       <!-- Profile Dropdown Trigger -->
       <div class="profile-dropdown">

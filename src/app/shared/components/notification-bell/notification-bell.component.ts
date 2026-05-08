@@ -87,7 +87,7 @@ import { NotificationCenterComponent } from '../notification-center/notification
     }
     .bell-btn:hover { background: #e5e7eb; }
     .bell-btn.has-unread {
-      background: #fef3c7; color: #d97706;
+      background: #fff7ed; color: #f97316;
       animation: bellRing 1.5s ease infinite;
     }
     .bell-badge {
@@ -116,7 +116,7 @@ import { NotificationCenterComponent } from '../notification-center/notification
       font-size: 14px; font-weight: 700; color: #0a0a0a;
     }
     .mark-all-btn {
-      font-size: 11px; font-weight: 600; color: #f59e0b;
+      font-size: 11px; font-weight: 600; color: #f97316;
       background: none; border: none; cursor: pointer;
       font-family: 'Outfit', sans-serif;
     }
@@ -128,8 +128,8 @@ import { NotificationCenterComponent } from '../notification-center/notification
       cursor: pointer; transition: background .2s;
       border-bottom: 1px solid #f9fafb; position: relative;
     }
-    .notif-item:hover { background: #fffbf0; }
-    .notif-item.unread { background: #fffbf0; }
+    .notif-item:hover { background: #fffaf5; }
+    .notif-item.unread { background: #fffaf5; }
     .notif-icon {
       font-size: 20px; flex-shrink: 0; width: 32px;
       height: 32px; display: flex; align-items: center; justify-content: center;
@@ -150,7 +150,7 @@ import { NotificationCenterComponent } from '../notification-center/notification
     }
     .unread-dot {
       width: 8px; height: 8px; border-radius: 50%;
-      background: #f59e0b; flex-shrink: 0; margin-top: 4px;
+      background: #f97316; flex-shrink: 0; margin-top: 4px;
     }
     .empty-notif {
       display: flex; flex-direction: column; align-items: center;
@@ -162,7 +162,7 @@ import { NotificationCenterComponent } from '../notification-center/notification
     }
     .view-all-btn {
       width: 100%; padding: 8px; border: none; background: none;
-      font-size: 12px; font-weight: 600; color: #f59e0b;
+      font-size: 12px; font-weight: 600; color: #f97316;
       cursor: pointer; text-decoration: none;
       &:hover { text-decoration: underline; }
     }

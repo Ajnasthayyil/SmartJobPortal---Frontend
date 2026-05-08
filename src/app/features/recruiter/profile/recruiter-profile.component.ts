@@ -42,7 +42,7 @@ export class RecruiterProfileComponent implements OnInit {
     this.form = this.fb.group({
       companyName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(150)]],
       industry:    ['', Validators.required],
-      website:     ['', [Validators.pattern('https?://.+')]],
+      website:     ['', [Validators.pattern('^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$')]],
       location:    ['', Validators.required],
       description: ['', [Validators.required, Validators.minLength(50), Validators.maxLength(1000)]]
     });
