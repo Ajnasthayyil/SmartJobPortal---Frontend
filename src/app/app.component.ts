@@ -1,46 +1,72 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import { SidebarService } from './core/services/sidebar.service';
+
 import { ToastContainerComponent } from './shared/components/toast/toast-container.component';
 
 @Component({
   selector: 'app-root',
   template: `
-    <div class="layout-container" [class.has-sidebar]="showSidebar()" [class.sidebar-expanded]="sidebarService.isExpanded()">
+    <div class="layout-container" 
+         [class.has-sidebar]="showSidebar() && !isFullPage" 
+         [class.sidebar-expanded]="sidebarService.isExpanded() && !isFullPage">
+      
       <!-- Dashboard Header -->
-      <ng-container *ngIf="isAuthPage()">
+      <ng-container *ngIf="isAuthPage() && !isFullPage">
         <app-dashboard-header></app-dashboard-header>
       </ng-container>
 
       <!-- Public Navbar -->
-      <ng-container *ngIf="isPublicPage()">
+      <ng-container *ngIf="isPublicPage() && !isFullPage">
         <app-public-navbar></app-public-navbar>
       </ng-container>
 
       <!-- Sidebar -->
-      <app-candidate-sidebar *ngIf="isCandidate()"></app-candidate-sidebar>
-      <app-recruiter-sidebar *ngIf="isRecruiter()"></app-recruiter-sidebar>
-      <app-admin-sidebar *ngIf="isAdmin()"></app-admin-sidebar>
+      <app-candidate-sidebar *ngIf="isCandidate() && !isFullPage"></app-candidate-sidebar>
+      <app-recruiter-sidebar *ngIf="isRecruiter() && !isFullPage"></app-recruiter-sidebar>
+      <app-admin-sidebar *ngIf="isAdmin() && !isFullPage"></app-admin-sidebar>
 
       <!-- Main Content -->
-      <main>
+      <main [class.full-page]="isFullPage">
         <router-outlet></router-outlet>
       </main>
     </div>
 
     <!-- Footer -->
-    <ng-container *ngIf="isPublicPage()">
+    <ng-container *ngIf="isPublicPage() && !isFullPage">
       <app-footer></app-footer>
     </ng-container>
 
     <!-- Global Toast Notifications -->
     <app-toast-container></app-toast-container>
+
+
   `,
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(private router: Router, public sidebarService: SidebarService) {}
+  isFullPage = false;
+
+  constructor(
+    private router: Router, 
+    private activatedRoute: ActivatedRoute,
+    public sidebarService: SidebarService
+  ) {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => this.activatedRoute),
+      map(route => {
+        while (route.firstChild) route = route.firstChild;
+        return route;
+      }),
+      mergeMap(route => route.data)
+    ).subscribe(data => {
+      this.isFullPage = data['fullPage'] === true;
+    });
+  }
+
 
   showSidebar(): boolean {
     return this.isCandidate() || this.isRecruiter() || this.isAdmin();

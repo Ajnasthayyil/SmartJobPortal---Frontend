@@ -1,6 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { SignalrService } from './signalr.service';
+import { ToastService } from './toast.service';
+
 
 export interface Notification {
   notificationId: number;
@@ -22,28 +25,39 @@ export class NotificationService {
   unreadCount  = signal(0);
   notifications = signal<Notification[]>([]);
 
-  private pollInterval: any;
-
-  constructor(private http: HttpClient) {}
-
-  // Start polling when user logs in
-  startPolling(): void {
-    this.fetchUnreadCount();
-    // Poll every 30 seconds
-    this.pollInterval = setInterval(
-      () => this.fetchUnreadCount(), 30_000
-    );
+  constructor(
+    private http: HttpClient,
+    private signalr: SignalrService,
+    private toast: ToastService
+  ) {
+    this.signalr.notificationReceived$.subscribe(data => {
+      this.handleIncomingNotification(data);
+    });
   }
 
-  // Stop polling on logout
-  stopPolling(): void {
-    if (this.pollInterval) {
-      clearInterval(this.pollInterval);
-      this.pollInterval = null;
-    }
+  private handleIncomingNotification(data: any): void {
+    // Add to top of notifications list
+    this.notifications.update(list => [data, ...list]);
+    // Increment unread count
+    this.unreadCount.update(c => c + 1);
+    // Show toast
+    this.toast.info(`${data.title}: ${data.message}`);
+  }
+
+
+  // Start SignalR connection (called on login)
+  startRealTime(token: string): void {
+    this.fetchUnreadCount();
+    this.signalr.startConnection(token);
+  }
+
+  // Stop SignalR connection (called on logout)
+  stopRealTime(): void {
+    this.signalr.stopConnection();
     this.unreadCount.set(0);
     this.notifications.set([]);
   }
+
 
   fetchUnreadCount(): void {
     this.http.get<any>(`${this.api}/unread-count`)

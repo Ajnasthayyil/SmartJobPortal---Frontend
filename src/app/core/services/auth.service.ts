@@ -25,9 +25,13 @@ export class AuthService {
     private notifications: NotificationService
   ) {
     if (this.isLoggedIn()) {
-      // Defer polling to break circular dependency with HttpClient/Interceptors
-      setTimeout(() => this.notifications.startPolling(), 0);
+      // Defer SignalR connection to break circular dependency
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        setTimeout(() => this.notifications.startRealTime(token), 0);
+      }
     }
+
   }
 
   login(request: LoginRequest): Observable<ApiResponse<AuthResponse>> {
@@ -51,7 +55,7 @@ export class AuthService {
               localStorage.setItem('authUser', JSON.stringify(session));
               this.currentUser.set(session);
               this.isLoggedIn.set(true);
-              this.notifications.startPolling(); 
+              this.notifications.startRealTime(token); 
 
             }
           }
@@ -84,7 +88,8 @@ export class AuthService {
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
     this.toast.info('Logged out successfully.');
-    this.notifications.stopPolling();
+    this.notifications.stopRealTime();
+
     this.router.navigate(['/login']);
   }
 

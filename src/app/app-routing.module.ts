@@ -91,7 +91,8 @@ const routes: Routes = [
     ]
   },
 
-  { path: '**', component: NotFoundComponent } // ✅ CONNECTED!
+  { path: '**', component: NotFoundComponent, data: { fullPage: true } } 
+
 ];
 
 @NgModule({
