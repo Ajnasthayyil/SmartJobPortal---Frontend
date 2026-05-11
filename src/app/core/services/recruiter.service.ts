@@ -62,4 +62,8 @@ export class RecruiterService {
   getApplicantsAcrossAllJobs(): Observable<ApiResponse<ApplicantResponse[]>> {
     return this.http.get<ApiResponse<ApplicantResponse[]>>(`${this.api}/applicants`);
   }
+
+  getCandidateProfile(candidateUserId: number): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.api}/candidates/${candidateUserId}/profile`);
+  }
 }

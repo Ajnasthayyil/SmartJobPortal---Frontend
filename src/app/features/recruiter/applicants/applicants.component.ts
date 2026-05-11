@@ -33,6 +33,11 @@ export class ApplicantsComponent implements OnInit {
   notifyingApplicant = signal<ApplicantResponse | null>(null);
   notificationForm = { title: '', message: '' };
   sendingNotification = signal(false);
+  
+  // Profile Modal State
+  profileModalOpen = signal(false);
+  selectedCandidate = signal<any | null>(null);
+  loadingProfile = signal(false);
 
 
   readonly categories: ('All' | 'New' | 'Screening' | 'Interview' | 'Shortlisted')[] = 
@@ -268,5 +273,37 @@ export class ApplicantsComponent implements OnInit {
           this.toast.error('Failed to send notification.');
         }
       });
+  }
+
+  openProfileModal(app: ApplicantResponse): void {
+    this.loadingProfile.set(true);
+    this.profileModalOpen.set(true);
+    this.selectedCandidate.set(null);
+
+    this.service.getCandidateProfile(app.candidateUserId).subscribe({
+      next: res => {
+        this.loadingProfile.set(false);
+        if (res.success) {
+          // Merge application-specific data (like cover note) with general profile
+          this.selectedCandidate.set({
+            ...res.data,
+            coverNote: app.coverNote
+          });
+        } else {
+          this.toast.error(res.message);
+          this.closeProfileModal();
+        }
+      },
+      error: () => {
+        this.loadingProfile.set(false);
+        this.toast.error('Failed to load candidate profile');
+        this.closeProfileModal();
+      }
+    });
+  }
+
+  closeProfileModal(): void {
+    this.profileModalOpen.set(false);
+    this.selectedCandidate.set(null);
   }
 }

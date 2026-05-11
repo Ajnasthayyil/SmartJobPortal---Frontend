@@ -61,7 +61,7 @@
               </div>
               <div class="info-body">
                 <div class="name-row">
-                  <h3 class="candidate-name">{{ app.fullName }}</h3>
+                  <h3 class="candidate-name" (click)="openProfileModal(app)">{{ app.fullName }}</h3>
                   <span class="match-chip">
                     <i class="fa-solid fa-star"></i> {{ app.totalScore || 0 }}% Match
                   </span>
@@ -167,6 +167,145 @@
           <span *ngIf="sendingNotification()"><i class="fa-solid fa-circle-notch fa-spin"></i> Sending...</span>
         </button>
       </footer>
+    </div>
+  </div>
+
+  <!-- ── LinkedIn-Style Candidate Profile Modal ── -->
+  <div class="modal-overlay profile-modal-overlay" *ngIf="profileModalOpen()" (click)="closeProfileModal()">
+    <div class="profile-modal" (click)="$event.stopPropagation()">
+      
+      <!-- Close Button -->
+      <button class="btn-close-modal" (click)="closeProfileModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Loading State -->
+      <div class="modal-loading" *ngIf="loadingProfile()">
+        <div class="spinner"></div>
+        <p>Fetching candidate profile...</p>
+      </div>
+
+      <ng-container *ngIf="!loadingProfile() && selectedCandidate() as profile">
+        <!-- Executive Report Header -->
+        <header class="profile-executive-header">
+          <div class="header-main">
+            <div class="name-block">
+              <h2 class="candidate-name">{{ profile.fullName }}</h2>
+              <p class="candidate-headline">{{ profile.headline || 'Professional Candidate' }}</p>
+            </div>
+            <div class="experience-badge">
+              <span class="exp-val">{{ profile.experienceYears }}</span>
+              <span class="exp-label">Years Exp.</span>
+            </div>
+          </div>
+          
+          <div class="header-details-row">
+            <div class="info-tag">
+              <i class="fa-solid fa-envelope"></i>
+              <span>{{ profile.email }}</span>
+            </div>
+            <div class="info-tag" *ngIf="profile.phoneNumber">
+              <i class="fa-solid fa-phone"></i>
+              <span>{{ profile.phoneNumber }}</span>
+            </div>
+            <div class="info-tag">
+              <i class="fa-solid fa-location-dot"></i>
+              <span>{{ profile.location || 'Not Specified' }}</span>
+            </div>
+          </div>
+        </header>
+
+        <div class="profile-body">
+          <!-- Cover Letter (Premium Box) -->
+          <section class="profile-section" *ngIf="profile.coverNote">
+            <div class="section-header">
+              <i class="fa-solid fa-file-lines"></i>
+              <h3>Cover Letter</h3>
+            </div>
+            <div class="premium-text-card cover-letter-card">
+              {{ profile.coverNote }}
+            </div>
+          </section>
+
+          <!-- Summary -->
+          <section class="profile-section" *ngIf="profile.summary">
+            <div class="section-header">
+              <i class="fa-solid fa-user-tie"></i>
+              <h3>Professional Summary</h3>
+            </div>
+            <div class="premium-text-card">
+              <p>{{ profile.summary }}</p>
+            </div>
+          </section>
+
+          <!-- Experience Section -->
+          <section class="profile-section">
+            <div class="section-header">
+              <i class="fa-solid fa-briefcase"></i>
+              <h3>Work Experience</h3>
+            </div>
+            <div class="timeline" *ngIf="profile.workExperience?.length; else noExp">
+              <div class="timeline-item" *ngFor="let exp of profile.workExperience">
+                <div class="item-icon"><i class="fa-solid fa-briefcase"></i></div>
+                <div class="item-content">
+                  <h4>{{ exp.role }}</h4>
+                  <span class="sub-text">{{ exp.company }}</span>
+                  <span class="duration">{{ exp.duration }}</span>
+                  <p class="desc" *ngIf="exp.description">{{ exp.description }}</p>
+                </div>
+              </div>
+            </div>
+            <ng-template #noExp><p class="empty-msg">No work experience listed.</p></ng-template>
+          </section>
+
+          <!-- Education Section -->
+          <section class="profile-section">
+            <div class="section-header">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <h3>Academic Background</h3>
+            </div>
+            <div class="timeline" *ngIf="profile.education?.length; else noEdu">
+              <div class="timeline-item" *ngFor="let edu of profile.education">
+                <div class="item-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="item-content">
+                  <h4>{{ edu.degree }}</h4>
+                  <span class="sub-text">{{ edu.institution }}</span>
+                  <span class="duration">{{ edu.graduationYear }}</span>
+                </div>
+              </div>
+            </div>
+            <ng-template #noEdu><p class="empty-msg">No education details listed.</p></ng-template>
+          </section>
+
+          <!-- Skills Section -->
+          <section class="profile-section">
+            <div class="section-header">
+              <i class="fa-solid fa-star"></i>
+              <h3>Core Competencies</h3>
+            </div>
+            <div class="premium-skills-grid" *ngIf="profile.skills?.length; else noSkills">
+              <div class="skill-tag" *ngFor="let s of profile.skills">
+                <span class="s-name">{{ s.skillName }}</span>
+                <span class="s-level">{{ s.level }}</span>
+              </div>
+            </div>
+            <ng-template #noSkills><p class="empty-msg">No skills listed.</p></ng-template>
+          </section>
+        </div>
+
+        <div class="profile-premium-footer">
+          <button class="btn-close-profile" (click)="closeProfileModal()">
+            <i class="fa-solid fa-chevron-left"></i> Back to Applicants
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Empty/Error State -->
+      <div class="modal-loading" *ngIf="!loadingProfile() && !selectedCandidate()">
+        <i class="fa-solid fa-circle-exclamation" style="font-size: 40px; color: #ef4444; margin-bottom: 20px;"></i>
+        <p>Candidate profile data is not available at the moment.</p>
+        <button class="btn-secondary" (click)="closeProfileModal()" style="margin-top: 20px;">Close</button>
+      </div>
     </div>
   </div>
 </div>
