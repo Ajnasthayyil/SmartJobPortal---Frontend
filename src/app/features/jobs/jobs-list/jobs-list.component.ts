@@ -20,7 +20,7 @@ export class JobsListComponent implements OnInit {
   loading    = signal(true);
   totalCount = signal(0);
   page       = signal(1);
-  pageSize   = 12;
+  pageSize   = 8;
 
   keyword    = '';
   location   = '';
@@ -128,24 +128,45 @@ export class JobsListComponent implements OnInit {
     this.search();
   }
 
-  loadMore(): void {
-    this.page.update(p => p + 1);
+  changePage(p: number): void {
+    const totalPages = Math.ceil(this.totalCount() / this.pageSize);
+    if (p >= 1 && p <= totalPages) {
+      this.page.set(p);
+      this.fetchPage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  fetchPage(): void {
+    this.loading.set(true);
     let params = new HttpParams()
       .set('page', this.page())
       .set('pageSize', this.pageSize);
-    if (this.keyword) params = params.set('keyword', this.keyword);
+
+    if (this.keyword)  params = params.set('keyword', this.keyword);
+    if (this.location) params = params.set('location', this.location);
+    if (this.jobType && this.jobType !== 'All')
+      params = params.set('jobType', this.jobType.replace(' ', ''));
+    if (this.selectedSalary?.min != null)
+      params = params.set('minSalary', this.selectedSalary.min);
+    if (this.selectedSalary?.max != null)
+      params = params.set('maxSalary', this.selectedSalary.max);
 
     this.http.get<any>(
       `${environment.apiUrl}/candidate/jobs`, { params }
     ).subscribe({
       next: res => {
-        if (res.success)
-          this.jobs.update(j => [...j, ...(res.data?.jobs || [])]);
-      }
+        if (res.success) {
+          this.jobs.set(res.data?.jobs || []);
+          this.totalCount.set(res.data?.totalCount || 0);
+        }
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false)
     });
   }
 
-  get hasMore(): boolean {
-    return this.jobs().length < this.totalCount();
+  get totalPages(): number {
+    return Math.ceil(this.totalCount() / this.pageSize);
   }
 }

@@ -8,14 +8,8 @@
         Global Partnership Network
       </div>
 
-      <h1 class="hero-title">
-        Discover <span class="amber">Industry Leaders</span><br>
-        Partner with <span class="amber">Innovation</span>
-      </h1>
+      <!-- Titles removed for density -->
 
-      <p class="hero-sub">
-        Explore a curated directory of high-growth companies and global innovators looking for exceptional talent like you.
-      </p>
 
       <!-- Search bar -->
       <div class="search-bar">
@@ -25,7 +19,7 @@
                  (input)="onSearch()"
                  placeholder="Search by name, industry or location..."
                  (keyup.enter)="onSearch()"/>
-          <button class="btn-clear" *ngIf="searchTerm" (click)="searchTerm=''; onSearch()">
+          <button class="btn-clear" *ngIf="searchTerm" (click)="resetFilters()">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
@@ -52,14 +46,14 @@
       <!-- Results count -->
       <div class="results-bar">
         <span class="results-count" *ngIf="!loading()">
-          Showing <strong>{{ getFilteredCompanies().length }}</strong> leading organizations
+          Showing <strong>{{ totalFilteredCount }}</strong> leading organizations
         </span>
       </div>
 
       <!-- Skeleton loading -->
       <ng-container *ngIf="loading()">
         <div class="jobs-grid">
-          <ng-container *ngFor="let i of [1,2,3,4,5,6]">
+          <ng-container *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]">
             <div class="job-card-skeleton">
               <div class="sk sk-logo"></div>
               <div class="sk sk-title"></div>
@@ -71,10 +65,10 @@
       </ng-container>
 
       <!-- Companies grid -->
-      <div class="jobs-grid" *ngIf="!loading() && getFilteredCompanies().length > 0">
+      <div class="jobs-grid" *ngIf="!loading() && paginatedCompanies.length > 0">
         <div class="job-card company-card-rev" 
-             *ngFor="let co of getFilteredCompanies(); let i = index"
-             [routerLink]="['/companies', co.id]">
+             *ngFor="let co of paginatedCompanies; let i = index"
+             (click)="openCompanyModal(co)">
           
           <div class="card-top">
             <div class="co-logo">
@@ -112,16 +106,109 @@
         </div>
       </div>
 
+      <!-- Pagination -->
+      <div class="pagination-wrap" *ngIf="totalPages > 1 && !loading()">
+        <button class="pag-btn" [disabled]="currentPage() === 1" (click)="changePage(currentPage() - 1)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <span class="pag-info">Page <strong>{{ currentPage() }}</strong> of {{ totalPages }}</span>
+        <button class="pag-btn" [disabled]="currentPage() === totalPages" (click)="changePage(currentPage() + 1)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
       <!-- Empty state -->
-      <div class="empty-state" *ngIf="!loading() && getFilteredCompanies().length === 0">
+      <div class="empty-state" *ngIf="!loading() && paginatedCompanies.length === 0">
         <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
         <h3>No matching companies found</h3>
         <p>Try adjusting your search terms or filters to see more results.</p>
-        <button class="btn-reset" (click)="searchTerm=''; activeIndustry='All'">
+        <button class="btn-reset" (click)="resetFilters()">
           Reset Filters
         </button>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- Premium Company Detail Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeCompanyModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="btn-close" (click)="closeCompanyModal()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="modal-body" *ngIf="selectedCompany">
+      <!-- Header -->
+      <div class="m-header">
+        <div class="m-co-logo">{{ selectedCompany.name.charAt(0) }}</div>
+        <div class="m-co-info">
+          <h2>{{ selectedCompany.name }}</h2>
+          <p>{{ selectedCompany.industry }} • {{ selectedCompany.location || 'Global' }}</p>
+        </div>
+        <div class="m-actions">
+          <div class="roles-badge-rev large">
+            <i class="fa-solid fa-briefcase"></i> {{ selectedCompany.openJobsCount || 0 }} Open Positions
+          </div>
+        </div>
+      </div>
+
+      <div class="m-grid">
+        <!-- Main Info -->
+        <div class="m-main">
+          <section class="m-section">
+            <h3 class="s-title">About {{ selectedCompany.name }}</h3>
+            <p class="s-text">
+              {{ selectedCompany.description || 'We are a leading organization committed to innovation and excellence in our industry. Join us to build the future together.' }}
+            </p>
+          </section>
+
+          <section class="m-section" *ngIf="selectedCompany.recentJobs?.length">
+            <h3 class="s-title">Latest Opportunities</h3>
+            <div class="m-jobs-list">
+              <div class="m-job-item" *ngFor="let job of selectedCompany.recentJobs">
+                <div class="job-info">
+                  <h4>{{ job.title }}</h4>
+                  <span>Full Time • Competitive Salary</span>
+                </div>
+                <button class="btn-apply-mini">View Job</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Sidebar Info -->
+        <div class="m-side">
+          <div class="m-info-card">
+            <h4 class="card-title">Company Insights</h4>
+            <div class="info-row">
+              <i class="fa-solid fa-users"></i>
+              <div class="row-val">
+                <span class="label">Company Size</span>
+                <span class="val">{{ selectedCompany.size || '50-200 Employees' }}</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <i class="fa-solid fa-globe"></i>
+              <div class="row-val">
+                <span class="label">Website</span>
+                <span class="val">www.{{ selectedCompany.name.toLowerCase().replace(' ', '') }}.com</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <i class="fa-solid fa-building"></i>
+              <div class="row-val">
+                <span class="label">Headquarters</span>
+                <span class="val">{{ selectedCompany.location || 'Distributed' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-full-profile" (click)="closeCompanyModal()">
+            View Full Directory Profile
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

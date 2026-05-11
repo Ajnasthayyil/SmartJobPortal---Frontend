@@ -8,14 +8,8 @@
         AI-Powered Job Matching — Now Live
       </div>
 
-      <h1 class="hero-title">
-        Discover Your <span class="amber">Ideal Career</span><br>
-        Match Your <span class="amber">True Potential</span>
-      </h1>
+      <!-- Titles removed for density -->
 
-      <p class="hero-sub">
-        Join the future of talent discovery. Our AI matching engine connects you with roles that truly align with your professional goals.
-      </p>
 
       <!-- Search bar -->
       <div class="search-bar">
@@ -96,7 +90,7 @@
       <!-- Skeleton loading -->
       <ng-container *ngIf="loading()">
         <div class="jobs-grid">
-          <ng-container *ngFor="let i of [1,2,3,4,5,6]">
+          <ng-container *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]">
             <div class="job-card-skeleton">
               <div class="sk sk-logo"></div>
               <div class="sk sk-title"></div>
@@ -170,14 +164,18 @@
           </ng-container>
         </div>
 
-        <!-- Load more -->
-        <ng-container *ngIf="hasMore">
-          <div class="load-more">
-            <button class="btn-more" (click)="loadMore()">
-              Load More Opportunities
-            </button>
-          </div>
-        </ng-container>
+        <!-- Pagination -->
+        <div class="pagination-wrap" *ngIf="totalPages > 1 && !loading()">
+          <button class="pag-btn" [disabled]="page() === 1" (click)="changePage(page() - 1)">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <span class="pag-info">Page <strong>{{ page() }}</strong> of {{ totalPages }}</span>
+          <button class="pag-btn" [disabled]="page() === totalPages" (click)="changePage(page() + 1)">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+
+
       </ng-container>
 
       <!-- Empty state -->

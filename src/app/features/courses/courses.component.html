@@ -1,127 +1,106 @@
-<div class="dashboard-page">
-  <div class="dashboard-inner">
-    
-    <!-- Welcome Box (Hero) -->
-    <div class="welcome-box">
-      <div class="user-meta-info">
-        <span class="hi-text"><i class="fa-solid fa-graduation-cap"></i> LEARNING CENTER</span>
-        <h1>Level Up Your <span style="color: #10b981;">Skills</span></h1>
-        <p class="headline-text">Hand-picked courses from YouTube, Udemy, and Coursera to help you land better jobs.</p>
+<div class="jobs-public-page">
+  
+  <!-- Hero search section -->
+  <div class="search-section">
+    <div class="search-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Learning Center — Now Live
       </div>
-      <div class="actions">
-        <div class="search-box-premium">
+
+      <!-- Titles removed for density -->
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <div class="search-input-wrap">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" [(ngModel)]="search" placeholder="Search courses or skills..." />
-          <button class="btn-clear" *ngIf="search" (click)="search = ''"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Layout Grid -->
-    <div class="dashboard-content">
-      
-      <!-- Side Content: Filters -->
-      <div class="col-side">
-        
-        <div class="side-widget">
-          <div class="section-title" style="margin-bottom: 24px;">Refine Courses</div>
-          
-          <!-- Free Toggle -->
-          <div class="filter-group-modern">
-            <label class="premium-toggle">
-              <input type="checkbox" [(ngModel)]="showFreeOnly"/>
-              <span class="slider"></span>
-              <span class="lbl">Free courses only</span>
-            </label>
-          </div>
-
-          <!-- Level Filter -->
-          <div class="filter-group-modern">
-            <label>Expertise Level</label>
-            <div class="pill-grid">
-              <button *ngFor="let level of levels" 
-                      class="pill-btn" 
-                      [class.active]="activeLevel === level"
-                      (click)="setLevel(level)">
-                {{ level }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Category Filter -->
-          <div class="filter-group-modern">
-            <label>Domain</label>
-            <div class="pill-grid">
-              <button *ngFor="let cat of categories" 
-                      class="pill-btn" 
-                      [class.active]="activeCategory === cat"
-                      (click)="setCategory(cat)">
-                {{ cat }}
-              </button>
-            </div>
-          </div>
-
-          <button class="btn-reset-full" *ngIf="hasActiveFilters" (click)="clearFilters()">
-            <i class="fa-solid fa-rotate-left"></i> Reset All Filters
+          <input type="text" [(ngModel)]="search"
+                 placeholder="Search courses or skills..." />
+          <button class="btn-clear" *ngIf="search" (click)="search = ''">
+            <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
-
+        <button class="btn-search">Find Courses</button>
       </div>
 
-      <!-- Main Content: Course Grid -->
-      <div class="col-main">
-        
-        <div class="section-header">
-          <h2 class="section-title">
-            Available Courses
-            <span style="font-size: 14px; font-weight: 600; color: #64748b;">(Found {{ filtered.length }} results)</span>
-          </h2>
-        </div>
+      <!-- Filter chips -->
+      <div class="filter-chips">
+        <ng-container *ngFor="let cat of categories">
+          <button class="chip"
+                  [class.active]="activeCategory === cat"
+                  (click)="setCategory(cat)">
+            {{ cat }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
 
-        <!-- Empty State -->
-        <div class="empty-state-card-modern" *ngIf="filtered.length === 0">
-          <div class="icon-box"><i class="fa-solid fa-magnifying-glass"></i></div>
-          <h3>No courses found</h3>
-          <p>Try adjusting your search terms or clearing filters.</p>
-          <button class="btn-primary" (click)="clearFilters()">Clear Filters</button>
-        </div>
+  <!-- Results -->
+  <div class="results-section">
+    <div class="results-inner">
 
-        <!-- Grid -->
-        <div class="course-modern-grid" *ngIf="filtered.length > 0">
-          <div *ngFor="let course of filtered" 
-               class="course-card-premium" 
-               (click)="openCourse(course.url)">
-            
-            <div class="card-image-placeholder">
-              {{ course.thumbnail }}
-              <div class="platform-float" [ngStyle]="getPlatformStyle(course.platform)">
-                {{ course.platform }}
-              </div>
+      <!-- Results count -->
+      <div class="results-bar">
+        <span class="results-count">
+          Showing <strong>{{ totalFilteredCount }}</strong> curated courses
+        </span>
+      </div>
+
+      <!-- Grid -->
+      <div class="jobs-grid" *ngIf="filtered.length > 0">
+        <div *ngFor="let course of filtered" 
+             class="job-card course-card-mod" 
+             (click)="openCourse(course.url)">
+          
+          <div class="card-top">
+            <div class="co-logo">
+              {{ course.platform.charAt(0) }}
             </div>
+            <span class="match-badge good" *ngIf="course.isFree">
+              <i class="fa-solid fa-gift"></i> FREE
+            </span>
+          </div>
 
-            <div class="card-content">
-              <div class="card-top">
-                <span class="instructor">by {{ course.instructor }}</span>
-                <span class="free-badge" *ngIf="course.isFree">FREE</span>
-              </div>
-              
-              <h3 class="course-title">{{ course.title }}</h3>
-              <p class="course-desc">{{ course.description }}</p>
+          <h3 class="jc-title">{{ course.title }}</h3>
+          <p class="jc-company">by {{ course.instructor }} • {{ course.platform }}</p>
 
-              <div class="course-stats">
-                <span class="stat"><i class="fa-solid fa-star"></i> {{ course.rating }}</span>
-                <span class="stat"><i class="fa-solid fa-users"></i> {{ course.reviews }}</span>
-                <span class="stat"><i class="fa-solid fa-clock"></i> {{ course.duration }}</span>
-              </div>
+          <p class="jc-desc">
+            {{ course.description | slice:0:80 }}{{ course.description.length > 80 ? '...' : '' }}
+          </p>
 
-              <div class="course-footer">
-                <span class="price" [class.is-free]="course.isFree">{{ course.price }}</span>
-                <span class="view-btn">Take Course <i class="fa-solid fa-arrow-right"></i></span>
-              </div>
-            </div>
+          <div class="jc-meta">
+            <span class="meta-pill"><i class="fa-solid fa-star"></i> {{ course.rating }}</span>
+            <span class="meta-pill"><i class="fa-solid fa-clock"></i> {{ course.duration }}</span>
+            <span class="meta-pill amber-pill">{{ course.level }}</span>
+          </div>
+
+          <div class="jc-footer">
+            <span class="posted-date">{{ course.price }}</span>
+            <span class="view-link">Take Course <i class="fa-solid fa-arrow-right"></i></span>
           </div>
         </div>
+      </div>
 
+      <!-- Pagination -->
+      <div class="pagination-wrap" *ngIf="totalPages > 1">
+        <button class="pag-btn" [disabled]="currentPage() === 1" (click)="changePage(currentPage() - 1)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <span class="pag-info">Page <strong>{{ currentPage() }}</strong> of {{ totalPages }}</span>
+        <button class="pag-btn" [disabled]="currentPage() === totalPages" (click)="changePage(currentPage() + 1)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="filtered.length === 0">
+        <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <h3>No courses found</h3>
+        <p>Try adjusting your search terms or filters to see more results.</p>
+        <button class="btn-reset" (click)="clearFilters()">
+          Reset Filters
+        </button>
       </div>
 
     </div>

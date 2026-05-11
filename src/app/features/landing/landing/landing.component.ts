@@ -51,7 +51,7 @@ export class LandingComponent implements OnInit {
 
   fetchFeaturedJobs() {
     this.loading = true;
-    this.http.get<any>(`${environment.apiUrl}/candidate/jobs?page=1&pageSize=6`).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/candidate/jobs?page=1&pageSize=8`).subscribe({
       next: res => {
         if (res.success) {
           this.jobs = res.data?.jobs || [];

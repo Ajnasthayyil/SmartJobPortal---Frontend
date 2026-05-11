@@ -96,7 +96,7 @@
           <article *ngFor="let job of jobs()" class="job-card">
             <div class="card-top">
               <div class="company-logo">{{ job.companyName.charAt(0) }}</div>
-              <div class="match-badge" *ngIf="job.matchScore">
+              <div class="match-badge" *ngIf="job.matchScore !== null && job.matchScore !== undefined">
                 <i class="fa-solid fa-bolt-lightning"></i> 
                 {{ job.matchScore }}% Match
               </div>

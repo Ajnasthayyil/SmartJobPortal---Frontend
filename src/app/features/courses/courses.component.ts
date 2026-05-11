@@ -15,6 +15,10 @@ import {
 })
 export class CoursesComponent {
 
+  // Pagination State
+  currentPage = signal(1);
+  pageSize = 8;
+
   // State
   search          = '';
   activeCategory  = 'All';
@@ -29,8 +33,8 @@ export class CoursesComponent {
   readonly levels       = ['All', 'Beginner', 'Intermediate', 'Advanced'];
   readonly platformConf = PLATFORM_CONFIG;
 
-  // Computed filtered list
-  get filtered(): Course[] {
+  // Computed filtered list (Internal)
+  private get allFiltered(): Course[] {
     return this.allCourses.filter(c => {
       const matchSearch   = !this.search ||
         c.title.toLowerCase().includes(this.search.toLowerCase()) ||
@@ -53,6 +57,27 @@ export class CoursesComponent {
       return matchSearch && matchCategory &&
              matchTag && matchLevel && matchFree;
     });
+  }
+
+  // Computed paginated list for template
+  get filtered(): Course[] {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.allFiltered.slice(start, start + this.pageSize);
+  }
+
+  get totalFilteredCount(): number {
+    return this.allFiltered.length;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.allFiltered.length / this.pageSize);
+  }
+
+  changePage(p: number): void {
+    if (p >= 1 && p <= this.totalPages) {
+      this.currentPage.set(p);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   get freeCount(): number {

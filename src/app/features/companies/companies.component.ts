@@ -16,8 +16,14 @@ export class CompaniesComponent implements OnInit {
 
   companies = signal<any[]>([]);
   loading = signal(true);
+  currentPage = signal(1);
+  pageSize = 8;
   searchTerm = '';
   activeIndustry = 'All';
+
+  // Modal State
+  selectedCompany: any = null;
+  showModal = false;
 
   readonly industries = [
     'All', 'Technology', 'Fintech', 'Healthcare',
@@ -30,6 +36,18 @@ export class CompaniesComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+  }
+
+  openCompanyModal(co: any): void {
+    this.selectedCompany = co;
+    this.showModal = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeCompanyModal(): void {
+    this.showModal = false;
+    this.selectedCompany = null;
+    document.body.style.overflow = 'auto';
   }
 
   load(): void {
@@ -89,11 +107,7 @@ export class CompaniesComponent implements OnInit {
   onSearch(): void {
   }
 
-  setIndustry(i: string): void {
-    this.activeIndustry = i;
-  }
-
-  getFilteredCompanies(): any[] {
+  private get allFiltered(): any[] {
     let list = this.companies();
     
     if (this.activeIndustry !== 'All') {
@@ -109,5 +123,40 @@ export class CompaniesComponent implements OnInit {
     }
     
     return list;
+  }
+
+  get paginatedCompanies(): any[] {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.allFiltered.slice(start, start + this.pageSize);
+  }
+
+  get totalFilteredCount(): number {
+    return this.allFiltered.length;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.allFiltered.length / this.pageSize);
+  }
+
+  changePage(p: number): void {
+    if (p >= 1 && p <= this.totalPages) {
+      this.currentPage.set(p);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  resetFilters(): void {
+    this.searchTerm = '';
+    this.activeIndustry = 'All';
+    this.currentPage.set(1);
+  }
+
+  setIndustry(i: string): void {
+    this.activeIndustry = i;
+    this.currentPage.set(1);
+  }
+
+  getFilteredCompanies(): any[] {
+    return this.allFiltered;
   }
 }
