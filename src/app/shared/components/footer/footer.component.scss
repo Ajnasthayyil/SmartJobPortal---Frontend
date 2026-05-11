@@ -30,6 +30,19 @@ footer {
   line-height: 1;
 }
 
+.footer-logo-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-img-footer {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1); // Make it white for dark footer
+}
+
 .footer-logo { 
   font-size: 24px; 
   font-weight: 800;

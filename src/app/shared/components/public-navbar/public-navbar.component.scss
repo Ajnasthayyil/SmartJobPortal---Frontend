@@ -46,7 +46,15 @@ $gray600:   #64748b;
   letter-spacing: -0.04em; 
   display: flex;
   align-items: center;
+  gap: 12px;
 }
+
+.logo-img-nav {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
 .logo-tal { color: $black; }
 .logo-ex  { color: $primary; }
 

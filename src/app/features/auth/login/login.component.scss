@@ -79,7 +79,21 @@ $white: #ffffff;
 
     .logo-row {
         position: relative; z-index: 10;
-        .brand-name { font-family: 'Outfit', sans-serif; font-size: 34px; font-weight: 800; color: $slate-900; span { color: $primary; } }
+        .brand-name { 
+            font-family: 'Outfit', sans-serif; 
+            font-size: 34px; 
+            font-weight: 800; 
+            color: $slate-900; 
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            span { color: $primary; } 
+        }
+        .logo-img-auth {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+        }
         .logo-subtitle { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: $slate-500; margin-top: 4px; text-transform: uppercase; }
     }
 

@@ -96,3 +96,9 @@ h1, h2, h3, h4, h5, h6 {
     display: none !important;
   }
 }
+
+.logo-text-group {
+  display: flex;
+  align-items: center;
+  gap: 0 !important;
+}
