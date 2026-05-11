@@ -109,7 +109,9 @@
                                 <ng-container *ngFor="let step of app.timeline; let last = last">
                                     <div class="timeline-step" [class.completed]="step.isCompleted" [class.current]="step.isCurrent">
                                         <div class="step-dot">
-                                            <ng-container *ngIf="step.isCompleted"> ✓ </ng-container>
+                                            <i class="fa-solid fa-check" *ngIf="step.isCompleted"></i>
+                                            <i class="fa-solid fa-clock-rotate-left" *ngIf="step.isCurrent"></i>
+                                            <i class="fa-solid fa-circle-dot" *ngIf="!step.isCompleted && !step.isCurrent"></i>
                                         </div>
                                         <ng-container *ngIf="!last">
                                             <div class="step-line" [class.filled]="step.isCompleted">

@@ -252,12 +252,14 @@ $slate-900: #0f172a;
   &.status-review { background: #e0e7ff; color: #3730a3; }
 }
 
+// ── Timeline: Ultra-Premium Modern ─────────────────────────────────
 .timeline {
   display: flex;
   align-items: center;
   gap: 0;
-  padding: 24px 0 0 0;
-  border-top: 1px dashed $slate-200;
+  padding: 40px 0 20px;
+  position: relative;
+  margin-top: 24px;
 }
 
 .timeline-step {
@@ -266,47 +268,99 @@ $slate-900: #0f172a;
   flex-direction: column;
   align-items: center;
   position: relative;
-  
-  .step-dot {
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    background: white;
-    border: 2px solid $slate-200;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px;
-    z-index: 2;
-    transition: all 0.3s;
-    color: #94a3b8;
-  }
+  z-index: 5;
 
-  .step-line {
+  // The connection line
+  &::after {
+    content: '';
     position: absolute;
-    height: 2px;
-    background: $slate-200;
+    height: 4px;
+    background: #f1f5f9; // Default line color
     width: 100%;
-    top: 12px;
+    top: 20px;
     left: 50%;
     z-index: 1;
-    &.filled { background: $slate-900; }
+    transition: all 0.4s ease;
   }
 
-  &.completed {
-    .step-dot { background: $slate-900; border-color: $slate-900; color: white; }
-  }
+  &:last-child::after { display: none; }
 
-  &.current {
-    .step-dot { 
-      border-color: $slate-900; 
-      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.1); 
-      color: $slate-900; 
-      font-weight: 800; 
-      transform: scale(1.2);
+  // Step indicator
+  .step-dot {
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    z-index: 10;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #94a3b8;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    position: relative;
+
+    &::before {
+      content: ''; position: absolute; inset: -4px;
+      border-radius: 18px; border: 2px solid transparent;
+      transition: 0.3s;
     }
-    .step-label { color: $slate-900; font-weight: 800; }
   }
 
-  .step-label { font-size: 13px; font-weight: 700; color: $slate-500; margin-top: 12px; }
-  .step-date { font-size: 11px; color: #94a3b8; font-weight: 600; margin-top: 2px; }
+  // Labeling
+  .step-label { 
+    font-size: 14px; font-weight: 700; color: #64748b; 
+    margin-top: 18px; text-align: center;
+    transition: color 0.3s;
+  }
+  .step-date { 
+    font-size: 12px; color: #94a3b8; font-weight: 600; 
+    margin-top: 4px; opacity: 0.8;
+  }
+
+  // ── States ──
+  
+  // Completed State
+  &.completed {
+    &::after { background: #10b981; } // Filled line
+    .step-dot { 
+      background: #10b981; border-color: #10b981; color: white;
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+    }
+    .step-label { color: #10b981; }
+  }
+
+  // Current/Active State
+  &.current {
+    .step-dot {
+      background: white;
+      border-color: #10b981;
+      color: #10b981;
+      transform: scale(1.15);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15);
+      
+      &::before {
+        border-color: rgba(16, 185, 129, 0.2);
+        animation: pulse 2s infinite;
+      }
+    }
+    .step-label { color: #020617; font-weight: 800; }
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  .timeline { flex-direction: column; align-items: flex-start; gap: 32px; padding-left: 20px; }
+  .timeline-step {
+    flex-direction: row; align-items: center; width: 100%;
+    &::after { width: 4px; height: 100%; left: 20px; top: 44px; }
+    .step-dot { margin-right: 20px; }
+    .step-label { margin-top: 0; text-align: left; }
+    .step-date { position: absolute; right: 0; top: 10px; }
+  }
 }
 
 // ── Empty State ──────────────────────────────────────────────────
