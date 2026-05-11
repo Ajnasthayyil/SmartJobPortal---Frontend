@@ -39,6 +39,7 @@ export interface WorkExperienceItem {
 export interface JobListItem {
   jobId: number;
   title: string;
+  description: string;
   companyName: string;
   location: string;
   jobType: string;

@@ -48,13 +48,14 @@ export class SkillAnalysisComponent implements OnInit {
               // 2. Fallback to extracting common skills from description
               const commonTech = [
                 'c#', '.net', 'sql', 'react', 'angular', 'node', 'javascript', 'typescript', 
-                'python', 'java', 'aws', 'azure', 'docker', 'kubernetes',
+                'python', 'java', 'aws', 'azure', 'docker', 'kubernetes', 'html', 'css',
                 'communication', 'management', 'leadership', 'sales', 'marketing', 
                 'hr', 'recruitment', 'administration', 'finance', 'accounting',
                 'teaching', 'counseling', 'advising', 'planning', 'analysis', 'ms office',
-                'excel', 'customer service', 'project management', 'operations'
+                'excel', 'customer service', 'project management', 'operations', 'problem solving',
+                'teamwork', 'strategy', 'presentation', 'writing', 'editing', 'consulting'
               ];
-              requiredSkills = commonTech.filter(tech => desc.includes(tech));
+              requiredSkills = commonTech.filter(tech => desc.includes(tech.toLowerCase()));
             }
             
             // Ensure unique skills and remove empty values

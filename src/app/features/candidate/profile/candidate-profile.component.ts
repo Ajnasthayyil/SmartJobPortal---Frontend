@@ -187,6 +187,7 @@ export class CandidateProfileComponent implements OnInit {
   onSave(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.toast.error('Please fill in all required fields (Headline, Summary, etc.)');
       return;
     }
     this.saving.set(true);
@@ -202,9 +203,22 @@ export class CandidateProfileComponent implements OnInit {
           this.toast.error(res.message);
         }
       },
-      error: () => {
+      error: (err) => {
         this.saving.set(false);
-        this.toast.error('Failed to update profile.');
+        console.error('Profile Update Error:', err);
+        
+        let msg = 'Failed to update profile.';
+        if (err.error?.message) {
+          msg = err.error.message;
+        } else if (err.error?.errors) {
+          // Handle ASP.NET Core Validation Errors
+          const firstError = Object.values(err.error.errors)[0] as string[];
+          if (firstError?.length) msg = firstError[0];
+        } else if (err.message) {
+          msg = err.message;
+        }
+        
+        this.toast.error(msg);
       }
     });
   }
