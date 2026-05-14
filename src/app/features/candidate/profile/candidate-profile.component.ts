@@ -27,8 +27,11 @@ export class CandidateProfileComponent implements OnInit {
   resumeFile = signal<File | null>(null);
   dragOver = signal(false);
   completion = signal(0);
-  isEditModalOpen = signal(false);
-  activeModalTab = signal<'identity' | 'experience' | 'education' | 'skills'>('identity');
+  
+  // Wizard State
+  currentStep = signal(0); // 0: Start/Upload, 1: Basics, 2: Experience, 3: Education, 4: Socials, 5: Skills
+  totalSteps = 5;
+  isWizardMode = signal(false);
 
   readonly levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
@@ -52,11 +55,29 @@ export class CandidateProfileComponent implements OnInit {
       location: ['', Validators.required],
       experienceYears: [0, [Validators.required, Validators.min(0)]],
       phoneNumber: [''],
+      linkedInUrl: [''],
+      gitHubUrl: [''],
+      leetCodeUrl: [''],
       skills: this.fb.array([]),
       education: this.fb.array([]),
       workExperience: this.fb.array([])
     });
   }
+
+  nextStep() {
+    if (this.currentStep() < this.totalSteps) {
+      this.currentStep.update(s => s + 1);
+      window.scrollTo(0, 0);
+    }
+  }
+
+  prevStep() {
+    if (this.currentStep() > 0) {
+      this.currentStep.update(s => s - 1);
+      window.scrollTo(0, 0);
+    }
+  }
+
 
   get skillGroups() {
     return (this.form.get('skills') as FormArray);
@@ -112,59 +133,65 @@ export class CandidateProfileComponent implements OnInit {
     });
   }
 
-  openEditModal(): void {
-    const data = this.profile();
-    if (!data) return;
+  startWizard(mode: 'manual' | 'ai') {
+    this.isWizardMode.set(true);
+    if (mode === 'manual') {
+      const data = this.profile();
+      if (data) {
+        this.form.patchValue({
+          headline: data.headline,
+          summary: data.summary,
+          location: data.location,
+          experienceYears: data.experienceYears,
+          phoneNumber: data.phoneNumber || '',
+          linkedInUrl: data.linkedInUrl || '',
+          gitHubUrl: data.gitHubUrl || '',
+          leetCodeUrl: data.leetCodeUrl || ''
+        });
 
-    this.form.patchValue({
-      headline: data.headline,
-      summary: data.summary,
-      location: data.location,
-      experienceYears: data.experienceYears,
-      phoneNumber: data.phoneNumber || ''
-    });
+        this.educationGroups.clear();
+        data.education?.forEach(edu => this.educationGroups.push(this.fb.group(edu)));
 
-    // Handle education array
-    this.educationGroups.clear();
-    if (data.education) {
-      data.education.forEach(edu => {
-        this.educationGroups.push(this.fb.group(edu));
-      });
-    }
+        this.experienceGroups.clear();
+        data.workExperience?.forEach(exp => this.experienceGroups.push(this.fb.group(exp)));
 
-    // Handle experience array
-    this.experienceGroups.clear();
-    if (data.workExperience) {
-      data.workExperience.forEach(exp => {
-        this.experienceGroups.push(this.fb.group(exp));
-      });
-    }
-    // Handle skills array
-    this.skillGroups.clear();
-    if (data.skills) {
-      data.skills.forEach(s => {
-        this.skillGroups.push(this.fb.group({
+        this.skillGroups.clear();
+        data.skills?.forEach(s => this.skillGroups.push(this.fb.group({
           skillName: [s.skillName, Validators.required],
           level: [s.level || 'Intermediate', Validators.required]
-        }));
-      });
+        })));
+      }
+      this.currentStep.set(1);
+    } else {
+      this.currentStep.set(0);
     }
-    this.isEditModalOpen.set(true);
-  }
-
-  closeEditModal(): void {
-    this.isEditModalOpen.set(false);
   }
 
   calcCompletion(p: CandidateProfile): void {
     let s = 0;
-    if (p.fullName) s += 20;
-    if (p.headline) s += 15;
-    if (p.summary) s += 15;
-    if (p.location) s += 10;
-    if (p.skills?.length) s += 20;
-    if (p.hasResume) s += 15;
+    
+    // Identity (30%)
+    if (p.fullName) s += 5;
+    if (p.headline) s += 5;
+    if (p.summary) s += 10;
+    if (p.location) s += 5;
     if (p.phoneNumber) s += 5;
+
+    // Professional History (20%)
+    if (p.workExperience?.length) s += 20;
+
+    // Education (15%)
+    if (p.education?.length) s += 15;
+
+    // Skills (15%)
+    if (p.skills?.length) s += 15;
+
+    // Social Links (10%)
+    if (p.linkedInUrl || p.gitHubUrl || p.leetCodeUrl) s += 10;
+
+    // Resume (10%)
+    if (p.hasResume) s += 10;
+
     this.completion.set(s);
   }
 
@@ -198,7 +225,8 @@ export class CandidateProfileComponent implements OnInit {
           this.toast.success('Profile updated successfully!');
           this.profile.set(res.data);
           this.calcCompletion(res.data);
-          this.closeEditModal();
+          this.isWizardMode.set(false);
+          this.currentStep.set(0);
         } else {
           this.toast.error(res.message);
         }
@@ -249,11 +277,56 @@ export class CandidateProfileComponent implements OnInit {
     this.service.uploadResume(file).subscribe({
       next: res => {
         this.uploading.set(false);
-        if (res.success) {
-          this.toast.success('Resume uploaded! Skills extracted automatically.');
-          this.loadProfile();
+        if (res.success && res.data.parsedData) {
+          const ai = res.data.parsedData;
+          this.toast.success('Resume parsed successfully! Please review the details.');
+          
+          // Auto-fill form
+          this.form.patchValue({
+            headline: ai.fullName ? `${ai.fullName} - Professional Profile` : '',
+            summary: ai.workExperience?.map(e => e.description).join('\n') || '',
+            phoneNumber: ai.phone || '',
+            linkedInUrl: ai.linkedIn || '',
+            gitHubUrl: ai.gitHub || '',
+            leetCodeUrl: ai.leetCode || '',
+            experienceYears: ai.totalExperience || 0
+          });
+
+          // Patch arrays
+          this.experienceGroups.clear();
+          ai.workExperience?.forEach(exp => {
+            this.experienceGroups.push(this.fb.group({
+              company: [exp.company, Validators.required],
+              role: [exp.role, Validators.required],
+              duration: [exp.duration, Validators.required],
+              description: [exp.description, Validators.required]
+            }));
+          });
+
+          this.educationGroups.clear();
+          ai.education?.forEach(edu => {
+            this.educationGroups.push(this.fb.group({
+              degree: [edu.degree, Validators.required],
+              institution: [edu.institution, Validators.required],
+              fieldOfStudy: [edu.fieldOfStudy || '', Validators.required],
+              duration: [edu.duration || '', Validators.required]
+            }));
+          });
+
+          this.skillGroups.clear();
+          ai.skills?.forEach(s => {
+            this.skillGroups.push(this.fb.group({
+              skillName: [s, Validators.required],
+              level: ['Intermediate', Validators.required]
+            }));
+          });
+
+          // Move to next step for review
+          this.currentStep.set(1);
+          this.isWizardMode.set(true);
+
         } else {
-          this.toast.error(res.message);
+          this.toast.error(res.message || 'Parsing failed.');
         }
       },
       error: () => {

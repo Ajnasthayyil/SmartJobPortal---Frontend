@@ -15,6 +15,9 @@ export interface CandidateProfile {
   workExperience: WorkExperienceItem[];
   profilePictureUrl?: string;
   phoneNumber?: string;
+  linkedInUrl?: string;
+  gitHubUrl?: string;
+  leetCodeUrl?: string;
 }
 
 export interface SkillItem {
@@ -81,4 +84,22 @@ export interface TimelineItem {
   isCompleted: boolean;
   isCurrent: boolean;
   occurredAt: string | null;
+}
+
+export interface ResumeParseResponse {
+  message: string;
+  parsedData: ResumeDto;
+}
+
+export interface ResumeDto {
+  fullName: string;
+  email: string;
+  phone: string;
+  skills: string[];
+  totalExperience: number;
+  linkedIn?: string;
+  gitHub?: string;
+  leetCode?: string;
+  education: any[];
+  workExperience: any[];
 }

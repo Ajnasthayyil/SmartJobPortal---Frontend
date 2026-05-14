@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   CandidateProfile, JobListItem, MatchScoreResponse,
-  ApplicationTracking, SkillItem
+  ApplicationTracking, SkillItem, ResumeParseResponse
 } from '../models/candidate.models';
 import { ApiResponse } from '../models/auth.models';
 
@@ -23,10 +23,10 @@ export class CandidateService {
     return this.http.put<ApiResponse<CandidateProfile>>(`${this.api}/profile`, data);
   }
 
-  uploadResume(file: File): Observable<ApiResponse<string>> {
+  uploadResume(file: File): Observable<ApiResponse<ResumeParseResponse>> {
     const form = new FormData();
     form.append('file', file);
-    return this.http.post<ApiResponse<string>>(`${this.api}/resume`, form);
+    return this.http.post<ApiResponse<ResumeParseResponse>>(`${this.api}/resume`, form);
   }
 
   searchJobs(filters: any): Observable<ApiResponse<{ jobs: JobListItem[], totalCount: number }>> {
