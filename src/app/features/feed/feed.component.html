@@ -1,46 +1,182 @@
-<div class="feed-page">
+<div class="feed-container">
+  
 
-  <div class="create-post-card">
-
-    <textarea
-      [(ngModel)]="postContent"
-      placeholder="Share something...">
-    </textarea>
-
-    <button (click)="createPost()">
-      Post
-    </button>
-
-  </div>
-
-  <div
-    class="post-card"
-    *ngFor="let post of posts">
-
-    <div class="post-header">
-
-      <img
-        [src]="post.userProfilePicture || 'assets/user.png'">
-
-      <div>
-        <h4>{{ post.userName }}</h4>
-
-        <span>
-          {{ post.createdAt | date:'medium' }}
-        </span>
+  <!-- Main Feed -->
+  <main class="main-feed">
+    
+    <header class="feed-content-header">
+      <div class="title-group">
+        <button class="back-btn"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Feed Posts</h2>
       </div>
+      <button class="post-article-btn-main" (click)="openModal()">
+        <i class="fa-solid fa-plus"></i>
+        <span>Post Article</span>
+      </button>
+    </header>
 
+    <!-- Feed Sorting -->
+    <div class="feed-sort">
+      <hr>
+      <div class="sort-trigger">
+        <span>Sort by:</span>
+        <strong>Top <i class="fa-solid fa-caret-down"></i></strong>
+      </div>
     </div>
 
-    <p class="content">
-      {{ post.content }}
-    </p>
+    <!-- Posts List -->
+    <div class="posts-wrapper">
+      <!-- Demo Post 1 (Promoted) -->
+      <div class="glass-card post-card reveal delay-1 promoted-post">
+        <div class="post-header">
+          <div class="avatar-small">
+            <img src="assets/images/talex-logo-mini.png" alt="TalEx">
+          </div>
+          <div class="post-meta">
+            <div class="name-group">
+              <h4>TalEx Hiring Solutions</h4>
+              <span class="badge">Promoted</span>
+            </div>
+            <p class="role-small">Empowering the future of recruitment</p>
+          </div>
+          <button class="more-btn"><i class="fa-solid fa-ellipsis"></i></button>
+        </div>
+        <div class="post-content">
+          <p>Looking for your next career move? TalEx AI matches you with the best roles in seconds. #Hiring #AI #FutureOfWork</p>
+        </div>
+        <div class="post-media">
+          <img src="assets/images/promo-banner.jpg" alt="Promo">
+        </div>
+        <div class="post-actions">
+          <button class="action-item"><i class="fa-regular fa-thumbs-up"></i> <span>Like</span></button>
+          <button class="action-item"><i class="fa-regular fa-comment-dots"></i> <span>Comment</span></button>
+          <button class="action-item"><i class="fa-solid fa-share-nodes"></i> <span>Share</span></button>
+        </div>
+      </div>
 
-    <img
-      *ngIf="post.imageUrl"
-      [src]="post.imageUrl"
-      class="post-image">
+      <!-- Real Posts -->
+      <div class="glass-card post-card reveal" [ngClass]="'delay-' + ((i % 4) + 1)" *ngFor="let post of posts; let i = index">
+        
+        <div class="post-header">
+          <div class="avatar-small">
+            <img [src]="post.userProfilePicture || 'assets/images/default-avatar.png'" alt="User">
+          </div>
+          <div class="post-meta">
+            <div class="name-group">
+              <h4>{{ post.userName }}</h4>
+              <span class="connection-level">• 1st</span>
+            </div>
+            <p class="role-small">{{ post.userRole || 'Professional' }}</p>
+            <span class="time-text">{{ post.createdAt | date:'mediumDate' }} • <i class="fa-solid fa-earth-americas"></i></span>
+          </div>
+          <button class="more-btn"><i class="fa-solid fa-ellipsis"></i></button>
+        </div>
+
+        <div class="post-content">
+          <p>{{ post.content }}</p>
+        </div>
+
+        <div class="post-media" *ngIf="post.imageUrl">
+          <img [src]="post.imageUrl" alt="Post Image">
+        </div>
+
+        <div class="post-stats">
+          <div class="likes-info" *ngIf="post.likesCount > 0">
+            <div class="reaction-icons">
+              <i class="fa-solid fa-thumbs-up like-icon"></i>
+              <i class="fa-solid fa-heart heart-icon"></i>
+            </div>
+            <span>{{ post.likesCount }}</span>
+          </div>
+          <div class="comments-info">
+            <span *ngIf="post.commentsCount > 0">{{ post.commentsCount }} comments • </span>
+            <span>12 shares</span>
+          </div>
+        </div>
+
+        <div class="post-actions">
+          <button class="action-item" [class.active]="post.isLiked">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <span>Like</span>
+          </button>
+          <button class="action-item">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span>Comment</span>
+          </button>
+          <button class="action-item">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span>Share</span>
+          </button>
+          <button class="action-item">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Send</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Infinite Scroll Loader -->
+    <div class="feed-loader" *ngIf="posts.length > 0">
+      <div class="loader-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- Post Article Modal -->
+<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="glass-card modal-content reveal-fast" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3>Create a post</h3>
+      <button class="close-btn" (click)="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="modal-user-info">
+      <div class="avatar-mid">
+        <img [src]="authService.currentUser()?.profilePictureUrl || 'assets/images/default-avatar.png'" alt="User">
+      </div>
+      <div class="user-meta">
+        <h5>{{ authService.currentUser()?.fullName }}</h5>
+        <button class="visibility-btn"><i class="fa-solid fa-earth-americas"></i> Anyone <i class="fa-solid fa-caret-down"></i></button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <textarea 
+        [(ngModel)]="postContent" 
+        placeholder="What do you want to talk about?"
+        rows="6">
+      </textarea>
+
+      <div class="image-preview-container" *ngIf="imagePreview">
+        <img [src]="imagePreview" alt="Selected Image">
+        <button class="remove-img" (click)="selectedFile = null; imagePreview = null;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="footer-actions">
+        <label for="file-upload" class="icon-action" title="Add a photo">
+          <i class="fa-solid fa-image"></i>
+          <input type="file" id="file-upload" hidden (change)="onFileSelected($event)" accept="image/*">
+        </label>
+        <button class="icon-action" title="Add a document"><i class="fa-solid fa-file-lines"></i></button>
+      </div>
+      <button 
+        class="submit-btn" 
+        [disabled]="(!postContent.trim() && !selectedFile) || isSubmitting"
+        (click)="submitPost()">
+        <span *ngIf="!isSubmitting">Post</span>
+        <i class="fa-solid fa-circle-notch fa-spin" *ngIf="isSubmitting"></i>
+      </button>
+    </div>
 
   </div>
-
 </div>

@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeedService {
 
-  private api =
-    'https://localhost:5001/api/feed';
+  private api = `${environment.apiUrl}/feed`;
 
   constructor(private http: HttpClient) {}
 
