@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { JwtInterceptorService } from './core/interceptors/jwt-interceptor.service';
 
@@ -21,16 +22,19 @@ import { AdminSidebarComponent } from './features/admin/admin-sidebar/admin-side
 import { ShellVisibilityDirective } from './core/directives/shell-visibility.directive';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { NotificationBellComponent } from './shared/components/notification-bell/notification-bell.component';
+import { FeedComponent } from './features/feed/feed.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FeedComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     RouterModule,
+    FormsModule,
 
     // ✅ Shared Shell Components (Standalone)
     FooterComponent,

@@ -24,6 +24,7 @@ import { ApplicantsComponent } from './features/recruiter/applicants/applicants.
 import { JobDetailComponent } from './features/candidate/job-detail/job-detail.component';
 import { SkillAnalysisComponent } from './features/candidate/skill-analysis/skill-analysis.component';
 import { CoursesComponent } from './features/courses/courses.component';
+import { FeedComponent } from './features/feed/feed.component';
 
 // ✅ NEW COMPONENTS
 import { ProfileAdminComponent } from './features/admin/profile-admin/profile-admin.component';
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'jobs/:id', component: JobPublicDetailComponent },
   { path: 'companies', component: CompaniesComponent },
   { path: 'courses', component: CoursesComponent },
+  { path: 'feed', component: FeedComponent, canActivate: [authGuard] },
 
   // Candidate Routes (Auth + Candidate Role required)
   { 

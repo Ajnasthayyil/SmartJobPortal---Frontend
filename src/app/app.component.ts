@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { SidebarService } from './core/services/sidebar.service';
+import { AuthService } from './core/services/auth.service';
+import { inject } from '@angular/core';
 
 import { ToastContainerComponent } from './shared/components/toast/toast-container.component';
 
@@ -48,6 +50,7 @@ import { ToastContainerComponent } from './shared/components/toast/toast-contain
 })
 export class AppComponent {
   isFullPage = false;
+  authService = inject(AuthService);
 
   constructor(
     private router: Router, 
@@ -73,15 +76,18 @@ export class AppComponent {
   }
 
   isCandidate(): boolean {
-    return this.router.url.startsWith('/candidate');
+    return this.router.url.startsWith('/candidate') || 
+           (this.router.url.startsWith('/feed') && this.authService.getRole() === 'Candidate');
   }
 
   isRecruiter(): boolean {
-    return this.router.url.startsWith('/recruiter');
+    return this.router.url.startsWith('/recruiter') || 
+           (this.router.url.startsWith('/feed') && this.authService.getRole() === 'Recruiter');
   }
 
   isAdmin(): boolean {
-    return this.router.url.startsWith('/admin');
+    return this.router.url.startsWith('/admin') || 
+           (this.router.url.startsWith('/feed') && this.authService.getRole() === 'Admin');
   }
 
   isAuthPage(): boolean {
@@ -89,7 +95,8 @@ export class AppComponent {
     return (
       url.startsWith('/candidate') ||
       url.startsWith('/recruiter') ||
-      url.startsWith('/admin')
+      url.startsWith('/admin') ||
+      url.startsWith('/feed')
     );
   }
 
@@ -102,7 +109,8 @@ export class AppComponent {
       url.startsWith('/forgot-password') ||
       url.startsWith('/candidate') ||
       url.startsWith('/recruiter') ||
-      url.startsWith('/admin')
+      url.startsWith('/admin') ||
+      url.startsWith('/feed')
     );
   }
 }

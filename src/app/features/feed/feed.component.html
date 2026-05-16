@@ -1,0 +1,46 @@
+<div class="feed-page">
+
+  <div class="create-post-card">
+
+    <textarea
+      [(ngModel)]="postContent"
+      placeholder="Share something...">
+    </textarea>
+
+    <button (click)="createPost()">
+      Post
+    </button>
+
+  </div>
+
+  <div
+    class="post-card"
+    *ngFor="let post of posts">
+
+    <div class="post-header">
+
+      <img
+        [src]="post.userProfilePicture || 'assets/user.png'">
+
+      <div>
+        <h4>{{ post.userName }}</h4>
+
+        <span>
+          {{ post.createdAt | date:'medium' }}
+        </span>
+      </div>
+
+    </div>
+
+    <p class="content">
+      {{ post.content }}
+    </p>
+
+    <img
+      *ngIf="post.imageUrl"
+      [src]="post.imageUrl"
+      class="post-image">
+
+  </div>
+
+</div>
