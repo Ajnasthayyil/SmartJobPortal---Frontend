@@ -114,4 +114,40 @@ export class FeedComponent implements OnInit {
       }
     });
 }
+
+commentsMap: any = {};
+
+commentInputs: any = {};
+
+loadComments(postId: number) {
+
+  this.feedService
+    .getComments(postId)
+    .subscribe({
+      next: (res) => {
+        this.commentsMap[postId] = res;
+      }
+    });
+}
+
+addComment(postId: number) {
+
+  const payload = {
+    content:
+      this.commentInputs[postId]
+  };
+
+  this.feedService
+    .addComment(postId, payload)
+    .subscribe({
+      next: () => {
+
+        this.commentInputs[postId] = '';
+
+        this.loadComments(postId);
+
+        this.loadFeed();
+      }
+    });
+}
 }

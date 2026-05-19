@@ -44,4 +44,23 @@ reactToPost(postId: number, reactionType: string) {
     }
   );
 }
+
+getComments(postId: number) {
+
+  return this.http.get<any[]>(
+    `${environment.apiUrl}/feed/${postId}/comments`
+  );
+}
+
+addComment(
+  postId: number,
+  payload: any
+) {
+
+  return this.http.post(
+    `${environment.apiUrl}/feed/${postId}/comments`,
+    payload
+  );
+}
+
 }
