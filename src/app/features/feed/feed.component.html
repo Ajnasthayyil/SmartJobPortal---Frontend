@@ -94,8 +94,15 @@
           </div>
         </div>
 
+        <div class="reaction-bar">
+          <button class="action-item" (click)="react(post.postId, 'Like')">👍 Like</button>
+          <button class="action-item" (click)="react(post.postId, 'Love')">❤️ Love</button>
+          <button class="action-item" (click)="react(post.postId, 'Celebrate')">🎉 Celebrate</button>
+          <span class="reaction-count" style="margin-left: auto;">{{ post.totalReactions }} reactions</span>
+        </div>
+
         <div class="post-actions">
-          <button class="action-item" [class.active]="post.isLiked">
+          <button class="action-item" [class.active]="post.isLiked" (click)="react(post.postId, 'Like')">
             <i class="fa-regular fa-thumbs-up"></i>
             <span>Like</span>
           </button>
@@ -171,12 +178,11 @@
       </div>
       <button 
         class="submit-btn" 
-        [disabled]="(!postContent.trim() && !selectedFile) || isSubmitting"
+        [disabled]="(!postContent.trim() && !uploadedImage) || isSubmitting"
         (click)="submitPost()">
         <span *ngIf="!isSubmitting">Post</span>
         <i class="fa-solid fa-circle-notch fa-spin" *ngIf="isSubmitting"></i>
       </button>
     </div>
-
   </div>
 </div>

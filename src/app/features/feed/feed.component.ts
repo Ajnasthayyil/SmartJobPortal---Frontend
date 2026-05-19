@@ -11,12 +11,12 @@ import { Router } from '@angular/router';
 export class FeedComponent implements OnInit {
 
   posts: any[] = [];
-
   postContent = '';
   isModalOpen = false;
   selectedFile: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
   isSubmitting = false;
+  uploadedImage: any = null;
 
   authService = inject(AuthService);
   router = inject(Router);
@@ -38,27 +38,9 @@ export class FeedComponent implements OnInit {
       });
   }
 
-  createPost() {
-
-    if (!this.postContent.trim())
-      return;
-
-    const payload = {
-      content: this.postContent
-    };
-
-    this.feedService.createPost(payload)
-      .subscribe({
-        next: () => {
-          this.postContent = '';
-          this.loadFeed();
-        }
-      });
-  }
-
   openModal() {
     this.isModalOpen = true;
-    document.body.style.overflow = 'hidden'; // Prevent scroll
+    document.body.style.overflow = 'hidden'; 
   }
 
   closeModal() {
@@ -66,6 +48,7 @@ export class FeedComponent implements OnInit {
     this.postContent = '';
     this.selectedFile = null;
     this.imagePreview = null;
+    this.uploadedImage = null;
     document.body.style.overflow = 'auto';
   }
 
@@ -73,25 +56,35 @@ export class FeedComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
+      
+      // 1. Local Preview
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result;
       };
       reader.readAsDataURL(file);
+
+      // 2. Upload to Cloudinary (via Backend)
+      this.feedService.uploadImage(file).subscribe({
+        next: (res: any) => {
+          this.uploadedImage = res;
+        },
+        error: (err) => console.error('Image upload failed', err)
+      });
     }
   }
 
   submitPost() {
-    if (!this.postContent.trim() && !this.selectedFile) return;
+    if (!this.postContent.trim() && !this.uploadedImage) return;
 
     this.isSubmitting = true;
-    const formData = new FormData();
-    formData.append('content', this.postContent);
-    if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
-    }
+    const payload = {
+      userId: this.authService.currentUser()?.userId,
+      content: this.postContent,
+      images: this.uploadedImage ? [this.uploadedImage] : []
+    };
 
-    this.feedService.createPost(formData)
+    this.feedService.createPost(payload)
       .subscribe({
         next: () => {
           this.isSubmitting = false;
@@ -110,4 +103,15 @@ export class FeedComponent implements OnInit {
     else if (role === 'Recruiter') this.router.navigate(['/recruiter/profile']);
     else if (role === 'Admin') this.router.navigate(['/admin/profile']);
   }
+
+  react(postId: number, type: string) {
+
+  this.feedService
+    .reactToPost(postId, type)
+    .subscribe({
+      next: () => {
+        this.loadFeed();
+      }
+    });
+}
 }

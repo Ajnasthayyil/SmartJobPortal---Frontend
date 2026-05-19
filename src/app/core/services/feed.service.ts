@@ -23,4 +23,25 @@ export class FeedService {
       data
     );
   }
+  uploadImage(file: File) {
+
+  const formData = new FormData();
+
+  formData.append('file', file);
+
+  return this.http.post(
+    `${environment.apiUrl}/media/upload`,
+    formData
+  );
+}
+
+reactToPost(postId: number, reactionType: string) {
+
+  return this.http.post(
+    `${environment.apiUrl}/feed/${postId}/react`,
+    {
+      reactionType
+    }
+  );
+}
 }

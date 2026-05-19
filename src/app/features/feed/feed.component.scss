@@ -447,3 +447,38 @@
     &:not(:disabled):active { transform: translateY(0); }
   }
 }
+
+.preview-image {
+  width: 100%;
+  border-radius: 16px;
+  margin-top: 16px;
+}
+
+.reaction-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+
+  button {
+    border: none;
+    background: #f1f5f9;
+    padding: 8px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+
+    &:hover {
+      background: #d1fae5;
+      color: #059669;
+    }
+  }
+
+  .reaction-count {
+    margin-left: auto;
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 600;
+  }
+}
