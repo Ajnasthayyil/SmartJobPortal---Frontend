@@ -310,6 +310,10 @@
       top: 30%; left: -8%; 
       animation: float 6s ease-in-out infinite 1s; 
     }
+
+    @media (max-width: 640px) {
+      display: none !important;
+    }
   }
 
   .ui-header {
@@ -554,6 +558,12 @@
     height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent);
     z-index: 0;
     @media (max-width: 768px) { display: none; }
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-top: 40px;
   }
 }
 .step-item {

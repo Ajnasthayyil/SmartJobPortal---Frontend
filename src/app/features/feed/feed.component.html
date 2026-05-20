@@ -6,7 +6,6 @@
     
     <header class="feed-content-header">
       <div class="title-group">
-        <button class="back-btn"><i class="fa-solid fa-arrow-left"></i></button>
         <h2>Feed Posts</h2>
       </div>
       <button class="post-article-btn-main" (click)="openModal()">
@@ -32,7 +31,10 @@
         
         <div class="post-header">
           <div class="avatar-small">
-            <img [src]="post.userProfilePicture || 'assets/images/default-avatar.png'" alt="User">
+            <img *ngIf="post.userProfilePicture && post.userProfilePicture !== 'null'" [src]="post.userProfilePicture" alt="User">
+            <div *ngIf="!post.userProfilePicture || post.userProfilePicture === 'null'" class="avatar-placeholder">
+              {{ post.userName ? post.userName.charAt(0).toUpperCase() : 'U' }}
+            </div>
           </div>
           <div class="post-meta">
             <div class="name-group">
@@ -42,11 +44,33 @@
             <p class="role-small">{{ post.userRole || 'Professional' }}</p>
             <span class="time-text">{{ post.createdAt | date:'mediumDate' }} • <i class="fa-solid fa-earth-americas"></i></span>
           </div>
-          <button class="more-btn"><i class="fa-solid fa-ellipsis"></i></button>
+          <!-- Ellipsis More Menu (only for Post Owner) -->
+          <div class="post-menu-container" *ngIf="post.userId === authService.currentUser()?.userId">
+            <button class="more-btn" (click)="togglePostMenu(post.postId, $event)">
+              <i class="fa-solid fa-ellipsis"></i>
+            </button>
+            <div class="post-menu-dropdown" *ngIf="activePostMenuId === post.postId">
+              <button class="menu-item-btn" (click)="startEditPost(post)">
+                <i class="fa-solid fa-pen"></i> Edit Post
+              </button>
+              <button class="menu-item-btn delete" (click)="deletePost(post.postId)">
+                <i class="fa-solid fa-trash"></i> Delete Post
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div class="post-content">
+        <div class="post-content" *ngIf="editingPostId !== post.postId">
           <p>{{ post.content }}</p>
+        </div>
+
+        <!-- Post Inline Editor -->
+        <div class="post-edit-wrapper" *ngIf="editingPostId === post.postId">
+          <textarea [(ngModel)]="editingPostContent" rows="3" class="edit-textarea"></textarea>
+          <div class="edit-actions">
+            <button class="btn-edit-cancel" (click)="cancelEditPost()">Cancel</button>
+            <button class="btn-edit-save" (click)="saveEditPost()">Save</button>
+          </div>
         </div>
 
         <div class="post-media" *ngIf="post.imageUrl">
@@ -54,41 +78,35 @@
         </div>
 
         <div class="post-stats">
-          <div class="likes-info" *ngIf="post.likesCount > 0 || post.totalReactions > 0">
+          <div class="likes-info" *ngIf="post.likesCount > 0 || post.totalReactions > 0" (click)="openReactionsModal(post.postId)" style="cursor: pointer;">
             <div class="reaction-icons">
               <i class="fa-solid fa-thumbs-up like-icon"></i>
-              <i class="fa-solid fa-heart heart-icon"></i>
             </div>
             <span>{{ post.totalReactions || post.likesCount }} reactions</span>
           </div>
           <div class="comments-info">
-            <span *ngIf="post.commentsCount > 0">{{ post.commentsCount }} comments • </span>
-            <span>12 shares</span>
+            <span *ngIf="post.commentsCount > 0">{{ post.commentsCount }} comments</span>
           </div>
         </div>
 
         <div class="post-actions">
           <button class="action-item" [class.active]="post.isLiked" (click)="react(post.postId, 'Like')">
-            <i class="fa-regular fa-thumbs-up" [class.fa-solid]="post.isLiked"></i>
+            <i class="fa-thumbs-up" [ngClass]="post.isLiked ? 'fa-solid' : 'fa-regular'"></i>
             <span>Like</span>
           </button>
-          <button class="action-item">
+          <button class="action-item" (click)="openCommentsModal(post)">
             <i class="fa-regular fa-comment-dots"></i>
             <span>Comment</span>
           </button>
-          <button class="action-item">
-            <i class="fa-solid fa-share-nodes"></i>
-            <span>Share</span>
-          </button>
-          <button class="action-item">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>Send</span>
-          </button>
+
         </div>
 
         <div class="comment-section">
-          <button class="load-comments-btn" (click)="loadComments(post.postId)">
-            💬 {{ post.totalComments || post.commentsCount }} Comments
+          <button class="load-comments-btn" *ngIf="!commentsMap[post.postId] && (post.totalComments > 0 || post.commentsCount > 0)" (click)="loadComments(post.postId)">
+             View {{ post.totalComments || post.commentsCount }} Comments
+          </button>
+          <button class="load-comments-btn" *ngIf="commentsMap[post.postId] && commentsMap[post.postId].length > 1" (click)="openCommentsModal(post)">
+             View all {{ commentsMap[post.postId].length }} comments
           </button>
 
           <div class="comment-input-wrapper">
@@ -97,15 +115,53 @@
           </div>
 
           <div class="comments-list" *ngIf="commentsMap[post.postId]">
-            <div class="comment-card" *ngFor="let comment of commentsMap[post.postId]">
-              <strong>{{ comment.userName }}</strong>
-              <p>{{ comment.content }}</p>
-              <span>{{ comment.createdAt | date:'short' }}</span>
+            <div class="comment-card" *ngFor="let comment of commentsMap[post.postId] | slice:0:1">
+              <div class="comment-bubble" *ngIf="editingCommentId !== comment.postCommentId">
+                <div class="comment-header-row">
+                  <strong>{{ comment.userName }}</strong>
+                  <div class="comment-owner-actions" *ngIf="comment.userId === authService.currentUser()?.userId">
+                    <button class="comment-action-icon" (click)="startEditComment(comment)" title="Edit">
+                      <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button class="comment-action-icon delete" (click)="deleteComment(comment.postCommentId, post.postId)" title="Delete">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                <p>{{ comment.content }}</p>
+              </div>
+
+              <!-- Comment Inline Editor -->
+              <div class="comment-edit-wrapper" *ngIf="editingCommentId === comment.postCommentId">
+                <input type="text" [(ngModel)]="editingCommentContent" class="edit-comment-input">
+                <div class="comment-edit-actions">
+                  <button class="btn-comment-save" (click)="saveEditComment(post.postId)">Save</button>
+                  <button class="btn-comment-cancel" (click)="cancelEditComment()">Cancel</button>
+                </div>
+              </div>
+
+              <div class="comment-meta" *ngIf="editingCommentId !== comment.postCommentId">
+                <span>{{ comment.createdAt | date:'shortTime' }}</span>
+                <button class="reply-btn" (click)="toggleReplyInput(comment.postCommentId)">Reply</button>
+              </div>
+              
+              <!-- Reply Input -->
+              <div class="comment-input-wrapper reply-input-wrapper" *ngIf="activeReplyCommentId === comment.postCommentId">
+                <input type="text" placeholder="Write a reply..." [(ngModel)]="replyInputs[comment.postCommentId]">
+                <button (click)="addComment(post.postId, comment.postCommentId)">Reply</button>
+              </div>
               
               <!-- Replies -->
-              <div class="reply-card" *ngFor="let reply of comment.replies">
-                <strong>{{ reply.userName }}</strong>
-                <p>{{ reply.content }}</p>
+              <div class="replies-container" *ngIf="comment.replies && comment.replies.length > 0">
+                <div class="reply-card" *ngFor="let reply of comment.replies">
+                  <div class="comment-bubble">
+                    <strong>{{ reply.userName }}</strong>
+                    <p>{{ reply.content }}</p>
+                  </div>
+                  <div class="comment-meta">
+                    <span>{{ reply.createdAt | date:'shortTime' }}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -136,11 +192,14 @@
 
     <div class="modal-user-info">
       <div class="avatar-mid">
-        <img [src]="authService.currentUser()?.profilePictureUrl || 'assets/images/default-avatar.png'" alt="User">
+        <img *ngIf="authService.currentUser()?.profilePictureUrl && authService.currentUser()?.profilePictureUrl !== 'null'" [src]="authService.currentUser()?.profilePictureUrl" alt="User">
+        <div *ngIf="!authService.currentUser()?.profilePictureUrl || authService.currentUser()?.profilePictureUrl === 'null'" class="avatar-placeholder">
+          {{ authService.currentUser()?.fullName ? authService.currentUser()?.fullName!.charAt(0).toUpperCase() : 'U' }}
+        </div>
       </div>
       <div class="user-meta">
         <h5>{{ authService.currentUser()?.fullName }}</h5>
-        <button class="visibility-btn"><i class="fa-solid fa-earth-americas"></i> Anyone <i class="fa-solid fa-caret-down"></i></button>
+        <p class="user-headline">Software Developer</p>
       </div>
     </div>
 
@@ -177,4 +236,145 @@
     </div>
   </div>
 
+</div>
+
+<!-- Reactions Modal -->
+<div class="modal-overlay" *ngIf="isReactionsModalOpen" (click)="closeReactionsModal()">
+  <div class="glass-card modal-content reactions-modal reveal-fast" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3>Reactions</h3>
+      <button class="close-btn" (click)="closeReactionsModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="modal-body reactions-body">
+      <div class="feed-loader" *ngIf="loadingReactions">
+        <div class="loader-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="reactions-list" *ngIf="!loadingReactions">
+        <div class="reaction-user-item" *ngFor="let reaction of postReactions" (click)="viewPublicProfile(reaction.userId)">
+          <div class="reaction-user-avatar">
+            <img *ngIf="reaction.profilePictureUrl && reaction.profilePictureUrl !== 'null'" [src]="reaction.profilePictureUrl" alt="User">
+            <div *ngIf="!reaction.profilePictureUrl || reaction.profilePictureUrl === 'null'" class="avatar-placeholder">
+              {{ reaction.userName ? reaction.userName.charAt(0).toUpperCase() : 'U' }}
+            </div>
+            <div class="reaction-badge" [ngClass]="reaction.reactionType === 'Like' ? 'like-bg' : 'heart-bg'">
+              <i class="fa-solid fa-thumbs-up" *ngIf="reaction.reactionType === 'Like'"></i>
+              <i class="fa-solid fa-heart" *ngIf="reaction.reactionType !== 'Like'"></i>
+            </div>
+          </div>
+          <div class="reaction-user-meta">
+            <h5>{{ reaction.userName }}</h5>
+            <p>Professional</p>
+          </div>
+        </div>
+        
+        <div class="no-reactions-msg" *ngIf="postReactions.length === 0">
+          <p>No reactions yet.</p>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- Comments Modal -->
+<div class="modal-overlay" *ngIf="isCommentsModalOpen" (click)="closeCommentsModal()">
+  <div class="glass-card modal-content comments-modal reveal-fast" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3>Comments on {{ activePostForComments?.userName }}'s post</h3>
+      <button class="close-btn" (click)="closeCommentsModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="modal-body comments-body">
+      
+      <!-- Input for modal -->
+      <div class="comment-input-wrapper modal-input-wrapper">
+        <input type="text" placeholder="Write a comment..." [(ngModel)]="commentInputs[activePostForComments?.postId]">
+        <button (click)="addComment(activePostForComments?.postId)">Post</button>
+      </div>
+
+      <div class="feed-loader" *ngIf="loadingCommentsModal">
+        <div class="loader-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="comments-list full-comments-list" *ngIf="!loadingCommentsModal">
+        <div class="comment-card" *ngFor="let comment of commentsMap[activePostForComments?.postId]">
+          <div class="comment-bubble" *ngIf="editingCommentId !== comment.postCommentId">
+            <div class="comment-header-row">
+              <strong>{{ comment.userName }}</strong>
+              <div class="comment-owner-actions" *ngIf="comment.userId === authService.currentUser()?.userId">
+                <button class="comment-action-icon" (click)="startEditComment(comment)" title="Edit">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button class="comment-action-icon delete" (click)="deleteComment(comment.postCommentId, activePostForComments.postId)" title="Delete">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <p>{{ comment.content }}</p>
+          </div>
+
+          <!-- Comment Editor (Modal) -->
+          <div class="comment-edit-wrapper" *ngIf="editingCommentId === comment.postCommentId">
+            <input type="text" [(ngModel)]="editingCommentContent" class="edit-comment-input">
+            <div class="comment-edit-actions">
+              <button class="btn-comment-save" (click)="saveEditComment(activePostForComments.postId)">Save</button>
+              <button class="btn-comment-cancel" (click)="cancelEditComment()">Cancel</button>
+            </div>
+          </div>
+
+          <div class="comment-meta" *ngIf="editingCommentId !== comment.postCommentId">
+            <span>{{ comment.createdAt | date:'shortTime' }}</span>
+            <button class="reply-btn" (click)="toggleReplyInput(comment.postCommentId)">Reply</button>
+          </div>
+          
+          <!-- Reply Input (Modal) -->
+          <div class="comment-input-wrapper reply-input-wrapper" *ngIf="activeReplyCommentId === comment.postCommentId">
+            <input type="text" placeholder="Write a reply..." [(ngModel)]="replyInputs[comment.postCommentId]">
+            <button (click)="addComment(activePostForComments?.postId, comment.postCommentId)">Reply</button>
+          </div>
+
+          <!-- Replies (Modal) -->
+          <div class="replies-container" *ngIf="comment.replies && comment.replies.length > 0">
+            <div class="reply-card" *ngFor="let reply of comment.replies">
+              <div class="comment-bubble">
+                <strong>{{ reply.userName }}</strong>
+                <p>{{ reply.content }}</p>
+              </div>
+              <div class="comment-meta">
+                <span>{{ reply.createdAt | date:'shortTime' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="no-reactions-msg" *ngIf="!commentsMap[activePostForComments?.postId] || commentsMap[activePostForComments?.postId].length === 0">
+          <p>No comments yet. Be the first!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Action Toast / Deletion Confirmation Toaster -->
+<div class="delete-toast-container" *ngIf="pendingDeletePostId !== null || pendingDeleteCommentId !== null" (click)="cancelPendingDelete()">
+  <div class="delete-toast-card reveal-fast" (click)="$event.stopPropagation()">
+    <div class="delete-toast-icon">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <div class="delete-toast-content">
+      <h5>Delete Confirmation</h5>
+      <p *ngIf="pendingDeletePostId !== null">Are you sure you want to permanently delete this post?</p>
+      <p *ngIf="pendingDeleteCommentId !== null">Are you sure you want to permanently delete this comment?</p>
+    </div>
+    <div class="delete-toast-actions">
+      <button class="btn-toast-cancel" (click)="cancelPendingDelete()">Cancel</button>
+      <button class="btn-toast-confirm" (click)="confirmPendingDelete()">Delete</button>
+    </div>
+  </div>
 </div>

@@ -52,6 +52,12 @@ getComments(postId: number) {
   );
 }
 
+getPostReactions(postId: number) {
+  return this.http.get<any[]>(
+    `${environment.apiUrl}/feed/${postId}/reactions`
+  );
+}
+
 addComment(
   postId: number,
   payload: any
@@ -63,4 +69,36 @@ addComment(
   );
 }
 
+
+editPost(
+  postId: number,
+  payload: any
+) {
+  return this.http.put(
+    `${environment.apiUrl}/feed/posts/${postId}`,
+    payload
+  );
+}
+
+editComment(
+  commentId: number,
+  payload: any
+) {
+  return this.http.put(
+    `${environment.apiUrl}/feed/comments/${commentId}`,
+    payload
+  );
+}
+
+  deletePost(postId: number) {
+    return this.http.delete(
+      `${environment.apiUrl}/feed/posts/${postId}`
+    );
+  }
+
+  deleteComment(commentId: number) {
+    return this.http.delete(
+      `${environment.apiUrl}/feed/comments/${commentId}`
+    );
+  }
 }
