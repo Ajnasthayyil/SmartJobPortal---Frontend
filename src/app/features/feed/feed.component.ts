@@ -43,10 +43,6 @@ export class FeedComponent implements OnInit {
   editingCommentId: number | null = null;
   editingCommentContent = '';
 
-  pendingDeletePostId: number | null = null;
-  pendingDeleteCommentId: number | null = null;
-  pendingDeleteCommentPostId: number | null = null;
-
   authService = inject(AuthService);
   router = inject(Router);
   toast = inject(ToastService);
@@ -157,7 +153,7 @@ export class FeedComponent implements OnInit {
       // 2. Upload to Cloudinary (via Backend)
       this.feedService.uploadImage(file).subscribe({
         next: (res: any) => {
-          this.uploadedImage = res;
+          this.uploadedImage = res.data || res;
         },
         error: (err) => console.error('Image upload failed', err)
       });
@@ -279,10 +275,18 @@ addComment(postId: number, parentCommentId?: number) {
   }
 
   deletePost(postId: number) {
-    this.pendingDeletePostId = postId;
-    this.pendingDeleteCommentId = null;
-    this.pendingDeleteCommentPostId = null;
     this.activePostMenuId = null;
+    if (confirm('Are you sure you want to permanently delete this post?')) {
+      this.feedService.deletePost(postId).subscribe({
+        next: () => {
+          this.toast.success('Post deleted successfully');
+          this.loadFeed();
+        },
+        error: (err: any) => {
+          this.toast.error(err?.error?.message || 'Failed to delete post');
+        }
+      });
+    }
   }
 
   startEditPost(post: any) {
@@ -312,34 +316,7 @@ addComment(postId: number, parentCommentId?: number) {
   }
 
   deleteComment(commentId: number, postId: number) {
-    this.pendingDeleteCommentId = commentId;
-    this.pendingDeleteCommentPostId = postId;
-    this.pendingDeletePostId = null;
-  }
-
-  cancelPendingDelete() {
-    this.pendingDeletePostId = null;
-    this.pendingDeleteCommentId = null;
-    this.pendingDeleteCommentPostId = null;
-  }
-
-  confirmPendingDelete() {
-    if (this.pendingDeletePostId !== null) {
-      const postId = this.pendingDeletePostId;
-      this.cancelPendingDelete();
-      this.feedService.deletePost(postId).subscribe({
-        next: () => {
-          this.toast.success('Post deleted successfully');
-          this.loadFeed();
-        },
-        error: (err: any) => {
-          this.toast.error(err?.error?.message || 'Failed to delete post');
-        }
-      });
-    } else if (this.pendingDeleteCommentId !== null) {
-      const commentId = this.pendingDeleteCommentId;
-      const postId = this.pendingDeleteCommentPostId!;
-      this.cancelPendingDelete();
+    if (confirm('Are you sure you want to permanently delete this comment?')) {
       this.feedService.deleteComment(commentId).subscribe({
         next: () => {
           this.toast.success('Comment deleted successfully');

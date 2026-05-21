@@ -53,7 +53,7 @@
               <button class="menu-item-btn" (click)="startEditPost(post)">
                 <i class="fa-solid fa-pen"></i> Edit Post
               </button>
-              <button class="menu-item-btn delete" (click)="deletePost(post.postId)">
+              <button class="menu-item-btn delete" (click)="deletePost(post.postId); $event.stopPropagation()">
                 <i class="fa-solid fa-trash"></i> Delete Post
               </button>
             </div>
@@ -123,7 +123,7 @@
                     <button class="comment-action-icon" (click)="startEditComment(comment)" title="Edit">
                       <i class="fa-solid fa-pen"></i>
                     </button>
-                    <button class="comment-action-icon delete" (click)="deleteComment(comment.postCommentId, post.postId)" title="Delete">
+                    <button class="comment-action-icon delete" (click)="deleteComment(comment.postCommentId, post.postId); $event.stopPropagation()" title="Delete">
                       <i class="fa-solid fa-trash"></i>
                     </button>
                   </div>
@@ -311,7 +311,7 @@
                 <button class="comment-action-icon" (click)="startEditComment(comment)" title="Edit">
                   <i class="fa-solid fa-pen"></i>
                 </button>
-                <button class="comment-action-icon delete" (click)="deleteComment(comment.postCommentId, activePostForComments.postId)" title="Delete">
+                <button class="comment-action-icon delete" (click)="deleteComment(comment.postCommentId, activePostForComments.postId); $event.stopPropagation()" title="Delete">
                   <i class="fa-solid fa-trash"></i>
                 </button>
               </div>
@@ -356,25 +356,4 @@
         <div class="no-reactions-msg" *ngIf="!commentsMap[activePostForComments?.postId] || commentsMap[activePostForComments?.postId].length === 0">
           <p>No comments yet. Be the first!</p>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Custom Action Toast / Deletion Confirmation Toaster -->
-<div class="delete-toast-container" *ngIf="pendingDeletePostId !== null || pendingDeleteCommentId !== null" (click)="cancelPendingDelete()">
-  <div class="delete-toast-card reveal-fast" (click)="$event.stopPropagation()">
-    <div class="delete-toast-icon">
-      <i class="fa-solid fa-triangle-exclamation"></i>
-    </div>
-    <div class="delete-toast-content">
-      <h5>Delete Confirmation</h5>
-      <p *ngIf="pendingDeletePostId !== null">Are you sure you want to permanently delete this post?</p>
-      <p *ngIf="pendingDeleteCommentId !== null">Are you sure you want to permanently delete this comment?</p>
-    </div>
-    <div class="delete-toast-actions">
-      <button class="btn-toast-cancel" (click)="cancelPendingDelete()">Cancel</button>
-      <button class="btn-toast-confirm" (click)="confirmPendingDelete()">Delete</button>
-    </div>
-  </div>
 </div>
