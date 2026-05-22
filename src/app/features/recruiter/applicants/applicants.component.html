@@ -192,6 +192,18 @@
             <div class="name-block">
               <h2 class="candidate-name">{{ profile.fullName }}</h2>
               <p class="candidate-headline">{{ profile.headline || 'Professional Candidate' }}</p>
+              <!-- Premium Social Media Icons Row -->
+              <div class="profile-social-row" *ngIf="profile.linkedInUrl || profile.gitHubUrl || profile.leetCodeUrl">
+                <a *ngIf="profile.linkedInUrl" [href]="profile.linkedInUrl" target="_blank" class="profile-social-icon linkedin" title="LinkedIn">
+                  <i class="fa-brands fa-linkedin"></i>
+                </a>
+                <a *ngIf="profile.gitHubUrl" [href]="profile.gitHubUrl" target="_blank" class="profile-social-icon github" title="GitHub">
+                  <i class="fa-brands fa-github"></i>
+                </a>
+                <a *ngIf="profile.leetCodeUrl" [href]="profile.leetCodeUrl" target="_blank" class="profile-social-icon leetcode" title="LeetCode">
+                  <i class="fa-solid fa-code"></i>
+                </a>
+              </div>
             </div>
             <div class="experience-badge">
               <span class="exp-val">{{ profile.experienceYears }}</span>
@@ -270,7 +282,13 @@
                 <div class="item-content">
                   <h4>{{ edu.degree }}</h4>
                   <span class="sub-text">{{ edu.institution }}</span>
-                  <span class="duration">{{ edu.graduationYear }}</span>
+                  <span class="duration" *ngIf="edu.duration">{{ edu.duration }}</span>
+                  <div class="edu-field-wrap" *ngIf="edu.fieldOfStudy" style="margin-top: 6px;">
+                    <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #2563eb; background: #eff6ff; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(37, 99, 235, 0.15);">
+                      <i class="fa-solid fa-book-open"></i>
+                      <span>{{ edu.fieldOfStudy }}</span>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

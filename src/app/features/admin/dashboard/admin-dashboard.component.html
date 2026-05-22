@@ -87,6 +87,58 @@
         </div>
       </div>
 
+      <!-- ── Charts Grid ─────────────────────────────────── -->
+      <div class="charts-section-grid reveal delay-3">
+        <!-- Platform Activity Chart -->
+        <div class="chart-card glass main-chart">
+          <div class="chart-header">
+            <div class="title-wrap">
+              <i class="fa-solid fa-chart-line chart-icon"></i>
+              <div class="chart-txt">
+                <h3>Platform Growth & Activity</h3>
+                <p>Sign-ups & job applications (Last 7 Days)</p>
+              </div>
+            </div>
+          </div>
+          <div class="canvas-container">
+            <canvas id="activityChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Donut Charts Row -->
+        <div class="charts-row-donuts">
+          <div class="chart-card glass donut-card">
+            <div class="chart-header">
+              <div class="title-wrap">
+                <i class="fa-solid fa-chart-pie chart-icon"></i>
+                <div class="chart-txt">
+                  <h3>User Composition</h3>
+                  <p>Breakdown by role profiles</p>
+                </div>
+              </div>
+            </div>
+            <div class="canvas-container doughnut">
+              <canvas id="userCompositionChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card glass donut-card">
+            <div class="chart-header">
+              <div class="title-wrap">
+                <i class="fa-solid fa-briefcase chart-icon"></i>
+                <div class="chart-txt">
+                  <h3>Job Listings Status</h3>
+                  <p>Active vs inactive postings</p>
+                </div>
+              </div>
+            </div>
+            <div class="canvas-container doughnut">
+              <canvas id="jobStatusChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── Quick Actions ────────────────────────────────── -->
       <section class="quick-actions-section reveal delay-3">
         <h3 class="section-title">Quick Management</h3>

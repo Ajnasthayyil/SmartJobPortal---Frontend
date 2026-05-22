@@ -124,6 +124,12 @@ export class CandidateProfileComponent implements OnInit {
     this.service.getProfile().subscribe({
       next: res => {
         if (res.success && res.data) {
+          if (res.data.education) {
+            res.data.education = res.data.education.map((edu: any) => ({
+              ...edu,
+              duration: edu.duration || edu.graduationYear || ''
+            }));
+          }
           this.profile.set(res.data);
           this.calcCompletion(res.data);
         }
@@ -150,10 +156,22 @@ export class CandidateProfileComponent implements OnInit {
         });
 
         this.educationGroups.clear();
-        data.education?.forEach(edu => this.educationGroups.push(this.fb.group(edu)));
+        data.education?.forEach((edu: any) => {
+          this.educationGroups.push(this.fb.group({
+            degree: [edu.degree || '', Validators.required],
+            institution: [edu.institution || '', Validators.required],
+            fieldOfStudy: [edu.fieldOfStudy || '', Validators.required],
+            duration: [edu.duration || edu.graduationYear || '', Validators.required]
+          }));
+        });
 
         this.experienceGroups.clear();
-        data.workExperience?.forEach(exp => this.experienceGroups.push(this.fb.group(exp)));
+        data.workExperience?.forEach(exp => this.experienceGroups.push(this.fb.group({
+          company: [exp.company || '', Validators.required],
+          role: [exp.role || '', Validators.required],
+          duration: [exp.duration || '', Validators.required],
+          description: [exp.description || '', Validators.required]
+        })));
 
         this.skillGroups.clear();
         data.skills?.forEach(s => this.skillGroups.push(this.fb.group({
@@ -223,6 +241,12 @@ export class CandidateProfileComponent implements OnInit {
         this.saving.set(false);
         if (res.success) {
           this.toast.success('Profile updated successfully!');
+          if (res.data && res.data.education) {
+            res.data.education = res.data.education.map((edu: any) => ({
+              ...edu,
+              duration: edu.duration || edu.graduationYear || ''
+            }));
+          }
           this.profile.set(res.data);
           this.calcCompletion(res.data);
           this.isWizardMode.set(false);

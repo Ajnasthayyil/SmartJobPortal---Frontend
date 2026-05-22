@@ -39,12 +39,16 @@ export class RecruiterProfileComponent implements OnInit {
     private auth:    AuthService,
     private toast:   ToastService
   ) {
+    const urlPattern = '^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$';
     this.form = this.fb.group({
       companyName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(150)]],
       industry:    ['', Validators.required],
-      website:     ['', [Validators.pattern('^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$')]],
+      website:     ['', [Validators.pattern(urlPattern)]],
       location:    ['', Validators.required],
-      description: ['', [Validators.required, Validators.minLength(50), Validators.maxLength(1000)]]
+      description: ['', [Validators.required, Validators.minLength(50), Validators.maxLength(1000)]],
+      linkedInUrl: ['', [Validators.pattern(urlPattern)]],
+      gitHubUrl:   ['', [Validators.pattern(urlPattern)]],
+      twitterUrl:  ['', [Validators.pattern(urlPattern)]]
     });
   }
 
@@ -55,7 +59,8 @@ export class RecruiterProfileComponent implements OnInit {
     this.service.getProfile().subscribe({
       next: res => {
         if (res.success && res.data) {
-          this.profile.set(res.data);
+          const socials = JSON.parse(localStorage.getItem(`recruiter_socials_${res.data.userId}`) || '{}');
+          this.profile.set({ ...res.data, ...socials });
         }
         this.loading.set(false);
       },
@@ -71,7 +76,10 @@ export class RecruiterProfileComponent implements OnInit {
         industry:    data.industry    || '',
         website:     data.website     || '',
         location:    data.location    || '',
-        description: data.description || ''
+        description: data.description || '',
+        linkedInUrl: (data as any).linkedInUrl || '',
+        gitHubUrl:   (data as any).gitHubUrl   || '',
+        twitterUrl:  (data as any).twitterUrl  || ''
       });
     }
     this.isEditModalOpen.set(true);
@@ -89,12 +97,29 @@ export class RecruiterProfileComponent implements OnInit {
     }
 
     this.saving.set(true);
-    this.service.updateProfile(this.form.value).subscribe({
+    const formValue = this.form.value;
+    const updatePayload = {
+      companyName: formValue.companyName,
+      industry:    formValue.industry,
+      website:     formValue.website,
+      location:    formValue.location,
+      description: formValue.description
+    };
+
+    this.service.updateProfile(updatePayload).subscribe({
       next: res => {
         this.saving.set(false);
         if (res.success) {
           this.toast.success('Company profile updated successfully!');
-          if (res.data) this.profile.set(res.data);
+          const socials = {
+            linkedInUrl: formValue.linkedInUrl || '',
+            gitHubUrl:   formValue.gitHubUrl   || '',
+            twitterUrl:  formValue.twitterUrl  || ''
+          };
+          if (res.data) {
+            localStorage.setItem(`recruiter_socials_${res.data.userId}`, JSON.stringify(socials));
+            this.profile.set({ ...res.data, ...socials });
+          }
           this.closeEditModal();
         } else {
           this.toast.error(res.message || 'Update failed.');

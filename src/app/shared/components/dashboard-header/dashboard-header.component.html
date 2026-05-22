@@ -1,5 +1,12 @@
 <div class="dash-header-container">
   <header class="dash-header">
+    <!-- Hamburger Menu (Mobile/Tablet only) -->
+    <button class="mobile-menu-toggle" 
+            (click)="sidebarService.toggleMobile()" 
+            aria-label="Toggle Menu">
+      <i class="fa-solid" [class.fa-bars]="!sidebarService.isOpenMobile()" [class.fa-xmark]="sidebarService.isOpenMobile()"></i>
+    </button>
+
     <div class="logo-wrapper" routerLink="/">
       <div class="logo">
         <div class="logo-text-group">Tal<span>Ex</span></div>

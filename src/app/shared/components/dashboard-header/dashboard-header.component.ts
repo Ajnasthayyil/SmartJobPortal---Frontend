@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { SidebarService } from '../../../core/services/sidebar.service';
 
 import { NotificationBellComponent } from '../notification-bell/notification-bell.component';
 
@@ -14,6 +15,7 @@ import { NotificationBellComponent } from '../notification-bell/notification-bel
 })
 export class DashboardHeaderComponent {
   authService = inject(AuthService);
+  sidebarService = inject(SidebarService);
   
   isDropdownOpen = false;
 

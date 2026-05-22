@@ -1,5 +1,5 @@
-<aside class="sidebar-wrapper">
-  <div class="sidebar-logo-container" routerLink="/">
+<aside class="sidebar-wrapper" [class.mobile-open]="sidebarService.isOpenMobile()">
+  <div class="sidebar-logo-container" routerLink="/" (click)="sidebarService.setMobileOpen(false)">
     <div class="sidebar-logo">
       <img src="assets/logo.png" alt="TalEx Logo" class="logo-img">
       <div class="logo-text-group">
@@ -19,7 +19,8 @@
            [routerLink]="item.path"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
-           class="nav-link">
+           class="nav-link"
+           (click)="sidebarService.setMobileOpen(false)">
           <i [class]="'nav-icon ' + item.iconClass"></i>
           <span class="nav-label">{{ item.label }}</span>
         </a>
@@ -28,7 +29,7 @@
   </div>
 
   <div class="sidebar-footer">
-    <button class="logout-btn" (click)="logout()">
+    <button class="logout-btn" (click)="logout(); sidebarService.setMobileOpen(false)">
       <i class="fa-solid fa-power-off nav-icon"></i>
       <span class="nav-label">Logout</span>
     </button>

@@ -284,6 +284,12 @@ export class ApplicantsComponent implements OnInit {
       next: res => {
         this.loadingProfile.set(false);
         if (res.success) {
+          if (res.data && res.data.education) {
+            res.data.education = res.data.education.map((edu: any) => ({
+              ...edu,
+              duration: edu.duration || edu.graduationYear || ''
+            }));
+          }
           // Merge application-specific data (like cover note) with general profile
           this.selectedCandidate.set({
             ...res.data,

@@ -9,6 +9,9 @@ export interface RecruiterProfile {
   description: string;
   location: string;
   totalJobsPosted: number;
+  linkedInUrl?: string;
+  gitHubUrl?: string;
+  twitterUrl?: string;
 }
 
 export interface PostJobRequest {

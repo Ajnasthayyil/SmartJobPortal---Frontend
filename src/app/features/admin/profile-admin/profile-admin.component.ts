@@ -27,10 +27,14 @@ export class ProfileAdminComponent implements OnInit {
   isEditModalOpen = signal(false);
 
   constructor() {
+    const urlPattern = '^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$';
     this.form = this.fb.group({
       fullName: ['', [Validators.required]],
       email: [{ value: '', disabled: true }],
-      phoneNumber: ['']
+      phoneNumber: [''],
+      linkedInUrl: ['', [Validators.pattern(urlPattern)]],
+      gitHubUrl:   ['', [Validators.pattern(urlPattern)]],
+      twitterUrl:  ['', [Validators.pattern(urlPattern)]]
     });
   }
 
@@ -43,8 +47,9 @@ export class ProfileAdminComponent implements OnInit {
     this.adminService.getProfile().subscribe({
       next: (res) => {
         if (res.success) {
-          this.profile.set(res.data);
-          this.form.patchValue(res.data);
+          const socials = JSON.parse(localStorage.getItem(`admin_socials_${res.data.userId}`) || '{}');
+          this.profile.set({ ...res.data, ...socials });
+          this.form.patchValue({ ...res.data, ...socials });
         } else {
           this.useFallback();
         }
@@ -71,7 +76,10 @@ export class ProfileAdminComponent implements OnInit {
     const mock = {
       fullName: 'AJNAS THAYYIL',
       email: 'admin@smartjobportal.com',
-      phoneNumber: '7025882784'
+      phoneNumber: '7025882784',
+      linkedInUrl: 'https://linkedin.com/in/ajnasthayyil',
+      gitHubUrl: 'https://github.com/ajnasthayyil',
+      twitterUrl: 'https://twitter.com/ajnasthayyil'
     };
     this.profile.set(mock);
     this.form.patchValue(mock);
@@ -96,12 +104,24 @@ export class ProfileAdminComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.saving.set(true);
-    this.adminService.updateProfile(this.form.getRawValue()).subscribe({
+    const formValue = this.form.getRawValue();
+    const updatePayload = {
+      fullName: formValue.fullName,
+      phoneNumber: formValue.phoneNumber
+    };
+
+    this.adminService.updateProfile(updatePayload).subscribe({
       next: (res) => {
         this.saving.set(false);
         if (res.success) {
           this.toast.success('Executive profile synchronized successfully.');
-          this.profile.set(res.data);
+          const socials = {
+            linkedInUrl: formValue.linkedInUrl || '',
+            gitHubUrl:   formValue.gitHubUrl   || '',
+            twitterUrl:  formValue.twitterUrl  || ''
+          };
+          localStorage.setItem(`admin_socials_${res.data.userId || 1}`, JSON.stringify(socials));
+          this.profile.set({ ...res.data, ...socials });
           this.closeEditModal();
         } else {
           this.toast.error('Synchronization failed.');

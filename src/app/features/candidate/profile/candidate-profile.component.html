@@ -294,6 +294,18 @@
               <span class="hi-text">Professional Profile</span>
               <h1>{{ profile()?.fullName }}</h1>
               <p class="headline-text">{{ profile()?.headline || 'Available for Opportunities' }}</p>
+              <!-- Premium Social Media Icons Row -->
+              <div class="profile-social-row">
+                <a [href]="profile()?.linkedInUrl || 'https://linkedin.com'" target="_blank" class="profile-social-icon linkedin" title="LinkedIn">
+                  <i class="fa-brands fa-linkedin"></i>
+                </a>
+                <a [href]="profile()?.gitHubUrl || 'https://github.com'" target="_blank" class="profile-social-icon github" title="GitHub">
+                  <i class="fa-brands fa-github"></i>
+                </a>
+                <a [href]="profile()?.leetCodeUrl || 'https://leetcode.com'" target="_blank" class="profile-social-icon leetcode" title="LeetCode">
+                  <i class="fa-solid fa-code"></i>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -373,10 +385,22 @@
               <div class="info">
                 <div class="top-row">
                   <span class="title">{{ edu.degree }}</span>
-                  <span class="date">{{ edu.duration }}</span>
+                  <span class="date" *ngIf="edu.duration">{{ edu.duration }}</span>
                 </div>
                 <span class="subtitle">{{ edu.institution }}</span>
+                
+                <!-- Field of Study / Expertise Fields -->
+                <div class="edu-meta-row" *ngIf="edu.fieldOfStudy">
+                  <span class="edu-field-badge">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Specialization: <strong>{{ edu.fieldOfStudy }}</strong></span>
+                  </span>
+                </div>
               </div>
+            </div>
+            <div *ngIf="!profile()?.education?.length" class="empty-state">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <p>No education details added yet.</p>
             </div>
           </div>
 

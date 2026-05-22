@@ -149,6 +149,31 @@
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
+@media (max-width: 1024px) {
+  .profile-container {
+    padding: 130px 24px 24px 24px;
+  }
+}
+
 @media (max-width: 900px) {
-  .profile-grid { grid-template-columns: 1fr; }
+  .profile-container {
+    padding: 120px 16px 16px 16px;
+  }
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .profile-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    .full-width {
+      grid-column: span 1;
+    }
+  }
 }

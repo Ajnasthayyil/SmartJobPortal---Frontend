@@ -15,6 +15,12 @@ import { ToastContainerComponent } from './shared/components/toast/toast-contain
          [class.has-sidebar]="showSidebar() && !isFullPage" 
          [class.sidebar-expanded]="sidebarService.isExpanded() && !isFullPage">
       
+      <!-- Mobile Sidebar Backdrop Overlay -->
+      <div class="mobile-sidebar-backdrop" 
+           *ngIf="showSidebar() && !isFullPage && sidebarService.isOpenMobile()" 
+           (click)="sidebarService.setMobileOpen(false)">
+      </div>
+      
       <!-- Dashboard Header -->
       <ng-container *ngIf="isAuthPage() && !isFullPage">
         <app-dashboard-header></app-dashboard-header>

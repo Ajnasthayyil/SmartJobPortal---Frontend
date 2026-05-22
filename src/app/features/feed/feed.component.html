@@ -119,11 +119,11 @@
               <div class="comment-bubble" *ngIf="editingCommentId !== comment.postCommentId">
                 <div class="comment-header-row">
                   <strong>{{ comment.userName }}</strong>
-                  <div class="comment-owner-actions" *ngIf="comment.userId === authService.currentUser()?.userId">
-                    <button class="comment-action-icon" (click)="startEditComment(comment)" title="Edit">
+                  <div class="comment-owner-actions" *ngIf="comment.userId === authService.currentUser()?.userId || post.userId === authService.currentUser()?.userId">
+                    <button class="comment-action-icon" *ngIf="comment.userId === authService.currentUser()?.userId" (click)="startEditComment(comment)" title="Edit">
                       <i class="fa-solid fa-pen"></i>
                     </button>
-                    <button class="comment-action-icon delete" (click)="deleteComment(comment.postCommentId, post.postId); $event.stopPropagation()" title="Delete">
+                    <button class="comment-action-icon delete" *ngIf="comment.userId === authService.currentUser()?.userId || post.userId === authService.currentUser()?.userId" (click)="deleteComment(comment.postCommentId, post.postId); $event.stopPropagation()" title="Delete">
                       <i class="fa-solid fa-trash"></i>
                     </button>
                   </div>
@@ -307,11 +307,11 @@
           <div class="comment-bubble" *ngIf="editingCommentId !== comment.postCommentId">
             <div class="comment-header-row">
               <strong>{{ comment.userName }}</strong>
-              <div class="comment-owner-actions" *ngIf="comment.userId === authService.currentUser()?.userId">
-                <button class="comment-action-icon" (click)="startEditComment(comment)" title="Edit">
+              <div class="comment-owner-actions" *ngIf="comment.userId === authService.currentUser()?.userId || activePostForComments?.userId === authService.currentUser()?.userId">
+                <button class="comment-action-icon" *ngIf="comment.userId === authService.currentUser()?.userId" (click)="startEditComment(comment)" title="Edit">
                   <i class="fa-solid fa-pen"></i>
                 </button>
-                <button class="comment-action-icon delete" (click)="deleteComment(comment.postCommentId, activePostForComments.postId); $event.stopPropagation()" title="Delete">
+                <button class="comment-action-icon delete" *ngIf="comment.userId === authService.currentUser()?.userId || activePostForComments?.userId === authService.currentUser()?.userId" (click)="deleteComment(comment.postCommentId, activePostForComments.postId); $event.stopPropagation()" title="Delete">
                   <i class="fa-solid fa-trash"></i>
                 </button>
               </div>

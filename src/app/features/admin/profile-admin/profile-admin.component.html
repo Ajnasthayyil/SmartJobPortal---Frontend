@@ -25,6 +25,20 @@
           <div class="badge">System Administrator</div>
           <h1 class="user-name">{{ profile()?.fullName }}</h1>
           <p class="user-headline">Principal Administrator • TalEx Ecosystem</p>
+          
+          <!-- Premium Social Media Icons Row -->
+          <div class="profile-social-row">
+            <a [href]="profile()?.linkedInUrl || 'https://linkedin.com'" target="_blank" class="profile-social-icon linkedin" title="LinkedIn">
+              <i class="fa-brands fa-linkedin"></i>
+            </a>
+            <a [href]="profile()?.gitHubUrl || 'https://github.com'" target="_blank" class="profile-social-icon github" title="GitHub">
+              <i class="fa-brands fa-github"></i>
+            </a>
+            <a [href]="profile()?.twitterUrl || 'https://twitter.com'" target="_blank" class="profile-social-icon twitter" title="Twitter / X">
+              <i class="fa-brands fa-x-twitter"></i>
+            </a>
+          </div>
+
           <div class="user-meta">
             <span><i class="fa-solid fa-envelope"></i> {{ profile()?.email }}</span>
             <span><i class="fa-solid fa-phone"></i> {{ profile()?.phoneNumber || 'No phone linked' }}</span>
@@ -119,6 +133,25 @@
           <div class="premium-field">
             <label>Phone Number</label>
             <input type="text" formControlName="phoneNumber" placeholder="Enter phone number" />
+          </div>
+
+          <div class="form-row">
+            <div class="premium-field" [class.has-error]="form.get('linkedInUrl')?.invalid && form.get('linkedInUrl')?.touched">
+              <label>LinkedIn URL</label>
+              <input type="text" formControlName="linkedInUrl" placeholder="https://linkedin.com/in/your-profile" />
+              <span class="error-msg" *ngIf="form.get('linkedInUrl')?.invalid && form.get('linkedInUrl')?.touched">Please enter a valid URL.</span>
+            </div>
+            <div class="premium-field" [class.has-error]="form.get('gitHubUrl')?.invalid && form.get('gitHubUrl')?.touched">
+              <label>GitHub URL</label>
+              <input type="text" formControlName="gitHubUrl" placeholder="https://github.com/your-username" />
+              <span class="error-msg" *ngIf="form.get('gitHubUrl')?.invalid && form.get('gitHubUrl')?.touched">Please enter a valid URL.</span>
+            </div>
+          </div>
+
+          <div class="premium-field" [class.has-error]="form.get('twitterUrl')?.invalid && form.get('twitterUrl')?.touched">
+            <label>Twitter / X URL</label>
+            <input type="text" formControlName="twitterUrl" placeholder="https://twitter.com/your-username" />
+            <span class="error-msg" *ngIf="form.get('twitterUrl')?.invalid && form.get('twitterUrl')?.touched">Please enter a valid URL.</span>
           </div>
         </div>
 
