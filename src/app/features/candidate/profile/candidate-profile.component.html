@@ -20,7 +20,7 @@
       <div class="wizard-header">
         <div class="header-content">
           <div class="brand">
-            <div class="logo-circle"><i class="fa-solid fa-bolt"></i></div>
+            <div class="logo-circle"><i class="fa-solid fa-user"></i></div>
             <div class="text">
               <h2>Complete Your Profile</h2>
               <p>Step {{ currentStep() }} of {{ totalSteps }}</p>
@@ -347,11 +347,6 @@
             <div class="meta-row">
               <div class="location-badge">
                 <i class="fa-solid fa-location-dot"></i> {{ profile()?.location || 'Remote / Global' }}
-              </div>
-              <div class="social-links-row" *ngIf="profile()?.linkedInUrl || profile()?.gitHubUrl || profile()?.leetCodeUrl">
-                <a *ngIf="profile()?.linkedInUrl" [href]="profile()?.linkedInUrl" target="_blank" class="social-link linkedin"><i class="fa-brands fa-linkedin"></i></a>
-                <a *ngIf="profile()?.gitHubUrl" [href]="profile()?.gitHubUrl" target="_blank" class="social-link github"><i class="fa-brands fa-github"></i></a>
-                <a *ngIf="profile()?.leetCodeUrl" [href]="profile()?.leetCodeUrl" target="_blank" class="social-link leetcode"><i class="fa-solid fa-code"></i></a>
               </div>
             </div>
           </div>

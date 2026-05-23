@@ -1,8 +1,10 @@
 import { FeedService } from 'src/app/core/services/feed.service';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { Component, OnInit, inject, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/core/services/toast.service';
+import { SignalRFeedService } from 'src/app/core/services/signalr-feed.service';
+import { Subscription } from 'rxjs';
 
 export interface FeedComment {
   postCommentId: number;
@@ -18,7 +20,7 @@ export interface FeedComment {
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.scss']
 })
-export class FeedComponent implements OnInit {
+export class FeedComponent implements OnInit, OnDestroy {
 
   posts: any[] = [];
   postContent = '';
@@ -47,12 +49,68 @@ export class FeedComponent implements OnInit {
   router = inject(Router);
   toast = inject(ToastService);
   
+  private subscriptions = new Subscription();
+  signalrService = inject(SignalRFeedService);
+
   constructor(
     private feedService: FeedService
   ) {}
 
   ngOnInit(): void {
     this.loadFeed();
+    
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      this.signalrService.startConnection(token);
+    }
+
+    this.subscriptions.add(
+      this.signalrService.newPostReceived$.subscribe(post => {
+        // If the post is already in the list (e.g. we created it and got the response before SignalR), don't add it twice
+        if (!this.posts.find(p => p.postId === post.postId)) {
+           this.posts.unshift({ ...post, isLiked: false });
+        }
+      })
+    );
+
+    this.subscriptions.add(
+      this.signalrService.newCommentReceived$.subscribe(({ comment, postId }) => {
+        const post = this.posts.find(p => p.postId === postId);
+        if (post) {
+           // Only increment if we don't already have it (basic deduplication)
+           if (!this.commentsMap[postId] || !this.commentsMap[postId].find((c: any) => c.postCommentId === comment.postCommentId)) {
+             post.totalComments = (post.totalComments || 0) + 1;
+             
+             if (this.commentsMap[postId]) {
+                if (comment.parentCommentId) {
+                  // It's a reply
+                  const parent = this.commentsMap[postId].find((c: any) => c.postCommentId === comment.parentCommentId);
+                  if (parent) {
+                    parent.replies = parent.replies || [];
+                    parent.replies.push(comment);
+                  }
+                } else {
+                  this.commentsMap[postId].push(comment);
+                }
+             }
+           }
+        }
+      })
+    );
+
+    this.subscriptions.add(
+      this.signalrService.reactionUpdated$.subscribe(({ postId, newLikesCount }) => {
+        const post = this.posts.find(p => p.postId === postId);
+        if (post) {
+           post.likesCount = newLikesCount;
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+    this.signalrService.stopConnection();
   }
 
   loadFeed() {
@@ -209,6 +267,7 @@ export class FeedComponent implements OnInit {
   commentsMap: { [key: number]: FeedComment[] } = {};
 
   commentInputs: { [key: number]: string } = {};
+  expandedComments: { [key: number]: boolean } = {};
   replyInputs: { [commentId: number]: string } = {};
   activeReplyCommentId: number | null = null;
 
@@ -216,13 +275,23 @@ export class FeedComponent implements OnInit {
     this.activeReplyCommentId = this.activeReplyCommentId === commentId ? null : commentId;
   }
 
+  toggleCommentsExpanded(postId: number) {
+    this.expandedComments[postId] = !this.expandedComments[postId];
+  }
+
+  loadCommentsIfNotLoaded(postId: number) {
+    if (!this.commentsMap[postId]) {
+      this.loadComments(postId);
+    }
+  }
+
 loadComments(postId: number) {
 
   this.feedService
     .getComments(postId)
     .subscribe({
-      next: (res) => {
-        this.commentsMap[postId] = res;
+      next: (res: any) => {
+        this.commentsMap[postId] = res.data || res; // Handle both wrapped and unwrapped arrays
       }
     });
 }
@@ -253,9 +322,11 @@ addComment(postId: number, parentCommentId?: number) {
           if (post) post.totalComments = (post.totalComments || post.commentsCount || 0) + 1;
         }
         
-        this.loadComments(postId); // Refresh comments inline and in modal
+        this.expandedComments[postId] = true; // Auto-expand to show new comment
+        
+        this.loadComments(postId); // Refresh comments inline
         if (!parentCommentId) {
-            this.loadFeed();
+          this.loadFeed();
         }
       }
     });

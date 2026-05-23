@@ -34,10 +34,17 @@
         </div>
         
         <div class="hero-actions" *ngIf="auth.isLoggedIn() && auth.getRole() === 'Candidate'">
-          <a [routerLink]="['/candidate/jobs', j.jobId]" class="btn-primary-lg">
-            Apply for this Position
-            <i class="fa-solid fa-arrow-right"></i>
-          </a>
+          <ng-container *ngIf="isExpired(j.expiresAt); else activeApply">
+             <button class="btn-primary-lg" disabled style="opacity: 0.6; cursor: not-allowed; background-color: #64748b;">
+               Job Expired
+             </button>
+          </ng-container>
+          <ng-template #activeApply>
+            <a [routerLink]="['/candidate/jobs', j.jobId]" class="btn-primary-lg">
+              Apply for this Position
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </ng-template>
         </div>
       </div>
     </section>

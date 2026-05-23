@@ -73,6 +73,14 @@ export class AuthService {
       (`${this.apiUrl}/register`, { ...req, role: 'Recruiter' });
   }
 
+  forgotPassword(email: string): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(request: any): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/reset-password`, request);
+  }
+
   logout(): void {
     // Call the backend to clear cookies before clearing local storage
     this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({

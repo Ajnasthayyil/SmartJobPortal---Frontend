@@ -47,7 +47,7 @@ $shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         width: 56px; height: 56px; background: $slate-100; border-radius: 16px;
         display: flex; align-items: center; justify-content: center;
         font-size: 22px; color: $primary; flex-shrink: 0;
-        &.academic { background: #eff6ff; color: #2563eb; }
+        &.academic { background: #ecfdf5; color: $primary; }
     }
 
     .info {
@@ -69,16 +69,16 @@ $shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
                 gap: 8px;
                 font-size: 13px;
                 font-weight: 700;
-                color: #2563eb;
-                background: #eff6ff;
-                border: 1px solid rgba(#2563eb, 0.15);
+                color: $primary;
+                background: #ecfdf5;
+                border: 1px solid rgba($primary, 0.15);
                 padding: 5px 12px;
                 border-radius: 8px;
                 transition: all 0.2s ease;
                 
                 &:hover {
-                    background: #dbeafe;
-                    border-color: rgba(#2563eb, 0.3);
+                    background: #d1fae5;
+                    border-color: rgba($primary, 0.3);
                     transform: translateY(-1px);
                 }
                 
@@ -87,7 +87,7 @@ $shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
                 }
                 
                 strong {
-                    color: #1e40af;
+                    color: $primary-dark;
                     font-weight: 800;
                 }
             }

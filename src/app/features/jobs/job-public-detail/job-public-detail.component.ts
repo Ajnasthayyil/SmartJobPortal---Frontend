@@ -36,4 +36,9 @@ export class JobPublicDetailComponent implements OnInit {
       error: () => this.loading.set(false)
     });
   }
+
+  isExpired(expiresAt: string | null): boolean {
+    if (!expiresAt) return false;
+    return new Date(expiresAt) < new Date();
+  }
 }
