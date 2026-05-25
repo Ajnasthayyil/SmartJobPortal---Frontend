@@ -63,6 +63,35 @@ export class AuthService {
       );
   }
 
+  googleLogin(idToken: string, role?: string): Observable<ApiResponse<AuthResponse>> {
+    const payload = role ? { idToken, role } : { idToken };
+    return this.http.post<ApiResponse<AuthResponse>>
+      (`${this.apiUrl}/google-login`, payload, { withCredentials: true }).pipe(
+        tap(res => {
+          if (res.success && res.data && res.data.token) {
+            const token = res.data.token;
+            const decoded = this.parseJwt(token);
+            if (decoded) {
+              const email = decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || '';
+              const session: UserSession = {
+                accessToken: token,
+                role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || '',
+                email: email,
+                userId: parseInt(decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || '0', 10),
+                fullName: email.split('@')[0] || 'User',
+                profilePictureUrl: decoded['profilePictureUrl'] || ''
+              };
+              localStorage.setItem('authToken', token);
+              localStorage.setItem('authUser', JSON.stringify(session));
+              this.currentUser.set(session);
+              this.isLoggedIn.set(true);
+              this.notifications.startRealTime(token); 
+            }
+          }
+        })
+      );
+  }
+
   registerCandidate(req: RegisterCandidateRequest): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>
       (`${this.apiUrl}/register`, { ...req, role: 'Candidate' });

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule, FormBuilder,
@@ -7,6 +7,9 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { environment } from '../../../../environments/environment';
+
+declare var google: any;
 
 @Component({
   selector: 'app-register',
@@ -15,7 +18,7 @@ import { ToastService } from '../../../core/services/toast.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   form: FormGroup;
   loading = signal(false);
   showPass = signal(false);
@@ -25,7 +28,8 @@ export class RegisterComponent {
     private fb: FormBuilder,
     private auth: AuthService,
     private toast: ToastService,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) {
     if (this.auth.isLoggedIn()) this.auth.redirectByRole();
 
@@ -79,6 +83,62 @@ export class RegisterComponent {
         this.loading.set(false);
         this.toast.error(
           err?.error?.message || 'Failed to register account.'
+        );
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.initGoogleSignIn();
+  }
+
+  initGoogleSignIn() {
+    const checkGoogleInterval = setInterval(() => {
+      if (typeof google !== 'undefined') {
+        clearInterval(checkGoogleInterval);
+        
+        google.accounts.id.initialize({
+          client_id: environment.googleClientId,
+          callback: (response: any) => {
+            this.ngZone.run(() => {
+              this.handleGoogleCredential(response.credential);
+            });
+          }
+        });
+
+        const btnElem = document.getElementById('googleBtn');
+        if (btnElem) {
+          google.accounts.id.renderButton(btnElem, {
+            theme: 'outline',
+            size: 'large',
+            width: btnElem.parentElement?.clientWidth || 380
+          });
+        }
+      }
+    }, 100);
+
+    // Stop checking after 5 seconds
+    setTimeout(() => clearInterval(checkGoogleInterval), 5000);
+  }
+
+  handleGoogleCredential(idToken: string) {
+    this.loading.set(true);
+    const selectedRole = Number(this.roleId.value) === 2 ? 'Recruiter' : 'Candidate';
+
+    this.auth.googleLogin(idToken, selectedRole).subscribe({
+      next: res => {
+        this.loading.set(false);
+        if (res.success) {
+          this.toast.success('Google authentication successful!');
+          this.auth.redirectByRole();
+        } else {
+          this.toast.error(res.message || 'Google authentication failed.');
+        }
+      },
+      error: err => {
+        this.loading.set(false);
+        this.toast.error(
+          err?.error?.message || 'Failed to authenticate with Google.'
         );
       }
     });

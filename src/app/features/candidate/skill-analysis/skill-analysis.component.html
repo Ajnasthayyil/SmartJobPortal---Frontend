@@ -1,31 +1,59 @@
 <div class="dashboard-page" *ngIf="data() as d">
   <div class="dashboard-inner" *ngIf="!loading()">
     
-    <!-- Welcome Box -->
+    <!-- Welcome Box / Hero Banner -->
     <div class="welcome-box">
+      <div class="hero-bg-accent"></div>
       <div class="user-meta-info">
         <span class="hi-text">
-        <i class="fa-solid fa-sparkles"></i> AI-POWERED ANALYSIS
-        <span class="simulation-badge" *ngIf="d.isSimulation">Simulation Mode</span>
-      </span>
-        <h1>Skill Match & Gaps</h1>
-        <p class="headline-text">Personalized analysis of how your current skills map to the highest-paying roles available.</p>
+          <i class="fa-solid fa-sparkles text-sparkle"></i> AI-powered intelligence
+          <span class="simulation-badge" *ngIf="d.isSimulation">Simulation Mode</span>
+        </span>
+        <h1>Career <span>Readiness</span> Index</h1>
+        <p class="headline-text">Hyper-accurate parsing of your capability mapping against current local high-paying job opportunities.</p>
+        
+        <div class="hero-stats-row">
+          <div class="hero-stat-pill">
+            <span class="pill-num">{{ d.potentialJobMatches }}</span>
+            <span class="pill-label">Analyzed Roles</span>
+          </div>
+          <div class="hero-stat-pill">
+            <span class="pill-num">{{ d.aggregatedGaps.length }}</span>
+            <span class="pill-label">Identified Gaps</span>
+          </div>
+        </div>
       </div>
-      <div class="actions">
-        <!-- <button class="btn-primary" (click)="load()">
-          <i class="fa-solid fa-arrows-rotate" [class.fa-spin]="loading()"></i>
-          Refresh Analysis
-        </button> -->
+
+      <div class="readiness-score-widget">
+        <div class="radial-progress-container">
+          <svg viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="readinessGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#059669" />
+              </linearGradient>
+            </defs>
+            <circle class="radial-ring-bg" cx="50" cy="50" r="42" />
+            <circle class="radial-ring-fg" cx="50" cy="50" r="42" 
+                    [style.stroke-dasharray]="(d.readiness * 2.63) + ', 263'" />
+          </svg>
+          <div class="radial-score-content">
+            <span class="score-percent">{{ d.readiness }}<span class="percent-sign">%</span></span>
+            <span class="score-label">MATCH INDEX</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- AI Insight Summary -->
+    <!-- Glassmorphic AI Insight -->
     <div class="ai-insight-card">
+      <div class="insight-glow-orb"></div>
       <div class="insight-icon">
-        <i class="fa-solid fa-bullseye"></i>
+        <i class="fa-solid fa-brain-circuit"></i>
       </div>
       <div class="insight-text">
-        <h3>Ready for {{ d.potentialJobMatches }} high-potential roles</h3>
+        <div class="badge-ai-model">TALEX COGNITIVE MODEL V4</div>
+        <h3>Synthesized Optimization Path</h3>
         <p [innerHTML]="d.aiInsight"></p>
       </div>
     </div>
@@ -36,50 +64,69 @@
       <!-- Main Content: Job Gaps -->
       <div class="col-main">
         <div class="section-header">
-          <h2 class="section-title">Top Job Matches & Gaps</h2>
+          <h2 class="section-title"><i class="fa-solid fa-list-check"></i> Targeted Position Gaps</h2>
+          <p class="section-subtitle">Comparing your current professional profile against market requirements.</p>
         </div>
 
         <div class="job-gap-list">
           <div class="gap-card-modern" *ngFor="let j of d.jobMatches; let i = index">
+            
             <div class="gap-card-header">
-              <div class="logo-circle">{{ j.company.charAt(0) }}</div>
+              <div class="logo-wrapper">
+                <div class="logo-circle">{{ j.company.charAt(0) }}</div>
+                <div class="pulse-indicator"></div>
+              </div>
               <div class="info">
                 <span class="title">{{ j.title }}</span>
-                <span class="subtitle">{{ j.company }} • {{ j.location }}</span>
+                <span class="subtitle">
+                  <i class="fa-solid fa-building"></i> {{ j.company }} • <i class="fa-solid fa-location-dot"></i> {{ j.location }}
+                </span>
               </div>
-              <div class="match-score-widget">
-                <div class="score-circle">
-                  <svg viewBox="0 0 36 36">
-                    <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path class="ring-fg" [style.stroke-dasharray]="j.matchPercentage + ', 100'" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  </svg>
-                  <span class="score-val">{{ j.matchPercentage }}%</span>
-                </div>
+              <div class="match-badge-container">
+                <span class="match-level-pill" [ngClass]="getTagClass(j.matchPercentage)">
+                  {{ getStrengthLabel(j.matchPercentage) }}
+                </span>
+                <div class="score-value">{{ j.matchPercentage }}% Match</div>
               </div>
             </div>
 
+            <!-- Custom matching progress bar -->
+            <div class="match-progress-wrapper">
+              <div class="progress-bar-rail">
+                <div class="progress-bar-fill" [ngClass]="getBarClass(j.matchPercentage)" [style.width]="j.matchPercentage + '%'"></div>
+              </div>
+            </div>
+
+            <!-- Skills Analysis Grid -->
             <div class="gap-analysis-grid">
               <div class="analysis-box matched">
-                <label><i class="fa-solid fa-circle-check"></i> Skills You Have</label>
+                <label><i class="fa-solid fa-square-check"></i> Profile Assets ({{ j.matchedSkills.length }})</label>
                 <div class="skill-pills">
-                  <span class="pill" *ngFor="let s of j.matchedSkills">{{ s }}</span>
+                  <span class="pill" *ngFor="let s of j.matchedSkills">
+                    <i class="fa-solid fa-circle-check pill-icon-matched"></i> {{ s }}
+                  </span>
                 </div>
               </div>
               
               <div class="analysis-box missing">
-                <label><i class="fa-solid fa-circle-exclamation"></i> Skills You Need</label>
+                <label><i class="fa-solid fa-triangle-exclamation"></i> Growth Requirements ({{ j.missingSkills.length }})</label>
                 <div class="skill-pills">
-                  <span class="pill" *ngFor="let s of j.missingSkills">{{ s }}</span>
+                  <span class="pill" *ngFor="let s of j.missingSkills">
+                    <i class="fa-solid fa-plus-circle pill-icon-missing"></i> {{ s }}
+                  </span>
                 </div>
-                <div class="insight-tip">
-                  <i class="fa-solid fa-lightbulb"></i> {{ j.missingInsight }}
+                <div class="insight-tip" *ngIf="j.missingSkills.length > 0">
+                  <div class="tip-header">
+                    <i class="fa-solid fa-lightbulb-on text-amber"></i> AI MATCH RECOMMENDATION:
+                  </div>
+                  <p class="tip-desc">{{ j.missingInsight }}</p>
                 </div>
               </div>
             </div>
 
             <div class="gap-card-footer">
-              <a [routerLink]="['/candidate/jobs', 1]" class="btn-link">
-                View Full Details <i class="fa-solid fa-arrow-right"></i>
+              <a [routerLink]="['/candidate/jobs', 1]" class="btn-link-premium">
+                Open Job Specs <i class="fa-solid fa-arrow-right"></i>
               </a>
             </div>
           </div>
@@ -89,31 +136,57 @@
       <!-- Side Content: Priority & Learning -->
       <div class="col-side">
         
-        <div class="side-widget">
-          <div class="section-title" style="margin-bottom: 24px;">Priority Skills to Add</div>
+        <!-- Priority Skills Widget -->
+        <div class="side-widget priority-skills-widget">
+          <div class="widget-header">
+            <span class="widget-icon"><i class="fa-solid fa-chart-line-up"></i></span>
+            <div class="widget-title-group">
+              <h3 class="side-widget-title">Market Demand Priorities</h3>
+              <p class="side-widget-subtitle">High-impact gaps in your geography</p>
+            </div>
+          </div>
+
           <div class="agg-gap-list">
-            <div class="agg-item" *ngFor="let g of d.aggregatedGaps">
-              <div class="agg-top">
-                <span class="name">{{ g.name }}</span>
-                <span [class]="'priority-badge ' + g.importance.toLowerCase()">{{ g.importance }}</span>
+            <div class="agg-item-premium" *ngFor="let g of d.aggregatedGaps; let idx = index">
+              <div class="agg-num">0{{ idx + 1 }}</div>
+              <div class="agg-content">
+                <div class="agg-top">
+                  <span class="name">{{ g.name }}</span>
+                  <span class="priority-tag" [ngClass]="g.importance.toLowerCase()">{{ g.importance }}</span>
+                </div>
+                <p class="demand-text"><i class="fa-regular fa-chart-bar"></i> {{ g.demand }}</p>
               </div>
-              <p class="demand-text">{{ g.demand }}</p>
             </div>
           </div>
         </div>
 
-        <div class="side-widget" style="margin-top: 32px;">
-          <div class="section-title" style="margin-bottom: 24px;">Recommended Learning</div>
+        <!-- Recommended Learning Widget -->
+        <div class="side-widget learning-widget" style="margin-top: 32px;">
+          <div class="widget-header">
+            <span class="widget-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+            <div class="widget-title-group">
+              <h3 class="side-widget-title">Adaptive Learning Paths</h3>
+              <p class="side-widget-subtitle">Curated to close your biggest gaps</p>
+            </div>
+          </div>
+
           <div class="learning-list">
-            <div class="learning-item-modern" *ngFor="let l of d.recommendedLearning">
-              <div class="icon"><i class="fa-solid fa-play"></i></div>
-              <div class="info">
-                <span class="l-title">{{ l.title }}</span>
-                <span class="l-meta">{{ l.source }} • {{ l.hours }}h intensive</span>
+            <div class="learning-item-premium" *ngFor="let l of d.recommendedLearning">
+              <div class="course-card-inner">
+                <div class="course-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                <div class="info">
+                  <span class="l-title">{{ l.title }}</span>
+                  <div class="l-badges">
+                    <span class="l-badge badge-source">{{ l.source }}</span>
+                    <span class="l-badge badge-duration"><i class="fa-regular fa-clock"></i> {{ l.hours }} hrs</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <a routerLink="/candidate/courses" class="btn-outline-full" style="margin-top: 24px;">Explore All Courses</a>
+          <a routerLink="/candidate/courses" class="btn-premium-full" style="margin-top: 24px;">
+            <i class="fa-solid fa-compass"></i> Discover Learning Portal
+          </a>
         </div>
 
       </div>
@@ -125,7 +198,7 @@
   <div class="loading-overlay" *ngIf="loading()">
     <div class="loader-box">
       <div class="spinner"></div>
-      <p>Analyzing your potential...</p>
+      <p>Parsing profile assets & compiling job market index...</p>
     </div>
   </div>
 </div>
