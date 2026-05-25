@@ -1,24 +1,48 @@
 <div class="apps-page">
     <div class="apps-inner">
 
-        <!-- Premium Hero -->
-        <header class="apps-hero">
-            <div class="hero-bg">
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
+        <!-- Welcome Box / Hero Banner -->
+        <div class="welcome-box">
+          <div class="hero-bg-accent"></div>
+          <div class="user-meta-info">
+            <span class="hi-text">
+              <i class="fa-solid fa-sparkles text-sparkle" style="color: #10b981;"></i> Application Tracker
+            </span>
+            <h1>My <span>Applications</span></h1>
+            <p class="headline-text">Monitor your real-time career progress, active interviews, and hiring stage transitions.</p>
+            
+            <div class="hero-stats-row">
+              <div class="hero-stat-pill">
+                <span class="pill-num">{{ countByStatus('All') }}</span>
+                <span class="pill-label">Total Submissions</span>
+              </div>
+              <div class="hero-stat-pill">
+                <span class="pill-num">{{ countByStatus('Interviewing') }}</span>
+                <span class="pill-label">Active Interviews</span>
+              </div>
             </div>
-            <div class="hero-content">
-                <div class="title-group">
-                    <span class="hero-badge">Application Tracker</span>
-                    <h1 class="page-title">My <span class="highlight">Applications</span></h1>
-                    <p class="page-sub">Monitor your career progress and interview stages in real-time.</p>
-                </div>
-                <a routerLink="/candidate/jobs" class="btn-browse-hero">
-                    <i class="fa-solid fa-plus"></i>
-                    Browse More Jobs
-                </a>
+          </div>
+
+          <div class="readiness-score-widget">
+            <div class="radial-progress-container">
+              <svg viewBox="0 0 100 100">
+                <defs>
+                  <linearGradient id="readinessGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#10b981" stop-opacity="1" />
+                    <stop offset="100%" stop-color="#059669" stop-opacity="1" />
+                  </linearGradient>
+                </defs>
+                <circle class="radial-ring-bg" cx="50" cy="50" r="42" />
+                <circle class="radial-ring-fg" cx="50" cy="50" r="42" 
+                        [style.stroke-dasharray]="((countByStatus('All') > 0 ? (100 - (countByStatus('Rejected') / countByStatus('All') * 100)) : 100) * 2.63) + ', 263'" />
+              </svg>
+              <div class="radial-score-content">
+                <span class="score-percent">{{ countByStatus('All') > 0 ? (100 - (countByStatus('Rejected') / countByStatus('All') * 100) | number:'1.0-0') : 100 }}<span class="percent-sign">%</span></span>
+                <span class="score-label">SUCCESS INDEX</span>
+              </div>
             </div>
-        </header>
+          </div>
+        </div>
 
         <!-- Filter tabs -->
         <div class="filter-tabs">

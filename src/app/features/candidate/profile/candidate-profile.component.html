@@ -281,6 +281,7 @@
       
       <!-- Welcome Box / Hero -->
       <div class="welcome-box profile-welcome">
+        <div class="hero-bg-accent"></div>
         <div class="content-left">
           <div class="avatar-group">
             <div class="avatar-wrapper" (click)="photoInput.click()">
@@ -313,6 +314,24 @@
           <button class="btn-primary" (click)="startWizard('manual')">
             <i class="fa-solid fa-user-pen"></i> Update Profile Wizard
           </button>
+          
+          <div class="radial-progress-container">
+            <svg viewBox="0 0 100 100">
+              <defs>
+                <linearGradient id="readinessGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#10b981" stop-opacity="1" />
+                  <stop offset="100%" stop-color="#059669" stop-opacity="1" />
+                </linearGradient>
+              </defs>
+              <circle class="radial-ring-bg" cx="50" cy="50" r="42" />
+              <circle class="radial-ring-fg" cx="50" cy="50" r="42" 
+                      [style.stroke-dasharray]="(completion() * 2.63) + ', 263'" />
+            </svg>
+            <div class="radial-score-content">
+              <span class="score-percent">{{ completion() }}<span class="percent-sign">%</span></span>
+              <span class="score-label">STRENGTH</span>
+            </div>
+          </div>
         </div>
       </div>
 

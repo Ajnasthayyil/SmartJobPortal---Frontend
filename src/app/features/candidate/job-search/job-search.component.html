@@ -1,33 +1,52 @@
 <div class="jobs-page-wrapper">
 
   <!-- ── Search Hero ─────────────────────────────────── -->
-  <header class="search-hero">
-    <div class="hero-bg-blobs">
-      <div class="blob blob-1"></div>
-      <div class="blob blob-2"></div>
-    </div>
-    
-    <h1 class="search-title">Find Your Future.</h1>
-    <p class="search-sub">
-      <i class="fa-solid fa-sparkles"></i> 
-      AI-powered job matching for the next generation of talent.
-    </p>
-    
-    <div class="search-bar">
-      <div class="search-field">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" [(ngModel)]="keyword" placeholder="What are you looking for?" (input)="onSearchChange()" />
+  <!-- Welcome Box / Hero Banner -->
+  <div class="welcome-box">
+    <div class="hero-bg-accent"></div>
+    <div class="user-meta-info" style="max-width: 70%; width: 100%;">
+      <span class="hi-text">
+        <i class="fa-solid fa-sparkles text-sparkle" style="color: #10b981;"></i> Explore Opportunities
+      </span>
+      <h1>Find Your <span>Future</span>.</h1>
+      <p class="headline-text" style="margin-bottom: 24px;">AI-powered capability matching & intelligent job parsing for top positions in your geography.</p>
+      
+      <div class="search-bar">
+        <div class="search-field">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" [(ngModel)]="keyword" placeholder="What are you looking for?" (input)="onSearchChange()" />
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-field">
+          <i class="fa-solid fa-location-arrow"></i>
+          <input type="text" [(ngModel)]="location" placeholder="Where? (City or Remote)" (input)="onSearchChange()" />
+        </div>
+        <button class="btn-search" (click)="executeSearch()">
+          Search Jobs
+        </button>
       </div>
-      <div class="search-divider"></div>
-      <div class="search-field">
-        <i class="fa-solid fa-location-arrow"></i>
-        <input type="text" [(ngModel)]="location" placeholder="Where? (City or Remote)" (input)="onSearchChange()" />
-      </div>
-      <button class="btn-search" (click)="executeSearch()">
-        Search Jobs
-      </button>
     </div>
-  </header>
+
+    <div class="readiness-score-widget">
+      <div class="radial-progress-container">
+        <svg viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="readinessGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#10b981" stop-opacity="1" />
+              <stop offset="100%" stop-color="#059669" stop-opacity="1" />
+            </linearGradient>
+          </defs>
+          <circle class="radial-ring-bg" cx="50" cy="50" r="42" />
+          <circle class="radial-ring-fg" cx="50" cy="50" r="42" 
+                  [style.stroke-dasharray]="(78 * 2.63) + ', 263'" />
+        </svg>
+        <div class="radial-score-content">
+          <span class="score-percent">78<span class="percent-sign">%</span></span>
+          <span class="score-label">MATCH RATIO</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="jobs-layout">
     

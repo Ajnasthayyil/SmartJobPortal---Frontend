@@ -11,11 +11,15 @@ $slate-900: #0f172a;
 
 :host {
   display: block;
-  background: var(--slate-50);
+  background: #f8fafc;
   min-height: 100vh;
   padding: 140px 60px 60px 80px;
   position: relative;
   overflow-x: hidden;
+
+  @media (max-width: 1024px) {
+    padding: 130px 24px 24px 24px;
+  }
 
   &::before {
     content: '';
@@ -55,22 +59,25 @@ $slate-900: #0f172a;
 }
 
 .card {
-  background: white;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
   padding: 32px;
-  border: 1px solid $slate-200;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.04);
   margin-bottom: 32px;
 }
 
 // ── Job Header Card ──────────────────────────────────────────────
 .job-header-card {
-  background: $slate-900;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   color: white;
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
-  border: none;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
 
   .jh-top {
     display: flex;
