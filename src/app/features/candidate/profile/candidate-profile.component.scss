@@ -741,6 +741,21 @@ $shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             display: none;
         }
     }
+
+    .wizard-container {
+        padding: 0 8px;
+    }
+    
+    .wizard-header {
+        padding: 16px 20px !important;
+        margin-bottom: 20px !important;
+        .header-content {
+            margin-bottom: 16px;
+            h2 {
+                font-size: 18px;
+            }
+        }
+    }
 }
 
 @media (max-width: 600px) {
@@ -748,11 +763,36 @@ $shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         gap: 8px;
         .step-item {
             span { display: none !important; }
+            .circle {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+            }
         }
     }
 }
 
 @media (max-width: 480px) {
+    .wizard-header {
+        padding: 12px 16px !important;
+        margin-bottom: 16px !important;
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            h2 {
+                font-size: 16px;
+            }
+            p {
+                font-size: 12px;
+            }
+            .btn-exit {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+        }
+    }
+
     .welcome-box {
         .avatar-group {
             flex-direction: column;
@@ -800,6 +840,45 @@ $shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             .date {
                 align-self: flex-start;
             }
+        }
+    }
+}
+
+.wizard-empty-state {
+    padding: 40px 24px;
+    text-align: center;
+    background: #fafafa;
+    border: 2.5px dashed $slate-200;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    margin: 16px 0;
+
+    i {
+        font-size: 32px;
+        color: $slate-300;
+    }
+
+    h4 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        color: $slate-900;
+        margin: 0;
+    }
+
+    p {
+        font-size: 13px;
+        color: $slate-500;
+        max-width: 320px;
+        margin: 0;
+        line-height: 1.5;
+        strong {
+            color: $primary;
         }
     }
 }

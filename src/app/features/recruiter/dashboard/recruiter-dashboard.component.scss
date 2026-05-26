@@ -314,6 +314,36 @@ h1, h2, h3, h4 {
   .welcome-box .actions { position: static; transform: none; margin-top: 24px; }
 }
 
+@media (max-width: 768px) {
+  :host { padding: 120px 16px 16px 16px; }
+  
+  .welcome-box {
+    padding-left: 0;
+    
+    h1 {
+      font-size: 28px;
+    }
+    
+    .actions {
+      flex-direction: column;
+      width: 100%;
+      gap: 12px;
+      margin-top: 16px;
+      
+      button, a {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  }
+
+  .stat-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+}
+
 .actions-right {
   display: flex;
   gap: 8px;

@@ -261,3 +261,31 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
   .dashboard-content { grid-template-columns: 1fr; }
   .welcome-box .actions { position: static; transform: none; margin-top: 24px; }
 }
+
+@media (max-width: 768px) {
+  .welcome-box {
+    padding-left: 0;
+    
+    h1 {
+      font-size: 28px;
+    }
+    
+    .actions {
+      flex-direction: column;
+      width: 100%;
+      gap: 12px;
+      margin-top: 16px;
+      
+      button, a {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  }
+
+  .stat-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+}

@@ -183,6 +183,7 @@ export class CandidateProfileComponent implements OnInit {
     } else {
       this.currentStep.set(0);
     }
+    window.scrollTo(0, 0);
   }
 
   calcCompletion(p: CandidateProfile): void {
@@ -348,6 +349,7 @@ export class CandidateProfileComponent implements OnInit {
           // Move to next step for review
           this.currentStep.set(1);
           this.isWizardMode.set(true);
+          window.scrollTo(0, 0);
 
         } else {
           this.toast.error(res.message || 'Parsing failed.');

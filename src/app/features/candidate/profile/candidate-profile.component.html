@@ -131,7 +131,12 @@
             <button class="btn-add-circle" (click)="addExperience()">+ Add Role</button>
           </div>
           <div class="card-body scroll-body custom-scrollbar">
-            <div formArrayName="workExperience" class="dynamic-stack">
+            <div *ngIf="!experienceGroups.controls.length" class="wizard-empty-state">
+              <i class="fa-solid fa-briefcase"></i>
+              <h4>No Experience Records Yet</h4>
+              <p>Click the <strong>+ Add Role</strong> button above to list your career history manually.</p>
+            </div>
+            <div formArrayName="workExperience" class="dynamic-stack" *ngIf="experienceGroups.controls.length">
               <div *ngFor="let exp of experienceGroups.controls; let i = index" [formGroupName]="i" class="wizard-item-card">
                 <button class="btn-remove" (click)="removeExperience(i)">✕</button>
                 <div class="form-grid-three">
@@ -169,7 +174,12 @@
             <button class="btn-add-circle" (click)="addEducation()">+ Add Degree</button>
           </div>
           <div class="card-body scroll-body custom-scrollbar">
-            <div formArrayName="education" class="dynamic-stack">
+            <div *ngIf="!educationGroups.controls.length" class="wizard-empty-state">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <h4>No Academic Records Yet</h4>
+              <p>Click the <strong>+ Add Degree</strong> button above to list your education history manually.</p>
+            </div>
+            <div formArrayName="education" class="dynamic-stack" *ngIf="educationGroups.controls.length">
               <div *ngFor="let edu of educationGroups.controls; let i = index" [formGroupName]="i" class="wizard-item-card edu">
                 <button class="btn-remove" (click)="removeEducation(i)">✕</button>
                 <div class="form-grid-two">
