@@ -17,7 +17,15 @@ $white: #ffffff;
     background: #f8fafc;
     min-height: 100vh;
     font-family: 'Outfit', sans-serif;
-    padding: 120px 80px 60px 120px;
+    padding: 140px 60px 60px 80px;
+
+    @media (max-width: 1024px) {
+        padding: 130px 24px 24px 24px;
+    }
+
+    @media (max-width: 768px) {
+        padding: 120px 16px 16px 16px;
+    }
 }
 
 .profile-page {
@@ -220,9 +228,6 @@ $white: #ffffff;
 @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (max-width: 1024px) {
-    :host {
-        padding: 130px 24px 24px 24px;
-    }
     .profile-layout {
         grid-template-columns: 1fr;
         gap: 24px;
@@ -230,9 +235,6 @@ $white: #ffffff;
 }
 
 @media (max-width: 768px) {
-    :host {
-        padding: 120px 16px 16px 16px;
-    }
     
     .profile-hero {
         padding-left: 0;

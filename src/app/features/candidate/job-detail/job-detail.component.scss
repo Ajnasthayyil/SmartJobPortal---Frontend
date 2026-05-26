@@ -332,3 +332,48 @@ $slate-900: #0f172a;
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
+// ── Responsive Design for Job Details ──
+@media (max-width: 1024px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .job-header-card {
+    padding: 24px;
+    
+    .jh-title {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+
+    .jh-company {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .jh-meta {
+      gap: 8px;
+      margin-bottom: 24px;
+      
+      .meta-pill {
+        font-size: 11px;
+        padding: 4px 8px;
+      }
+    }
+  }
+
+  .card {
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+  }
+
+  .apply-form {
+    padding: 16px;
+    border-radius: 16px;
+  }
+}
+

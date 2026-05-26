@@ -255,10 +255,36 @@
 }
 
 @media (max-width: 1024px) {
-  :host { padding: 0 20px; top: 16px; left: 0; width: 100%; }
-  .dash-header { padding: 8px 12px 8px 24px; }
-  .user-meta { display: none; }
+  :host { padding: 0 16px; top: 12px; left: 0; width: 100%; }
+  .dash-header { padding: 6px 12px 6px 16px; }
+  
+  .logo-wrapper {
+    .logo-subtitle { display: none; }
+  }
+
+  .profile-btn {
+    padding: 4px;
+    background: transparent;
+    border-color: transparent;
+
+    .user-meta { display: none; }
+    .chevron { display: none; }
+
+    &:hover {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: transparent;
+    }
+  }
+
   .mobile-menu-toggle {
     display: flex;
   }
+}
+
+@media (max-width: 480px) {
+  :host { padding: 0 8px; top: 8px; }
+  .dash-header { padding: 6px 8px; border-radius: 16px; }
+  .header-right { gap: 8px; }
+  .mobile-menu-toggle { margin-right: 4px; }
+  .logo { font-size: 20px; }
 }
