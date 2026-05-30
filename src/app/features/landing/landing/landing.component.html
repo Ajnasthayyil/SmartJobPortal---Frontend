@@ -18,9 +18,16 @@
       <h1>The Smarter<br>Way to <span>Navigate Your Future</span></h1>
       <p>TalEx leverages deep learning to bridge the gap between ambitious talent and visionary companies. Experience the first truly intelligent career ecosystem.</p>
 
-      <div class="hero-actions">
-        <button class="btn-primary-hero" routerLink="/register">Get Started Free <i class="fa-solid fa-arrow-right"></i></button>
-        <button class="btn-demo" routerLink="/jobs"><i class="fa-solid fa-magnifying-glass"></i> Explore Jobs</button>
+      <!-- Elegant Premium Hero CTA Buttons -->
+      <div class="hero-cta-buttons">
+        <button class="btn-hero-primary" routerLink="/jobs">
+          <span>Explore Opportunities</span>
+          <i class="fa-solid fa-compass"></i>
+        </button>
+        <button class="btn-hero-secondary" routerLink="/register">
+          <span>Get Started Free</span>
+          <i class="fa-solid fa-user-plus"></i>
+        </button>
       </div>
 
       <div class="hero-stats">
@@ -84,14 +91,16 @@
   </section>
 
   <!-- TRUSTED BY (Sleek Logo Section) -->
-  <section class="section-pad center" style="padding-top: 0; padding-bottom: 60px;">
-    <p style="text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; font-weight: 700; color: var(--slate-500); margin-bottom: 40px;">Trusted by Industry Leaders</p>
-    <div style="display: flex; justify-content: center; align-items: center; gap: 60px; opacity: 0.5; flex-wrap: wrap;">
-      <i class="fa-brands fa-google fa-2x"></i>
-      <i class="fa-brands fa-microsoft fa-2x"></i>
-      <i class="fa-brands fa-amazon fa-2x"></i>
-      <i class="fa-brands fa-apple fa-2x"></i>
-      <i class="fa-brands fa-spotify fa-2x"></i>
+  <section class="trusted-brands-section">
+    <div class="container-inner">
+      <p class="trusted-headline">Trusted by Industry Leaders</p>
+      <div class="brands-marquee">
+        <div class="brand-item"><i class="fa-brands fa-google brand-icon"></i> <span class="brand-name">Google</span></div>
+        <div class="brand-item"><i class="fa-brands fa-microsoft brand-icon"></i> <span class="brand-name">Microsoft</span></div>
+        <div class="brand-item"><i class="fa-brands fa-amazon brand-icon"></i> <span class="brand-name">Amazon</span></div>
+        <div class="brand-item"><i class="fa-brands fa-apple brand-icon"></i> <span class="brand-name">Apple</span></div>
+        <div class="brand-item"><i class="fa-brands fa-spotify brand-icon"></i> <span class="brand-name">Spotify</span></div>
+      </div>
     </div>
   </section>
 
@@ -110,10 +119,22 @@
       </div>
     </div>
 
+    <!-- Interactive Premium Filter Pills -->
+    <div class="filter-pills-bar">
+      <button 
+        *ngFor="let item of filters" 
+        [class.active]="activeFilter === item"
+        (click)="setFilter(item)"
+        class="filter-pill-btn"
+      >
+        {{ item }}
+      </button>
+    </div>
+
     <div class="jobs-grid">
       <!-- Loading Skeletons -->
       <ng-container *ngIf="loading">
-        <div class="job-card-skeleton" *ngFor="let i of [1,2,3,4,5,6,7,8]">
+        <div class="job-card-skeleton" *ngFor="let i of [1,2,3,4]">
           <div class="sk-logo"></div>
           <div class="sk-title"></div>
           <div class="sk-meta"></div>
@@ -123,24 +144,54 @@
 
       <!-- Real Data -->
       <ng-container *ngIf="!loading">
-        <div class="job-card" *ngFor="let job of jobs" [routerLink]="['/jobs', job.jobId]">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div class="company-logo">{{ job.companyName?.charAt(0) }}</div>
-            <span class="match-pill" *ngIf="job.matchScore">{{ job.matchScore }}% AI Match</span>
-          </div>
-          <h3 class="job-title">{{ job.title }}</h3>
-          <div class="job-meta">{{ job.companyName }} • {{ job.jobType }}</div>
-          
-          <div class="card-tags">
-            <span class="tag" *ngFor="let skill of job.requiredSkills?.slice(0, 3)">{{ skill }}</span>
-            <span class="tag" *ngIf="job.requiredSkills?.length > 3">+{{ job.requiredSkills.length - 3 }}</span>
-          </div>
+        <div class="job-card-wrapper" *ngFor="let job of filteredJobs" [routerLink]="['/jobs', job.jobId]">
+          <div class="job-card-glow"></div>
+          <div class="job-card-inner">
+            <div class="card-header-flex">
+              <div class="company-brand">
+                <div class="company-logo-avatar">{{ job.companyName?.charAt(0) }}</div>
+                <div class="company-details">
+                  <h4 class="company-name-text">{{ job.companyName }}</h4>
+                  <span class="location-tag-text"><i class="fa-solid fa-location-dot"></i> {{ job.location || 'Remote' }}</span>
+                </div>
+              </div>
+              <span class="match-badge-pill" *ngIf="job.matchScore">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> {{ job.matchScore }}% Match
+              </span>
+            </div>
+            
+            <h3 class="job-card-title">{{ job.title }}</h3>
+            
+            <div class="job-card-badges">
+              <span class="badge-pill-item"><i class="fa-solid fa-briefcase"></i> {{ job.jobType }}</span>
+              <span class="badge-pill-item" *ngIf="job.experienceLevel"><i class="fa-solid fa-user-gear"></i> {{ job.experienceLevel }}</span>
+            </div>
 
-          <div class="card-footer">
-            <div class="salary" *ngIf="job.minSalary">₹{{ job.minSalary | number }}+</div>
-            <div class="salary" *ngIf="!job.minSalary">Competitive</div>
-            <button class="search-btn">View Details</button>
+            <div class="skills-wrap-tags">
+              <span class="skill-tag-badge" *ngFor="let skill of job.requiredSkills?.slice(0, 3)">{{ skill }}</span>
+              <span class="skill-tag-badge plus-count" *ngIf="job.requiredSkills?.length > 3">+{{ job.requiredSkills.length - 3 }}</span>
+            </div>
+
+            <div class="card-action-footer">
+              <div class="salary-offer-display">
+                <span class="salary-label">Estimated salary</span>
+                <span class="salary-amount" *ngIf="job.minSalary">₹{{ job.minSalary | number }}+</span>
+                <span class="salary-amount" *ngIf="!job.minSalary">Competitive</span>
+              </div>
+              <button class="view-details-primary-btn">
+                <span>View Role</span>
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
           </div>
+        </div>
+
+        <!-- Empty State if no jobs match filter -->
+        <div class="no-jobs-empty-state" *ngIf="filteredJobs.length === 0">
+          <div class="empty-icon"><i class="fa-solid fa-folder-open"></i></div>
+          <h3>No Featured Roles Found</h3>
+          <p>We couldn't find any featured jobs under "{{ activeFilter }}" at this moment. Check back soon or select another category.</p>
+          <button class="reset-filter-btn" (click)="setFilter('All')">Show All Openings</button>
         </div>
       </ng-container>
     </div>
@@ -199,37 +250,118 @@
       <h2 class="section-title">What Our Users Say</h2>
     </div>
 
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-        <p>"TalEx completely transformed my job search. The AI matching is scarily accurate — I found my dream role at Amazon within two weeks of joining."</p>
-        <div class="test-user">
-          <img src="https://i.pravatar.cc/150?u=1" alt="User">
-          <div class="user-info">
-            <strong>Aditi Sharma</strong>
-            <span>Senior Dev @ Amazon</span>
+    <div class="testimonials-slider-container">
+      <div class="testimonials-track">
+        <!-- Story 1 -->
+        <div class="testimonial-card-premium">
+          <div class="card-quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <p class="story-text">"TalEx completely transformed my job search. The AI matching is scarily accurate — I found my dream role at Amazon within two weeks of joining."</p>
+          <div class="story-divider"></div>
+          <div class="story-author">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150" alt="Aditi Sharma" class="author-img">
+            <div class="author-meta">
+              <strong class="author-name">Aditi Sharma</strong>
+              <span class="author-title">Senior Dev @ Amazon</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-        <p>"As a recruiter, TalEx saves me hundreds of hours. I only see candidates who are a perfect cultural and technical fit, thanks to their scoring system."</p>
-        <div class="test-user">
-          <img src="https://i.pravatar.cc/150?u=2" alt="User">
-          <div class="user-info">
-            <strong>Marcus Vane</strong>
-            <span>Talent Lead @ Spotify</span>
+        
+        <!-- Story 2 -->
+        <div class="testimonial-card-premium">
+          <div class="card-quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <p class="story-text">"As a recruiter, TalEx saves me hundreds of hours. I only see candidates who are a perfect cultural and technical fit, thanks to their scoring system."</p>
+          <div class="story-divider"></div>
+          <div class="story-author">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=150" alt="Marcus Vane" class="author-img">
+            <div class="author-meta">
+              <strong class="author-name">Marcus Vane</strong>
+              <span class="author-title">Talent Lead @ Spotify</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-        <p>"The UI is stunning and the insights are invaluable. I now know exactly what skills to learn next to increase my market value."</p>
-        <div class="test-user">
-          <img src="https://i.pravatar.cc/150?u=3" alt="User">
-          <div class="user-info">
-            <strong>Liam Carter</strong>
-            <span>Product Designer</span>
+
+        <!-- Story 3 -->
+        <div class="testimonial-card-premium">
+          <div class="card-quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <p class="story-text">"The UI is stunning and the insights are invaluable. I now know exactly what skills to learn next to increase my market value in this competitive market."</p>
+          <div class="story-divider"></div>
+          <div class="story-author">
+            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=150" alt="Liam Carter" class="author-img">
+            <div class="author-meta">
+              <strong class="author-name">Liam Carter</strong>
+              <span class="author-title">Product Designer</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Story 4 -->
+        <div class="testimonial-card-premium">
+          <div class="card-quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <p class="story-text">"The platform is incredibly fluid. I landed a senior role at Google. The matching is exceptionally precise and eliminated all standard job board friction."</p>
+          <div class="story-divider"></div>
+          <div class="story-author">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Neha Gupta" class="author-img">
+            <div class="author-meta">
+              <strong class="author-name">Neha Gupta</strong>
+              <span class="author-title">Frontend Lead @ Google</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplicated Stories for Infinite Marquee Loop -->
+        <!-- Story 1 Duplicate -->
+        <div class="testimonial-card-premium">
+          <div class="card-quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <p class="story-text">"TalEx completely transformed my job search. The AI matching is scarily accurate — I found my dream role at Amazon within two weeks of joining."</p>
+          <div class="story-divider"></div>
+          <div class="story-author">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150" alt="Aditi Sharma" class="author-img">
+            <div class="author-meta">
+              <strong class="author-name">Aditi Sharma</strong>
+              <span class="author-title">Senior Dev @ Amazon</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Story 2 Duplicate -->
+        <div class="testimonial-card-premium">
+          <div class="card-quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <p class="story-text">"As a recruiter, TalEx saves me hundreds of hours. I only see candidates who are a perfect cultural and technical fit, thanks to their scoring system."</p>
+          <div class="story-divider"></div>
+          <div class="story-author">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=150" alt="Marcus Vane" class="author-img">
+            <div class="author-meta">
+              <strong class="author-name">Marcus Vane</strong>
+              <span class="author-title">Talent Lead @ Spotify</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Story 3 Duplicate -->
+        <div class="testimonial-card-premium">
+          <div class="card-quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <p class="story-text">"The UI is stunning and the insights are invaluable. I now know exactly what skills to learn next to increase my market value in this competitive market."</p>
+          <div class="story-divider"></div>
+          <div class="story-author">
+            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=150" alt="Liam Carter" class="author-img">
+            <div class="author-meta">
+              <strong class="author-name">Liam Carter</strong>
+              <span class="author-title">Product Designer</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Story 4 Duplicate -->
+        <div class="testimonial-card-premium">
+          <div class="card-quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <p class="story-text">"The platform is incredibly fluid. I landed a senior role at Google. The matching is exceptionally precise and eliminated all standard job board friction."</p>
+          <div class="story-divider"></div>
+          <div class="story-author">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Neha Gupta" class="author-img">
+            <div class="author-meta">
+              <strong class="author-name">Neha Gupta</strong>
+              <span class="author-title">Frontend Lead @ Google</span>
+            </div>
           </div>
         </div>
       </div>
@@ -237,15 +369,31 @@
   </section>
 
   <!-- CTA -->
-  <section class="section-pad cta-section">
-    <div class="cta-banner">
-      <div class="cta-content">
-        <h2 class="cta-title">Ready to define your <span>future?</span></h2>
-        <p class="cta-sub">Join thousands of professionals already using TalEx to accelerate their career growth.</p>
-      </div>
-      <div class="cta-btns">
-        <button class="btn-large btn-primary" routerLink="/register">Get Started Free</button>
-        <button class="btn-large btn-outline" routerLink="/login">Sign In</button>
+  <section class="section-pad cta-section-premium">
+    <div class="cta-banner-premium">
+      <!-- Ambient mesh glow effects inside -->
+      <div class="cta-mesh-glow glow-top-right"></div>
+      <div class="cta-mesh-glow glow-bottom-left"></div>
+      
+
+      <div class="cta-content-inner">
+        <div class="cta-badge-pill">
+          <span class="cta-pulse-dot"></span>
+          <span>Join the Talent Revolution</span>
+        </div>
+        <h2 class="cta-premium-title">Ready to define your <span class="gradient-text-glow">future?</span></h2>
+        <p class="cta-premium-sub">Create your dynamic profile today and bridge the gap to top-tier global opportunities.</p>
+        
+        <div class="cta-action-buttons">
+          <button class="btn-premium-cta primary" routerLink="/register">
+            <span>Get Started Free</span>
+            <i class="fa-solid fa-arrow-right-long"></i>
+          </button>
+          <button class="btn-premium-cta outline" routerLink="/login">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <span>Sign In</span>
+          </button>
+        </div>
       </div>
     </div>
   </section>
