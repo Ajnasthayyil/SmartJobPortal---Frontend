@@ -1,0 +1,110 @@
+<div class="chatbot-container" *ngIf="isVisible" [class.open]="isOpen" [class.minimized]="isMinimized">
+  <!-- Closed State Bubble Icon -->
+  <button 
+    class="chatbot-bubble" 
+    *ngIf="!isOpen" 
+    (click)="toggleChat()" 
+    title="Open TalEx Support Assistant"
+    aria-label="Open support assistant"
+  >
+    <div class="bubble-ripple"></div>
+    <span class="bubble-icon">💬</span>
+    <span class="pulse-indicator"></span>
+  </button>
+
+  <!-- Open State Chat Card -->
+  <div class="chatbot-card" *ngIf="isOpen && !isMinimized">
+    <!-- Header -->
+    <div class="chatbot-header">
+      <div class="header-info">
+        <div class="bot-avatar">🤖</div>
+        <div class="header-titles">
+          <h3>TalEx Assistant</h3>
+          <span class="status-indicator">
+            <span class="status-dot"></span> Online Support
+          </span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="action-btn" (click)="minimizeChat($event)" title="Minimize" aria-label="Minimize chat">
+          <span class="btn-icon">➖</span>
+        </button>
+        <button class="action-btn close-btn" (click)="closeChat($event)" title="Close" aria-label="Close chat">
+          <span class="btn-icon">❌</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages List -->
+    <div class="chatbot-messages" #messageContainer>
+      <div 
+        *ngFor="let msg of history" 
+        [class]="'message-wrapper ' + msg.sender"
+      >
+        <div class="message-bubble">
+          <div class="message-text">{{ msg.text }}</div>
+          
+          <!-- Route Redirect Button ("Go to Page") -->
+          <div *ngIf="msg.routeUrl" class="route-action">
+            <button 
+              class="go-to-page-btn" 
+              (click)="navigateToRoute(msg.routeUrl)"
+            >
+              🚀 Go to Page
+            </button>
+          </div>
+
+          <!-- Dynamic Options Pills -->
+          <div *ngIf="msg.options && msg.options.length > 0" class="options-container">
+            <button 
+              *ngFor="let opt of msg.options" 
+              class="option-pill"
+              (click)="selectOption(opt)"
+            >
+              {{ opt.title }}
+            </button>
+          </div>
+        </div>
+        <span class="message-time">{{ msg.timestamp | date:'shortTime' }}</span>
+      </div>
+    </div>
+
+    <!-- Navigation Back Button & Quick Actions -->
+    <div class="chatbot-actions-bar" *ngIf="navigationStack.length > 0">
+      <button class="back-btn" (click)="goBack()">
+        ⬅️ Back to Previous Menu
+      </button>
+    </div>
+
+    <!-- Search Input Bar -->
+    <form class="chatbot-input-form" (ngSubmit)="submitSearch()">
+      <input 
+        type="text" 
+        name="searchQuery"
+        [(ngModel)]="searchQuery" 
+        placeholder="Type a keyword (e.g. forgot password)..." 
+        autocomplete="off"
+        aria-label="Ask support assistant"
+      />
+      <button type="submit" class="send-btn" title="Search keyword" aria-label="Submit search">
+        <span class="send-icon">🔍</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Minimized State Floating Bar -->
+  <div class="chatbot-minimized-bar" *ngIf="isOpen && isMinimized" (click)="toggleChat()">
+    <div class="minimized-info">
+      <span class="minimized-icon">💬</span>
+      <span class="minimized-title">TalEx Support Assistant (Minimized)</span>
+    </div>
+    <div class="minimized-actions">
+      <button class="minimized-action-btn" (click)="toggleChat()" title="Restore" aria-label="Restore chat">
+        <span>🔳</span>
+      </button>
+      <button class="minimized-action-btn" (click)="closeChat($event)" title="Close" aria-label="Close chat">
+        <span>❌</span>
+      </button>
+    </div>
+  </div>
+</div>

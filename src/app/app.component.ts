@@ -50,7 +50,8 @@ import { ToastContainerComponent } from './shared/components/toast/toast-contain
     <!-- Global Toast Notifications -->
     <app-toast-container></app-toast-container>
 
-
+    <!-- Guided Support Chatbot Widget -->
+    <app-chatbot></app-chatbot>
   `,
   styleUrls: ['./app.component.scss']
 })

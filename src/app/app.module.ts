@@ -23,6 +23,7 @@ import { ShellVisibilityDirective } from './core/directives/shell-visibility.dir
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { NotificationBellComponent } from './shared/components/notification-bell/notification-bell.component';
 import { FeedComponent } from './features/feed/feed.component';
+import { ChatbotComponent } from './shared/components/chatbot/chatbot.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { FeedComponent } from './features/feed/feed.component';
     PublicNavbarComponent,
     ToastContainerComponent,
     NotificationBellComponent, // ✅ Correctly imported as standalone
-    ShellVisibilityDirective
+    ShellVisibilityDirective,
+    ChatbotComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true }
