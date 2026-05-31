@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { RecruiterService } from '../../../core/services/recruiter.service';
@@ -75,7 +76,8 @@ export class ApplicantsComponent implements OnInit {
     private route:   ActivatedRoute,
     private service: RecruiterService,
     private toast:   ToastService,
-    private notify:  NotificationService
+    private notify:  NotificationService,
+    private http:    HttpClient
   ) {}
 
 
@@ -103,8 +105,8 @@ export class ApplicantsComponent implements OnInit {
             
             // Fix Resume URLs
             data = data.map(a => {
-              if (a.hasResume && a.resumeUrl && a.resumeUrl.startsWith('/')) {
-                a.resumeUrl = `${this.service.getApiBaseUrl()}${a.resumeUrl}`;
+              if (a.hasResume) {
+                a.resumeUrl = `${this.service.getApiBaseUrl()}/api/recruiter/candidates/${a.candidateUserId}/resume`;
               }
               return a;
             });
@@ -130,14 +132,14 @@ export class ApplicantsComponent implements OnInit {
               this.service.getApplicants(job.jobId).pipe(
                 map(res => {
                    // Inject JobTitle and fix Resume URLs
-                   const applicants = res.data || [];
-                   return applicants.map(a => {
-                     const updated = { ...a, jobTitle: job.title };
-                     if (updated.hasResume && updated.resumeUrl && updated.resumeUrl.startsWith('/')) {
-                       updated.resumeUrl = `${this.service.getApiBaseUrl()}${updated.resumeUrl}`;
-                     }
-                     return updated;
-                   });
+                    const applicants = res.data || [];
+                    return applicants.map(a => {
+                      const updated = { ...a, jobTitle: job.title };
+                      if (updated.hasResume) {
+                        updated.resumeUrl = `${this.service.getApiBaseUrl()}/api/recruiter/candidates/${updated.candidateUserId}/resume`;
+                      }
+                      return updated;
+                    });
                 }),
                 catchError(() => of([]))
               )
@@ -311,5 +313,40 @@ export class ApplicantsComponent implements OnInit {
   closeProfileModal(): void {
     this.profileModalOpen.set(false);
     this.selectedCandidate.set(null);
+  }
+
+  downloadResume(url: string | undefined, name: string | undefined): void {
+    if (!url || !name) return;
+    
+    this.toast.info('Preparing resume download...');
+    
+    this.http.get(url, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        
+        const extension = url.split('.').pop()?.split('?')[0] || 'pdf';
+        const sanitizedName = name.replace(/[^a-zA-Z0-9]/g, '_');
+        link.download = `${sanitizedName}_Resume.${extension}`;
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+        this.toast.success('Download complete!');
+      },
+      error: (err) => {
+        console.error('Download failed via HttpClient', err);
+        // Fallback if HTTP call fails
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.download = `${name.replace(/[^a-zA-Z0-9]/g, '_')}_Resume.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    });
   }
 }

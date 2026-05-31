@@ -99,9 +99,9 @@
               </div>
 
               <div class="card-actions">
-                <a *ngIf="app.hasResume" [href]="app.resumeUrl" target="_blank" class="icon-btn preview" title="View Resume">
+                <button *ngIf="app.hasResume" (click)="downloadResume(app.resumeUrl, app.fullName)" class="icon-btn preview" title="Download Resume">
                   <i class="fa-solid fa-file-pdf"></i>
-                </a>
+                </button>
                 
                 <button class="icon-btn notify" title="Send Notification" (click)="openNotificationModal(app)">
                   <i class="fa-solid fa-paper-plane"></i>
