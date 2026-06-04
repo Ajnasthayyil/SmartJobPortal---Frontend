@@ -39,8 +39,8 @@ import { NotificationCenterComponent } from '../notification-center/notification
         <!-- Notifications list -->
         <div class="notif-list">
 
-          <div *ngIf="ns.notifications().length === 0" class="empty-notif">
-            <span style="font-size:32px">🔔</span>
+          <div style="text-align: center;" *ngIf="ns.notifications().length === 0" class="empty-notif">
+            <span style="font-size:32px; color: #cbd5e1;"><i class="fa-solid fa-bell"></i></span>
             <p>No notifications yet</p>
           </div>
 
@@ -48,11 +48,10 @@ import { NotificationCenterComponent } from '../notification-center/notification
                class="notif-item"
                [class.unread]="!n.isRead"
                (click)="onNotifClick(n)">
-            <div class="notif-icon">
-              {{ ns.getTypeIcon(n.type) }}
+            <div class="notif-icon" [innerHTML]="getTypeIconHtml(n.type)">
             </div>
             <div class="notif-body">
-              <div class="notif-title">{{ n.title }}</div>
+              <div class="notif-title">{{ stripEmojis(n.title) }}</div>
               <div class="notif-message">{{ n.message }}</div>
               <div class="notif-time">{{ n.timeAgo }}</div>
             </div>
@@ -210,5 +209,27 @@ export class NotificationBellComponent {
   @HostListener('document:click')
   onDocClick(): void {
     this.open.set(false);
+  }
+
+  stripEmojis(text: string): string {
+    if (!text) return '';
+    // Strip emojis, dingbats, and surrogate pairs
+    return text.replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDDFF]/g, '').trim();
+  }
+
+  getTypeIconHtml(type: string): string {
+    const icons: Record<string, string> = {
+      StatusUpdate:    '<i class="fa-solid fa-clipboard-list" style="color: #64748b;"></i>',
+      Shortlisted:     '<i class="fa-solid fa-star" style="color: #eab308;"></i>',
+      Interview:       '<i class="fa-regular fa-calendar-check" style="color: #3b82f6;"></i>',
+      Offer:           '<i class="fa-solid fa-award" style="color: #10b981;"></i>',
+      Rejected:        '<i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i>',
+      AccountApproved: '<i class="fa-solid fa-circle-check" style="color: #10b981;"></i>',
+      AccountRejected: '<i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i>',
+      AccountBlocked:  '<i class="fa-solid fa-ban" style="color: #ef4444;"></i>',
+      AccountActive:   '<i class="fa-solid fa-unlock-keyhole" style="color: #10b981;"></i>',
+      JobMatch:        '<i class="fa-solid fa-bullseye" style="color: #8b5cf6;"></i>'
+    };
+    return icons[type] || '<i class="fa-solid fa-bell" style="color: #10b981;"></i>';
   }
 }

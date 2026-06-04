@@ -36,6 +36,9 @@ export class NotificationService {
   }
 
   private handleIncomingNotification(data: any): void {
+    if (data && data.title) {
+      data.title = data.title.replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDDFF]/g, '').trim();
+    }
     // Add to top of notifications list
     this.notifications.update(list => [data, ...list]);
     // Increment unread count

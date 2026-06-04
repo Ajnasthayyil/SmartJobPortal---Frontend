@@ -39,8 +39,7 @@ import { NotificationService } from '../../../core/services/notification.service
                [class.unread]="!n.isRead"
                (click)="onNotifClick(n)">
             
-            <div class="card-icon">
-              {{ ns.getTypeIcon(n.type) }}
+            <div class="card-icon" [innerHTML]="getTypeIconHtml(n.type)">
             </div>
 
             <div class="card-content">
@@ -56,7 +55,7 @@ import { NotificationService } from '../../../core/services/notification.service
                 <span class="comp" *ngIf="n.companyName">{{ n.companyName }}</span>
               </div>
 
-              <h4 class="notif-title">{{ n.title }}</h4>
+              <h4 class="notif-title">{{ stripEmojis(n.title) }}</h4>
               <p class="notif-msg">{{ n.message }}</p>
             </div>
             
@@ -292,5 +291,27 @@ export class NotificationCenterComponent {
     if (!n.isRead) {
       this.ns.markAsRead(n.notificationId);
     }
+  }
+
+  stripEmojis(text: string): string {
+    if (!text) return '';
+    // Strip emojis, dingbats, and surrogate pairs
+    return text.replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDDFF]/g, '').trim();
+  }
+
+  getTypeIconHtml(type: string): string {
+    const icons: Record<string, string> = {
+      StatusUpdate:    '<i class="fa-solid fa-clipboard-list" style="color: #64748b;"></i>',
+      Shortlisted:     '<i class="fa-solid fa-star" style="color: #eab308;"></i>',
+      Interview:       '<i class="fa-regular fa-calendar-check" style="color: #3b82f6;"></i>',
+      Offer:           '<i class="fa-solid fa-award" style="color: #10b981;"></i>',
+      Rejected:        '<i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i>',
+      AccountApproved: '<i class="fa-solid fa-circle-check" style="color: #10b981;"></i>',
+      AccountRejected: '<i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i>',
+      AccountBlocked:  '<i class="fa-solid fa-ban" style="color: #ef4444;"></i>',
+      AccountActive:   '<i class="fa-solid fa-unlock-keyhole" style="color: #10b981;"></i>',
+      JobMatch:        '<i class="fa-solid fa-bullseye" style="color: #8b5cf6;"></i>'
+    };
+    return icons[type] || '<i class="fa-solid fa-bell" style="color: #10b981;"></i>';
   }
 }
