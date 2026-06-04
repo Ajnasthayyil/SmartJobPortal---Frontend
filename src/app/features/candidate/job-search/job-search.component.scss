@@ -350,17 +350,47 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
         }
     }
 
-    .filter-select {
+    .select-wrapper {
+        position: relative;
         width: 100%;
-        padding: 14px;
-        border-radius: 14px;
-        border: 1.5px solid $slate-200;
-        background: $white;
-        font-weight: 700;
-        font-size: 14px;
-        color: $slate-900;
-        cursor: pointer;
-        &:focus { outline: none; border-color: $primary; }
+        
+        .filter-select {
+            width: 100%;
+            padding: 14px 40px 14px 16px;
+            border-radius: 14px;
+            border: 1.5px solid $slate-200;
+            background: $white;
+            font-weight: 700;
+            font-size: 14px;
+            color: $slate-900;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            transition: all 0.2s ease;
+
+            &:focus {
+                outline: none;
+                border-color: $primary;
+                box-shadow: 0 0 0 4px rgba($primary, 0.05);
+            }
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: $slate-400;
+            font-size: 13px;
+            pointer-events: none;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        &:focus-within .select-arrow {
+            color: $primary;
+            transform: translateY(-50%) rotate(180deg);
+        }
     }
 
     .btn-reset-all {

@@ -110,21 +110,23 @@ export class AuthService {
     return this.http.post<ApiResponse<string>>(`${this.apiUrl}/reset-password`, request);
   }
 
-  logout(): void {
+  logout(showNotification: boolean = false): void {
     // Call the backend to clear cookies before clearing local storage
     this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({
-      next: () => this.clearSession(),
-      error: () => this.clearSession()
+      next: () => this.clearSession(showNotification),
+      error: () => this.clearSession(showNotification)
     });
     
   }
 
-  private clearSession(): void {
+  private clearSession(showNotification: boolean = false): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('authUser');
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
-    this.toast.info('Logged out successfully.');
+    if (showNotification) {
+      this.toast.info('Logged out successfully.');
+    }
     this.notifications.stopRealTime();
 
     this.router.navigate(['/login']);

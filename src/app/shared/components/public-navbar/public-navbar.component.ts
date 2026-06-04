@@ -24,7 +24,7 @@ export class PublicNavbarComponent {
   }
 
   logout(): void {
-    this.auth.logout();
+    this.auth.logout(true);
     this.router.navigate(['/login']);
   }
 

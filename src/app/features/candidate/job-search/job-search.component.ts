@@ -36,6 +36,14 @@ export class JobSearchComponent implements OnInit {
   ];
   selectedSalary: any = null;
 
+  readonly dateFilters = [
+    { label: 'Any Time', value: '' },
+    { label: 'Last 24 Hours', value: '24h' },
+    { label: 'Last Week', value: 'week' },
+    { label: 'Last Month', value: 'month' }
+  ];
+  selectedDatePosted = '';
+
   private searchSubject = new Subject<void>();
 
   constructor(
@@ -87,6 +95,21 @@ export class JobSearchComponent implements OnInit {
     this.executeSearch();
   }
 
+  setDatePosted(value: string): void {
+    this.selectedDatePosted = value;
+    this.executeSearch();
+  }
+
+  resetFilters(): void {
+    this.keyword = '';
+    this.location = '';
+    this.jobType = '';
+    this.activeFilter = 'All';
+    this.selectedSalary = null;
+    this.selectedDatePosted = '';
+    this.executeSearch();
+  }
+
   loadMore(): void {
     this.page.update(p => p + 1);
     this.service.searchJobs({ ...this.buildParams(), page: this.page() }).subscribe({
@@ -105,6 +128,7 @@ export class JobSearchComponent implements OnInit {
       jobType: this.jobType || undefined,
       minSalary: this.selectedSalary?.min,
       maxSalary: this.selectedSalary?.max,
+      datePosted: this.selectedDatePosted || undefined,
       page: this.page(),
       pageSize: this.pageSize
     };

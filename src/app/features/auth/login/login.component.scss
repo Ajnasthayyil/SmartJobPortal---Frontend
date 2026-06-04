@@ -188,14 +188,38 @@ $white: #ffffff;
 .input-wrapper {
     position: relative;
     i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: $slate-400; font-size: 16px; transition: color 0.3s; z-index: 5; }
+    
     .form-control {
         width: 100%; padding: 12px 52px; background: $slate-100; border: 2px solid transparent; border-radius: 14px; font-size: 14px; color: $slate-900;
         transition: all 0.3s; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500;
         &::placeholder { color: $slate-400; }
         &:focus { outline: none; background: $white; border-color: $primary; box-shadow: 0 10px 25px rgba($primary, 0.12); i { color: $primary; } }
         &.error { border-color: #ef4444; }
+
+        &::-ms-reveal,
+        &::-ms-clear {
+            display: none !important;
+        }
     }
-    .eye-toggle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: $slate-400; cursor: pointer; padding: 8px; z-index: 5; &:hover { color: $primary; } }
+    
+    .eye-toggle { 
+        position: absolute; 
+        right: 16px; 
+        top: 50%; 
+        transform: translateY(-50%); 
+        background: none; 
+        border: none; 
+        color: $slate-400; 
+        cursor: pointer; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        z-index: 5; 
+        &:hover { color: $primary; } 
+    }
 }
 
 .form-footer-actions {

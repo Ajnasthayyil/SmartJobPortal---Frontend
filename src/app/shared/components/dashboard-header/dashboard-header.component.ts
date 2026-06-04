@@ -24,7 +24,7 @@ export class DashboardHeaderComponent {
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.logout(true);
     this.isDropdownOpen = false;
   }
 

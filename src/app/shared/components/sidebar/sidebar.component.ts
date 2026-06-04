@@ -22,7 +22,7 @@ export class SidebarComponent implements OnInit {
   currentPath = '';
   
   logout() {
-    this.authService.logout();
+    this.authService.logout(true);
   }
   
   // Grouped links with headings

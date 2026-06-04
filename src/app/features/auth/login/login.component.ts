@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
       error: err => {
         this.loading.set(false);
         this.toast.error(
-          err?.error?.message || 'Invalid email or password.'
+          err?.error?.errors?.[0] || err?.error?.message || 'Invalid email or password.'
         );
       }
     });
@@ -122,7 +122,7 @@ export class LoginComponent implements OnInit {
       error: err => {
         this.loading.set(false);
         this.toast.error(
-          err?.error?.message || 'Failed to authenticate with Google.'
+          err?.error?.errors?.[0] || err?.error?.message || 'Failed to authenticate with Google.'
         );
       }
     });

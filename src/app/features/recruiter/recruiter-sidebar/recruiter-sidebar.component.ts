@@ -22,7 +22,7 @@ export class RecruiterSidebarComponent {
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.logout(true);
   }
 
   links = [

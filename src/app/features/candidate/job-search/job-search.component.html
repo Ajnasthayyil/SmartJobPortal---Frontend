@@ -56,30 +56,37 @@
         <h3 class="filter-title">Refine Results</h3>
         
         <div class="filter-group">
-          <label>Job Category</label>
-          <div class="chip-grid">
-            <button *ngFor="let type of jobTypes" 
-                    class="filter-chip" 
-                    [class.active]="activeFilter === type"
-                    (click)="setFilter(type)">
-              {{ type }}
-            </button>
+          <label for="jobCategorySelect">Job Category</label>
+          <div class="select-wrapper">
+            <select id="jobCategorySelect" class="filter-select" [ngModel]="activeFilter" (ngModelChange)="setFilter($event)">
+              <option *ngFor="let type of jobTypes" [value]="type">{{ type }}</option>
+            </select>
+            <i class="fa-solid fa-chevron-down select-arrow"></i>
           </div>
         </div>
 
         <div class="filter-group">
-          <label>Minimum Salary</label>
-          <div class="chip-grid">
-            <button *ngFor="let range of salaryRanges" 
-                    class="filter-chip" 
-                    [class.active]="selectedSalary?.label === range.label"
-                    (click)="setSalary(range)">
-              {{ range.label }}
-            </button>
+          <label for="salarySelect">Minimum Salary</label>
+          <div class="select-wrapper">
+            <select id="salarySelect" class="filter-select" [ngModel]="selectedSalary" (ngModelChange)="setSalary($event)">
+              <option [ngValue]="null">All Salaries</option>
+              <option *ngFor="let range of salaryRanges" [ngValue]="range">{{ range.label }}</option>
+            </select>
+            <i class="fa-solid fa-chevron-down select-arrow"></i>
           </div>
         </div>
 
-        <button class="btn-reset-all" (click)="keyword='';location='';setFilter('All');executeSearch()">
+        <div class="filter-group">
+          <label for="datePostedSelect">Date Posted</label>
+          <div class="select-wrapper">
+            <select id="datePostedSelect" class="filter-select" [ngModel]="selectedDatePosted" (ngModelChange)="setDatePosted($event)">
+              <option *ngFor="let date of dateFilters" [value]="date.value">{{ date.label }}</option>
+            </select>
+            <i class="fa-solid fa-chevron-down select-arrow"></i>
+          </div>
+        </div>
+
+        <button class="btn-reset-all" (click)="resetFilters()">
           Reset All Filters
         </button>
       </div>
