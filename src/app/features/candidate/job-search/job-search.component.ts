@@ -141,6 +141,11 @@ export class JobSearchComponent implements OnInit {
     const jobId = this.currentJobId();
     if (!jobId) return;
 
+    if (!this.coverNote || !this.coverNote.trim()) {
+      this.toast.warning('Please enter a cover letter / note explaining why you are a good fit.');
+      return;
+    }
+
     this.applyingId.set(jobId);
     this.service.applyJob(jobId, this.coverNote).subscribe({
       next: res => {

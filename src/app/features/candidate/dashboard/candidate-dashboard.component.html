@@ -122,7 +122,15 @@
               <span class="subtitle">{{ app.companyName }}</span>
             </div>
             <div class="meta">
-              <span [class]="'badge status-applied ' + getStatusClass(app.status)">
+              <span [class]="'badge ' + getStatusClass(app.status)">
+                <ng-container [ngSwitch]="app.status">
+                  <i class="fa-solid fa-paper-plane" *ngSwitchCase="'Applied'"></i>
+                  <i class="fa-solid fa-magnifying-glass" *ngSwitchCase="'UnderReview'"></i>
+                  <i class="fa-solid fa-star" *ngSwitchCase="'Shortlisted'"></i>
+                  <i class="fa-solid fa-calendar-days" *ngSwitchCase="'Interview'"></i>
+                  <i class="fa-solid fa-gift" *ngSwitchCase="'Offered'"></i>
+                  <i class="fa-solid fa-circle-xmark" *ngSwitchCase="'Rejected'"></i>
+                </ng-container>
                 {{ getStatusLabel(app.status) }}
               </span>
             </div>

@@ -68,9 +68,9 @@ export class ApplicationsComponent implements OnInit {
     const map: Record<string, string> = {
       Applied: 'Applied',
       UnderReview: 'Under Review',
-      Shortlisted: 'Shortlisted ⭐',
-      Interview: 'Interview Scheduled 📅',
-      Offered: 'Offer Received 🎉',
+      Shortlisted: 'Shortlisted',
+      Interview: 'Interview Scheduled',
+      Offered: 'Offer Received',
       Rejected: 'Not Selected'
     };
     return map[status] || status;

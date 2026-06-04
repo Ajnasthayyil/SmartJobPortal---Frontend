@@ -79,6 +79,11 @@ export class JobDetailComponent implements OnInit {
   }
 
   applyJob(): void {
+    if (!this.coverNote || !this.coverNote.trim()) {
+      this.toast.warning('Please enter a cover letter / note explaining why you are a good fit.');
+      return;
+    }
+
     this.applying.set(true);
     this.service.applyJob(this.jobId, this.coverNote).subscribe({
       next: res => {

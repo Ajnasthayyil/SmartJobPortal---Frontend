@@ -168,7 +168,7 @@ export class CandidateDashboardComponent implements OnInit {
       'UnderReview':  'Under Review',
       'Shortlisted':  'Shortlisted',
       'Interview':    'Interview Scheduled',
-      'Offered':      'Offer Received 🎉',
+      'Offered':      'Offer Received',
       'Rejected':     'Not Selected'
     };
     return map[status] || status;
