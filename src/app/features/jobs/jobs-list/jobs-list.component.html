@@ -165,7 +165,7 @@
         </div>
 
         <!-- Pagination -->
-        <div class="pagination-wrap" *ngIf="totalPages > 1 && !loading()">
+        <div class="pagination-wrap" *ngIf="totalPages >= 1 && !loading()">
           <button class="pag-btn" [disabled]="page() === 1" (click)="changePage(page() - 1)">
             <i class="fa-solid fa-chevron-left"></i>
           </button>
