@@ -496,6 +496,12 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
         margin-bottom: 16px;
     }
 
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
     .meta-row {
         display: flex;
         flex-wrap: wrap;
@@ -518,8 +524,8 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
+        margin-top: auto;
         margin-bottom: 20px;
-        flex: 1;
 
         .skill-tag {
             background: $slate-50;

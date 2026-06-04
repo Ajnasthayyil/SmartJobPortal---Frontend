@@ -101,20 +101,31 @@
             <div class="gap-analysis-grid">
               <div class="analysis-box matched">
                 <label><i class="fa-solid fa-square-check"></i> Profile Assets ({{ j.matchedSkills.length }})</label>
-                <div class="skill-pills">
+                <div class="skill-pills" *ngIf="j.matchedSkills.length > 0; else noMatchedSkills">
                   <span class="pill" *ngFor="let s of j.matchedSkills">
                     <i class="fa-solid fa-circle-check pill-icon-matched"></i> {{ s }}
                   </span>
                 </div>
+                <ng-template #noMatchedSkills>
+                  <div class="empty-skills-placeholder">
+                    <i class="fa-regular fa-folder-open"></i> No matching skills detected in your profile.
+                  </div>
+                </ng-template>
               </div>
               
               <div class="analysis-box missing">
                 <label><i class="fa-solid fa-triangle-exclamation"></i> Growth Requirements ({{ j.missingSkills.length }})</label>
-                <div class="skill-pills">
+                <div class="skill-pills" *ngIf="j.missingSkills.length > 0; else noMissingSkills">
                   <span class="pill" *ngFor="let s of j.missingSkills">
                     <i class="fa-solid fa-plus-circle pill-icon-missing"></i> {{ s }}
                   </span>
                 </div>
+                <ng-template #noMissingSkills>
+                  <div class="empty-skills-placeholder success">
+                    <i class="fa-solid fa-circle-check"></i> You meet all required skills for this position!
+                  </div>
+                </ng-template>
+                
                 <div class="insight-tip" *ngIf="j.missingSkills.length > 0">
                   <div class="tip-header">
                     <i class="fa-solid fa-lightbulb-on text-amber"></i> AI MATCH RECOMMENDATION:
