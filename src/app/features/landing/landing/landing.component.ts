@@ -26,14 +26,14 @@ export class LandingComponent implements OnInit {
   ];
 
   categories = [
-    { icon: 'fa-solid fa-laptop-code', name: 'Technology', count: 12430 },
-    { icon: 'fa-solid fa-chart-line', name: 'Data & Analytics', count: 4820 },
-    { icon: 'fa-solid fa-palette', name: 'Design & UX', count: 2910 },
-    { icon: 'fa-solid fa-mobile-screen-button', name: 'Mobile Dev', count: 3200 },
-    { icon: 'fa-solid fa-cloud-arrow-up', name: 'Cloud & DevOps', count: 5600 },
-    { icon: 'fa-solid fa-bullhorn', name: 'Marketing', count: 6720 },
-    { icon: 'fa-solid fa-sack-dollar', name: 'Finance', count: 3480 },
-    { icon: 'fa-solid fa-robot', name: 'AI & Machine Learning', count: 2150 },
+    { icon: 'fa-solid fa-bezier-curve', name: 'UI/UX Designer', count: 2910, colorClass: 'purple' },
+    { icon: 'fa-solid fa-palette', name: 'Graphic Designer', count: 1840, colorClass: 'yellow' },
+    { icon: 'fa-solid fa-camera', name: 'Photography', count: 1250, colorClass: 'blue' },
+    { icon: 'fa-solid fa-video', name: 'Videography', count: 980, colorClass: 'pink' },
+    { icon: 'fa-solid fa-bullhorn', name: 'Marketing', count: 6720, colorClass: 'purple' },
+    { icon: 'fa-solid fa-laptop-code', name: 'Software Dev', count: 12430, colorClass: 'blue' },
+    { icon: 'fa-solid fa-sack-dollar', name: 'Finance', count: 3480, colorClass: 'yellow' },
+    { icon: 'fa-solid fa-robot', name: 'AI & Learning', count: 2150, colorClass: 'pink' }
   ];
 
   displayCounts: number[] = [];

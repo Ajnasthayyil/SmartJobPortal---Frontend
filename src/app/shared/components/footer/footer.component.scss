@@ -1,22 +1,26 @@
+$primary:   #FD6F3F;
+$primary-d: #E05626;
+$white:     #ffffff;
+
 footer { 
-  background: #020617; // Slate 950
+  background: #0F1016; /* Clean brand dark background */
   border-top: 1px solid rgba(255,255,255,0.03); 
-  padding: 60px 5% 40px; // Reduced top padding from 100px to 60px
+  padding: 60px 5% 40px; 
   font-family: 'Outfit', sans-serif;
-  color: #ffffff;
+  color: $white;
 }
 
 .footer-grid { 
   display: grid; 
   grid-template-columns: 2fr 1fr 1fr 1fr; 
-  gap: 40px; // Reduced gap
-  margin-bottom: 40px; // Reduced margin
+  gap: 40px; 
+  margin-bottom: 40px; 
 }
 
 .footer-brand { 
   p { 
     font-size: 14px; 
-    color: #ffffff; 
+    color: rgba($white, 0.7); 
     line-height: 1.6; 
     font-weight: 400; 
     max-width: 280px; 
@@ -36,27 +40,20 @@ footer {
   gap: 12px;
 }
 
-.logo-img-footer {
-  height: 28px;
-  width: auto;
-  object-fit: contain;
-  filter: brightness(0) invert(1); // Make it white for dark footer
-}
-
 .footer-logo { 
   font-size: 24px; 
   font-weight: 800;
-  color: #ffffff;
   letter-spacing: -0.04em;
-  span { 
-    color: #10b981;
-  }
+  text-decoration: none;
 }
+
+.logo-tal { color: $primary; }
+.logo-ex  { color: $white; }
 
 .logo-subtitle {
   font-size: 8px;
   font-weight: 700;
-  color: #ffffff;
+  color: rgba($white, 0.5);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-top: 4px;
@@ -67,17 +64,17 @@ footer {
     font-weight: 700; 
     font-size: 14px; 
     margin-bottom: 20px; 
-    color: #ffffff;
+    color: $white;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   } 
   ul { list-style: none; display: flex; flex-direction: column; gap: 10px; padding: 0; } 
   a { 
     font-size: 14px; 
-    color: #ffffff; 
+    color: rgba($white, 0.6); 
     text-decoration: none; 
     transition: all 0.2s; 
-    &:hover { color: #10b981; } 
+    &:hover { color: $primary; } 
   } 
 }
 
@@ -87,16 +84,16 @@ footer {
   justify-content: space-between; 
   padding-top: 30px; 
   border-top: 1px solid rgba(255,255,255,0.05); 
-  p { font-size: 13px; color: #ffffff; } 
+  p { font-size: 13px; color: rgba($white, 0.5); } 
 
   .footer-portfolio-link {
-    color: #10b981;
+    color: $primary;
     text-decoration: none;
     font-weight: 700;
     transition: all 0.2s ease;
 
     &:hover {
-      color: #059669;
+      color: $primary-d;
       text-decoration: underline;
     }
   }
@@ -116,8 +113,13 @@ footer {
   cursor: pointer; 
   transition: all 0.3s; 
   font-size: 16px; 
-  color: #ffffff; 
-  &:hover { border-color: #10b981; color: #10b981; background: rgba(16, 185, 129, 0.05); transform: translateY(-4px); } 
+  color: $white; 
+  &:hover { 
+    border-color: $primary; 
+    color: $primary; 
+    background: rgba(253, 111, 63, 0.05); 
+    transform: translateY(-4px); 
+  } 
 }
 
 @media (max-width: 992px) {

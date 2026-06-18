@@ -9,6 +9,15 @@ module.exports = {
           white:  '#ffffff',
           gray:   '#6b7280',
           border: '#e5e7eb',
+        },
+        jobfin: {
+          primary: '#FD6F3F',
+          bg: '#F9F8F6',
+          dark: '#0F1016',
+          purple: '#E3DBFA',
+          yellow: '#FFF3D2',
+          blue: '#D5F0FF',
+          pink: '#FCE5E4',
         }
       },
       fontFamily: {

@@ -11,9 +11,9 @@
     <!-- Center: Navigation Links -->
     <div class="nav-pill">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      <a routerLink="/jobs" routerLinkActive="active">Jobs</a>
+      <a routerLink="/jobs" routerLinkActive="active">Find Jobs</a>
+      <a routerLink="/courses" routerLinkActive="active">Career Tips</a>
       <a routerLink="/companies" routerLinkActive="active">Companies</a>
-      <a routerLink="/courses" routerLinkActive="active">Courses</a>
       <a routerLink="/feed" routerLinkActive="active">Community</a>
     </div>
 
@@ -38,7 +38,8 @@
 
       <!-- Logged Out State -->
       <ng-container *ngIf="!auth.isLoggedIn()">
-        <a routerLink="/login" class="btn-login">Login</a>
+        <a routerLink="/login" class="btn-login-text">Log in</a>
+        <a routerLink="/register" class="btn-register-cta">Create an account</a>
       </ng-container>
 
       <!-- Mobile Toggle -->
