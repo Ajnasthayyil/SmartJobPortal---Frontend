@@ -11,7 +11,7 @@ module.exports = {
           border: '#e5e7eb',
         },
         jobfin: {
-          primary: '#FD6F3F',
+          primary: '#10b981',
           bg: '#F9F8F6',
           dark: '#0F1016',
           purple: '#E3DBFA',

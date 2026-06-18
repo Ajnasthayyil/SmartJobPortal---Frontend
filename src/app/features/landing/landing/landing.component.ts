@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { CandidateService } from '../../../core/services/candidate.service';
 
 @Component({
   selector: 'app-landing',
@@ -39,10 +40,14 @@ export class LandingComponent implements OnInit {
   displayCounts: number[] = [];
   private startTime: number | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private candidateService: CandidateService
+  ) {}
 
   ngOnInit() {
     this.fetchFeaturedJobs();
+    this.fetchCompanies();
     this.categories.forEach((cat, i) => {
       this.displayCounts[i] = 0;
       this.animateCount(i, cat.count);
@@ -51,7 +56,7 @@ export class LandingComponent implements OnInit {
 
   fetchFeaturedJobs() {
     this.loading = true;
-    this.http.get<any>(`${environment.apiUrl}/candidate/jobs?page=1&pageSize=8`).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/candidate/jobs?page=1&pageSize=4`).subscribe({
       next: res => {
         if (res.success) {
           this.jobs = res.data?.jobs || [];
@@ -60,6 +65,58 @@ export class LandingComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
+      }
+    });
+  }
+
+  fetchCompanies(): void {
+    this.candidateService.getCompanies().subscribe({
+      next: (res: any) => {
+        if (res.success && res.data && res.data.length > 0) {
+          this.companies = res.data.slice(0, 4).map((c: any, index: number) => ({
+            logoClass: this.getLogoClassByIndex(index),
+            logoText: c.companyName ? c.companyName.substring(0, 2).toUpperCase() : 'CO',
+            name: c.companyName,
+            industry: c.industry || 'Technology',
+            openRoles: c.openJobsCount || 5
+          }));
+        } else {
+          this.fetchCompaniesFromJobs();
+        }
+      },
+      error: () => this.fetchCompaniesFromJobs()
+    });
+  }
+
+  private getLogoClassByIndex(index: number): string {
+    const classes = ['logo-a', 'logo-b', 'logo-e', 'logo-c'];
+    return classes[index % classes.length];
+  }
+
+  private fetchCompaniesFromJobs(): void {
+    this.candidateService.searchJobs({ pageSize: 100 }).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          const jobs: any[] = res.data?.jobs || [];
+          const map = new Map<string, any>();
+          let idx = 0;
+          
+          jobs.forEach(j => {
+            if (!map.has(j.companyName)) {
+              map.set(j.companyName, {
+                logoClass: this.getLogoClassByIndex(idx++),
+                logoText: j.companyName ? j.companyName.substring(0, 2).toUpperCase() : 'CO',
+                name: j.companyName,
+                industry: j.industry || 'Technology',
+                openRoles: 1
+              });
+            } else {
+              const c = map.get(j.companyName)!;
+              c.openRoles++;
+            }
+          });
+          this.companies = Array.from(map.values()).slice(0, 4);
+        }
       }
     });
   }
@@ -77,7 +134,7 @@ export class LandingComponent implements OnInit {
     window.requestAnimationFrame(step);
   }
 
-  companies = [
+  companies: any[] = [
     { logoClass: 'logo-a', logoText: 'GG', name: 'Google', industry: 'Technology', openRoles: 142 },
     { logoClass: 'logo-b', logoText: 'AZ', name: 'Amazon', industry: 'E-Commerce & Cloud', openRoles: 89 },
     { logoClass: 'logo-e', logoText: 'RZ', name: 'Razorpay', industry: 'Fintech', openRoles: 34 },

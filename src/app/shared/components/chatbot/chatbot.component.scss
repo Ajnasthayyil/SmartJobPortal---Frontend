@@ -1,9 +1,9 @@
 // Premium Guided Chatbot Styling System
 
-$primary-gradient: linear-gradient(135deg, #FD6F3F, #E05626);
+$primary-gradient: linear-gradient(135deg, #10b981, #059669);
 $glass-bg: rgba(255, 255, 255, 0.88);
 $glass-border: 1px solid rgba(255, 255, 255, 0.5);
-$shadow-premium: 0 12px 40px rgba(253, 111, 63, 0.15);
+$shadow-premium: 0 12px 40px rgba(16, 185, 129, 0.15);
 $font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
 .chatbot-container {
@@ -52,7 +52,7 @@ $font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
     right: 2px;
     width: 12px;
     height: 12px;
-    background-color: #FD6F3F;
+    background-color: #10b981;
     border: 2px solid #fff;
     border-radius: 50%;
     animation: pulse 2s infinite;
@@ -66,7 +66,7 @@ $font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
     right: 0;
     bottom: 0;
     border-radius: 50%;
-    border: 2px solid rgba(224, 86, 38, 0.4);
+    border: 2px solid rgba(5, 150, 105, 0.4);
     animation: ripple 2s infinite ease-out;
     pointer-events: none;
   }
@@ -132,7 +132,7 @@ $font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
           .status-dot {
             width: 7px;
             height: 7px;
-            background-color: #FD6F3F;
+            background-color: #10b981;
             border-radius: 50%;
             display: inline-block;
           }
@@ -252,7 +252,7 @@ $font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
 
     .go-to-page-btn {
       width: 100%;
-      background: #FD6F3F;
+      background: #10b981;
       color: white;
       border: none;
       padding: 10px 14px;
@@ -264,13 +264,13 @@ $font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
       align-items: center;
       justify-content: center;
       gap: 6px;
-      box-shadow: 0 4px 10px rgba(253, 111, 63, 0.25);
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
       transition: all 0.2s ease;
 
       &:hover {
-        background: #E05626;
+        background: #059669;
         transform: translateY(-1px);
-        box-shadow: 0 6px 14px rgba(253, 111, 63, 0.35);
+        box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35);
       }
 
       &:active {
@@ -288,9 +288,9 @@ $font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
     width: 100%;
 
     .option-pill {
-      background: rgba(253, 111, 63, 0.06);
-      border: 1px solid rgba(253, 111, 63, 0.15);
-      color: #E05626;
+      background: rgba(16, 185, 129, 0.06);
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      color: #059669;
       padding: 8px 14px;
       border-radius: 20px;
       font-size: 13px;
@@ -300,11 +300,11 @@ $font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
       text-align: left;
 
       &:hover {
-        background: #FD6F3F;
+        background: #10b981;
         color: #fff;
-        border-color: #FD6F3F;
+        border-color: #10b981;
         transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(253, 111, 63, 0.15);
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
       }
 
       &:active {
@@ -324,7 +324,7 @@ $font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
     .back-btn {
       background: transparent;
       border: none;
-      color: #E05626;
+      color: #059669;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;

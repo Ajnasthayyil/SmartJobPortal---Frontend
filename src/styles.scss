@@ -1,13 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700,800,900&f[]=cabinet-grotesk@400,700,800&display=swap');
 
 
 :root {
-  --primary: #FD6F3F;
-  --primary-light: #FFEFEA;
-  --primary-dark: #E05626;
+  --primary: #10b981;
+  --primary-light: #ecfdf5;
+  --primary-dark: #059669;
   
-  --font-main: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --font-main: 'Satoshi', 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Cabinet Grotesk', 'Outfit', 'Plus Jakarta Sans', sans-serif;
   
   --black:   #0F1016;
   --slate-50: #F9F8F6;

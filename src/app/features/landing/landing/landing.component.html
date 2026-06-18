@@ -208,6 +208,49 @@
     </div>
   </section>
 
+  <!-- TOP COMPANIES -->
+  <section class="section-pad top-companies-section">
+    <div class="section-header split">
+      <div class="header-text">
+        <span class="section-tag-premium"><i class="fa-solid fa-building"></i> Top Recruiters</span>
+        <h2 class="section-title-premium">Featured <span class="gradient-text">Companies</span></h2>
+        <p class="section-sub-premium">Work with top-tier global teams driving innovation in technology and fintech.</p>
+      </div>
+      <div class="header-action">
+        <a class="see-all" routerLink="/companies">
+          Explore all companies <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="companies-row-wrapper">
+      <div class="companies-row">
+        <div class="company-card-landing" *ngFor="let comp of companies" routerLink="/companies">
+          <div class="company-card-glow-landing"></div>
+          <div class="company-card-inner-landing">
+            <div class="company-card-header-landing">
+              <div class="company-logo-landing" [class]="comp.logoClass">
+                {{ comp.logoText }}
+              </div>
+              <div class="company-roles-badge-landing">
+                <span class="roles-count-landing">{{ comp.openRoles }}</span>
+                <span class="roles-label-landing">Jobs</span>
+              </div>
+            </div>
+            <div class="company-info-landing">
+              <h3 class="company-name-landing">{{ comp.name }}</h3>
+              <span class="company-industry-landing"><i class="fa-solid fa-briefcase"></i> {{ comp.industry }}</span>
+            </div>
+            <div class="company-card-footer-landing">
+              <span class="view-co-text-landing">Explore Company</span>
+              <span class="view-co-arrow-landing"><i class="fa-solid fa-arrow-right-long"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CATEGORIES -->
   <section class="section-pad section-alt">
     <div class="section-header center">

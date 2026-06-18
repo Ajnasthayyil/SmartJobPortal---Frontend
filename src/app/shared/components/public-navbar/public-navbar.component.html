@@ -38,8 +38,8 @@
 
       <!-- Logged Out State -->
       <ng-container *ngIf="!auth.isLoggedIn()">
-        <a routerLink="/login" class="btn-login-text">Log in</a>
-        <a routerLink="/register" class="btn-register-cta">Create an account</a>
+        <a routerLink="/login" class="btn-login-text hide-mobile">Log in</a>
+        <a routerLink="/register" class="btn-register-cta hide-mobile">Create an account</a>
       </ng-container>
 
       <!-- Mobile Toggle -->
@@ -65,6 +65,12 @@
       <hr style="border: 0; border-top: 1px solid #f1f5f9; margin: 10px 0;">
       <a (click)="goToDashboard(); mobileOpen.set(false)">Dashboard</a>
       <a (click)="logout(); mobileOpen.set(false)" style="color: #ef4444;">Logout</a>
+    </ng-container>
+
+    <ng-container *ngIf="!auth.isLoggedIn()">
+      <hr style="border: 0; border-top: 1px solid #f1f5f9; margin: 10px 0;">
+      <a routerLink="/login" (click)="mobileOpen.set(false)">Log in</a>
+      <a routerLink="/register" (click)="mobileOpen.set(false)" style="color: #10b981; font-weight: 700;">Create an account</a>
     </ng-container>
   </div>
 </nav>
