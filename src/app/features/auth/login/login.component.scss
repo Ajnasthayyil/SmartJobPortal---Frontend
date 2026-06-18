@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap');
 
-$primary: #10b981;
-$primary-dark: #059669;
+$primary: #FD6F3F;
+$primary-dark: #E05626;
+$bg-cream: #F9F8F6;
 $slate-900: #0f172a;
 $slate-800: #1e293b;
 $slate-700: #334155;
@@ -18,7 +19,7 @@ $white: #ffffff;
     grid-template-columns: 1.25fr 0.75fr;
     min-height: 100vh;
     height: 100vh;
-    background: #fdfdfd;
+    background: $bg-cream;
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow: hidden;
 
@@ -39,7 +40,7 @@ $white: #ffffff;
     justify-content: space-between;
     overflow: hidden;
     color: $slate-900;
-    background: #ffffff;
+    background: $bg-cream;
 
     &::before {
         content: '';
@@ -48,7 +49,7 @@ $white: #ffffff;
         background-image: url('/auth_active_seeker_premium_1778131765037.png');
         background-size: cover;
         background-position: center;
-        opacity: 0.15;
+        opacity: 0.12;
         z-index: 0;
     }
 
@@ -56,43 +57,22 @@ $white: #ffffff;
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+        background: linear-gradient(to bottom, rgba($bg-cream, 0.8), rgba($bg-cream, 0.2));
         z-index: 1;
-    }
-
-    .panel-bg-overlay {
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 10% 10%, rgba($primary, 0.08), transparent 40%);
-        z-index: 2;
-    }
-
-    .glow-orb {
-        position: absolute;
-        width: 500px; height: 500px;
-        border-radius: 50%;
-        filter: blur(120px);
-        z-index: 2;
-        &.orb-1 { top: -150px; left: -150px; background: rgba($primary, 0.12); }
-        &.orb-2 { bottom: -150px; right: 0; background: rgba(59, 130, 246, 0.1); }
     }
 
     .logo-row {
         position: relative; z-index: 10;
+        cursor: pointer;
         .brand-name { 
             font-family: 'Outfit', sans-serif; 
             font-size: 34px; 
             font-weight: 800; 
-            color: $slate-900; 
             display: flex;
             align-items: center;
-            gap: 15px;
-            span { color: $primary; } 
-        }
-        .logo-img-auth {
-            height: 48px;
-            width: auto;
-            object-fit: contain;
+            gap: 1px;
+            .logo-tal { color: $primary; }
+            .logo-ex { color: $slate-900; }
         }
         .logo-subtitle { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: $slate-500; margin-top: 4px; text-transform: uppercase; }
     }
@@ -120,7 +100,7 @@ $white: #ffffff;
             line-height: 1.05; margin-bottom: 24px; font-weight: 800; color: $slate-900;
             letter-spacing: -0.03em;
             span { 
-                background: linear-gradient(135deg, $primary 0%, #34d399 100%);
+                background: linear-gradient(135deg, $primary 0%, #ff8c5a 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
@@ -157,13 +137,6 @@ $white: #ffffff;
     position: relative;
     overflow-y: auto;
     max-height: 100vh;
-
-    &::before {
-        content: '';
-        position: absolute; bottom: 0; right: 0; width: 400px; height: 400px;
-        background: radial-gradient(circle, rgba($primary, 0.03), transparent 70%);
-        z-index: 0;
-    }
 }
 
 .form-box {
@@ -230,7 +203,7 @@ $white: #ffffff;
 
 .btn-primary-auth {
     width: 100%; padding: 14px; 
-    background: linear-gradient(135deg, $primary 0%, #059669 100%); 
+    background: linear-gradient(135deg, $primary 0%, $primary-dark 100%); 
     color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 800;
     cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
     box-shadow: 0 12px 30px rgba($primary, 0.3);
