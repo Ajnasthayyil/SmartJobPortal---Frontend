@@ -114,7 +114,7 @@
                                     <span>Applied {{ app.appliedAt | date:'mediumDate' }}</span>
                                     <ng-container *ngIf="app.matchScore">
                                         <span class="match-score">
-                                            🎯 {{ app.matchScore }}% match
+                                            <i class="fa-solid fa-bullseye icon-match"></i> {{ app.matchScore }}% match
                                         </span>
                                     </ng-container>
                                 </div>
@@ -141,9 +141,14 @@
                                 <ng-container *ngFor="let step of app.timeline; let last = last">
                                     <div class="timeline-step" [class.completed]="step.isCompleted" [class.current]="step.isCurrent">
                                         <div class="step-dot">
-                                            <i class="fa-solid fa-check" *ngIf="step.isCompleted"></i>
-                                            <i class="fa-solid fa-clock-rotate-left" *ngIf="step.isCurrent"></i>
-                                            <i class="fa-solid fa-circle-dot" *ngIf="!step.isCompleted && !step.isCurrent"></i>
+                                            <ng-container [ngSwitch]="step.status">
+                                                <i class="fa-solid fa-paper-plane" *ngSwitchCase="'Applied'"></i>
+                                                <i class="fa-solid fa-magnifying-glass" *ngSwitchCase="'UnderReview'"></i>
+                                                <i class="fa-solid fa-star" *ngSwitchCase="'Shortlisted'"></i>
+                                                <i class="fa-solid fa-calendar-days" *ngSwitchCase="'Interview'"></i>
+                                                <i class="fa-solid fa-gift" *ngSwitchCase="'Offered'"></i>
+                                                <i class="fa-solid fa-circle-xmark" *ngSwitchCase="'Rejected'"></i>
+                                            </ng-container>
                                         </div>
                                         <ng-container *ngIf="!last">
                                             <div class="step-line" [class.filled]="step.isCompleted">

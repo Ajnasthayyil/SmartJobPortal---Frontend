@@ -374,6 +374,13 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
       border-radius: 6px;
       font-weight: 700; 
       border: 1px solid rgba($primary, 0.15);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+
+      .icon-match {
+        font-size: 13px;
+      }
     }
   }
 }
@@ -618,7 +625,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     flex-direction: column;
     align-items: flex-start;
     gap: 24px;
-    padding-left: 16px;
+    padding-left: 0;
     margin-top: 16px;
     border-top: none;
     position: relative;
@@ -628,7 +635,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
       position: absolute;
       width: 3px;
       background: $slate-100;
-      left: 35px;
+      left: 18px;
       top: 16px;
       bottom: 16px;
       z-index: 1;
@@ -651,7 +658,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
         position: absolute;
         width: 3px;
         background: $primary;
-        left: 35px;
+        left: 18px;
         top: 20px;
         height: 100%;
         z-index: 2;
