@@ -160,7 +160,12 @@ $white:         #ffffff;
     
     &::before { opacity: 1; }
     .jc-title { color: $primary; }
-    .view-link { color: $white; background: $primary; border-color: $primary; transform: scale(1.02); }
+    .view-link {
+      color: $primary;
+      i {
+        transform: translateX(4px);
+      }
+    }
   }
 }
 
@@ -199,8 +204,12 @@ $white:         #ffffff;
 .posted-date { font-size: 16px; font-weight: 800; color: $primary; }
 .view-link {
   font-size: 12px; font-weight: 700; color: $primary; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  background: $primary-light; border: 1px solid rgba($primary, 0.15); padding: 8px 16px; border-radius: 100px;
-  display: inline-flex; align-items: center; gap: 4px;
+  background: transparent; border: none; padding: 0; border-radius: 0;
+  display: inline-flex; align-items: center; gap: 6px;
+
+  i {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
 // Pagination

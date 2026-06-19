@@ -30,23 +30,23 @@ export class CoursesComponent {
   pageSize = 8;
 
   // State
-  search          = '';
-  activeCategory  = 'All';
-  activeTag       = 'All';
-  activeLevel     = 'All';
-  showFreeOnly    = false;
+  search = '';
+  activeCategory = 'All';
+  activeTag = 'All';
+  activeLevel = 'All';
+  showFreeOnly = false;
 
   // Data
-  readonly allCourses   = COURSES;
-  readonly categories   = CATEGORIES;
-  readonly skillTags    = SKILL_TAGS;
-  readonly levels       = ['All', 'Beginner', 'Intermediate', 'Advanced'];
+  readonly allCourses = COURSES;
+  readonly categories = CATEGORIES;
+  readonly skillTags = SKILL_TAGS;
+  readonly levels = ['All', 'Beginner', 'Intermediate', 'Advanced'];
   readonly platformConf = PLATFORM_CONFIG;
 
   // Computed filtered list (Internal)
   private get allFiltered(): Course[] {
     return this.allCourses.filter(c => {
-      const matchSearch   = !this.search ||
+      const matchSearch = !this.search ||
         c.title.toLowerCase().includes(this.search.toLowerCase()) ||
         c.tags.some(t => t.toLowerCase().includes(this.search.toLowerCase())) ||
         c.instructor.toLowerCase().includes(this.search.toLowerCase());
@@ -54,18 +54,18 @@ export class CoursesComponent {
       const matchCategory = this.activeCategory === 'All' ||
         c.category === this.activeCategory;
 
-      const matchTag      = this.activeTag === 'All' ||
+      const matchTag = this.activeTag === 'All' ||
         c.tags.some(t =>
           t.toLowerCase() === this.activeTag.toLowerCase()
         );
 
-      const matchLevel    = this.activeLevel === 'All' ||
+      const matchLevel = this.activeLevel === 'All' ||
         c.level === this.activeLevel;
 
-      const matchFree     = !this.showFreeOnly || c.isFree;
+      const matchFree = !this.showFreeOnly || c.isFree;
 
       return matchSearch && matchCategory &&
-             matchTag && matchLevel && matchFree;
+        matchTag && matchLevel && matchFree;
     });
   }
 
@@ -108,11 +108,11 @@ export class CoursesComponent {
   }
 
   clearFilters(): void {
-    this.search         = '';
+    this.search = '';
     this.activeCategory = 'All';
-    this.activeTag      = 'All';
-    this.activeLevel    = 'All';
-    this.showFreeOnly   = false;
+    this.activeTag = 'All';
+    this.activeLevel = 'All';
+    this.showFreeOnly = false;
   }
 
   getPlatformStyle(platform: string): { color: string; background: string } {
@@ -128,9 +128,9 @@ export class CoursesComponent {
 
   get hasActiveFilters(): boolean {
     return this.search !== '' ||
-           this.activeCategory !== 'All' ||
-           this.activeTag !== 'All' ||
-           this.activeLevel !== 'All' ||
-           this.showFreeOnly;
+      this.activeCategory !== 'All' ||
+      this.activeTag !== 'All' ||
+      this.activeLevel !== 'All' ||
+      this.showFreeOnly;
   }
 }

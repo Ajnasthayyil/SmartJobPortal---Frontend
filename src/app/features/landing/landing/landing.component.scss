@@ -1286,15 +1286,24 @@ $white:         #ffffff;
       z-index: 0;
     }
 
-    .testimonial-user-photo {
+    .testimonial-avatar-sticker {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       border-radius: 28px;
       position: relative;
       z-index: 1;
       box-shadow: 0 15px 35px rgba($dark-text, 0.08);
       border: 4px solid $white;
+      background: linear-gradient(135deg, $primary-light 0%, #38bdf8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 120px;
+        color: $primary;
+        filter: drop-shadow(0 8px 16px rgba($primary, 0.15));
+      }
     }
 
     .testimonial-float-card {
