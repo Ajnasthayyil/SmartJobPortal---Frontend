@@ -105,20 +105,47 @@ export class CompaniesComponent implements OnInit {
   }
 
   onSearch(): void {
+    this.currentPage.set(1);
   }
 
   private get allFiltered(): any[] {
     let list = this.companies();
     
     if (this.activeIndustry !== 'All') {
-      list = list.filter(c => c.industry === this.activeIndustry);
+      const active = this.activeIndustry.toLowerCase();
+      list = list.filter(c => {
+        if (!c.industry) return false;
+        const ind = c.industry.toLowerCase().trim();
+        
+        if (active === 'technology') {
+          return ind.includes('tech') || ind === 'it' || ind.includes('software');
+        }
+        if (active === 'education') {
+          return ind.includes('educat') || ind.includes('school') || ind.includes('training') || ind.includes('academy');
+        }
+        if (active === 'retail') {
+          return ind.includes('retail') || ind.includes('food') || ind.includes('market') || ind.includes('store') || ind.includes('shop');
+        }
+        if (active === 'fintech') {
+          return ind.includes('fin') || ind.includes('bank') || ind.includes('pay');
+        }
+        if (active === 'healthcare') {
+          return ind.includes('health') || ind.includes('medic') || ind.includes('hospit');
+        }
+        if (active === 'manufacturing') {
+          return ind.includes('manufactur') || ind.includes('factor') || ind.includes('industr');
+        }
+        
+        return ind === active;
+      });
     }
     
     if (this.searchTerm) {
-      const term = this.searchTerm.toLowerCase();
+      const term = this.searchTerm.toLowerCase().trim();
       list = list.filter(c => 
-        c.name.toLowerCase().includes(term) || 
-        (c.industry && c.industry.toLowerCase().includes(term))
+        (c.name && c.name.toLowerCase().includes(term)) || 
+        (c.industry && c.industry.toLowerCase().includes(term)) ||
+        (c.location && c.location.toLowerCase().includes(term))
       );
     }
     

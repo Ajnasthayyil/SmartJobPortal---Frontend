@@ -79,15 +79,15 @@ import { NotificationCenterComponent } from '../notification-center/notification
       position: relative; display: inline-block;
     }
     .bell-btn {
-      width: 40px; height: 40px; border-radius: 50%;
-      border: none; background: #f3f4f6; cursor: pointer;
+      width: 44px; height: 44px; border-radius: 50%;
+      border: none; background: #ffffff; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      position: relative; transition: all .2s; color: #374151;
+      position: relative; transition: all .2s; color: #1e293b;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
     }
-    .bell-btn:hover { background: #e5e7eb; }
+    .bell-btn:hover { background: #f8fafc; color: #003d4c; }
     .bell-btn.has-unread {
       background: #fff7ed; color: #f97316;
-      animation: bellRing 1.5s ease infinite;
     }
     .bell-badge {
       position: absolute; top: -3px; right: -3px;
@@ -222,14 +222,14 @@ export class NotificationBellComponent {
       StatusUpdate:    '<i class="fa-solid fa-clipboard-list" style="color: #64748b;"></i>',
       Shortlisted:     '<i class="fa-solid fa-star" style="color: #eab308;"></i>',
       Interview:       '<i class="fa-regular fa-calendar-check" style="color: #3b82f6;"></i>',
-      Offer:           '<i class="fa-solid fa-award" style="color: #10b981;"></i>',
+      Offer:           '<i class="fa-solid fa-award" style="color: #003d4c;"></i>',
       Rejected:        '<i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i>',
-      AccountApproved: '<i class="fa-solid fa-circle-check" style="color: #10b981;"></i>',
+      AccountApproved: '<i class="fa-solid fa-circle-check" style="color: #003d4c;"></i>',
       AccountRejected: '<i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i>',
       AccountBlocked:  '<i class="fa-solid fa-ban" style="color: #ef4444;"></i>',
-      AccountActive:   '<i class="fa-solid fa-unlock-keyhole" style="color: #10b981;"></i>',
+      AccountActive:   '<i class="fa-solid fa-unlock-keyhole" style="color: #003d4c;"></i>',
       JobMatch:        '<i class="fa-solid fa-bullseye" style="color: #8b5cf6;"></i>'
     };
-    return icons[type] || '<i class="fa-solid fa-bell" style="color: #10b981;"></i>';
+    return icons[type] || '<i class="fa-solid fa-bell" style="color: #003d4c;"></i>';
   }
 }

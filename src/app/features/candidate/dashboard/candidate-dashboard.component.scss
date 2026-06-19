@@ -1,7 +1,7 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #10b981;
-$primary-light: #d1fae5;
-$primary-dark: #059669;
+$primary: #003d4c;
+$primary-light: #e0f2f1;
+$primary-dark: #00232d;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -68,14 +68,22 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
   .content { position: relative; z-index: 1; }
 
   .hi-text {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 800;
-    color: $slate-500;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-top: 12px;
-    margin-bottom: 8px;
+    color: $primary;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    margin-top: 0;
+    margin-bottom: 2px;
     display: block;
+  }
+
+  .welcome-subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: $slate-500;
+    margin-top: 0;
+    margin-bottom: 16px;
   }
 
   h1 {
@@ -137,7 +145,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     margin-bottom: 24px;
     box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1);
     
-    &.blue, &.indigo, &.purple, &.rose { background: #ecfdf5; color: #10b981; }
+    &.blue, &.indigo, &.purple, &.rose { background: $primary-light; color: $primary; }
   }
 
   .value {
@@ -161,7 +169,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     font-size: 12px;
     font-weight: 600;
     display: flex; align-items: center; gap: 4px;
-    &.up { color: #10b981; }
+    &.up { color: $primary; }
   }
 }
 

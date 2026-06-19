@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RecruiterService } from '../../../core/services/recruiter.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -55,10 +55,20 @@ export class ManageJobsComponent implements OnInit {
 
   constructor(
     private service: RecruiterService,
-    private toast:   ToastService
+    private toast:   ToastService,
+    private route:   ActivatedRoute
   ) {}
 
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['keyword']) {
+        this.searchQuery.set(params['keyword']);
+      } else {
+        this.searchQuery.set('');
+      }
+    });
+    this.load();
+  }
 
   load(): void {
     this.loading.set(true);

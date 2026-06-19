@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
 
-$primary:   #10b981; // TalEx Green
-$primary-d: #059669;
+$primary:   #003d4c; // TalEx Teal
+$primary-d: #00232d;
 $black:     #0F1016; 
 $white:     #ffffff;
 $gray200:   #E6E4DD;
@@ -49,8 +49,8 @@ $gray600:   #7A7669;
   gap: 1px;
 }
 
-.logo-tal { color: $primary; }
-.logo-ex  { color: $black; }
+.logo-tal { color: $primary; } // Deep teal Tal logo symbol
+.logo-ex  { color: $primary; } // Deep teal Ex brand name
 
 // Center Nav Links
 .nav-pill {

@@ -1,7 +1,7 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #10b981;
-$primary-light: #d1fae5;
-$primary-dark: #059669;
+$primary: #003d4c;
+$primary-light: #e0f2f1;
+$primary-dark: #00232d;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -66,14 +66,22 @@ h1, h2, h3, h4 {
   .content { position: relative; z-index: 1; }
 
   .hi-text {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 800;
-    color: $slate-500;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-top: 12px;
-    margin-bottom: 8px;
+    color: $primary;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    margin-top: 0;
+    margin-bottom: 2px;
     display: block;
+  }
+
+  .welcome-subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: $slate-500;
+    margin-top: 0;
+    margin-bottom: 16px;
   }
 
   h1 {
@@ -148,7 +156,7 @@ h1, h2, h3, h4 {
     box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1);
     
     &.blue { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #3b82f6; }
-    &.indigo { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #059669; }
+    &.indigo { background: linear-gradient(135deg, $primary-light 0%, #a0ebd9 100%); color: $primary-dark; }
     &.purple { background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%); color: #a855f7; }
     &.rose { background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); color: #f43f5e; }
   }
@@ -174,7 +182,7 @@ h1, h2, h3, h4 {
     font-size: 12px;
     font-weight: 600;
     display: flex; align-items: center; gap: 4px;
-    &.up { color: #10b981; }
+    &.up { color: $primary; }
   }
 }
 
@@ -381,7 +389,7 @@ h1, h2, h3, h4 {
   &.toggle {
     background: #fef2f2; color: #ef4444; border-color: #fee2e2;
     &.active {
-      background: #f0fdf4; color: #10b981; border-color: #dcfce7;
+      background: $primary-light; color: $primary; border-color: rgba($primary, 0.15);
     }
     
     &:hover {

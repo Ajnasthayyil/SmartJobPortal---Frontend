@@ -1,6 +1,6 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #10b981;
-$primary-dark: #059669;
+$primary: #003d4c;
+$primary-dark: #00232d;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -87,7 +87,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     font-family: $font-heading;
     font-size: 12px; 
     font-weight: 800; 
-    color: $primary; 
+    color: #2dd4bf; 
     text-transform: uppercase; 
     letter-spacing: 0.2em; 
     margin-bottom: 16px; 
@@ -106,7 +106,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     line-height: 1.1;
 
     span {
-      background: linear-gradient(135deg, $primary 0%, #34d399 100%);
+      background: linear-gradient(135deg, #2dd4bf 0%, #ffffff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -138,7 +138,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
         font-family: $font-heading;
         font-size: 16px;
         font-weight: 800;
-        color: $primary;
+        color: #2dd4bf;
       }
 
       .pill-label {
@@ -212,7 +212,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
 
       .percent-sign {
         font-size: 18px;
-        color: $primary;
+        color: #2dd4bf;
         margin-left: 1px;
       }
     }
@@ -368,7 +368,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     font-weight: 600;
     
     .match-score { 
-      color: #047857; 
+      color: $primary; 
       background: rgba($primary, 0.08);
       padding: 3px 10px;
       border-radius: 6px;

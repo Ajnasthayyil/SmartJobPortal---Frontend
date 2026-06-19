@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { AdminDashboard } from '../../../core/models/admin.models';
 import Chart from 'chart.js/auto';
 
@@ -21,7 +22,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   userChart: any;
   jobChart: any;
 
-  constructor(private service: AdminService) {}
+  constructor(
+    private service: AdminService,
+    public authService: AuthService
+  ) {}
+
+  getUserFirstName(): string {
+    return this.authService.currentUser()?.fullName?.split(' ')[0] || 'Admin';
+  }
 
   ngOnInit(): void {
     this.service.getDashboard().subscribe({

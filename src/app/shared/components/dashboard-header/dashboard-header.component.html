@@ -1,23 +1,28 @@
 <div class="dash-header-container">
   <header class="dash-header">
-    <!-- Hamburger Menu (Mobile/Tablet only) -->
-    <button class="mobile-menu-toggle" 
-            (click)="sidebarService.toggleMobile()" 
-            aria-label="Toggle Menu">
-      <i class="fa-solid" [class.fa-bars]="!sidebarService.isOpenMobile()" [class.fa-xmark]="sidebarService.isOpenMobile()"></i>
-    </button>
-
-    <div class="logo-wrapper" routerLink="/">
-      <div class="logo">
-        <div class="logo-text-group">Tal<span>Ex</span></div>
-      </div>
-      <span class="logo-subtitle">Where Talent Meets Opportunity</span>
+    <!-- Left Section: Mobile menu toggle + Logo + Greeting -->
+    <div class="header-left">
+      <button class="mobile-menu-toggle" 
+              (click)="sidebarService.toggleMobile()" 
+              aria-label="Toggle Menu">
+        <i class="fa-solid" [class.fa-bars]="!sidebarService.isOpenMobile()" [class.fa-xmark]="sidebarService.isOpenMobile()"></i>
+      </button>
     </div>
 
+    <!-- Right Section: Search + Chat + Bell + Profile Dropdown -->
     <div class="header-right">
-      <!-- Community Feed -->
-      <button class="icon-btn" title="Community Feed" routerLink="/feed" routerLinkActive="active">
-        <i class="fa-solid fa-users"></i>
+      <!-- Search Bar -->
+      <form class="search-bar" (submit)="onSearch(searchInput.value, $event)">
+        <input #searchInput type="text" placeholder="Search..." aria-label="Search">
+        <button type="submit" class="search-btn" aria-label="Search Submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+
+      <!-- Community/Chat Button -->
+      <button class="icon-btn chat-btn" title="Community Feed" routerLink="/feed" routerLinkActive="active">
+        <i class="fa-regular fa-comment-dots"></i>
+        <span class="notification-dot"></span>
       </button>
 
       <!-- Notifications -->

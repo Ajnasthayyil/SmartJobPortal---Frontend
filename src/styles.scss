@@ -3,9 +3,9 @@
 
 
 :root {
-  --primary: #10b981;
-  --primary-light: #ecfdf5;
-  --primary-dark: #059669;
+  --primary: #003d4c;
+  --primary-light: #e0f2f1;
+  --primary-dark: #00232d;
   
   --font-main: 'Satoshi', 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Cabinet Grotesk', 'Outfit', 'Plus Jakarta Sans', sans-serif;
@@ -71,7 +71,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 
     0 10px 15px -3px rgba(0, 0, 0, 0.05),
     0 4px 6px -2px rgba(0, 0, 0, 0.03),
-    0 20px 40px -10px rgba(16, 185, 129, 0.05);
+    0 20px 40px -10px rgba(0, 61, 76, 0.05);
 }
 
 
@@ -102,4 +102,15 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   gap: 0 !important;
+}
+
+/* Global Font Consistency Override for Admin, Candidate, Recruiter & All Other Components */
+html, body, p, span, a, li, input, button, select, textarea, div {
+  font-family: var(--font-main) !important;
+}
+
+h1, h2, h3, h4, h5, h6, 
+.h1, .h2, .h3, .h4, .h5, .h6,
+.title, .section-title, .jh-title, .card-title, .jc-title {
+  font-family: var(--font-heading) !important;
 }

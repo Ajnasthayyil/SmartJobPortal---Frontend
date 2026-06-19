@@ -1,7 +1,7 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #10b981;
-$primary-light: #ecfdf5;
-$success: #10b981;
+$primary: #003d4c;
+$primary-light: #e0f2f1;
+$success: #00232d;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -62,7 +62,7 @@ $glass-border: rgba(255, 255, 255, 0.4);
     font-size: 14px; font-weight: 700; color: $slate-600; cursor: pointer;
     display: flex; align-items: center; gap: 8px; transition: all 0.2s;
     &:hover { background: $slate-50; color: $slate-900; }
-    &.active { background: $primary; color: $white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+    &.active { background: $primary; color: $white; box-shadow: 0 4px 12px rgba(0, 61, 76, 0.2); }
     .badge { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: rgba($slate-900, 0.05); color: $slate-600; }
     &.active .badge { background: rgba($white, 0.2); color: $white; }
 }
@@ -99,7 +99,7 @@ $glass-border: rgba(255, 255, 255, 0.4);
         display: flex; gap: 24px; align-items: center;
         .avatar-circle { width: 70px; height: 70px; border-radius: 18px; background: $primary; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; }
         .info-body {
-            .name-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; .candidate-name { font-size: 18px; font-weight: 800; color: $slate-900; margin: 0; } .match-chip { background: #ecfdf5; color: $primary; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 6px; } }
+            .name-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; .candidate-name { font-size: 18px; font-weight: 800; color: $slate-900; margin: 0; } .match-chip { background: $primary-light; color: $primary; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 6px; } }
             .candidate-headline { font-size: 14px; font-weight: 700; color: $slate-500; margin-bottom: 8px; }
             .meta-info { display: flex; gap: 16px; margin-bottom: 12px; span { font-size: 13px; color: $slate-400; font-weight: 600; display: flex; align-items: center; gap: 6px; i { font-size: 14px; } } }
             .skills-wrap { display: flex; gap: 8px; .skill-pill { background: $slate-50; border: 1px solid $slate-100; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: $slate-600; } }
@@ -222,8 +222,8 @@ $glass-border: rgba(255, 255, 255, 0.4);
         .btn-secondary { padding: 10px 20px; border-radius: 12px; border: none; background: $white; color: $slate-600; font-weight: 700; cursor: pointer; transition: all 0.2s; &:hover { background: $slate-100; } }
         .btn-primary { 
             padding: 10px 24px; border-radius: 12px; border: none; background: $primary; color: white; font-weight: 700; cursor: pointer; transition: all 0.2s; 
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-            &:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); }
+            box-shadow: 0 4px 12px rgba(0, 61, 76, 0.2);
+            &:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0, 61, 76, 0.3); }
             &:disabled { opacity: 0.7; cursor: not-allowed; }
         }
     }
@@ -289,7 +289,7 @@ $glass-border: rgba(255, 255, 255, 0.4);
   .spinner {
     width: 50px; height: 50px;
     border: 3px solid #f3f3f3;
-    border-top: 3px solid #10b981;
+    border-top: 3px solid $primary;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto 20px;
@@ -311,7 +311,7 @@ $glass-border: rgba(255, 255, 255, 0.4);
     
     .name-block {
       .candidate-name { font-size: 32px; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.03em; text-transform: capitalize; }
-      .candidate-headline { font-size: 16px; color: #10b981; font-weight: 700; margin-top: 4px; }
+      .candidate-headline { font-size: 16px; color: $primary; font-weight: 700; margin-top: 4px; }
       
       .profile-social-row {
         display: flex;
@@ -359,16 +359,16 @@ $glass-border: rgba(255, 255, 255, 0.4);
     }
     
     .experience-badge {
-      background: #f0fdf4;
-      border: 1px solid #dcfce7;
+      background: $primary-light;
+      border: 1px solid rgba(0, 61, 76, 0.15);
       padding: 10px 20px;
       border-radius: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
-      .exp-val { font-size: 24px; font-weight: 800; color: #10b981; line-height: 1; }
-      .exp-label { font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase; margin-top: 2px; }
+      box-shadow: 0 4px 12px rgba(0, 61, 76, 0.08);
+      .exp-val { font-size: 24px; font-weight: 800; color: $primary; line-height: 1; }
+      .exp-label { font-size: 10px; font-weight: 800; color: $success; text-transform: uppercase; margin-top: 2px; }
     }
   }
   
@@ -383,7 +383,7 @@ $glass-border: rgba(255, 255, 255, 0.4);
       font-size: 13px;
       font-weight: 600;
       color: #64748b;
-      i { color: #10b981; font-size: 14px; opacity: 0.8; }
+      i { color: $primary; font-size: 14px; opacity: 0.8; }
     }
   }
 }
@@ -407,7 +407,7 @@ $glass-border: rgba(255, 255, 255, 0.4);
       align-items: center;
       gap: 12px;
       margin-bottom: 16px;
-      i { color: #10b981; font-size: 16px; }
+      i { color: $primary; font-size: 16px; }
       h3 { font-size: 14px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.1em; margin: 0; }
     }
     
@@ -424,7 +424,7 @@ $glass-border: rgba(255, 255, 255, 0.4);
       p { margin: 0; }
       
       &.cover-letter-card {
-        border-left: 4px solid #10b981;
+        border-left: 4px solid $primary;
         font-style: italic;
         background: #f8fafc;
         color: #0f172a;
@@ -446,9 +446,9 @@ $glass-border: rgba(255, 255, 255, 0.4);
     flex-direction: column;
     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     transition: all 0.3s;
-    &:hover { border-color: #10b981; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(16, 185, 129, 0.08); }
+    &:hover { border-color: $primary; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0, 61, 76, 0.08); }
     .s-name { font-size: 13px; font-weight: 700; color: #0f172a; }
-    .s-level { font-size: 10px; font-weight: 800; color: #10b981; text-transform: uppercase; margin-top: 2px; }
+    .s-level { font-size: 10px; font-weight: 800; color: $primary; text-transform: uppercase; margin-top: 2px; }
   }
 }
 
@@ -485,13 +485,13 @@ $glass-border: rgba(255, 255, 255, 0.4);
     gap: 20px;
     .item-icon {
       width: 44px; height: 44px;
-      background: #f0fdf4;
-      border: 1px solid #dcfce7;
+      background: $primary-light;
+      border: 1px solid rgba(0, 61, 76, 0.15);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #10b981;
+      color: $primary;
       font-size: 18px;
       flex-shrink: 0;
     }
@@ -517,9 +517,9 @@ $glass-border: rgba(255, 255, 255, 0.4);
     display: flex;
     flex-direction: column;
     transition: all 0.3s;
-    &:hover { border-color: #10b981; background: #ffffff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08); }
+    &:hover { border-color: $primary; background: #ffffff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 61, 76, 0.08); }
     .s-name { font-size: 14px; font-weight: 700; color: #0f172a; }
-    .s-level { font-size: 11px; color: #10b981; font-weight: 800; text-transform: uppercase; margin-top: 2px; }
+    .s-level { font-size: 11px; color: $primary; font-weight: 800; text-transform: uppercase; margin-top: 2px; }
   }
 }
 
@@ -538,7 +538,7 @@ $glass-border: rgba(255, 255, 255, 0.4);
 .candidate-name {
   cursor: pointer;
   transition: color 0.3s;
-  &:hover { color: #10b981 !important; text-decoration: underline; }
+  &:hover { color: $primary !important; text-decoration: underline; }
 }
 
 .empty-msg {

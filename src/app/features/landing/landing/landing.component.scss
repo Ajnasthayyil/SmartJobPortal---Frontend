@@ -1,7 +1,7 @@
-$primary:       #10b981;
-$primary-light: #ecfdf5;
-$primary-dark:  #059669;
-$primary-d:     #059669;
+$primary:       #003d4c;
+$primary-light: #e0f2f1;
+$primary-dark:  #00232d;
+$primary-d:     #00232d;
 $bg-cream:      #F9F8F6;
 $dark-text:     #0F1016;
 $gray-muted:    #7A7669;
@@ -51,7 +51,7 @@ $white:         #ffffff;
     opacity: 0.45;
   }
   .blob-1 { top: -10%; left: 10%; width: 300px; height: 300px; background: #E3DBFA; }
-  .blob-2 { bottom: 10%; right: 10%; width: 400px; height: 400px; background: #ecfdf5; }
+  .blob-2 { bottom: 10%; right: 10%; width: 400px; height: 400px; background: #e0f2f1; }
   .blob-3 { top: 40%; left: 50%; width: 250px; height: 250px; background: #D5F0FF; }
 }
 
@@ -729,8 +729,8 @@ $white:         #ffffff;
   }
 
   .match-badge-pill {
-    background: #EAFDF0;
-    color: #27c93f;
+    background: $primary-light;
+    color: $primary;
     font-size: 12px;
     font-weight: 700;
     padding: 6px 12px;
@@ -809,14 +809,14 @@ $white:         #ffffff;
       .salary-amount {
         font-size: 18px;
         font-weight: 800;
-        color: $dark-text;
+        color: $primary;
       }
     }
 
     .view-details-primary-btn {
-      background: $white;
-      border: 1px solid $border-color;
-      color: $dark-text;
+      background: $primary-light;
+      border: 1px solid rgba($primary, 0.15);
+      color: $primary;
       font-size: 13px;
       font-weight: 700;
       padding: 10px 18px;
@@ -825,12 +825,19 @@ $white:         #ffffff;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+      i {
+        transition: transform 0.3s ease;
+      }
 
       &:hover {
         background: $primary;
         border-color: $primary;
         color: $white;
+        i {
+          transform: translateX(4px);
+        }
       }
     }
   }
@@ -915,7 +922,7 @@ $white:         #ffffff;
 
 .cat-card {
   background: $white;
-  border: 1px solid $border-color;
+  border: 1px solid rgba(15, 16, 22, 0.06);
   border-radius: 24px;
   padding: 28px 24px;
   text-align: left;
@@ -927,6 +934,7 @@ $white:         #ffffff;
   justify-content: space-between;
   min-height: 260px;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px -10px rgba(15, 16, 22, 0.04);
 
   .cat-card-glow {
     position: absolute;
@@ -949,19 +957,19 @@ $white:         #ffffff;
   }
 
   .cat-icon-container {
-    width: 52px;
-    height: 52px;
+    width: 56px;
+    height: 56px;
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 22px;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
-    &.purple { background-color: rgba(#6C5DD3, 0.12); color: #6C5DD3; }
-    &.yellow { background-color: rgba(#FFB01A, 0.12); color: #FFB01A; }
-    &.blue   { background-color: rgba(#1B86FF, 0.12); color: #1B86FF; }
-    &.pink   { background-color: rgba(#FF4B55, 0.12); color: #FF4B55; }
+    &.purple { background-color: rgba(#6C5DD3, 0.08); color: #6C5DD3; }
+    &.yellow { background-color: rgba(#FFB01A, 0.08); color: #FFB01A; }
+    &.blue   { background-color: rgba(#1B86FF, 0.08); color: #1B86FF; }
+    &.pink   { background-color: rgba(#FF4B55, 0.08); color: #FF4B55; }
   }
 
   .cat-badge {
@@ -971,7 +979,7 @@ $white:         #ffffff;
     
     .count-num {
       font-weight: 800;
-      font-size: 16px;
+      font-size: 18px;
       color: $dark-text;
       line-height: 1;
     }
@@ -982,7 +990,7 @@ $white:         #ffffff;
       text-transform: uppercase;
       color: $gray-muted;
       letter-spacing: 0.05em;
-      margin-top: 3px;
+      margin-top: 4px;
     }
   }
 
@@ -992,7 +1000,7 @@ $white:         #ffffff;
     z-index: 2;
     
     h4 {
-      font-size: 19px;
+      font-size: 20px;
       font-weight: 800;
       margin: 0 0 8px 0;
       color: $dark-text;
@@ -1048,11 +1056,11 @@ $white:         #ffffff;
 
   &[data-color="purple"] {
     .cat-card-glow {
-      background: radial-gradient(120px circle at top left, rgba(#6C5DD3, 0.08), transparent);
+      background: radial-gradient(140px circle at top left, rgba(#6C5DD3, 0.08), transparent);
     }
     &:hover {
       border-color: rgba(#6C5DD3, 0.35);
-      box-shadow: 0 20px 40px rgba(#6C5DD3, 0.08);
+      box-shadow: 0 20px 40px rgba(#6C5DD3, 0.1);
       h4 { color: #6C5DD3; }
       .explore-btn-text { color: #6C5DD3; }
       .explore-btn-arrow { transform: translateX(6px); color: #6C5DD3; }
@@ -1061,11 +1069,11 @@ $white:         #ffffff;
 
   &[data-color="yellow"] {
     .cat-card-glow {
-      background: radial-gradient(120px circle at top left, rgba(#FFB01A, 0.08), transparent);
+      background: radial-gradient(140px circle at top left, rgba(#FFB01A, 0.08), transparent);
     }
     &:hover {
       border-color: rgba(#FFB01A, 0.35);
-      box-shadow: 0 20px 40px rgba(#FFB01A, 0.08);
+      box-shadow: 0 20px 40px rgba(#FFB01A, 0.1);
       h4 { color: #FFB01A; }
       .explore-btn-text { color: #FFB01A; }
       .explore-btn-arrow { transform: translateX(6px); color: #FFB01A; }
@@ -1074,11 +1082,11 @@ $white:         #ffffff;
 
   &[data-color="blue"] {
     .cat-card-glow {
-      background: radial-gradient(120px circle at top left, rgba(#1B86FF, 0.08), transparent);
+      background: radial-gradient(140px circle at top left, rgba(#1B86FF, 0.08), transparent);
     }
     &:hover {
       border-color: rgba(#1B86FF, 0.35);
-      box-shadow: 0 20px 40px rgba(#1B86FF, 0.08);
+      box-shadow: 0 20px 40px rgba(#1B86FF, 0.1);
       h4 { color: #1B86FF; }
       .explore-btn-text { color: #1B86FF; }
       .explore-btn-arrow { transform: translateX(6px); color: #1B86FF; }
@@ -1087,11 +1095,11 @@ $white:         #ffffff;
 
   &[data-color="pink"] {
     .cat-card-glow {
-      background: radial-gradient(120px circle at top left, rgba(#FF4B55, 0.08), transparent);
+      background: radial-gradient(140px circle at top left, rgba(#FF4B55, 0.08), transparent);
     }
     &:hover {
       border-color: rgba(#FF4B55, 0.35);
-      box-shadow: 0 20px 40px rgba(#FF4B55, 0.08);
+      box-shadow: 0 20px 40px rgba(#FF4B55, 0.1);
       h4 { color: #FF4B55; }
       .explore-btn-text { color: #FF4B55; }
       .explore-btn-arrow { transform: translateX(6px); color: #FF4B55; }
@@ -1110,17 +1118,19 @@ $white:         #ffffff;
     color: $dark-text;
     font-weight: 700;
     text-decoration: none;
-    font-size: 15px;
-    border: 1px solid $border-color;
-    padding: 10px 24px;
+    font-size: 14px;
+    border: 1px solid rgba(15, 16, 22, 0.08);
+    padding: 12px 26px;
     border-radius: 100px;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     background: $white;
+    box-shadow: 0 4px 10px rgba(15, 16, 22, 0.02);
 
     &:hover {
       border-color: $primary;
       color: $primary;
       transform: translateX(4px);
+      box-shadow: 0 10px 20px rgba($primary, 0.08);
     }
   }
 }
@@ -1140,32 +1150,35 @@ $white:         #ffffff;
 
 .step-item {
   background: $white;
-  border: 1px solid $border-color;
-  padding: 32px;
-  border-radius: 24px;
+  border: 1px solid rgba(15, 16, 22, 0.06);
+  padding: 40px 32px;
+  border-radius: 28px;
   text-align: center;
-  transition: all 0.2s;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px -10px rgba(15, 16, 22, 0.03);
 
   &:hover {
-    border-color: rgba($primary, 0.2);
-    box-shadow: 0 10px 25px rgba($dark-text, 0.03);
+    border-color: rgba($primary, 0.25);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -10px rgba($primary, 0.06);
   }
 
   .step-circle {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     background: $primary-light;
     color: $primary;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    margin: 0 auto 20px auto;
+    font-size: 26px;
+    margin: 0 auto 24px auto;
+    box-shadow: 0 10px 20px rgba($primary, 0.1);
   }
 
   h3 {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 800;
     margin-bottom: 12px;
     color: $dark-text;
@@ -1215,7 +1228,7 @@ $white:         #ffffff;
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      border: 1px solid $border-color;
+      border: 1px solid rgba(15, 16, 22, 0.08);
       background: $white;
       color: $dark-text;
       cursor: pointer;
@@ -1286,9 +1299,9 @@ $white:         #ffffff;
       bottom: -30px;
       left: -20px;
       background: $white;
-      border: 1px solid $border-color;
-      box-shadow: 0 20px 40px rgba($dark-text, 0.1);
-      border-radius: 20px;
+      border: 1px solid rgba(15, 16, 22, 0.06);
+      box-shadow: 0 20px 40px rgba(15, 16, 22, 0.08);
+      border-radius: 24px;
       padding: 24px;
       z-index: 10;
       max-width: 340px;
@@ -1360,10 +1373,10 @@ $white:         #ffffff;
 }
 
 .cta-banner-premium {
-  background: radial-gradient(circle at top right, #3A3B45 0%, #0F1016 100%);
+  background: radial-gradient(circle at top right, #1f2029 0%, #0F1016 100%);
   color: $white;
   border-radius: 32px;
-  padding: 64px 32px;
+  padding: 72px 32px;
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -1410,7 +1423,7 @@ $white:         #ffffff;
 
     .cta-premium-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 42px;
+      font-size: 44px;
       font-weight: 800;
       line-height: 1.2;
       margin-bottom: 16px;
@@ -1509,12 +1522,13 @@ $white:         #ffffff;
 
 .company-card-landing {
   background: $white;
-  border: 1px solid $border-color;
+  border: 1px solid rgba(15, 16, 22, 0.06);
   border-radius: 24px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px -10px rgba(15, 16, 22, 0.04);
 
   .company-card-glow-landing {
     position: absolute;
@@ -1523,7 +1537,7 @@ $white:         #ffffff;
     width: 100%;
     height: 100%;
     opacity: 0;
-    background: radial-gradient(120px circle at top left, rgba($primary, 0.06), transparent);
+    background: radial-gradient(140px circle at top left, rgba($primary, 0.06), transparent);
     transition: opacity 0.4s ease;
     pointer-events: none;
     z-index: 1;
@@ -1570,7 +1584,7 @@ $white:         #ffffff;
 
     .roles-count-landing {
       font-weight: 800;
-      font-size: 16px;
+      font-size: 18px;
       color: $dark-text;
       line-height: 1;
     }
@@ -1581,7 +1595,7 @@ $white:         #ffffff;
       text-transform: uppercase;
       color: $gray-muted;
       letter-spacing: 0.05em;
-      margin-top: 3px;
+      margin-top: 4px;
     }
   }
 
@@ -1643,7 +1657,7 @@ $white:         #ffffff;
   &:hover {
     transform: translateY(-6px);
     border-color: rgba($primary, 0.35);
-    box-shadow: 0 20px 40px rgba($primary, 0.06);
+    box-shadow: 0 20px 40px rgba($primary, 0.1);
 
     .company-card-glow-landing {
       opacity: 1;

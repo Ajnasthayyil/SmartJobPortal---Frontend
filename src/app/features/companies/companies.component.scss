@@ -1,6 +1,6 @@
-$primary:       #10b981;
-$primary-light: #ecfdf5;
-$primary-dark:  #059669;
+$primary:       #003d4c;
+$primary-light: #e0f2f1;
+$primary-dark:  #00232d;
 $bg-cream:      #F9F8F6;
 $dark-text:     #0F1016;
 $gray-muted:    #7A7669;
@@ -17,12 +17,12 @@ $white:         #ffffff;
   font-family: 'Outfit', sans-serif;
   background: $bg-cream;
   min-height: 100vh;
-  padding-top: 80px; /* Space for navbar */
+  padding-top: 0;
 }
 
 // ── Hero / Search Section ─────────────────────────────────────────
 .search-section {
-  padding: 60px 5% 32px;
+  padding: 130px 5% 48px;
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -51,7 +51,7 @@ $white:         #ffffff;
 .hero-badge {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 8px 20px; background: $white;
-  border: 1px solid $border-color; border-radius: 100px;
+  border: 1px solid rgba(15, 16, 22, 0.08); border-radius: 100px;
   font-size: 13px; font-weight: 600; color: $dark-text;
   box-shadow: 0 4px 12px rgba(15, 16, 22, 0.04); 
   margin-bottom: 30px;
@@ -61,8 +61,8 @@ $white:         #ffffff;
 .search-bar {
   background: $white; padding: 8px; border-radius: 100px;
   display: flex; align-items: center; gap: 10px;
-  box-shadow: 0 12px 30px rgba(15, 16, 22, 0.05); border: 1px solid $border-color;
-  margin-bottom: 24px;
+  box-shadow: 0 12px 30px rgba(15, 16, 22, 0.05); border: 1px solid rgba(15, 16, 22, 0.08);
+  margin-bottom: 28px;
   width: 100%;
   max-width: 820px;
 
@@ -88,10 +88,10 @@ $white:         #ffffff;
 }
 
 .btn-search {
-  padding: 12px 32px; background: $primary; color: $white;
+  padding: 14px 36px; background: $primary; color: $white;
   border: none; border-radius: 100px; font-size: 16px; font-weight: 700;
-  cursor: pointer; transition: all 0.3s;
-  box-shadow: 0 4px 14px rgba($primary, 0.3);
+  cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba($primary, 0.35);
   &:hover { background: $primary-dark; transform: translateY(-1px); }
 }
 
@@ -103,9 +103,10 @@ $white:         #ffffff;
   max-width: 100%;
 }
 .chip {
-  padding: 8px 18px; background: $white; border: 1px solid $border-color;
+  padding: 8px 20px; background: $white; border: 1px solid rgba(15, 16, 22, 0.08);
   border-radius: 100px; font-size: 14px; font-weight: 600; color: $gray-muted;
-  cursor: pointer; transition: all 0.2s;
+  cursor: pointer; transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(15, 16, 22, 0.02);
   &:hover { border-color: $primary; color: $primary; }
   &.active {
     background: $primary; color: $white; border-color: $primary;
@@ -116,15 +117,15 @@ $white:         #ffffff;
 // ── Results Section ──────────────────────────────────────────────
 .results-section { 
   background: $white; 
-  border-top: 1px solid $border-color;
-  padding: 48px 5% 100px; 
+  border-top: 1px solid rgba(15, 16, 22, 0.06);
+  padding: 60px 5% 100px; 
   position: relative;
   min-height: 400px;
 }
 
 .results-inner { max-width: 1400px; margin: 0 auto; }
-.results-bar { margin-bottom: 24px; }
-.results-count { font-size: 15px; color: $gray-muted; strong { color: $dark-text; font-weight: 700; } }
+.results-bar { margin-bottom: 32px; }
+.results-count { font-size: 16px; color: $gray-muted; strong { color: $dark-text; font-weight: 700; } }
 
 .jobs-grid {
   display: grid; 
@@ -133,27 +134,43 @@ $white:         #ffffff;
 }
 
 .job-card {
-  background: $white; border: 1px solid $border-color; border-radius: 24px;
-  padding: 24px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: $white; border: 1px solid rgba(15, 16, 22, 0.06); border-radius: 24px;
+  padding: 28px 24px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none; color: inherit; display: flex; flex-direction: column;
-  box-shadow: 0 4px 12px rgba(15, 16, 22, 0.02);
+  box-shadow: 0 10px 30px -10px rgba(15, 16, 22, 0.04);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0;
+    background: radial-gradient(140px circle at top left, rgba($primary, 0.06), transparent);
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(15, 16, 22, 0.06);
-    border-color: $primary;
-    .view-link { color: $primary-dark; transform: translateX(4px); }
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba($primary, 0.08);
+    border-color: rgba($primary, 0.35);
+    
+    &::before { opacity: 1; }
+    .jc-title { color: $primary; }
+    .view-link { color: $white; background: $primary; border-color: $primary; transform: scale(1.02); }
   }
 }
 
-.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; position: relative; z-index: 2; }
 
 .co-logo {
-  width: 44px; height: 44px; border-radius: 12px; background: $bg-cream;
+  width: 48px; height: 48px; border-radius: 14px; background: $primary-light;
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 800; color: $primary;
-  border: 1px solid rgba($primary, 0.1);
+  font-size: 20px; font-weight: 800; color: $primary;
+  border: 1px solid rgba($primary, 0.15);
 }
 
 .roles-badge-rev {
@@ -162,33 +179,38 @@ $white:         #ffffff;
   display: flex; align-items: center; gap: 6px;
 }
 
-.jc-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 800; color: $dark-text; line-height: 1.3; margin-bottom: 4px; }
-.jc-company { font-size: 13px; color: $gray-muted; font-weight: 500; margin-bottom: 12px; }
-.jc-desc { font-size: 13px; color: $gray-muted; line-height: 1.5; margin-bottom: 16px; }
+.jc-title { font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800; color: $dark-text; line-height: 1.3; margin-bottom: 4px; transition: color 0.3s; position: relative; z-index: 2; }
+.jc-company { font-size: 14px; color: $gray-muted; font-weight: 500; margin-bottom: 12px; position: relative; z-index: 2; }
+.jc-desc { font-size: 13px; color: $gray-muted; line-height: 1.6; margin-bottom: 16px; position: relative; z-index: 2; }
 
-.jc-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.jc-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; position: relative; z-index: 2; }
 .meta-pill {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 12px; background: $bg-cream; border-radius: 100px;
+  padding: 6px 14px; background: $bg-cream; border-radius: 100px;
   font-size: 12px; font-weight: 600; color: $gray-muted;
 }
 
-.jc-skills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.jc-skills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; position: relative; z-index: 2; }
 .skill-chip {
-  padding: 4px 10px; background: $bg-cream; border: 1px solid $border-color;
-  border-radius: 8px; font-size: 11px; font-weight: 600; color: $gray-muted;
+  padding: 4px 12px; background: $bg-cream; border: 1px solid $border-color;
+  border-radius: 8px; font-size: 12px; font-weight: 600; color: $dark-text;
 }
 
 .jc-footer {
-  margin-top: auto; padding-top: 18px; border-top: 1px dashed $border-color;
-  display: flex; justify-content: flex-end; align-items: center;
+  margin-top: auto; padding-top: 20px; border-top: 1px dashed rgba($border-color, 0.6);
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; z-index: 2;
 }
-.view-link { font-size: 12px; font-weight: 700; color: $primary; transition: all 0.3s; }
+.view-link {
+  font-size: 12px; font-weight: 700; color: $primary; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: $primary-light; border: 1px solid rgba($primary, 0.15); padding: 8px 16px; border-radius: 100px;
+  display: inline-flex; align-items: center; gap: 4px;
+}
 
 // ── Modal Styles ────────────────────────────────────────────────
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba($dark-text, 0.4);
-  backdrop-filter: blur(8px); z-index: 2000;
+  position: fixed; inset: 0; background: rgba(15, 16, 22, 0.4);
+  backdrop-filter: blur(12px); z-index: 2000;
   display: flex; align-items: center; justify-content: center; padding: 40px;
   animation: fadeIn 0.3s ease;
 }
@@ -198,7 +220,7 @@ $white:         #ffffff;
   border-radius: 32px; box-shadow: 0 30px 70px rgba($dark-text, 0.15);
   position: relative; overflow-y: auto;
   animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid $border-color;
+  border: 1px solid rgba(15, 16, 22, 0.08);
 }
 
 .btn-close {
@@ -214,7 +236,7 @@ $white:         #ffffff;
 .m-header {
   display: flex; align-items: center; gap: 24px; margin-bottom: 40px;
   .m-co-logo {
-    width: 80px; height: 80px; border-radius: 20px; background: $bg-cream;
+    width: 80px; height: 80px; border-radius: 20px; background: $primary-light;
     display: flex; align-items: center; justify-content: center;
     font-size: 32px; font-weight: 800; color: $primary;
     border: 1px solid rgba($primary, 0.15);
@@ -246,7 +268,7 @@ $white:         #ffffff;
   span { font-size: 12px; color: $gray-muted; font-weight: 500; }
 }
 .btn-apply-mini {
-  padding: 8px 16px; background: $white; border: 1px solid $border-color;
+  padding: 8px 16px; background: $white; border: 1px solid rgba(15, 16, 22, 0.08);
   border-radius: 10px; font-size: 13px; font-weight: 700; color: $dark-text;
   cursor: pointer; transition: 0.2s;
   &:hover { border-color: $primary; color: $primary; }
@@ -254,7 +276,7 @@ $white:         #ffffff;
 
 .m-info-card {
   background: $bg-cream; padding: 24px; border-radius: 24px; margin-bottom: 24px;
-  .card-title { font-size: 14px; font-weight: 800; color: $gray-muted; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 24px; }
+  .card-title { font-size: 12px; font-weight: 800; color: $gray-muted; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 24px; }
 }
 .info-row {
   display: flex; gap: 16px; margin-bottom: 20px;
@@ -281,10 +303,11 @@ $white:         #ffffff;
   margin-top: 48px; display: flex; align-items: center; justify-content: center; gap: 20px;
 }
 .pag-btn {
-  width: 44px; height: 44px; border-radius: 12px; border: 1px solid $border-color;
-  background: $white; color: $dark-text; cursor: pointer; transition: all 0.3s;
+  width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(15, 16, 22, 0.08);
+  background: $white; color: $dark-text; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex; align-items: center; justify-content: center; font-size: 16px;
-  &:hover:not(:disabled) { border-color: $primary; color: $primary; transform: translateY(-1px); }
+  box-shadow: 0 2px 6px rgba(15, 16, 22, 0.02);
+  &:hover:not(:disabled) { border-color: $primary; color: $primary; transform: translateY(-1px); box-shadow: 0 6px 12px rgba($primary, 0.1); }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 .pag-info { font-size: 14px; color: $gray-muted; font-weight: 500; strong { color: $dark-text; font-weight: 700; } }
@@ -292,8 +315,8 @@ $white:         #ffffff;
 // Skeleton
 .sk { background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-.job-card-skeleton { padding: 24px; border: 1px solid $border-color; border-radius: 24px; }
-.sk-logo { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 16px; }
+.job-card-skeleton { padding: 24px; border: 1px solid rgba(15, 16, 22, 0.06); border-radius: 24px; box-shadow: 0 10px 30px -10px rgba(15, 16, 22, 0.04); }
+.sk-logo { width: 48px; height: 48px; border-radius: 14px; margin-bottom: 16px; }
 .sk-title { height: 18px; width: 80%; border-radius: 4px; margin-bottom: 8px; }
 .sk-sub { height: 13px; width: 60%; border-radius: 4px; margin-bottom: 16px; }
 .sk-tags { height: 32px; width: 100%; border-radius: 8px; }
@@ -306,8 +329,8 @@ $white:         #ffffff;
   p { font-size: 16px; color: $gray-muted; margin-bottom: 24px; }
 }
 .btn-reset {
-  padding: 12px 36px; background: $primary; color: $white; border: none; border-radius: 100px;
-  font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s;
+  padding: 14px 38px; background: $primary; color: $white; border: none; border-radius: 100px;
+  font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 14px rgba($primary, 0.35);
   &:hover { background: $primary-dark; transform: scale(1.02); }
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../core/services/admin.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin-jobs',
@@ -23,10 +24,21 @@ export class AdminJobsComponent implements OnInit {
 
   constructor(
     private service: AdminService,
-    private toast:   ToastService
+    private toast:   ToastService,
+    private route:   ActivatedRoute
   ) {}
 
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['keyword']) {
+        this.search = params['keyword'];
+      } else {
+        this.search = '';
+      }
+      this.applySearch();
+    });
+    this.load();
+  }
 
   load(): void {
     this.loading.set(true);

@@ -1,7 +1,7 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #10b981;
-$primary-light: #d1fae5;
-$primary-dark: #059669;
+$primary: #003d4c;
+$primary-light: #e0f2f1;
+$primary-dark: #00232d;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -41,7 +41,7 @@ h1, h2, h3, h4 {
     .profile-badge {
         display: inline-block;
         padding: 6px 12px;
-        background: rgba(16, 185, 129, 0.1);
+        background: rgba(0, 61, 76, 0.1);
         color: $primary;
         border-radius: 8px;
         font-size: 12px;
@@ -156,13 +156,19 @@ h1, h2, h3, h4 {
                 padding-right: 12px;
                 font-family: 'Inter', sans-serif;
                 letter-spacing: 0.05em;
+                &:focus {
+                    outline: none;
+                    border-color: $primary;
+                    background: #ffffff;
+                    box-shadow: 0 0 0 4px rgba(0, 61, 76, 0.1);
+                }
             }
 
             &:focus {
                 outline: none;
                 border-color: $primary;
                 background: #ffffff;
-                box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+                box-shadow: 0 0 0 4px rgba(0, 61, 76, 0.1);
             }
         }
     }
@@ -183,7 +189,7 @@ h1, h2, h3, h4 {
             outline: none;
             border-color: $primary;
             background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 61, 76, 0.1);
         }
     }
 }
@@ -281,7 +287,7 @@ h1, h2, h3, h4 {
         gap: 12px;
         line-height: 1.5;
 
-        i { color: #10b981; margin-top: 3px; }
+        i { color: $primary; margin-top: 3px; }
     }
 }
 
@@ -323,11 +329,11 @@ h1, h2, h3, h4 {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 61, 76, 0.3);
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        box-shadow: 0 8px 20px rgba(0, 61, 76, 0.4);
         background: $primary-dark;
     }
 

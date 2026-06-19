@@ -52,11 +52,11 @@
         background: $white;
         border-color: $primary;
         color: $slate-900;
-        box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15);
+        box-shadow: 0 15px 30px rgba(0, 61, 76, 0.15);
         
         .role-icon {
             color: white;
-            background: linear-gradient(135deg, $primary 0%, #059669 100%);
+            background: $primary;
             box-shadow: 0 8px 16px rgba($primary, 0.3);
         }
     }

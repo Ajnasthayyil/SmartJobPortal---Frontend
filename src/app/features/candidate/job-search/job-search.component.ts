@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CandidateService } from '../../../core/services/candidate.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { JobListItem } from '../../../core/models/candidate.models';
@@ -48,17 +48,26 @@ export class JobSearchComponent implements OnInit {
 
   constructor(
     private service: CandidateService,
-    private toast:   ToastService
+    private toast:   ToastService,
+    private route:   ActivatedRoute
   ) { }
 
   ngOnInit(): void { 
+    // Listen for query params
+    this.route.queryParams.subscribe(params => {
+      if (params['keyword']) {
+        this.keyword = params['keyword'];
+      } else {
+        this.keyword = '';
+      }
+      this.executeSearch();
+    });
+
     // Listen for debounced search triggers
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(() => this.executeSearch());
-
-    this.executeSearch(); 
   }
 
   onSearchChange(): void {

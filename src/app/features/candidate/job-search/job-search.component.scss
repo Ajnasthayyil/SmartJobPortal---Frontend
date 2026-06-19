@@ -1,7 +1,7 @@
 // ── Design Tokens ────────────────────────────────────────────────
-$primary: #10b981;
-$primary-light: #d1fae5;
-$primary-dark: #059669;
+$primary: #003d4c;
+$primary-light: #e0f2f1;
+$primary-dark: #00232d;
 $slate-50: #f8fafc;
 $slate-100: #f1f5f9;
 $slate-200: #e2e8f0;
@@ -70,7 +70,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     font-family: $font-heading;
     font-size: 12px; 
     font-weight: 800; 
-    color: $primary; 
+    color: #2dd4bf; 
     text-transform: uppercase; 
     letter-spacing: 0.2em; 
     margin-bottom: 16px; 
@@ -89,7 +89,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     line-height: 1.1;
 
     span {
-      background: linear-gradient(135deg, $primary 0%, #34d399 100%);
+      background: linear-gradient(135deg, #2dd4bf 0%, #ffffff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -779,7 +779,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
             font-weight: 600;
             transition: all 0.3s;
             resize: none;
-            &:focus { outline: none; border-color: #10b981; background: white; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.05); }
+            &:focus { outline: none; border-color: $primary; background: white; box-shadow: 0 10px 30px rgba(0, 61, 76, 0.05); }
         }
         .textarea-footer {
             display: flex; justify-content: space-between;
@@ -810,7 +810,7 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     }
 
     .btn-submit {
-        background: #10b981;
+        background: $primary;
         color: white;
         border: none;
         padding: 14px 32px;
@@ -819,12 +819,12 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
         font-size: 15px;
         cursor: pointer;
         transition: all 0.3s;
-        box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        box-shadow: 0 10px 20px rgba(0, 61, 76, 0.2);
 
         &:hover:not(:disabled) {
             transform: translateY(-2px);
-            background: #059669;
-            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.3);
+            background: $primary-dark;
+            box-shadow: 0 15px 30px rgba(0, 61, 76, 0.3);
         }
 
         &:disabled {
@@ -847,5 +847,5 @@ $font-body: 'Plus Jakarta Sans', sans-serif;
     box-shadow: none !important;
     cursor: default !important;
     transform: none !important;
-    i { color: #10b981; }
+    i { color: $primary; }
 }
