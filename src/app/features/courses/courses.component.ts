@@ -1,6 +1,7 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   COURSES, CATEGORIES, SKILL_TAGS,
   PLATFORM_CONFIG, Course
@@ -11,9 +12,18 @@ import {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss']
+  styleUrls: ['./courses.component.scss'],
+  host: {
+    '[class.candidate-view]': 'isCandidate'
+  }
 })
 export class CoursesComponent {
+
+  private router = inject(Router);
+
+  get isCandidate(): boolean {
+    return this.router.url.includes('/candidate');
+  }
 
   // Pagination State
   currentPage = signal(1);

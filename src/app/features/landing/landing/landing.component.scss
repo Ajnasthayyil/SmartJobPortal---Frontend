@@ -20,7 +20,7 @@ $white:         #ffffff;
 .hero-split {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  max-width: 1240px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 60px 24px 80px 24px;
   gap: 48px;
@@ -365,25 +365,28 @@ $white:         #ffffff;
         transform: scale(1.1);
       }
 
-      &.apple {
+      &.graduation {
         top: 30%;
         left: 5%;
-        color: #000000;
+        background: $primary-light;
+        color: $primary;
+        border-color: $primary-light;
       }
 
-      &.google {
+      &.chart {
         top: 25%;
         right: 5%;
-        color: #EA4335;
+        background: #e0f2fe;
+        color: #0284c7;
+        border-color: #e0f2fe;
       }
 
-      &.facebook {
+      &.briefcase {
         bottom: 30%;
         left: -10px;
-        color: #1877F2;
-        background: #1877F2;
+        background: $primary;
         color: $white;
-        border-color: #1877F2;
+        border-color: $primary;
       }
     }
 
@@ -1430,8 +1433,11 @@ $white:         #ffffff;
       color: $white;
 
       .gradient-text-glow {
-        color: $primary;
-        text-shadow: 0 0 20px rgba($primary, 0.35);
+        background: linear-gradient(135deg, #2dd4bf 0%, #38bdf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 30px rgba(45, 212, 191, 0.2);
+        display: inline-block;
       }
 
       @media (max-width: 640px) {

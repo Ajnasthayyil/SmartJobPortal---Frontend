@@ -1,20 +1,54 @@
-<div class="jobs-public-page">
+<div [class.candidate-page-wrap]="isCandidate" [class.jobs-public-page]="!isCandidate">
   
-  <!-- Hero search section -->
-  <div class="search-section">
+  <!-- Candidate Welcome Box / Hero Banner -->
+  <div *ngIf="isCandidate" class="welcome-box">
+    <div class="hero-bg-accent"></div>
+    <div class="user-meta-info">
+      <span class="hi-text">
+        <i class="fa-solid fa-graduation-cap text-sparkle" style="color: #2dd4bf;"></i> Professional Development
+      </span>
+      <h1>Explore <span>Courses</span></h1>
+      <p class="headline-text">Enhance your skillset with curated expert courses aligned with market demand.</p>
+      
+      <!-- Search bar inside welcome box -->
+      <div class="search-bar">
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="coursesSearchCandidate" type="text" [(ngModel)]="search"
+                 placeholder="Search courses or skills..." />
+          <button class="btn-clear" *ngIf="search" (click)="search = ''">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <button class="btn-search">Find Courses</button>
+      </div>
+
+      <!-- Filter chips inside welcome box -->
+      <div class="filter-chips">
+        <ng-container *ngFor="let cat of categories">
+          <button class="chip"
+                  [class.active]="activeCategory === cat"
+                  (click)="setCategory(cat)">
+            {{ cat }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero search section (Public View only) -->
+  <div class="search-section" *ngIf="!isCandidate">
     <div class="search-container">
       <div class="hero-badge">
         <span class="badge-dot"></span>
         Learning Center — Now Live
       </div>
 
-      <!-- Titles removed for density -->
-
       <!-- Search bar -->
       <div class="search-bar">
         <div class="search-input-wrap">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" [(ngModel)]="search"
+          <input id="coursesSearchPublic" type="text" [(ngModel)]="search"
                  placeholder="Search courses or skills..." />
           <button class="btn-clear" *ngIf="search" (click)="search = ''">
             <i class="fa-solid fa-xmark"></i>
