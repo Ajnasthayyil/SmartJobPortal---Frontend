@@ -187,7 +187,7 @@ $slate-900: #0f172a;
   border-collapse: collapse;
   
   th {
-    padding: 20px 32px;
+    padding: 12px 20px;
     text-align: left;
     font-size: 11px;
     font-weight: 800;
@@ -199,7 +199,7 @@ $slate-900: #0f172a;
   }
   
   td {
-    padding: 24px 32px;
+    padding: 12px 20px;
     font-size: 14px;
     font-weight: 500;
     color: var(--slate-700);
@@ -213,19 +213,19 @@ $slate-900: #0f172a;
 .user-identity {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   
   .avatar-box {
-    width: 44px; height: 44px;
-    border-radius: 14px;
+    width: 36px; height: 36px;
+    border-radius: 10px;
     background: $emerald-500;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 16px;
-    box-shadow: 0 4px 12px rgba($emerald-500, 0.2);
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba($emerald-500, 0.15);
   }
   
   .u-info {
